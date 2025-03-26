@@ -12,6 +12,12 @@ module Dataverse
       @data = Data.new(parsed[:data])
     end
 
+    def files_by_ids(ids)
+      ids = Array(ids)
+      ids = ids.map { |id| id.to_i }
+      data.latest_version.files.select { |f| ids.include?(f.data_file.id.to_i) }
+    end
+
     class Data
       attr_reader :id, :identifier, :persistent_url, :publisher, :publication_date, :dataset_type, :latest_version
 
