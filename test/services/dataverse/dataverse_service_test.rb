@@ -4,8 +4,6 @@ class Dataverse::DataverseServiceTest < ActiveSupport::TestCase
 
   def setup
     @tmp_dir = Dir.mktmpdir
-    DownloadCollection.stubs(:metadata_root_directory).returns(@tmp_dir)
-    DownloadFile.stubs(:metadata_root_directory).returns(@tmp_dir)
     Dataverse::DataverseMetadata.stubs(:metadata_root_directory).returns(@tmp_dir)
     @sample_uri = URI('https://example.com:443')
     @dataverse_metadata = Dataverse::DataverseMetadata.find_or_initialize_by_uri(@sample_uri)
