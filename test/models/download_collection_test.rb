@@ -27,7 +27,7 @@ class DownloadCollectionTest < ActiveSupport::TestCase
     @file_attributes = {
       'id' => '123-321', 'collection_id' => '456-789', 'type' => 'dataverse',
       'metadata_id' => '123-456', 'external_id' => '789', 'filename' => 'test.png',
-      'status' => 'new', 'size' => 1024, 'checksum' => 'abc123', 'content_type' => 'image/png'
+      'status' => 'ready', 'size' => 1024, 'checksum' => 'abc123', 'content_type' => 'image/png'
     }
     @download_file = DownloadFile.new(@file_attributes)
     @file_filename = File.join(@tmp_dir, 'downloads', '456-789', 'files', '123-321.yml')
@@ -35,7 +35,7 @@ class DownloadCollectionTest < ActiveSupport::TestCase
     @file_attributes2 = {
       'id' => '111-123', 'collection_id' => '456-789', 'type' => 'dataverse',
       'metadata_id' => '123-456', 'external_id' => '790', 'filename' => 'test.png',
-      'status' => 'new', 'size' => 1024, 'checksum' => 'abc123', 'content_type' => 'image/png'
+      'status' => 'ready', 'size' => 1024, 'checksum' => 'abc123', 'content_type' => 'image/png'
     }
     @download_file2 = DownloadFile.new(@file_attributes2)
     @file_filename2 = File.join(@tmp_dir, 'downloads', '456-789', 'files', '111-123.yml')
@@ -43,7 +43,7 @@ class DownloadCollectionTest < ActiveSupport::TestCase
     @file_attributes3 = {
       'id' => '123-456', 'collection_id' => '111-111', 'type' => 'dataverse',
       'metadata_id' => '123-456', 'external_id' => '791', 'filename' => 'test.png',
-      'status' => 'new', 'size' => 1024, 'checksum' => 'abc123', 'content_type' => 'image/png'
+      'status' => 'ready', 'size' => 1024, 'checksum' => 'abc123', 'content_type' => 'image/png'
     }
     @download_file3 = DownloadFile.new(@file_attributes3)
     @file_filename3 = File.join(@tmp_dir, 'downloads', '111-111', 'files', '123-456.yml')
@@ -230,7 +230,7 @@ class DownloadCollectionTest < ActiveSupport::TestCase
     assert_equal '123-456', first_file.metadata_id
     assert_equal '789', first_file.external_id
     assert_equal 'test.png', first_file.filename
-    assert_equal 'new', first_file.status
+    assert_equal 'ready', first_file.status
     assert_equal 1024, first_file.size
     assert_equal 'abc123', first_file.checksum
   end
