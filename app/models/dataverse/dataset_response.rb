@@ -18,6 +18,23 @@ module Dataverse
       data.latest_version.files.select { |f| ids.include?(f.data_file.id.to_i) }
     end
 
+    def metadata_field(field_name)
+      field = data.latest_version.metadata_blocks.citation.fields.find{|f| f.type_name == field_name}
+      field.value if field
+    end
+
+    def authors
+      metadata_field("author").map { |a| a[:authorName][:value] }.join(" | ")
+    end
+
+    def description
+      metadata_field("dsDescription").map { |a| a[:dsDescriptionValue][:value] }.join(" ")
+    end
+
+    def subjects
+      metadata_field("subject").join(", ")
+    end
+
     class Data
       attr_reader :id, :identifier, :persistent_url, :publisher, :publication_date, :dataset_type, :latest_version
 
@@ -32,13 +49,17 @@ module Dataverse
       end
 
       class Version
-        attr_reader :id, :version_number, :version_state, :license, :files
+        attr_reader :id, :dataset_id, :dataset_persistent_id, :version_number, :version_state, :license, :files,
+                    :metadata_blocks
 
         def initialize(version)
           @id = version[:id]
+          @dataset_id = version[:datasetId]
+          @dataset_persistent_id = version[:datasetPersistentId]
           @version_number = version[:versionNumber]
           @version_state = version[:versionState]
           @license = License.new(version[:license])
+          @metadata_blocks = MetadataBlocks.new(version[:metadataBlocks])
           @files = version[:files].map { |file| DatasetFile.new(file) }
         end
 
@@ -52,6 +73,32 @@ module Dataverse
           end
         end
 
+        class MetadataBlocks
+          attr_reader :citation
+          def initialize(metadata_blocks)
+            @citation = Citation.new(metadata_blocks[:citation])
+          end
+
+          class Citation
+            attr_reader :name, :fields
+            def initialize(citation)
+              @name = citation[:name]
+              @fields = citation[:fields].map { |field| CitationField.new(field) }
+            end
+
+            class CitationField
+              attr_reader :type_name, :multiple, :type_class, :value
+              def initialize(field)
+                @type_name = field[:typeName]
+                @multiple = field[:multiple]
+                @type_class = field[:typeClass]
+                @value = field[:value]
+              end
+            end
+          end
+
+        end
+
         class DatasetFile
           attr_reader :label, :restricted, :data_file
 
@@ -62,14 +109,16 @@ module Dataverse
           end
 
           class DataFile
-            attr_reader :id, :filename, :content_type, :filesize, :md5
+            attr_reader :id, :filename, :content_type, :friendly_type, :filesize, :md5, :publication_date
 
             def initialize(data_file)
               @id = data_file[:id]
               @filename = data_file[:filename]
               @content_type = data_file[:contentType]
+              @friendly_type = data_file[:friendlyType]
               @filesize = data_file[:filesize]
               @md5 = data_file[:md5]
+              @publication_date = data_file[:publicationDate]
             end
           end
         end

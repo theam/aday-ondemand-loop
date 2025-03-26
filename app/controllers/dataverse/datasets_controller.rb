@@ -3,6 +3,7 @@ class Dataverse::DatasetsController < ApplicationController
   before_action :find_dataset
 
   def show
+    @files = @dataset.data.latest_version.files
   end
 
   def download
@@ -45,4 +46,5 @@ class Dataverse::DatasetsController < ApplicationController
       return
     end
   end
+
 end

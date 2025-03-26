@@ -1,0 +1,98 @@
+
+<div class="container-md content mt-4" role="main">
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active">
+        <a href="/pun/sys/ood/">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a aria-current="page">Dataverse</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a aria-current="page"><%= @dataverse_metadata.full_hostname %></a>
+      </li>
+      <li class="breadcrumb-item">
+        <a aria-current="page">Datasets</a>
+      </li>
+      <li class="breadcrumb-item active">
+        <a aria-current="page"><%= @dataset.data.latest_version.dataset_persistent_id %></a>
+      </li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card dataset-header">
+        <div class="card-header">Dataset</div>
+        <div class="list-group list-group-flush">
+          <span class="list-group-item list-group-item-action">
+            <b><%= @dataset.metadata_field('title') %></b>
+          </span>
+          <span class="list-group-item list-group-item-action">
+            <%= @dataset.data.latest_version.dataset_persistent_id %>
+          </span>
+        </div>
+      </div>
+      <div class="card dataset-header">
+        <div class="card-header">Description</div>
+        <div class="list-group list-group-flush">
+          <span class="list-group-item list-group-item-action">
+            <%= @dataset.description %>
+          </span>
+        </div>
+      </div>
+      <div class="card dataset-header">
+        <div class="card-header">Dataset Metadata</div>
+        <div class="list-group list-group-flush">
+          <span class="list-group-item list-group-item-action">
+            <b>Publication date:</b> <%= @dataset.data.publication_date %>
+          </span>
+          <span class="list-group-item list-group-item-action">
+            <b>Authors:</b> <%= @dataset.authors %>
+          </span>
+          <span class="list-group-item list-group-item-action">
+            <b>Subjects:</b> <%= @dataset.subjects %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card dataset-header">
+        <div class="card-header">Files</div>
+        <%= form_with url: nil, method: :post, local: true, class: "p-4 border rounded bg-light" do %>
+          <div class="row">
+            <% @files.each do |file| %>
+              <div class="col-lg-4 col-md-6 col-sd-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <div class="form-check mb-2">
+                      <%= check_box_tag "file_ids[]", file.data_file.id, false, class: "form-check-input", id: "file_checkbox_#{file.data_file.id}"  %>
+                      <label class="form-check-label fw-bold" for="file_checkbox_<%= file.data_file.id %>">
+                        <%= file.label %>
+                      </label>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <%= file_thumbnail(@dataverse_metadata, file) %>
+                      </div>
+                      <div class="col-md-8">
+                        <ul class="list-unstyled small text-muted">
+                          <li><strong>Type:</strong> <%= file.data_file.friendly_type %></li>
+                          <li><strong>Size:</strong> <%= number_to_human_size(file.data_file.filesize) %></li>
+                          <li><strong>Published:</strong> <%= file.data_file.publication_date %></li>
+                          <li><strong>MD5:</strong> <%= md5_with_copy(file.data_file.md5) %></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-center mt-4">
+            <%= submit_tag "Download Selected Files", class: "btn btn-primary", id: "submit_button" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
