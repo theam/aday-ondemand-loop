@@ -58,7 +58,7 @@
     <div class="col-md-9">
       <div class="card dataset-header">
         <div class="card-header">Files</div>
-        <%= form_with url: nil, method: :post, local: true, class: "p-4 border rounded bg-light" do %>
+        <%= form_with url: download_dataverse_dataset_files_path(@dataverse_metadata.id, @dataset.data.id), method: :post, local: true, class: "p-4 border rounded bg-light" do %>
           <div class="row">
             <% @files.each do |file| %>
               <div class="col-lg-4 col-md-6 col-sd-6 mb-4">
