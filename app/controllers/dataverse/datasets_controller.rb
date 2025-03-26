@@ -1,5 +1,6 @@
 class Dataverse::DatasetsController < ApplicationController
   before_action :find_dataverse_metadata
+  before_action :init_service
   before_action :find_dataset
 
   def show
@@ -9,8 +10,7 @@ class Dataverse::DatasetsController < ApplicationController
   def download
     @file_ids = params[:file_ids]
     @files = @dataset.files_by_ids(@file_ids)
-    @download_collection = DownloadCollection.new_from_dataverse(@dataverse_metadata)
-    @download_collection.name = "#{@dataverse_metadata.full_hostname} Dataverse selection from #{@dataset.data.identifier}"
+    @download_collection = @service.initialize_download_collection(@dataset)
     @download_collection.save
     @files.each do |file|
       download_file = DownloadFile.new_from_dataverse_file(@download_collection, file)
@@ -30,10 +30,13 @@ class Dataverse::DatasetsController < ApplicationController
     end
   end
 
+  def init_service
+    @service = Dataverse::DataverseService.new(@dataverse_metadata)
+  end
+
   def find_dataset
     begin
-      service = Dataverse::DataverseService.new(@dataverse_metadata)
-      @dataset = service.find_dataset_by_id(params[:id])
+      @dataset = @service.find_dataset_by_id(params[:id])
       unless @dataset
         flash[:error] = "Dataset not found"
         redirect_to downloads_path

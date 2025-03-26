@@ -12,14 +12,14 @@ namespace :dev do
 
     parsed_url = URI.parse("http://localhost:3000")
     dataverse_metadata = Dataverse::DataverseMetadata.find_or_initialize_by_uri(parsed_url)
+    service = Dataverse::DataverseService.new(dataverse_metadata)
 
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_response', 'valid_response.json'))
     dataset = Dataverse::DatasetResponse.new(valid_json)
     file_ids = [7]
     files = dataset.files_by_ids(file_ids)
 
-    download_collection = DownloadCollection.new_from_dataverse(dataverse_metadata)
-    download_collection.name = "#{dataverse_metadata.full_hostname} Dataverse selection from #{dataset.data.identifier}"
+    download_collection = service.initialize_download_collection(dataset)
     download_collection.save
 
     files.each do |file|

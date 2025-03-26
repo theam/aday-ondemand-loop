@@ -254,14 +254,4 @@ class DownloadCollectionTest < ActiveSupport::TestCase
     assert_equal 0, @download_collection3.files.count
   end
 
-  test "new from dataverse" do
-    dataverse_metadata = Dataverse::DataverseMetadata.find_or_initialize_by_uri(URI.parse("http://localhost:3000"))
-    assert dataverse_metadata
-    collection = DownloadCollection.new_from_dataverse(dataverse_metadata)
-    assert_equal "dataverse", collection.type
-    assert_equal dataverse_metadata.id, collection.metadata_id
-    assert collection.id
-    collection.name = 'new name'
-    assert collection.save
-  end
 end

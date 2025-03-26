@@ -12,5 +12,13 @@ module Dataverse
       response.is_a?(Net::HTTPSuccess) ? DatasetResponse.new(response.body) : nil
     end
 
+    def initialize_download_collection(dataset)
+      DownloadCollection.new.tap do |collection|
+        collection.id = DownloadCollection.generate_id
+        collection.type = "dataverse"
+        collection.metadata_id = @dataverse_metadata.id
+        collection.name = "#{@dataverse_metadata.full_hostname} Dataverse selection from #{dataset.data.identifier}"
+      end
+    end
   end
 end
