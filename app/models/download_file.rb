@@ -5,7 +5,7 @@ class DownloadFile < ApplicationDiskRecord
 
   ATTRIBUTES = %w[id collection_id type metadata_id external_id filename status size checksum content_type].freeze
   TYPES = %w[dataverse].freeze
-  STATUS = %w[new ready downloading success error].freeze
+  STATUS = %w[ready downloading success error].freeze
 
   attr_accessor *ATTRIBUTES
 
@@ -29,7 +29,7 @@ class DownloadFile < ApplicationDiskRecord
       f.metadata_id = download_collection.metadata_id
       f.external_id = dataset_file.data_file.id
       f.filename = dataset_file.data_file.filename
-      f.status = 'new'
+      f.status = 'ready'
       f.size = dataset_file.data_file.filesize
       f.checksum = dataset_file.data_file.md5
       f.content_type = dataset_file.data_file.content_type
