@@ -20,5 +20,23 @@ module Dataverse
         collection.name = "#{@dataverse_metadata.full_hostname} Dataverse selection from #{dataset.data.identifier}"
       end
     end
+
+    def initialize_download_files(download_collection, dataset, file_ids)
+      dataset_files = dataset.files_by_ids(file_ids)
+      dataset_files.each.map do |dataset_file|
+        DownloadFile.new.tap do |f|
+          f.id = DownloadFile.generate_id
+          f.collection_id = download_collection.id
+          f.type = 'dataverse'
+          f.metadata_id = download_collection.metadata_id
+          f.external_id = dataset_file.data_file.id
+          f.filename = dataset_file.data_file.filename
+          f.status = 'ready'
+          f.size = dataset_file.data_file.filesize
+          f.checksum = dataset_file.data_file.md5
+          f.content_type = dataset_file.data_file.content_type
+        end
+      end
+    end
   end
 end

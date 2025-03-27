@@ -8,12 +8,11 @@ class Dataverse::DatasetsController < ApplicationController
   end
 
   def download
-    @file_ids = params[:file_ids]
-    @files = @dataset.files_by_ids(@file_ids)
+    file_ids = params[:file_ids]
     @download_collection = @service.initialize_download_collection(@dataset)
     @download_collection.save
-    @files.each do |file|
-      download_file = DownloadFile.new_from_dataverse_file(@download_collection, file)
+    @download_files = @service.initialize_download_files(@download_collection, @dataset, file_ids)
+    @download_files.each do |download_file|
       download_file.save
     end
     redirect_to downloads_path

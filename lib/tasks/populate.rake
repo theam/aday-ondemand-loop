@@ -17,26 +17,31 @@ namespace :dev do
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_response', 'valid_response.json'))
     dataset = Dataverse::DatasetResponse.new(valid_json)
     file_ids = [7]
-    files = dataset.files_by_ids(file_ids)
 
     download_collection = service.initialize_download_collection(dataset)
     download_collection.save
 
-    files.each do |file|
-      download_file = DownloadFile.new_from_dataverse_file(download_collection, file)
+    files = service.initialize_download_files(download_collection, dataset, file_ids)
+    files.each do |download_file|
       download_file.save
+    end
 
-      download_file2 = DownloadFile.new_from_dataverse_file(download_collection, file)
+    files = service.initialize_download_files(download_collection, dataset, file_ids)
+    files.each do |download_file2|
       download_file2.status = 'downloading'
       download_file2.filename = "another_file_being_downloaded.png"
       download_file2.save
+    end
 
-      download_file3 = DownloadFile.new_from_dataverse_file(download_collection, file)
+    files = service.initialize_download_files(download_collection, dataset, file_ids)
+    files.each do |download_file3|
       download_file3.status = 'success'
       download_file3.filename = "yet_another_file_downloaded.png"
       download_file3.save
+    end
 
-      download_file4 = DownloadFile.new_from_dataverse_file(download_collection, file)
+    files = service.initialize_download_files(download_collection, dataset, file_ids)
+    files.each do |download_file4|
       download_file4.status = 'error'
       download_file4.filename = "a_file_with_error.png"
       download_file4.save
