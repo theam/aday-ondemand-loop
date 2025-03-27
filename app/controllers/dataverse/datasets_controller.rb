@@ -1,5 +1,6 @@
 class Dataverse::DatasetsController < ApplicationController
   before_action :find_dataverse_metadata
+  before_action :init_service
   before_action :find_dataset
 
   def show
@@ -7,14 +8,17 @@ class Dataverse::DatasetsController < ApplicationController
   end
 
   def download
-    @file_ids = params[:file_ids] #TODO get the real param with ids
-    @files = @dataset.files_by_ids(@file_ids)
-    @download_collection = DownloadCollection.new_from_dataverse(@dataverse_metadata)
-    @download_collection.name = "#{@dataverse_metadata.full_name} Dataverse selection from #{@dataset.data.identifier}"
-    @download_collection.save
-    @files.each do |file|
-      download_file = DownloadFile.new_from_dataverse_file(@download_collection, file)
-      download_file.save
+    file_ids = params[:file_ids]
+    @download_collection = @service.initialize_download_collection(@dataset)
+    unless @download_collection.save
+      flash[:error] = "Error generating the download collection"
+      redirect_to downloads_path
+      return
+    end
+    @download_files = @service.initialize_download_files(@download_collection, @dataset, file_ids)
+    save_results = @download_files.each.map { |download_file| download_file.save }
+    if save_results.include?(false)
+      flash[:error] = "Error generating the download file"
     end
     redirect_to downloads_path
   end
@@ -30,10 +34,13 @@ class Dataverse::DatasetsController < ApplicationController
     end
   end
 
+  def init_service
+    @service = Dataverse::DataverseService.new(@dataverse_metadata)
+  end
+
   def find_dataset
     begin
-      service = Dataverse::DataverseService.new(@dataverse_metadata)
-      @dataset = service.find_dataset_by_id(params[:id])
+      @dataset = @service.find_dataset_by_id(params[:id])
       unless @dataset
         flash[:error] = "Dataset not found"
         redirect_to downloads_path
