@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
-  get "downloads" => "downloads#index", as: :downloads
-  get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get "downloads" => "downloads#index", as: :downloads
+  get "downloads/collections" => "downloads#collections", as: :downloads_collections
 
-  # Dataverse routes
+  # DATAVERSE ROUTES
+  get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
+
   post "/view/dataverse/:metadata_id/datasets/:id/download" => "dataverse/datasets#download", as: :download_dataverse_dataset_files
   get "/view/dataverse/:metadata_id/datasets/:id" => "dataverse/datasets#show", as: :view_dataverse_dataset
 
