@@ -89,16 +89,40 @@ class Dataverse::DatasetResponseTest < ActiveSupport::TestCase
     assert_equal "PNG Image", data_file.friendly_type
   end
 
-  test "empty json raises error" do
-    assert_raises(NoMethodError) { Dataverse::DatasetResponse.new(empty_json) }
+  test "empty json does not throw exception" do
+    @invalid_dataset = Dataverse::DatasetResponse.new(empty_json)
+    assert_instance_of Dataverse::DatasetResponse, @invalid_dataset
+    assert_equal 0, @invalid_dataset.files.count
+    files = @invalid_dataset.files_by_ids([86,87,88,89,90])
+    assert_equal 0, files.size
+    assert_equal "", @invalid_dataset.authors
+    assert_equal "", @invalid_dataset.description
+    assert_equal "", @invalid_dataset.subjects
+    assert_nil @invalid_dataset.data.latest_version.dataset_persistent_id
+    assert_nil @invalid_dataset.metadata_field('title')
+    assert_nil @invalid_dataset.data.publication_date
+    assert_nil @invalid_dataset.data.latest_version.license.name
+    assert_nil @invalid_dataset.data.latest_version.license.icon_uri
   end
 
   test "empty string raises JSON::ParserError" do
     assert_raises(JSON::ParserError) { Dataverse::DatasetResponse.new(empty_string) }
   end
 
-  test "incomplete json raises NoMethodError when accessing missing data" do
-    assert_raises(NoMethodError) { Dataverse::DatasetResponse.new(incomplete_json_body) }
+  test "incomplete json does not throw exception" do
+    @invalid_dataset = Dataverse::DatasetResponse.new(incomplete_json_body)
+    assert_instance_of Dataverse::DatasetResponse, @invalid_dataset
+    assert_equal 0, @invalid_dataset.files.count
+    files = @invalid_dataset.files_by_ids([86,87,88,89,90])
+    assert_equal 0, files.size
+    assert_equal "", @invalid_dataset.authors
+    assert_equal "", @invalid_dataset.description
+    assert_equal "", @invalid_dataset.subjects
+    assert_nil @invalid_dataset.data.latest_version.dataset_persistent_id
+    assert_nil @invalid_dataset.metadata_field('title')
+    assert_equal "2025-01-23", @invalid_dataset.data.publication_date
+    assert_nil @invalid_dataset.data.latest_version.license.name
+    assert_nil @invalid_dataset.data.latest_version.license.icon_uri
   end
 
   test "find files matches one file" do
@@ -136,4 +160,160 @@ class Dataverse::DatasetResponseTest < ActiveSupport::TestCase
     assert_equal 7, files.first.data_file.id
     assert_equal "image/png", files.first.data_file.content_type
   end
+
+  test "files method" do
+    files = @dataset.files_by_ids([1,2,3,4,5,6,7,8,9,10])
+    assert_equal files, @dataset.files
+    assert_equal 1, files.size
+  end
+
+  test "dataset with multiple files" do
+    valid_json = load_file_fixture(File.join('dataverse', 'dataset_response', 'valid_response_multiple_files.json'))
+    @dataset_multiple_files = Dataverse::DatasetResponse.new(valid_json)
+    assert_equal 5, @dataset_multiple_files.files.size
+    files = @dataset_multiple_files.files_by_ids([86,87,88,89,90])
+    assert_equal 5, files.size
+
+    version = @dataset_multiple_files.data.latest_version
+
+    assert_equal 5, version.files.size
+    version.files.each { |file| assert_instance_of Dataverse::DatasetResponse::Data::Version::DatasetFile, file }
+
+    assert_equal "Doe, John", @dataset_multiple_files.authors
+    assert_match /The tabular file contains information on known/, @dataset_multiple_files.description
+    assert_equal "Social Sciences", @dataset_multiple_files.subjects
+    assert_equal "doi:10.5072/FK2/LLIZ6Q", @dataset_multiple_files.data.latest_version.dataset_persistent_id
+    assert_equal "Open Source at Harvard", @dataset_multiple_files.metadata_field('title')
+    assert_equal "2025-04-04", @dataset_multiple_files.data.publication_date
+    assert_equal "CC0 1.0", @dataset_multiple_files.data.latest_version.license.name
+    assert_equal "https://licensebuttons.net/p/zero/1.0/88x31.png", @dataset_multiple_files.data.latest_version.license.icon_uri
+
+    file = version.files.first
+    assert_equal "2019-02-25.tab", file.label
+    assert_equal "data", file.directory_label
+    refute file.restricted
+    assert_instance_of Dataverse::DatasetResponse::Data::Version::DatasetFile::DataFile, file.data_file
+
+    data_file = file.data_file
+    assert_equal 90, data_file.id
+    assert_equal "2019-02-25.tab", data_file.filename
+    assert_equal "text/tab-separated-values", data_file.content_type
+    assert_equal 17232, data_file.filesize
+    assert_equal "8af47fd3e16134e1aa4700fbfc48ff50", data_file.md5
+    assert_equal "Tab-Delimited", data_file.friendly_type
+  end
+
+  test "dataset incomplete with no license" do
+    json = load_file_fixture(File.join('dataverse', 'dataset_response', 'incomplete_no_license.json'))
+    @dataset_incomplete = Dataverse::DatasetResponse.new(json)
+    assert_instance_of Dataverse::DatasetResponse, @dataset_incomplete
+    assert_equal "Doe, John", @dataset_incomplete.authors
+    assert_match /The tabular file contains information on known/, @dataset_incomplete.description
+    assert_equal "Social Sciences", @dataset_incomplete.subjects
+    assert_equal "doi:10.5072/FK2/LLIZ6Q", @dataset_incomplete.data.latest_version.dataset_persistent_id
+    assert_equal "Open Source at Harvard", @dataset_incomplete.metadata_field('title')
+    assert_equal "2025-04-04", @dataset_incomplete.data.publication_date
+    assert_nil @dataset_incomplete.data.latest_version.license.name
+    assert_nil @dataset_incomplete.data.latest_version.license.icon_uri
+  end
+
+  test "dataset incomplete with no latest_version" do
+    json = load_file_fixture(File.join('dataverse', 'dataset_response', 'incomplete_no_version.json'))
+    @dataset_incomplete = Dataverse::DatasetResponse.new(json)
+    assert_instance_of Dataverse::DatasetResponse, @dataset_incomplete
+    assert_equal 0, @dataset_incomplete.files.count
+    files = @dataset_incomplete.files_by_ids([86,87,88,89,90])
+    assert_equal 0, files.size
+    assert_equal "", @dataset_incomplete.authors
+    assert_equal "", @dataset_incomplete.description
+    assert_equal "", @dataset_incomplete.subjects
+    assert_nil @dataset_incomplete.data.latest_version.dataset_persistent_id
+    assert_nil @dataset_incomplete.metadata_field('title')
+    assert_equal "2025-04-04", @dataset_incomplete.data.publication_date
+    assert_nil @dataset_incomplete.data.latest_version.license.name
+    assert_nil @dataset_incomplete.data.latest_version.license.icon_uri
+  end
+
+  test "dataset incomplete with no data" do
+    json = load_file_fixture(File.join('dataverse', 'dataset_response', 'incomplete_no_data.json'))
+    @dataset_incomplete = Dataverse::DatasetResponse.new(json)
+    assert_instance_of Dataverse::DatasetResponse, @dataset_incomplete
+    assert_equal 0, @dataset_incomplete.files.count
+    files = @dataset_incomplete.files_by_ids([86,87,88,89,90])
+    assert_equal 0, files.size
+    assert_equal "", @dataset_incomplete.authors
+    assert_equal "", @dataset_incomplete.description
+    assert_equal "", @dataset_incomplete.subjects
+    assert_nil @dataset_incomplete.data.latest_version.dataset_persistent_id
+    assert_nil @dataset_incomplete.metadata_field('title')
+    assert_nil @dataset_incomplete.data.publication_date
+    assert_nil @dataset_incomplete.data.latest_version.license.name
+    assert_nil @dataset_incomplete.data.latest_version.license.icon_uri
+  end
+
+  test "dataset incomplete with no metadata blocks" do
+    json = load_file_fixture(File.join('dataverse', 'dataset_response', 'incomplete_no_metadata_blocks.json'))
+    @dataset_incomplete = Dataverse::DatasetResponse.new(json)
+    assert_instance_of Dataverse::DatasetResponse, @dataset_incomplete
+    assert_equal 5, @dataset_incomplete.files.count
+    files = @dataset_incomplete.files_by_ids([86,87,88,89,90])
+    assert_equal 5, files.size
+    assert_equal "", @dataset_incomplete.authors
+    assert_equal "", @dataset_incomplete.description
+    assert_equal "", @dataset_incomplete.subjects
+    assert_equal "doi:10.5072/FK2/LLIZ6Q", @dataset_incomplete.data.latest_version.dataset_persistent_id
+    assert_nil @dataset_incomplete.metadata_field('title')
+    assert_equal "2025-04-04", @dataset_incomplete.data.publication_date
+    assert_equal "CC0 1.0", @dataset_incomplete.data.latest_version.license.name
+    assert_equal "https://licensebuttons.net/p/zero/1.0/88x31.png", @dataset_incomplete.data.latest_version.license.icon_uri
+  end
+
+  test "dataset incomplete with no data_file in some files" do
+    json = load_file_fixture(File.join('dataverse', 'dataset_response', 'incomplete_no_data_file.json'))
+    @dataset_incomplete = Dataverse::DatasetResponse.new(json)
+    assert_instance_of Dataverse::DatasetResponse, @dataset_incomplete
+    assert_equal 5, @dataset_incomplete.files.count
+    files = @dataset_incomplete.files_by_ids([86,87,88,89,90])
+    assert_equal 3, files.size
+    assert_equal "Doe, John", @dataset_incomplete.authors
+    assert_match /The tabular file contains information on known/, @dataset_incomplete.description
+    assert_equal "Social Sciences", @dataset_incomplete.subjects
+    assert_equal "doi:10.5072/FK2/LLIZ6Q", @dataset_incomplete.data.latest_version.dataset_persistent_id
+    assert_equal "Open Source at Harvard", @dataset_incomplete.metadata_field('title')
+    assert_equal "2025-04-04", @dataset_incomplete.data.publication_date
+    assert_equal "CC0 1.0", @dataset_incomplete.data.latest_version.license.name
+    assert_equal "https://licensebuttons.net/p/zero/1.0/88x31.png", @dataset_incomplete.data.latest_version.license.icon_uri
+    file = @dataset_incomplete.files.first
+    assert_equal "2019-02-25.tab", file.label
+    assert_equal "data", file.directory_label
+    refute file.restricted
+    assert_instance_of Dataverse::DatasetResponse::Data::Version::DatasetFile::DataFile, file.data_file
+    data_file = file.data_file
+    assert_nil data_file.id
+    assert_nil data_file.filename
+    assert_nil data_file.publication_date
+    assert_nil data_file.storage_identifier
+    assert_nil data_file.content_type
+    assert_nil data_file.filesize
+    assert_nil data_file.md5
+    assert_nil data_file.friendly_type
+  end
+
+  test "dataset incomplete with no files" do
+    json = load_file_fixture(File.join('dataverse', 'dataset_response', 'incomplete_no_files.json'))
+    @dataset_incomplete = Dataverse::DatasetResponse.new(json)
+    assert_instance_of Dataverse::DatasetResponse, @dataset_incomplete
+    assert_equal 0, @dataset_incomplete.files.count
+    files = @dataset_incomplete.files_by_ids([86,87,88,89,90])
+    assert_equal 0, files.size
+    assert_equal "Doe, John", @dataset_incomplete.authors
+    assert_match /The tabular file contains information on known/, @dataset_incomplete.description
+    assert_equal "Social Sciences", @dataset_incomplete.subjects
+    assert_equal "doi:10.5072/FK2/LLIZ6Q", @dataset_incomplete.data.latest_version.dataset_persistent_id
+    assert_equal "Open Source at Harvard", @dataset_incomplete.metadata_field('title')
+    assert_equal "2025-04-04", @dataset_incomplete.data.publication_date
+    assert_equal "CC0 1.0", @dataset_incomplete.data.latest_version.license.name
+    assert_equal "https://licensebuttons.net/p/zero/1.0/88x31.png", @dataset_incomplete.data.latest_version.license.icon_uri
+  end
+
 end
