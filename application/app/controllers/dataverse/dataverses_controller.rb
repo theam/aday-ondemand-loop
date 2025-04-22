@@ -2,10 +2,22 @@ class Dataverse::DataversesController < ApplicationController
   include LoggingCommon
   include Dataverse::CommonHelper
 
-  before_action :get_dv_full_hostname
-  before_action :init_service
+  def index
+    begin
+      hub_registry = Dataverse::HubRegistry.new
+      installations = hub_registry.installations
+      page = params[:page] ? params[:page].to_i : 1
+      @installations_page = Page.new(installations, page, 25)
+    rescue Exception => e
+      log_error('Dataverse Installations service error', {}, e)
+      flash[:error] = "Dataverse Installations service error."
+      redirect_to root_path
+    end
+  end
 
   def show
+    @dataverse_url = current_dataverse_url
+    @service = Dataverse::DataverseService.new(@dataverse_url)
     begin
       @page = params[:page] ? params[:page].to_i : 1
       @dataverse = @service.find_dataverse_by_id(params[:id])
@@ -21,15 +33,5 @@ class Dataverse::DataversesController < ApplicationController
       flash[:error] = "Dataverse service error. Dataverse: #{@dataverse_url} Id: #{params[:id]}"
       redirect_to root_path
     end
-  end
-
-  private
-
-  def get_dv_full_hostname
-    @dataverse_url = current_dataverse_url
-  end
-
-  def init_service
-    @service = Dataverse::DataverseService.new(@dataverse_url)
   end
 end
