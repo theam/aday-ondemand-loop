@@ -9,7 +9,7 @@ module Dataverse
     end
 
     class Data
-      attr_reader :id, :alias, :name, :description, :is_facet_root
+      attr_reader :id, :alias, :name, :description, :is_facet_root, :parents
 
       def initialize(data)
         data = data || {}
@@ -18,6 +18,14 @@ module Dataverse
         @name = data[:name]
         @description = data[:description]
         @is_facet_root = data[:isFacetRoot]
+        @parents = []
+        parent = data[:isPartOf]
+        while parent
+          p = { name: parent[:displayName], type: parent[:type], identifier: parent[:identifier] }
+          @parents << p
+          parent = parent[:isPartOf]
+        end
+        @parents.reverse!
       end
     end
   end
