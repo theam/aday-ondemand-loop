@@ -1,13 +1,17 @@
-<%
-  display_files = local_assigns[:error_message].nil? && files.count > 0
-  message = local_assigns[:error_message] || 'The dataset does not contain files to download'
-%>
 <div class="card dataset-header">
-  <div class="card-header"><%= pluralize(files.count, 'file') %></div>
-  <% if display_files %>
+  <div class="card-header d-flex align-items-center">
+    <%= files_page.to_s %>
+    <span class="ms-auto">
+      <%= link_to_dataset_prev_page(dataverse_url, @persistent_id, files_page, {class: "text-decoration-none"}) %>
+      <%= "page #{files_page.page}" %>
+      <%= link_to_dataset_next_page(dataverse_url, @persistent_id, files_page, {class: "text-decoration-none"}) %>
+    </span>
+  </div>
+  <% if files_page.total_count > 0 %>
     <%= form_with url: download_dataverse_dataset_files_path, method: :post, local: true, class: "p-3 rounded bg-light" do %>
       <%= hidden_field_tag 'dataverse_url', dataverse_url %>
       <%= hidden_field_tag 'persistent_id', @persistent_id %>
+      <%= hidden_field_tag 'page', @page %>
       <div class="row">
         <table class="table table-bordered table-hover align-middle">
           <thead class="table-light">
@@ -24,7 +28,7 @@
           </tr>
           </thead>
           <tbody>
-            <%= render partial: "dataverse/datasets/dataset_file_row", collection: files, as: :file %>
+            <%= render partial: "dataverse/datasets/dataset_file_row", collection: files_page.files, as: :file %>
           </tbody>
         </table>
       </div>
@@ -35,7 +39,7 @@
   <% else %>
     <div class="list-group list-group-flush">
       <span class="list-group-item list-group-item-action">
-        <%= message %>
+        The dataset does not contain files to download
       </span>
     </div>
   <% end %>

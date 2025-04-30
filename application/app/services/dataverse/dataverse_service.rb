@@ -10,13 +10,23 @@ module Dataverse
       @http_client = http_client
     end
 
-    def find_dataset_by_persistent_id(persistent_id)
-      url = "/api/datasets/:persistentId/?persistentId=#{persistent_id}&returnOwners=true"
+    def find_dataset_version_by_persistent_id(persistent_id, version: ':latest-published')
+      url = "/api/datasets/:persistentId/versions/#{version}?persistentId=#{persistent_id}&returnOwners=true&excludeFiles=true"
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
       raise "Error getting dataset: #{response.code} - #{response.body}" unless response.success?
-      DatasetResponse.new(response.body)
+      DatasetVersionResponse.new(response.body)
+    end
+
+    def search_dataset_files_by_persistent_id(persistent_id, version: ':latest-published', page: 1, per_page: 10)
+      start = (page-1) * per_page
+      url = "/api/datasets/:persistentId/versions/#{version}/files?persistentId=#{persistent_id}&offset=#{start}&limit=#{per_page}"
+      response = @http_client.get(url)
+      return nil if response.not_found?
+      raise UnauthorizedException if response.unauthorized?
+      raise "Error getting dataset files: #{response.code} - #{response.body}" unless response.success?
+      DatasetFilesResponse.new(response.body, page: page, per_page: per_page)
     end
 
     def find_dataverse_by_id(id)
@@ -40,11 +50,11 @@ module Dataverse
     end
 
     def initialize_download_collection(dataset)
-      DownloadCollection.new(name: "#{@dataverse_url} Dataverse selection from #{dataset.data.identifier}")
+      DownloadCollection.new(name: "#{@dataverse_url} Dataverse selection from #{dataset.data.dataset_persistent_id}")
     end
 
-    def initialize_download_files(download_collection, dataset, file_ids)
-      dataset_files = dataset.files_by_ids(file_ids)
+    def initialize_download_files(download_collection, files_page, file_ids)
+      dataset_files = files_page.files_by_ids(file_ids)
       dataset_files.each.map do |dataset_file|
         DownloadFile.new.tap do |f|
           f.id = DownloadFile.generate_id
