@@ -1,9 +1,12 @@
+$btn-disabled-opacity: 0.4;
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 @import "fontawesome/fontawesome";
 
 @import 'custom_styles';
 @import 'progress_bar';
+@import 'projects';
 @import 'project_progress';
 @import 'downloads';
 @import 'dataverse';
