@@ -5,9 +5,10 @@ module Dataverse
 
     class UnauthorizedException < Exception; end
 
-    def initialize(dataverse_url, http_client: Common::HttpClient.new(base_url: dataverse_url))
+    def initialize(dataverse_url, http_client: Common::HttpClient.new(base_url: dataverse_url), file_utils: Common::FileUtils.new)
       @dataverse_url = dataverse_url
       @http_client = http_client
+      @file_utils = file_utils
     end
 
     def find_dataset_version_by_persistent_id(persistent_id, version: ':latest-published')
@@ -15,7 +16,7 @@ module Dataverse
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
-      raise "Error getting dataset: #{response.code} - #{response.body}" unless response.success?
+      raise "Error getting dataset: #{response.status} - #{response.body}" unless response.success?
       DatasetVersionResponse.new(response.body)
     end
 
@@ -25,7 +26,7 @@ module Dataverse
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
-      raise "Error getting dataset files: #{response.code} - #{response.body}" unless response.success?
+      raise "Error getting dataset files: #{response.status} - #{response.body}" unless response.success?
       DatasetFilesResponse.new(response.body, page: page, per_page: per_page)
     end
 
@@ -34,7 +35,7 @@ module Dataverse
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
-      raise "Error getting dataverse: #{response.code} - #{response.body}" unless response.success?
+      raise "Error getting dataverse: #{response.status} - #{response.body}" unless response.success?
       DataverseResponse.new(response.body)
     end
 
@@ -45,15 +46,16 @@ module Dataverse
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
-      raise "Error getting dataverse items: #{response.code} - #{response.body}" unless response.success?
+      raise "Error getting dataverse items: #{response.status} - #{response.body}" unless response.success?
       SearchResponse.new(response.body, page, per_page)
     end
 
     def initialize_project(dataset)
-      Project.new(name: ProjectNameGenerator.generate)
+      name = ProjectNameGenerator.generate
+      Project.new(id: name, name: name)
     end
 
-    def initialize_download_files(project, files_page, file_ids)
+    def initialize_download_files(project, dataset, files_page, file_ids)
       dataset_files = files_page.files_by_ids(file_ids)
       dataset_files.each.map do |dataset_file|
         DownloadFile.new.tap do |f|
@@ -61,21 +63,23 @@ module Dataverse
           f.project_id = project.id
           f.creation_date = now
           f.type = ConnectorType::DATAVERSE
-          f.filename = dataset_file.data_file.filename
+          f.filename = dataset_file.full_filename
           f.status = FileStatus::PENDING
-          f.size = dataset_file.data_file.filesize
+          f.size = dataset_file.filesize
           f.metadata = {
             dataverse_url: @dataverse_url,
+            persistent_id: dataset.data.dataset_persistent_id,
+            parents: dataset.data.parents,
             id: dataset_file.data_file.id.to_s,
-            filename: dataset_file.data_file.filename,
-            size: dataset_file.data_file.filesize,
-            content_type: dataset_file.data_file.content_type,
+            content_type: dataset_file.content_type,
             storage: dataset_file.data_file.storage_identifier,
             md5: dataset_file.data_file.md5,
             download_url: nil,
             download_location: nil,
             temp_location: nil,
           }
+
+          @file_utils.make_download_file_unique(f)
         end
       end
     end

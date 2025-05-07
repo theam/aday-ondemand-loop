@@ -37,7 +37,7 @@ class Project < ApplicationDiskRecord
         directory = File.join(self.class.files_directory(id))
         Dir.glob(File.join(directory, '*.yml'))
            .select { |f| File.file?(f) }
-           .sort_by { |f| File.ctime(f) }
+           .sort_by { |f| -File.ctime(f).to_f }
            .map { |f| DownloadFile.find(id, File.basename(f, ".yml")) }
            .compact
       end
@@ -83,8 +83,12 @@ class Project < ApplicationDiskRecord
   end
 
   def destroy
-    project_path = self.class.projects_directory(id)
+    project_path = self.class.project_metadata_dir(id)
     FileUtils.rm_rf(project_path)
+  end
+
+  def self.project_metadata_dir(id)
+    File.join(metadata_directory, id)
   end
 
   private
@@ -93,16 +97,12 @@ class Project < ApplicationDiskRecord
     File.join(metadata_root_directory, 'projects')
   end
 
-  def self.projects_directory(id)
-    File.join(metadata_directory, id)
-  end
-
   def self.files_directory(id)
     File.join(metadata_directory, id, 'files')
   end
 
   def self.filename_by_id(id)
-    File.join(projects_directory(id), "metadata.yml")
+    File.join(project_metadata_dir(id), "metadata.yml")
   end
 
   def self.load_metadata_from_directory(directory)
