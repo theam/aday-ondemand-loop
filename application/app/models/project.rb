@@ -44,14 +44,13 @@ class Project < ApplicationDiskRecord
       end
   end
 
-  def upload_files
-    @upload_files ||=
+  def upload_collections
+    @upload_collections ||=
       begin
-        directory = File.join(self.class.upload_files_directory(id))
-        Dir.glob(File.join(directory, '*.yml'))
-           .select { |f| File.file?(f) }
-           .sort_by { |f| File.ctime(f) }
-           .map { |f| UploadFile.find(id, File.basename(f, ".yml")) }
+        Dir.glob(File.join(self.class.upload_collections_directory(id), '*'))
+           .select { |path| File.directory?(path) }
+           .sort { |a, b| File.ctime(b) <=> File.ctime(a) }
+           .map { |directory| UploadCollection.find(id, File.basename(directory)) }
            .compact
       end
   end
@@ -116,6 +115,10 @@ class Project < ApplicationDiskRecord
 
   def self.upload_files_directory(id)
     File.join(metadata_directory, id, 'uploads')
+  end
+
+  def self.upload_collections_directory(id)
+    File.join(metadata_directory, id, 'upload_collections')
   end
 
   def self.filename_by_id(id)
