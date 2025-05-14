@@ -61,12 +61,12 @@ module Upload
 
     # Internal class for chunked reading with progress reporting
     class ProgressIO
-      def initialize(file_path, chunk_size: 16 * 1024)
+      def initialize(file_path, chunk_size: 16 * 1024, &callback)
         @total_size = File.size(file_path)
         @file = File.open(file_path, 'rb')
         @uploaded = 0
         @chunk_size = chunk_size
-        #@callback = block_given? ? Proc.new : nil
+        @callback = block_given? ? callback : nil
         @file_path = file_path
       end
 
@@ -99,9 +99,9 @@ module Upload
           file: @file_path,
           total: @total_size,
           uploaded: @uploaded,
-          percent: ((@uploaded.to_f / @total_size) * 100).round(2)
+          progress: [ (@uploaded.to_f / @total_size * 100).to_i, 100 ].min
         }
-        #@callback.call(context) if @callback
+        @callback.call(context) if @callback
       end
     end
   end
