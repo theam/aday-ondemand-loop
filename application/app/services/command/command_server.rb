@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Download::Command
-  class DownloadCommandServer
+module Command
+  class CommandServer
     include LoggingCommon
 
     def initialize(socket_path:)
@@ -55,13 +55,13 @@ module Download::Command
       return unless raw
 
       begin
-        request = Download::Command::Request.from_json(raw.strip)
-        result = Download::Command::DownloadCommandRegistry.instance.dispatch(request)
+        request = Command::Request.from_json(raw.strip)
+        result = Command::CommandRegistry.instance.dispatch(request)
 
         client.puts(result.to_json)
       rescue => e
         log_error('Error processing request', {request: raw}, e)
-        error = Download::Command::Response.error(message: e.message)
+        error = Command::Response.error(message: e.message)
         client.puts(error.to_json)
       ensure
         client.close

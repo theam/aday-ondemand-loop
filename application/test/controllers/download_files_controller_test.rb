@@ -1,6 +1,6 @@
 require "test_helper"
 
-class FilesControllerTest < ActionDispatch::IntegrationTest
+class DownloadFilesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @project_id = "test_project"
     @file_id = "file_123"
@@ -8,7 +8,7 @@ class FilesControllerTest < ActionDispatch::IntegrationTest
     @now = Time.current
 
     # Stub now from DateTimeCommon if needed
-    FilesController.any_instance.stubs(:now).returns(@now)
+    DownloadFilesController.any_instance.stubs(:now).returns(@now)
   end
 
   test "cancel should return not_found if file is nil" do
@@ -25,7 +25,7 @@ class FilesControllerTest < ActionDispatch::IntegrationTest
 
     mock_client = mock("DownloadCommandClient")
     mock_client.expects(:request).returns(OpenStruct.new(status: 500))
-    Download::Command::DownloadCommandClient.stubs(:new).returns(mock_client)
+    Command::CommandClient.stubs(:new).returns(mock_client)
 
     post downloads_file_cancel_url(project_id: @project_id, file_id: @file_id)
 
@@ -40,7 +40,7 @@ class FilesControllerTest < ActionDispatch::IntegrationTest
 
     mock_client = mock("DownloadCommandClient")
     mock_client.expects(:request).returns(OpenStruct.new(status: 200))
-    Download::Command::DownloadCommandClient.stubs(:new).returns(mock_client)
+    Command::CommandClient.stubs(:new).returns(mock_client)
 
     post downloads_file_cancel_url(project_id: @project_id, file_id: @file_id)
 

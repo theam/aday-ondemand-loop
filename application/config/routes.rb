@@ -2,13 +2,13 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "downloads" => "downloads#index", as: :downloads
   get "downloads/files" => "downloads#files", as: :downloads_files
-  post "downloads/:project_id/:file_id/cancel" => "files#cancel", as: :downloads_file_cancel
-  delete "downloads/:project_id/:file_id" => "files#destroy", as: :downloads_file_delete
+  post "downloads/:project_id/:file_id/cancel" => "download_files#cancel", as: :downloads_file_cancel
+  delete "downloads/:project_id/:file_id" => "download_files#destroy", as: :downloads_file_delete
 
   get "uploads" => "uploads#index", as: :uploads
   get "uploads/files" => "uploads#files", as: :uploads_files
 
-  post "uploads/:project_id/:collection_id/:file_id/cancel" => "files#cancel_upload", as: :uploads_file_cancel
+  post "uploads/:project_id/:collection_id/:file_id/cancel" => "upload_files#cancel", as: :uploads_file_cancel
   post "uploads/:project_id/:collection_id/add" => "upload_files#add", as: :uploads_file_add
   get "uploads/:project_id/:collection_id/files" => "upload_files#files", as: :uploads_file_files
   delete "uploads/:project_id/:collection_id/:file_id" => "upload_files#delete_file", as: :uploads_file_delete

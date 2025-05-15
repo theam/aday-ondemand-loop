@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require 'timeout'
 
-module Download::Command
-  class DownloadCommandClient
+module Command
+  class CommandClient
     include LoggingCommon
 
     class TimeoutError < StandardError; end
@@ -25,7 +25,7 @@ module Download::Command
             raise CommandError, "No response from server for request=#{request.inspect}"
           end
 
-          Download::Command::Response.from_json(raw_response.strip)
+          Command::Response.from_json(raw_response.strip)
         rescue => e
           log_error('Error processing request', {request: request.inspect}, e)
           raise CommandError, "Error processing request for request=#{request.inspect} error=#{e.message}"
