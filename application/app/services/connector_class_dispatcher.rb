@@ -4,16 +4,16 @@
 # This is to avoid creating a factory/strategy class for every connector specific class required
 class ConnectorClassDispatcher
 
-  def self.file_connector_status(download_file)
-    self.load(download_file.type, 'ConnectorStatus', download_file)
+  def self.download_connector_status(download_file)
+    self.load(download_file.type, 'DownloadConnectorStatus', download_file)
   end
 
   def self.upload_file_connector_status(upload_file)
     self.load(upload_file.type, 'UploadConnectorStatus', upload_file)
   end
 
-  def self.connector_metadata(download_file)
-    self.load(download_file.type, 'ConnectorMetadata', download_file)
+  def self.download_connector_metadata(download_file)
+    self.load(download_file.type, 'DownloadConnectorMetadata', download_file)
   end
 
   def self.upload_connector_metadata(upload_file)
