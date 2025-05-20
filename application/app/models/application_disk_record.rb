@@ -1,4 +1,6 @@
 class ApplicationDiskRecord
+  include YamlStorage
+  include LoggingCommon
 
   def self.metadata_root_directory
     Configuration.metadata_root
@@ -26,11 +28,11 @@ class ApplicationDiskRecord
   end
 
   def to_json
-    to_hash.to_json
+    to_h.to_json
   end
 
   def to_yaml
-    to_hash.to_yaml
+    to_h.to_yaml
   end
 
   def to_s

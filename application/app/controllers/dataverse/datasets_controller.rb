@@ -16,13 +16,23 @@ class Dataverse::DatasetsController < ApplicationController
     if project.nil?
       project = @service.initialize_project(@dataset)
       unless project.save
-        redirect_back fallback_location: root_path, alert: "Error generating project: #{project.errors}"
+        errors = project.errors.full_messages.join(", ")
+        redirect_back fallback_location: root_path, alert: "Error generating project: #{errors}"
         return
       end
     end
 
-    @download_files = @service.initialize_download_files(project, @dataset, @files_page, file_ids)
-    save_results = @download_files.each.map { |download_file| download_file.save }
+    download_files = @service.initialize_download_files(project, @dataset, @files_page, file_ids)
+    download_files.each do |file|
+      unless file.valid?
+        errors = file.errors.full_messages.join(", ")
+        log_error('DownloadFile validation error', {error: errors, project_id: project.id, file: file.to_s})
+        redirect_back fallback_location: root_path, alert: "Invalid file in selection: #{file.filename} errors: #{errors}"
+        return
+      end
+    end
+
+    save_results = download_files.map(&:save)
     if save_results.include?(false)
       redirect_back fallback_location: root_path, alert: "Error generating the download file"
       return
@@ -47,18 +57,15 @@ class Dataverse::DatasetsController < ApplicationController
       @dataset = @service.find_dataset_version_by_persistent_id(@persistent_id)
       unless @dataset
         log_error('Dataset not found.', {dataverse: @dataverse_url, persistent_id: @persistent_id})
-        flash[:alert] = "Dataset not found. Dataverse: #{@dataverse_url} persistentId: #{@persistent_id}"
-        redirect_to root_path
+        redirect_back fallback_location: root_path, alert: "Dataset not found. Dataverse: #{@dataverse_url} persistentId: #{@persistent_id}"
         return
       end
     rescue Dataverse::DataverseService::UnauthorizedException => e
       log_error('Dataset requires authorization', {dataverse: @dataverse_url, persistent_id: @persistent_id}, e)
-      flash[:alert] = "Dataset requires authorization. Dataverse: #{@dataverse_url} persistentId: #{@persistent_id}"
-      redirect_to root_path
+      redirect_back fallback_location: root_path, alert: "Dataset requires authorization. Dataverse: #{@dataverse_url} persistentId: #{@persistent_id}"
     rescue Exception => e
       log_error('Dataverse service error', {dataverse: @dataverse_url, persistent_id: @persistent_id}, e)
-      flash[:alert] = "Dataverse service error. Dataverse: #{@dataverse_url} persistentId: #{@persistent_id}"
-      redirect_to root_path
+      redirect_back fallback_location: root_path, alert: "Dataverse service error. Dataverse: #{@dataverse_url} persistentId: #{@persistent_id}"
       return
     end
   end
