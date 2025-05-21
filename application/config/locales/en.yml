@@ -28,4 +28,176 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  connectors:
+    dataverse:
+      upload_collection_bar:
+        edit_dataset: "Edit Dataset"
+      upload_collection_form:
+        dataset_url: "Dataset URL"
+        dataset_url_form_text: "Enter the URL of the dataset where files will be uploaded."
+        api_key: "API Key"
+        api_key_placeholder: "Enter your API key"
+        api_key_form_text: "Provide the API key required to authenticate with the connector."
+        save_changes: "Save Changes"
+        cancel: "Cancel"
+  dataverse:
+    datasets:
+      breadcrumbs:
+        home: "Home"
+      dataset_files:
+        page: "page %{page}"
+        file_name: "File name"
+        size: "Size"
+        storage: "Storage"
+        published: "Published"
+        add_files_submit: "Add Files to Active Project"
+        empty_dataset_msg: "The dataset does not contain files to download"
+      dataset_info:
+        dataset: "Dataset"
+        description: "Description"
+      dataset_metadata:
+        dataset_metadata: "Dataset Metadata"
+        publication_date: "Publication date:"
+        authors: "Authors:"
+        subjects: "Subjects:"
+        license: "License:"
+    dataverses:
+      breadcrumbs:
+        home: "Home"
+      dataset_item:
+        untitled_dataset: "Untitled Dataset"
+        published: "Published"
+        type: "Type"
+        publisher: "Publisher"
+        files: "Files"
+      dataverse_info:
+        dataverse: "Dataverse"
+      dataverse_item:
+        unnamed_dataverse: "Unnamed Dataverse"
+        published: "Published"
+        type: "Type"
+        affiliation: "Affiliation"
+        parent: "Parent"
+      installation_items:
+        page: "page %{page}"
+        no_items_found: "No items found."
+      search_items:
+        page: "page %{page}"
+        no_items_found: "No items found."
+      index:
+        home: "Home"
+        dataverse_icon: "Dataverse icon"
+  doi_search:
+    index:
+      doi_search: "DOI Search"
+      doi_logo: "DOI Logo"
+      doi_lookup: "DOI Lookup"
+      doi_placeholder: "Enter DOI..."
+      search: "Search"
+  download_status:
+    actions:
+      downloads_directory: "Downloads Directory"
+      reload: "Reload"
+    files:
+      scheduled_downloads: "Scheduled Downloads"
+      browse_file: "Browse file"
+      creation_date: "Creation date"
+      cancel_download: "Cancel download"
+    index:
+      downloads: "Downloads"
+  file_browser:
+    browser:
+      edit_path: "Edit path"
+      parent_folder: "Parent folder"
+  layouts:
+    nav:
+      logo:
+        logo_alt_text: "OnDemand Loop Logo"
+      navigation:
+        projects: "Projects"
+        downloads: "Downloads"
+        uploads: "Uploads"
+        doi_search: "DOI Search"
+        repositories: "Repositories"
+        explore: "Explore"
+        icon_alt_text: "Loop Application Icon"
+        ood_icon_alt_text: "Open OnDemand Icon"
+        restart: "Restart"
+    footer:
+      version: "OnDemand Loop version: %{version}"
+  projects:
+    show:
+      download_actions:
+        open_downloads_folder: "Open Downloads folder"
+        download_files: "Download Files"
+        edit_download_settings: "Edit Download settings"
+      download_files:
+        schedule_date: "Schedule date"
+        repository_files: "Repository Files"
+        completion_date: "Completion date"
+        download_start_date: "Download start date"
+        delete_file: "Delete File"
+      project_actions:
+        open_project_folder: "Open project folder"
+        create_upload_collection: "Create Upload Collection"
+        delete_project: "Delete Project"
+        open_project_metadata: "Open Project Metadata"
+      project_metadata:
+        project_details: "Project Details"
+        name: "Name"
+        download_directory: "Download Directory"
+        created_at: "Created At"
+        file_summary: "File Summary"
+        total_files: "Total Files"
+        missing_files: "Missing Files"
+        last_sync: "Last Sync"
+        here: "HERE"
+      project_tabs:
+        project: "Project"
+        download_files: "Download Files"
+      upload_actions:
+        creation_date: "Creation date"
+        add_files: "Add Files"
+        edit_upload_collection_settings: "Edit upload collection settings"
+        delete_collection: "Delete Collection"
+      upload_files:
+        no_upload_files: "No Upload Files"
+        schedule_date: "Schedule date"
+        completion_date: "Completion date"
+        download_start_date: "Download start date"
+        delete_file: "Delete File"
+      projects: "Projects"
+
+    actions:
+      downloads_root_directory: "Downloads Root Directory"
+      create_project: "Create Project"
+    download_files:
+      schedule_date: "Schedule date"
+      repository_files: "Repository Files"
+      completion_date: "Completion date"
+      download_start_date: "Download start date"
+      delete_file: "Delete file"
+    project_footer:
+      files: "Files"
+      view_files: "View files"
+      open_project_metadata: "Open Project metadata"
+      download_files: "Download Files"
+      uploads: "Uploads"
+    project_header:
+      open_project_folder: "Open project folder"
+      creation_date: "Creation Date"
+      save_project_name: "Save project name"
+      cancel: "Cancel"
+      edit_project_name: "Edit Project name"
+      delete_project: "Delete project"
+      active_project: "Active project"
+      set_as_active_project: "Set as Active Project"
+    upload_collection:
+      schedule_date: "Schedule date"
+      repository_files: "Repository Files"
+      completion_date: "Completion date"
+      upload_start_date: "Upload start date"
+      delete_file: "Delete file"
+    index:
+      projects: "Projects"
+
