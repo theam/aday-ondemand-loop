@@ -1,33 +1,12 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
+  acts_as_page:
+    results_summary: "%{start_index} to %{end_index} of %{total_count} results"
+    out_of_range: "Out of range"
+  helpers:
+    invalid_dataverse_hostname: "Invalid Dataverse hostname"
+    key_missing: "Key missing"
+    key_not_verified: "Key not verified"
+    key_verified: "Key verified"
   connectors:
     dataverse:
       upload_collection_bar:
@@ -140,6 +119,7 @@ en:
       project_actions:
         open_project_folder: "Open project folder"
         create_upload_collection: "Create Upload Collection"
+        create_upload_collection_placeholder: "Dataset URL"
         delete_project: "Delete Project"
         open_project_metadata: "Open Project Metadata"
       project_metadata:
@@ -167,7 +147,6 @@ en:
         download_start_date: "Download start date"
         delete_file: "Delete File"
       projects: "Projects"
-
     actions:
       downloads_root_directory: "Downloads Root Directory"
       create_project: "Create Project"
@@ -177,6 +156,8 @@ en:
       completion_date: "Completion date"
       download_start_date: "Download start date"
       delete_file: "Delete file"
+    project:
+      download_files: "Download Files"
     project_footer:
       files: "Files"
       view_files: "View files"
@@ -200,4 +181,47 @@ en:
       delete_file: "Delete file"
     index:
       projects: "Projects"
-
+  shared:
+    breadcrumbs:
+      home: "Home"
+    file_stats_inline:
+      pending_files: "Pending files"
+      completed_files: "Completed files"
+      cancelled_files: "Cancelled files"
+      error_files: "Error files"
+      total_files: "Total files"
+    file_stats_widget:
+      pending_files: "Pending files"
+      completed_files: "Completed files"
+      cancelled_files: "Cancelled files"
+      error_files: "Error files"
+      total_files: "Total files"
+    inline_field_submit:
+      default_placeholder: "Enter value"
+      submit: "Submit"
+      cancel: "Cancel"
+      loading: "Loading..."
+    modal:
+      close: "Close"
+    ood_folder_button:
+      ood_icon_alt: "Open OnDemand Icon"
+    project_bar:
+      open_project_folder: "Open Project folder"
+      creation_date: "Creation date"
+      open_project_metadata: "Open Project metadata"
+      active_project: "Active Project"
+    repo_resolver_bar:
+      repo_url_placeholder: "Paste Repository URL"
+      repo_url: "Repository URL"
+      connect: "Connect"
+  upload_status:
+    actions:
+      reload: "Reload"
+    files:
+      scheduled_uploads: "Scheduled Uploads"
+      browse_file: "Browse file"
+      external_dataset: "External dataset"
+      schedule_creation_date: "Schedule creation date"
+      cancel_upload: "Cancel upload"
+    index:
+      uploads: "Uploads"
