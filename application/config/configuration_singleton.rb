@@ -28,6 +28,10 @@ class ConfigurationSingleton
     File.join(metadata_root, 'command.server.sock')
   end
 
+  def repo_db_file
+    File.join(metadata_root, 'repos', 'repo_db.yml')
+  end
+
   def config
     @config ||= read_config
   end

@@ -8,17 +8,19 @@ module Repo
 
     def resolve(object_url)
       context = RepoResolverContext.new(object_url)
+      return context.result if object_url.blank?
 
       @resolvers.each do |resolver|
         resolver.resolve(context)
-        break if context.result
+        break if context.result.resolved?
       rescue => e
         log_error('Error while executing URL resolvers', {resolver: resolver.class.name}, e)
         break
       end
 
-      context.result || { type: "Unknown" }
+      context.result
     end
   end
+
 end
 
