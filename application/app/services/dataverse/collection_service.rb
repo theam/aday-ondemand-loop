@@ -1,11 +1,5 @@
 module Dataverse
-  class DataverseService
-    include LoggingCommon
-    include DateTimeCommon
-
-    AUTH_HEADER = 'X-Dataverse-key'
-    class UnauthorizedException < Exception; end
-    class ApiKeyRequiredException < Exception; end
+  class CollectionService < Dataverse::ApiService
 
     def initialize(dataverse_url, api_key: nil, http_client: Common::HttpClient.new(base_url: dataverse_url), file_utils: Common::FileUtils.new)
       @dataverse_url = dataverse_url
@@ -55,7 +49,7 @@ module Dataverse
       DatasetFilesResponse.new(response.body, page: page, per_page: per_page)
     end
 
-    def find_dataverse_by_id(id)
+    def find_collection_by_id(id)
       url = "/api/dataverses/#{id}?returnOwners=true"
       response = @http_client.get(url)
       return nil if response.not_found?
@@ -64,7 +58,7 @@ module Dataverse
       DataverseResponse.new(response.body)
     end
 
-    def search_dataverse_items(dataverse_id, page = 1, per_page = 10, include_collections = true, include_datasets = true)
+    def search_collection_items(dataverse_id, page: 1, per_page: 10, include_collections: true, include_datasets: true)
       start = (page-1) * per_page
       type_collection = include_collections ? "&type=dataverse" : ""
       type_dataset = include_datasets ? "&type=dataset" : ""

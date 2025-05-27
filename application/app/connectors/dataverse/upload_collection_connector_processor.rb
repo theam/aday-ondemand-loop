@@ -18,9 +18,9 @@ module Dataverse
       remote_repo_url = request_params[:object_url]
       dataverse_url = Dataverse::DataverseUrl.parse(remote_repo_url)
 
-      dv_service = Dataverse::DataverseService.new(dataverse_url.dataverse_url)
+      dv_service = Dataverse::CollectionService.new(dataverse_url.dataverse_url)
       if dataverse_url.collection?
-        collection = dv_service.find_dataverse_by_id(dataverse_url.collection_id)
+        collection = dv_service.find_collection_by_id(dataverse_url.collection_id)
         return error(I18n.t('connectors.dataverse.upload_collections.collection_not_found', url: remote_repo_url)) unless collection
 
         root_dv = collection.data.parents.first
@@ -36,7 +36,7 @@ module Dataverse
         collection_title = parent_dv[:name]
         dataset_title = dataset.metadata_field('title').to_s
       else
-        collection = dv_service.find_dataverse_by_id(':root')
+        collection = dv_service.find_collection_by_id(':root')
         root_title = collection.data.name
       end
 
