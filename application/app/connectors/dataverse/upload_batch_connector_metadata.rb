@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Dataverse
-  class UploadCollectionConnectorMetadata
-    def initialize(upload_collection)
-      @metadata = upload_collection.metadata.to_h.deep_symbolize_keys
+  class UploadBatchConnectorMetadata
+    def initialize(upload_batch)
+      @metadata = upload_batch.metadata.to_h.deep_symbolize_keys
       @metadata.each_key do |key|
         define_singleton_method("#{key.to_s}="){ |value| @metadata[key] = value }
         define_singleton_method(key){ @metadata[key] }

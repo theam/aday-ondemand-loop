@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UploadCollection < ApplicationDiskRecord
+class UploadBatch < ApplicationDiskRecord
   include ActiveModel::Model
 
   ATTRIBUTES = %w[id project_id remote_repo_url type name creation_date metadata].freeze
@@ -65,13 +65,13 @@ class UploadCollection < ApplicationDiskRecord
   end
 
   def connector_metadata
-    ConnectorClassDispatcher.upload_collection_connector_metadata(self)
+    ConnectorClassDispatcher.upload_batch_connector_metadata(self)
   end
 
   private
 
   def self.directory_by_ids(project_id, collection_id)
-    File.join(Project.upload_collections_directory(project_id), collection_id)
+    File.join(Project.upload_batches_directory(project_id), collection_id)
   end
 
   def self.filename_by_ids(project_id, collection_id)
