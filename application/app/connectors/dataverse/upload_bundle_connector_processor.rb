@@ -2,7 +2,7 @@
 
 module Dataverse
   # Dataverse upload batch connector processor. Responsible for managing updates to collections of type Dataverse
-  class UploadBatchConnectorProcessor
+  class UploadBundleConnectorProcessor
     include LoggingCommon
     include DateTimeCommon
 
@@ -21,7 +21,7 @@ module Dataverse
       if dataverse_url.collection?
         collection_service = Dataverse::CollectionService.new(dataverse_url.dataverse_url)
         collection = collection_service.find_collection_by_id(dataverse_url.collection_id)
-        return error(I18n.t('connectors.dataverse.upload_batches.collection_not_found', url: remote_repo_url)) unless collection
+        return error(I18n.t('connectors.dataverse.upload_bundles.collection_not_found', url: remote_repo_url)) unless collection
 
         root_dv = collection.data.parents.first
         root_title = root_dv[:name]
@@ -29,7 +29,7 @@ module Dataverse
       elsif dataverse_url.dataset?
         dataset_service = Dataverse::DatasetService.new(dataverse_url.dataverse_url)
         dataset = dataset_service.find_dataset_version_by_persistent_id(dataverse_url.dataset_id)
-        return error(I18n.t('connectors.dataverse.upload_batches.dataset_not_found', url: remote_repo_url)) unless dataset
+        return error(I18n.t('connectors.dataverse.upload_bundles.dataset_not_found', url: remote_repo_url)) unless dataset
 
         parent_dv = dataset.data.parents.last
         root_dv = dataset.data.parents.first
@@ -43,14 +43,14 @@ module Dataverse
       end
 
       file_utils = Common::FileUtils.new
-      upload_batch = UploadBatch.new.tap do |batch|
-        batch.id = file_utils.normalize_name(File.join(dataverse_url.domain, UploadBatch.generate_code))
-        batch.name = batch.id
-        batch.project_id = project.id
-        batch.remote_repo_url = remote_repo_url
-        batch.type = ConnectorType::DATAVERSE
-        batch.creation_date = now
-        batch.metadata = {
+      upload_bundle = UploadBundle.new.tap do |bundle|
+        bundle.id = file_utils.normalize_name(File.join(dataverse_url.domain, UploadBundle.generate_code))
+        bundle.name = bundle.id
+        bundle.project_id = project.id
+        bundle.remote_repo_url = remote_repo_url
+        bundle.type = ConnectorType::DATAVERSE
+        bundle.creation_date = now
+        bundle.metadata = {
           dataverse_url: dataverse_url.dataverse_url,
           dataverse_title: root_title,
           collection_title: collection_title,
@@ -59,42 +59,42 @@ module Dataverse
           dataset_id: dataverse_url.dataset_id,
         }
       end
-      upload_batch.save
+      upload_bundle.save
 
       ConnectorResult.new(
-        redirect_url: Rails.application.routes.url_helpers.project_path(id: project.id, anchor: "tab-#{upload_batch.id}"),
-        message: { notice: I18n.t('connectors.dataverse.upload_batches.created', name: upload_batch.name) },
+        redirect_url: Rails.application.routes.url_helpers.project_path(id: project.id, anchor: "tab-#{upload_bundle.id}"),
+        message: { notice: I18n.t('connectors.dataverse.upload_bundles.created', name: upload_bundle.name) },
         success: true
       )
     end
 
-    def edit(upload_batch, request_params)
+    def edit(upload_bundle, request_params)
       case request_params[:form].to_s
       when 'dataset_form_tabs'
-        Dataverse::Actions::DatasetFormTabs.new.edit(upload_batch, request_params)
+        Dataverse::Actions::DatasetFormTabs.new.edit(upload_bundle, request_params)
       when 'dataset_create'
-        Dataverse::Actions::DatasetCreate.new.edit(upload_batch, request_params)
+        Dataverse::Actions::DatasetCreate.new.edit(upload_bundle, request_params)
       when 'dataset_select'
-        Dataverse::Actions::DatasetSelect.new.edit(upload_batch, request_params)
+        Dataverse::Actions::DatasetSelect.new.edit(upload_bundle, request_params)
       when 'collection_select'
-        Dataverse::Actions::CollectionSelect.new.edit(upload_batch, request_params)
+        Dataverse::Actions::CollectionSelect.new.edit(upload_bundle, request_params)
       else
-        Dataverse::Actions::ConnectorEdit.new.edit(upload_batch, request_params)
+        Dataverse::Actions::ConnectorEdit.new.edit(upload_bundle, request_params)
       end
     end
 
-    def update(upload_batch, request_params)
+    def update(upload_bundle, request_params)
       case request_params[:form].to_s
       when 'dataset_form_tabs'
-        Dataverse::Actions::DatasetFormTabs.new.update(upload_batch, request_params)
+        Dataverse::Actions::DatasetFormTabs.new.update(upload_bundle, request_params)
       when 'dataset_create'
-        Dataverse::Actions::DatasetCreate.new.update(upload_batch, request_params)
+        Dataverse::Actions::DatasetCreate.new.update(upload_bundle, request_params)
       when 'dataset_select'
-        Dataverse::Actions::DatasetSelect.new.update(upload_batch, request_params)
+        Dataverse::Actions::DatasetSelect.new.update(upload_bundle, request_params)
       when 'collection_select'
-        Dataverse::Actions::CollectionSelect.new.update(upload_batch, request_params)
+        Dataverse::Actions::CollectionSelect.new.update(upload_bundle, request_params)
       else
-        Dataverse::Actions::ConnectorEdit.new.update(upload_batch, request_params)
+        Dataverse::Actions::ConnectorEdit.new.update(upload_bundle, request_params)
       end
     end
 
