@@ -29,10 +29,6 @@ jobs:
         working-directory: src
         run: make release_build
 
-      - name: Run tests
-        working-directory: src
-        run: make test
-
       - name: Checkout Loop Production branch
         uses: actions/checkout@v4
         with:

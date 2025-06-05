@@ -23,16 +23,27 @@ jobs:
         with:
           path: src
 
+      - name: Run tests using Docker via Make
+        working-directory: src
+        run: make test
+
+      - name: Bump version using Docker via Make
+        working-directory: src
+        run: make version VERSION_TYPE=${{ github.event.inputs.bump_type }}
+
+      - name: Commit bumped version
+        working-directory: src
+        run: |
+          git add application/VERSION
+          git commit -m "Create release version"
+          git push origin main
+
       - name: Read current version
         id: version
         working-directory: src/application
         run: |
           version=$(cat VERSION)
           echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Run tests using Docker via Make
-        working-directory: src
-        run: make test
 
       - name: Create and push tag
         working-directory: src
@@ -42,16 +53,4 @@ jobs:
           git tag -f "v${{ steps.version.outputs.version }}"
           git push origin "v${{ steps.version.outputs.version }}" --force
 
-      - name: Bump version using Docker via Make
-        working-directory: src
-        run: make version VERSION_TYPE=${{ github.event.inputs.bump_type }}
-
-      - name: Commit bumped version
-        working-directory: src
-        run: |
-          git checkout main
-          git pull origin main
-          git add application/VERSION
-          git commit -m "Bump version after release"
-          git push origin main
 
