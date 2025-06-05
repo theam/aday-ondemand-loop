@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Checkout Loop Tags
         uses: actions/checkout@v4
-        working-directory: src
         with:
+          path: src
           fetch-depth: 0
 
       - name: Checkout specified tag
