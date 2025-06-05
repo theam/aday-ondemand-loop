@@ -19,6 +19,12 @@ jobs:
           path: src
           fetch-depth: 0
 
+      - name: Git setup
+        working-directory: src
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+
       - name: Checkout specified tag
         working-directory: src
         run: |
@@ -44,8 +50,6 @@ jobs:
       - name: Commit production release
         working-directory: target
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@users.noreply.github.com"
           git add .
           git commit -m "OnDemand Loop deployment for version ${{ github.event.inputs.tag }}"
           git push

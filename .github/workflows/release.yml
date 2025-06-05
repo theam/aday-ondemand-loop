@@ -23,6 +23,12 @@ jobs:
         with:
           path: src
 
+      - name: Git setup
+        working-directory: src
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+
       - name: Run tests using Docker via Make
         working-directory: src
         run: make test
@@ -48,8 +54,6 @@ jobs:
       - name: Create and push tag
         working-directory: src
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@users.noreply.github.com"
           git tag -f "v${{ steps.version.outputs.version }}"
           git push origin "v${{ steps.version.outputs.version }}" --force
 
