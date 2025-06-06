@@ -63,6 +63,7 @@ jobs:
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
+        working-directory: src
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
