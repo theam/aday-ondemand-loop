@@ -63,12 +63,11 @@ jobs:
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
-        working-directory: src
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          body_path: application/release_notes.md
+          body_path: src/application/release_notes.md
 
 
 
