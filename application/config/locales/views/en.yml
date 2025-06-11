@@ -125,15 +125,27 @@ en:
         dataverse_icon: "Dataverse icon"
   download_status:
     actions:
-      downloads_directory: "Downloads Directory"
-      reload: "Reload"
+      actions_bar:
+        title:
+          a11y: { label: "Downloads actions bar" }
+      button:
+        downloads_directory: { title: "Downloads Directory" }
+        reload: { title: "Reload" }
     files:
-      scheduled_downloads: "Scheduled Downloads"
-      browse_file: "Browse file"
-      creation_date: "Creation date"
-      cancel_download: "Cancel download"
+      button:
+        browse_file:
+          title: "Browse file"
+          a11y: { text: "Browse file %{filename}" }
+        cancel_download:
+          title: "Cancel download"
+          a11y: { text: "Cancel download of %{filename}" }
+      field:
+        creation_date: { title: "Creation date" }
+      header:
+        scheduled_downloads: { text: "Scheduled Downloads" }
     index:
-      downloads: "Downloads"
+      breadcrumbs: { text: "Downloads" }
+      page: { title: "Downloads" }
   file_browser:
     browser:
       edit_path: "Edit path"
@@ -280,6 +292,7 @@ en:
     files:
       scheduled_uploads: "Scheduled Uploads"
       browse_file: "Browse file"
+      browse_file_for: "Browse file %(filename)"
       external_dataset: "External dataset"
       schedule_creation_date: "Schedule creation date"
       cancel_upload: "Cancel upload"
