@@ -44,8 +44,7 @@ jobs:
 
       - name: Copy Loop new version
         run: |
-          rm -rf target/*
-          cp -a src/application/. target/
+          rsync -a --delete --exclude='.git' src/application/ target/
 
       - name: List contents of target
         run: ls -la target/
