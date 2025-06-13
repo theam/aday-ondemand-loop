@@ -45,7 +45,10 @@ jobs:
       - name: Copy Loop new version
         run: |
           rm -rf target/*
-          cp -R src/application/. target
+          cp -a src/application/. target/
+
+      - name: List contents of target
+        run: ls -la target/
 
       - name: Commit production release
         working-directory: target
