@@ -1,0 +1,26 @@
+<div class="container-md content" role="main">
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to t('.home'), root_path %></li>
+      <li class="breadcrumb-item active">Zenodo</li>
+    </ol>
+  </nav>
+  <%= form_with url: view_zenodo_landing_path, method: :get, local: true, class: 'mb-3' do %>
+    <div class="input-group">
+      <%= text_field_tag :q, params[:q], placeholder: 'Search Zenodo', class: 'form-control' %>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  <% end %>
+  <% if @results %>
+    <div class="list-group mt-3">
+      <% @results.page_items.each do |item| %>
+        <a class="list-group-item list-group-item-action" href="<%= view_zenodo_record_path(z_hostname: 'zenodo.org', id: item.id) %>"><%= item.title %></a>
+      <% end %>
+      <div class="list-group-item d-flex justify-content-center">
+        <%= link_to '<', view_zenodo_landing_path(q: @query, page: @results.prev_page), class: 'text-decoration-none' unless @results.first_page? %>
+        Page <%= @results.page %>
+        <%= link_to '>', view_zenodo_landing_path(q: @query, page: @results.next_page), class: 'text-decoration-none' unless @results.last_page? %>
+      </div>
+    </div>
+  <% end %>
+</div>

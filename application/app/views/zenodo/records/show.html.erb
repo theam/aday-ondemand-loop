@@ -1,0 +1,47 @@
+<div class="container-md content" role="main">
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to t('.home'), root_path %></li>
+      <li class="breadcrumb-item"><%= link_to 'Zenodo', view_zenodo_landing_path %></li>
+      <li class="breadcrumb-item active">Record <%= @record.id %></li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card dataset-header">
+        <div class="card-header">Record</div>
+        <div class="list-group list-group-flush">
+          <span class="list-group-item list-group-item-action"><b><%= @record.metadata.title %></b></span>
+          <span class="list-group-item list-group-item-action"><%= @record.id %></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <%= form_with url: download_zenodo_record_files_path, method: :post, local: true do %>
+        <%= hidden_field_tag 'project_id', Current.settings.user_settings.active_project %>
+        <%= hidden_field_tag 'id', @record.id %>
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">File</th>
+              <th scope="col">Size</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @record.files.each do |file| %>
+              <tr>
+                <td><%= check_box_tag 'file_ids[]', file.id, false, class: 'form-check-input' %></td>
+                <td><%= file.filename %></td>
+                <td><%= number_to_human_size(file.filesize) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="text-center">
+          <%= submit_tag 'Add Files', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

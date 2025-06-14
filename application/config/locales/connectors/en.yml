@@ -16,3 +16,11 @@ en:
         created: "Upload bundle created: %{name}"
       upload_connector_processor:
         description: "File uploaded from OnDemand Loop application"
+    zenodo:
+      actions:
+        connector_edit:
+          success: "API Key updated"
+      upload_bundles:
+        created: "Upload bundle created: %{name}"
+      upload_connector_processor:
+        description: "File uploaded from OnDemand Loop application"
