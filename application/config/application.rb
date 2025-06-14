@@ -43,11 +43,17 @@ module DataverseForOndemand
       end
       namespace_mod = Object.const_get(connector_name)
 
-      %w[controllers models helpers services].each do |folder|
+      %w[controllers models services].each do |folder|
         path = File.join(connector_dir, folder)
         if Dir.exist?(path)
           Rails.autoloaders.main.push_dir(path, namespace: namespace_mod)
         end
+      end
+
+      helpers_path = File.join(connector_dir, 'helpers')
+      if Dir.exist?(helpers_path)
+        Rails.autoloaders.main.push_dir(helpers_path, namespace: namespace_mod)
+        config.paths['app/helpers'] << helpers_path
       end
 
       views_path = File.join(connector_dir, 'views')
