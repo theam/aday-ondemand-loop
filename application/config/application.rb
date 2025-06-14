@@ -33,6 +33,26 @@ module DataverseForOndemand
 
     # ALLOW ANY DOMAINS
     config.hosts.clear
+
+    # Load connector plugin folders
+    connectors_root = Rails.root.join('connectors')
+    Dir.glob(connectors_root.join('*')).select { |f| File.directory?(f) }.each do |connector_dir|
+      connector_name = File.basename(connector_dir).camelize
+      unless Object.const_defined?(connector_name)
+        Object.const_set(connector_name, Module.new)
+      end
+      namespace_mod = Object.const_get(connector_name)
+
+      %w[controllers models helpers services].each do |folder|
+        path = File.join(connector_dir, folder)
+        if Dir.exist?(path)
+          Rails.autoloaders.main.push_dir(path, namespace: namespace_mod)
+        end
+      end
+
+      views_path = File.join(connector_dir, 'views')
+      config.paths['app/views'] << views_path if Dir.exist?(views_path)
+    end
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
