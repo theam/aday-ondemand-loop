@@ -1,10 +1,10 @@
 require "test_helper"
 
-class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
+class DataverseDatasetVersionResponseTest < ActiveSupport::TestCase
 
   def setup
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_version_response', 'valid_response.json'))
-    @dataset = Dataverse::DatasetVersionResponse.new(valid_json)
+    @dataset = DataverseDatasetVersionResponse.new(valid_json)
   end
 
   def empty_json
@@ -20,9 +20,9 @@ class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
   end
 
   test "valid json parses @dataset version response" do
-    assert_instance_of Dataverse::DatasetVersionResponse, @dataset
+    assert_instance_of DataverseDatasetVersionResponse, @dataset
     assert_equal "OK", @dataset.status
-    assert_instance_of Dataverse::DatasetVersionResponse::Data, @dataset.data
+    assert_instance_of DataverseDatasetVersionResponse::Data, @dataset.data
   end
 
   test "valid json parses @dataset version response data" do
@@ -58,15 +58,15 @@ class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
 
   test "valid json parses dataset response license" do
     license = @dataset.data.license
-    assert_instance_of Dataverse::DatasetVersionResponse::Data::License, license
+    assert_instance_of DataverseDatasetVersionResponse::Data::License, license
     assert_equal "CC0 1.0", license.name
     assert_equal "http://creativecommons.org/publicdomain/zero/1.0", license.uri
     assert_equal "https://licensebuttons.net/p/zero/1.0/88x31.png", license.icon_uri
   end
 
   test "empty version json does not throw exception" do
-    @invalid_dataset = Dataverse::DatasetVersionResponse.new(empty_json)
-    assert_instance_of Dataverse::DatasetVersionResponse, @invalid_dataset
+    @invalid_dataset = DataverseDatasetVersionResponse.new(empty_json)
+    assert_instance_of DataverseDatasetVersionResponse, @invalid_dataset
     assert_equal "", @invalid_dataset.authors
     assert_equal "", @invalid_dataset.description
     assert_equal "", @invalid_dataset.subjects
@@ -78,17 +78,17 @@ class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
   end
 
   test "empty string raises JSON::ParserError on version" do
-    assert_raises(JSON::ParserError) { Dataverse::DatasetVersionResponse.new(empty_string) }
+    assert_raises(JSON::ParserError) { DataverseDatasetVersionResponse.new(empty_string) }
   end
 
   test "licence as string is supported" do
-    @target = Dataverse::DatasetVersionResponse.new(load_file_fixture(File.join('dataverse', 'dataset_version_response', 'license_as_string_response.json')))
+    @target = DataverseDatasetVersionResponse.new(load_file_fixture(File.join('dataverse', 'dataset_version_response', 'license_as_string_response.json')))
     assert_equal "string-license", @target.data.license.name
   end
 
   test "incomplete json does not throw exception" do
-    @invalid_dataset = Dataverse::DatasetVersionResponse.new(incomplete_json_body)
-    assert_instance_of Dataverse::DatasetVersionResponse, @invalid_dataset
+    @invalid_dataset = DataverseDatasetVersionResponse.new(incomplete_json_body)
+    assert_instance_of DataverseDatasetVersionResponse, @invalid_dataset
     assert_equal "", @invalid_dataset.authors
     assert_equal "", @invalid_dataset.description
     assert_equal "", @invalid_dataset.subjects
@@ -101,8 +101,8 @@ class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
 
   test "dataset incomplete with no license" do
     json = load_file_fixture(File.join('dataverse', 'dataset_version_response', 'incomplete_no_license.json'))
-    @dataset_incomplete = Dataverse::DatasetVersionResponse.new(json)
-    assert_instance_of Dataverse::DatasetVersionResponse, @dataset_incomplete
+    @dataset_incomplete = DataverseDatasetVersionResponse.new(json)
+    assert_instance_of DataverseDatasetVersionResponse, @dataset_incomplete
     assert_equal "Admin, Dataverse", @dataset_incomplete.authors
     assert_match /This is the description of the dataset/, @dataset_incomplete.description
     assert_equal "Astronomy and Astrophysics", @dataset_incomplete.subjects
@@ -115,8 +115,8 @@ class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
 
   test "dataset incomplete with no data" do
     json = load_file_fixture(File.join('dataverse', 'dataset_version_response', 'incomplete_no_data.json'))
-    @dataset_incomplete = Dataverse::DatasetVersionResponse.new(json)
-    assert_instance_of Dataverse::DatasetVersionResponse, @dataset_incomplete
+    @dataset_incomplete = DataverseDatasetVersionResponse.new(json)
+    assert_instance_of DataverseDatasetVersionResponse, @dataset_incomplete
     assert_equal "", @dataset_incomplete.authors
     assert_equal "", @dataset_incomplete.description
     assert_equal "", @dataset_incomplete.subjects
@@ -129,8 +129,8 @@ class Dataverse::DatasetVersionResponseTest < ActiveSupport::TestCase
 
   test "dataset incomplete with no metadata blocks" do
     json = load_file_fixture(File.join('dataverse', 'dataset_version_response', 'incomplete_no_metadata_blocks.json'))
-    @dataset_incomplete = Dataverse::DatasetVersionResponse.new(json)
-    assert_instance_of Dataverse::DatasetVersionResponse, @dataset_incomplete
+    @dataset_incomplete = DataverseDatasetVersionResponse.new(json)
+    assert_instance_of DataverseDatasetVersionResponse, @dataset_incomplete
     assert_equal "", @dataset_incomplete.authors
     assert_equal "", @dataset_incomplete.description
     assert_equal "", @dataset_incomplete.subjects

@@ -3,51 +3,51 @@ require 'test_helper'
 
 class ConnectorClassDispatcherTest < ActiveSupport::TestCase
 
-  test 'download_connector_status should return Dataverse::DownloadConnectorStatus class for dataverse files' do
+  test 'download_connector_status should return DataverseDownloadConnectorStatus class for dataverse files' do
     project = download_project(type: ConnectorType::DATAVERSE, files: 1)
     result = ConnectorClassDispatcher.download_connector_status(project.download_files.first)
-    assert_instance_of Dataverse::DownloadConnectorStatus, result
+    assert_instance_of DataverseDownloadConnectorStatus, result
   end
 
-  test 'upload_file_connector_status should return Dataverse::UploadConnectorStatus class for dataverse files' do
+  test 'upload_file_connector_status should return DataverseUploadConnectorStatus class for dataverse files' do
     project = upload_project(type: ConnectorType::DATAVERSE, files: 1)
     result = ConnectorClassDispatcher.upload_file_connector_status(project.upload_bundles.first, project.upload_bundles.first.files.first)
-    assert_instance_of Dataverse::UploadConnectorStatus, result
+    assert_instance_of DataverseUploadConnectorStatus, result
   end
 
-  test 'download_connector_metadata should return Dataverse::DownloadConnectorMetadata class for dataverse files' do
+  test 'download_connector_metadata should return DataverseDownloadConnectorMetadata class for dataverse files' do
     project = download_project(type: ConnectorType::DATAVERSE, files: 1)
     result = ConnectorClassDispatcher.download_connector_metadata(project.download_files.first)
-    assert_instance_of Dataverse::DownloadConnectorMetadata, result
+    assert_instance_of DataverseDownloadConnectorMetadata, result
   end
 
-  test 'upload_bundle_connector_processor should return Dataverse::UploadBatchConnectorProcessor class for dataverse type' do
+  test 'upload_bundle_connector_processor should return DataverseUploadBatchConnectorProcessor class for dataverse type' do
     result = ConnectorClassDispatcher.upload_bundle_connector_processor(ConnectorType::DATAVERSE)
-    assert_instance_of Dataverse::UploadBundleConnectorProcessor, result
+    assert_instance_of DataverseUploadBundleConnectorProcessor, result
   end
 
-  test 'upload_bundle_connector_metadata should return Dataverse::UploadBundleConnectorMetadata class for dataverse collections' do
+  test 'upload_bundle_connector_metadata should return DataverseUploadBundleConnectorMetadata class for dataverse collections' do
     project = create_project
     upload_batch = create_upload_bundle(project, type: ConnectorType::DATAVERSE)
     result = ConnectorClassDispatcher.upload_bundle_connector_metadata(upload_batch)
-    assert_instance_of Dataverse::UploadBundleConnectorMetadata, result
+    assert_instance_of DataverseUploadBundleConnectorMetadata, result
   end
 
-  test 'download_processor should return Dataverse::DownloadConnectorProcessor class for dataverse files' do
+  test 'download_processor should return DataverseDownloadConnectorProcessor class for dataverse files' do
     project = download_project(type: ConnectorType::DATAVERSE, files: 1)
     result = ConnectorClassDispatcher.download_processor(project.download_files.first)
-    assert_instance_of Dataverse::DownloadConnectorProcessor, result
+    assert_instance_of DataverseDownloadConnectorProcessor, result
   end
 
-  test 'upload_processor should return Dataverse::UploadConnectorProcessor class for dataverse files' do
+  test 'upload_processor should return DataverseUploadConnectorProcessor class for dataverse files' do
     project = upload_project(type: ConnectorType::DATAVERSE, files: 1)
     result = ConnectorClassDispatcher.upload_processor(project.upload_bundles.first, project.upload_bundles.first.files.first)
-    assert_instance_of Dataverse::UploadConnectorProcessor, result
+    assert_instance_of DataverseUploadConnectorProcessor, result
   end
 
-  test 'repo_controller_resolver should return Dataverse::DisplayRepoControllerResolver class for dataverse files' do
+  test 'repo_controller_resolver should return DataverseDisplayRepoControllerResolver class for dataverse files' do
     result = ConnectorClassDispatcher.repo_controller_resolver(ConnectorType::DATAVERSE)
-    assert_instance_of Dataverse::DisplayRepoControllerResolver, result
+    assert_instance_of DataverseDisplayRepoControllerResolver, result
   end
 
   test 'raises ConnectorNotSupported for unknown connector type' do

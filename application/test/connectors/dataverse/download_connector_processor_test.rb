@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
+class DataverseDownloadConnectorProcessorTest < ActiveSupport::TestCase
 
   def setup
     @tmp_dir = Dir.mktmpdir
@@ -28,7 +28,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
 
     File.write(@download_path, 'test content') # for MD5 match
 
-    @processor = Dataverse::DownloadConnectorProcessor.new(@file)
+    @processor = DataverseDownloadConnectorProcessor.new(@file)
   end
 
   def teardown

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
+class DataverseDatasetsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @tmp_dir = Dir.mktmpdir
@@ -40,87 +40,87 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect to root path after not finding a dataverse host" do
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises("error")
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises("error")
     get view_dataverse_dataset_url("random", "random_id")
     assert_redirected_to root_path
     assert_equal "Dataverse service error. Dataverse: https://random persistentId: random_id", flash[:alert]
   end
 
   test "should redirect to root path after not finding a dataset" do
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
     get view_dataverse_dataset_url(@new_id, "random_id")
     assert_redirected_to root_path
     assert_equal "Dataset not found. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
   end
 
   test "should redirect to root path after raising exception" do
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
     get view_dataverse_dataset_url(@new_id, "random_id")
     assert_redirected_to root_path
     assert_equal "Dataverse service error. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
   end
 
   test "should redirect to root path after raising Unauthorized exception" do
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(DataverseDatasetService::UnauthorizedException)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(DataverseDatasetService::UnauthorizedException)
     get view_dataverse_dataset_url(@new_id, "random_id")
     assert_redirected_to root_path
     assert_equal "Dataset requires authorization. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
   end
 
   test "should redirect to root path after raising Unauthorized exception only in files page" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    dataset = DataverseDatasetVersionResponse.new(dataset_valid_json)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(DataverseDatasetService::UnauthorizedException)
     get view_dataverse_dataset_url(@new_id, "random_id")
     assert_redirected_to root_path
     assert_equal "Dataset files endpoint requires authorization. Dataverse: https://#{@new_id} persistentId: random_id page: 1", flash[:alert]
   end
 
   test "should display the dataset view with the file" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    dataset = DataverseDatasetVersionResponse.new(dataset_valid_json)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    files_page = DataverseDatasetFilesResponse.new(files_valid_json)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/GCN7US")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 2
   end
 
   test "should display the dataset incomplete with no data" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_incomplete_json_no_data)
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    files_page = Dataverse::DatasetFilesResponse.new(files_incomplete_no_data_json)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    dataset = DataverseDatasetVersionResponse.new(dataset_incomplete_json_no_data)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    files_page = DataverseDatasetFilesResponse.new(files_incomplete_no_data_json)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/LLIZ6Q")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 0
   end
 
   test "should display the dataset incomplete with no data file" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_incomplete_json_no_data)
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    files_page = Dataverse::DatasetFilesResponse.new(files_incomplete_no_data_file_json)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    dataset = DataverseDatasetVersionResponse.new(dataset_incomplete_json_no_data)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    files_page = DataverseDatasetFilesResponse.new(files_incomplete_no_data_file_json)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/LLIZ6Q")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 2
   end
 
   test "should redirect if project fails to save" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
-    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
+    dataset = DataverseDatasetVersionResponse.new(dataset_valid_json)
+    files_page = DataverseDatasetFilesResponse.new(files_valid_json)
 
     project = Project.new
     project.stubs(:save).returns(false)
     project.errors.add(:base, "Project save failed")
 
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    DataverseProjectService.any_instance.stubs(:initialize_project).returns(project)
 
     post download_dataverse_dataset_files_url, params: {
       file_ids: ["123"],
@@ -135,8 +135,8 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect if any download file is invalid" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
-    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
+    dataset = DataverseDatasetVersionResponse.new(dataset_valid_json)
+    files_page = DataverseDatasetFilesResponse.new(files_valid_json)
 
     project = Project.new(name: "Test Project")
     project.stubs(:save).returns(true)
@@ -147,10 +147,10 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     valid_file = DownloadFile.new(filename: "good_file.txt")
     valid_file.stubs(:valid?).returns(true)
 
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_download_files).returns([valid_file, invalid_file])
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    DataverseProjectService.any_instance.stubs(:initialize_project).returns(project)
+    DataverseProjectService.any_instance.stubs(:initialize_download_files).returns([valid_file, invalid_file])
 
     post download_dataverse_dataset_files_url, params: {
       file_ids: ["1", "2"],
@@ -166,8 +166,8 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect if download file save fails" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
-    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
+    dataset = DataverseDatasetVersionResponse.new(dataset_valid_json)
+    files_page = DataverseDatasetFilesResponse.new(files_valid_json)
 
     project = Project.new(name: "Test Project")
     project.stubs(:save).returns(true)
@@ -176,10 +176,10 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     valid_file.stubs(:valid?).returns(true)
     valid_file.stubs(:save).returns(false)
 
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_download_files).returns([valid_file])
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    DataverseProjectService.any_instance.stubs(:initialize_project).returns(project)
+    DataverseProjectService.any_instance.stubs(:initialize_download_files).returns([valid_file])
 
     post download_dataverse_dataset_files_url, params: {
       file_ids: ["1"],
@@ -194,8 +194,8 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect with notice if download files are saved successfully" do
-    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
-    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
+    dataset = DataverseDatasetVersionResponse.new(dataset_valid_json)
+    files_page = DataverseDatasetFilesResponse.new(files_valid_json)
 
     project = Project.new(name: "Test Project")
     project.stubs(:id).returns(1)
@@ -209,10 +209,10 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     file2.stubs(:valid?).returns(true)
     file2.stubs(:save).returns(true)
 
-    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
-    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
-    Dataverse::ProjectService.any_instance.stubs(:initialize_download_files).returns([file1, file2])
+    DataverseDatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    DataverseDatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    DataverseProjectService.any_instance.stubs(:initialize_project).returns(project)
+    DataverseProjectService.any_instance.stubs(:initialize_download_files).returns([file1, file2])
 
     post download_dataverse_dataset_files_url, params: {
       file_ids: ["1", "2"],
