@@ -33,6 +33,37 @@ module DataverseForOndemand
 
     # ALLOW ANY DOMAINS
     config.hosts.clear
+
+    connectors_root = config.root.join('application', 'connectors')
+    if connectors_root.directory?
+      Dir.children(connectors_root).each do |connector|
+        connector_path = connectors_root.join(connector)
+        next unless connector_path.directory?
+
+        %w[controllers models helpers services views javascript].each do |sub|
+          sub_path = connector_path.join(sub)
+          next unless sub_path.directory?
+
+          Rails.autoloaders.main.push_dir(sub_path)
+          config.eager_load_paths << sub_path
+
+          case sub
+          when 'views'
+            config.paths['app/views'] << sub_path
+            ActionController::Base.prepend_view_path(sub_path)
+          when 'helpers'
+            config.paths['app/helpers'] << sub_path
+            if ActionController::Base.respond_to?(:helpers_path)
+              ActionController::Base.helpers_path << sub_path
+            end
+          when 'controllers'
+            config.paths['app/controllers'] << sub_path
+          when 'models'
+            config.paths['app/models'] << sub_path
+          end
+        end
+      end
+    end
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

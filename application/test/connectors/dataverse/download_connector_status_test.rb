@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "test_helper"
 
-class Dataverse::DownloadConnectorStatusTest < ActiveSupport::TestCase
+class DataverseDownloadConnectorStatusTest < ActiveSupport::TestCase
 
   def setup
     @default_metadata = {
@@ -19,7 +19,7 @@ class Dataverse::DownloadConnectorStatusTest < ActiveSupport::TestCase
     @file.status = FileStatus::DOWNLOADING
     @file.size = 200
 
-    target = Dataverse::DownloadConnectorStatus.new(@file)
+    target = DataverseDownloadConnectorStatus.new(@file)
     assert_equal 0, target.download_progress
   end
 
@@ -31,7 +31,7 @@ class Dataverse::DownloadConnectorStatusTest < ActiveSupport::TestCase
     @file.status = FileStatus::PENDING
     @file.metadata = @default_metadata
 
-    target = Dataverse::DownloadConnectorStatus.new(@file)
+    target = DataverseDownloadConnectorStatus.new(@file)
     assert_equal 0, target.download_progress
   end
 
@@ -45,7 +45,7 @@ class Dataverse::DownloadConnectorStatusTest < ActiveSupport::TestCase
     @file.size = 200
     @file.metadata = @default_metadata
 
-    target = Dataverse::DownloadConnectorStatus.new(@file)
+    target = DataverseDownloadConnectorStatus.new(@file)
     assert_equal 100, target.download_progress
   end
 
@@ -58,7 +58,7 @@ class Dataverse::DownloadConnectorStatusTest < ActiveSupport::TestCase
     @file.size = 200
     @file.metadata = @default_metadata
 
-    target = Dataverse::DownloadConnectorStatus.new(@file)
+    target = DataverseDownloadConnectorStatus.new(@file)
     assert_equal 100, target.download_progress
   end
 
@@ -71,7 +71,7 @@ class Dataverse::DownloadConnectorStatusTest < ActiveSupport::TestCase
     @file.size = 200
     @file.metadata = @default_metadata
 
-    target = Dataverse::DownloadConnectorStatus.new(@file)
+    target = DataverseDownloadConnectorStatus.new(@file)
     assert_equal 50, target.download_progress
   end
 end

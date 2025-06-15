@@ -38,12 +38,12 @@ Rails.application.routes.draw do
 
 
   # DATAVERSE ROUTES
-  get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
+  get "integrations/dataverse/external_tool/dataset" => "dataverse_external_tool#dataset"
 
-  post "/view/dataverse/download/dataset" => "dataverse/datasets#download", as: :download_dataverse_dataset_files
-  get "/view/dataverse" => "dataverse/landing_page#index", as: :view_dataverse_landing
-  get "/view/dataverse/*dv_hostname/datasets/*persistent_id" => "dataverse/datasets#show", as: :view_dataverse_dataset, format: false
-  get "/view/dataverse/*dv_hostname/dataverses/:id" => "dataverse/collections#show", as: :view_dataverse, format: false
+  post "/view/dataverse/download/dataset" => "dataverse_datasets#download", as: :download_dataverse_dataset_files
+  get "/view/dataverse" => "dataverse_landing_page#index", as: :view_dataverse_landing
+  get "/view/dataverse/*dv_hostname/datasets/*persistent_id" => "dataverse_datasets#show", as: :view_dataverse_dataset, format: false
+  get "/view/dataverse/*dv_hostname/dataverses/:id" => "dataverse_collections#show", as: :view_dataverse, format: false
 
   # REPO RESOLVER ROUTES
   post '/view/repo/resolve' => 'repo_resolver#resolve', as: :repo_resolver

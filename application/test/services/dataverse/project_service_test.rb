@@ -2,13 +2,13 @@
 
 require 'test_helper'
 
-class Dataverse::ProjectServiceTest < ActiveSupport::TestCase
+class DataverseProjectServiceTest < ActiveSupport::TestCase
 
   def setup
     @tmp_dir = Dir.mktmpdir
     Project.stubs(:metadata_root_directory).returns(@tmp_dir)
     @sample_uri = URI('https://example.com:443')
-    @service = Dataverse::ProjectService.new(@sample_uri.to_s)
+    @service = DataverseProjectService.new(@sample_uri.to_s)
   end
 
   def teardown
@@ -16,7 +16,7 @@ class Dataverse::ProjectServiceTest < ActiveSupport::TestCase
   end
 
   test 'the class is initialized' do
-    assert @service.kind_of?(Dataverse::ProjectService)
+    assert @service.kind_of?(DataverseProjectService)
   end
 
   test 'initialize project' do
@@ -28,9 +28,9 @@ class Dataverse::ProjectServiceTest < ActiveSupport::TestCase
 
   test 'initialize download files' do
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_version_response', 'valid_response.json'))
-    dataset = Dataverse::DatasetVersionResponse.new(valid_json)
+    dataset = DataverseDatasetVersionResponse.new(valid_json)
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_files_response', 'valid_response.json'))
-    files_page = Dataverse::DatasetFilesResponse.new(valid_json)
+    files_page = DataverseDatasetFilesResponse.new(valid_json)
     project = @service.initialize_project
     assert project.save
     download_files = @service.initialize_download_files(project, dataset, files_page, [4])
