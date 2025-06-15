@@ -1,18 +1,17 @@
 class DataverseMetadataService < DataverseApiService
 
-    def initialize(dataverse_url, http_client: Common::HttpClient.new(base_url: dataverse_url), api_key: nil)
-      @dataverse_url = dataverse_url
-      @http_client = http_client
-      @api_key = api_key
-    end
-
-    def get_citation_metadata
-      url = "/api/metadatablocks/citation"
-      response = @http_client.get(url)
-      return nil if response.not_found?
-      raise UnauthorizedException if response.unauthorized?
-      raise "Error getting dataverse citation metadata: #{response.status} - #{response.body}" unless response.success?
-      DataverseCitationMetadataResponse.new(response.body)
-    end
+  def initialize(dataverse_url, http_client: Common::HttpClient.new(base_url: dataverse_url), api_key: nil)
+    @dataverse_url = dataverse_url
+    @http_client = http_client
+    @api_key = api_key
   end
-end
+
+  def get_citation_metadata
+    url = "/api/metadatablocks/citation"
+    response = @http_client.get(url)
+    return nil if response.not_found?
+    raise UnauthorizedException if response.unauthorized?
+    raise "Error getting dataverse citation metadata: #{response.status} - #{response.body}" unless response.success?
+    DataverseCitationMetadataResponse.new(response.body)
+  end
+  end
