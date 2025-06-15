@@ -59,5 +59,3 @@ class DataverseHub
     []
   end
   end
-end
-
