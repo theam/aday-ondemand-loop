@@ -20,7 +20,7 @@ module Repo
       def resolve(context)
         return unless context.object_url
 
-        repo_url = Dataverse::DataverseUrl.parse(context.object_url)
+        repo_url = DataverseUrl.parse(context.object_url)
 
         domain = repo_url.domain
         return unless domain

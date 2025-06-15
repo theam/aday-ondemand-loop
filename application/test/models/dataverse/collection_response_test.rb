@@ -1,10 +1,10 @@
 require "test_helper"
 
-class Dataverse::CollectionResponseTest < ActiveSupport::TestCase
+class DataverseCollectionResponseTest < ActiveSupport::TestCase
 
   def setup
     valid_json = load_file_fixture(File.join('dataverse', 'collection_response', 'valid_response.json'))
-    @response = Dataverse::CollectionResponse.new(valid_json)
+    @response = DataverseCollectionResponse.new(valid_json)
   end
 
   def empty_json
@@ -16,9 +16,9 @@ class Dataverse::CollectionResponseTest < ActiveSupport::TestCase
   end
 
   test "valid json parses dataverse response" do
-    assert_instance_of Dataverse::CollectionResponse, @response
+    assert_instance_of DataverseCollectionResponse, @response
     assert_equal "OK", @response.status
-    assert_instance_of Dataverse::CollectionResponse::Data, @response.data
+    assert_instance_of DataverseCollectionResponse::Data, @response.data
   end
 
   test "valid json parses :root dataverse response data" do
@@ -33,7 +33,7 @@ class Dataverse::CollectionResponseTest < ActiveSupport::TestCase
 
   test "valid json parses child dataverse response data" do
     json = load_file_fixture(File.join('dataverse', 'collection_response', 'valid_child_response.json'))
-    @child_response = Dataverse::CollectionResponse.new(json)
+    @child_response = DataverseCollectionResponse.new(json)
     data = @child_response.data
     assert_equal 1234, data.id
     assert_equal "Sample_Child_Dataverse", data.alias
@@ -48,12 +48,12 @@ class Dataverse::CollectionResponseTest < ActiveSupport::TestCase
   end
 
   test "dataverse response on empty json does not throw exception" do
-    @invalid_response = Dataverse::CollectionResponse.new(empty_json)
-    assert_instance_of Dataverse::CollectionResponse, @invalid_response
+    @invalid_response = DataverseCollectionResponse.new(empty_json)
+    assert_instance_of DataverseCollectionResponse, @invalid_response
   end
 
   test "dataverse response with empty string raises JSON::ParserError" do
-    assert_raises(JSON::ParserError) { Dataverse::CollectionResponse.new(empty_string) }
+    assert_raises(JSON::ParserError) { DataverseCollectionResponse.new(empty_string) }
   end
 
 end

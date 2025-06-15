@@ -3,12 +3,12 @@
 require 'test_helper'
 
 class DummyDataverseUrlBuilder
-  include Dataverse::Concerns::DataverseUrlBuilder
+  include Concerns::DataverseUrlBuilder
 
   attr_accessor :dataverse_url, :collection_id, :dataset_id
 end
 
-class Dataverse::Concerns::DataverseUrlBuilderTest < ActiveSupport::TestCase
+class Concerns::DataverseUrlBuilderTest < ActiveSupport::TestCase
   def setup
     @builder = DummyDataverseUrlBuilder.new
     @builder.dataverse_url = 'https://demo.dataverse.org'

@@ -29,13 +29,13 @@ class DownloadStatusControllerTest < ActionDispatch::IntegrationTest
 
   def populate
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_version_response', 'valid_response.json'))
-    dataset = Dataverse::DatasetVersionResponse.new(valid_json)
+    dataset = DataverseDatasetVersionResponse.new(valid_json)
     valid_json = load_file_fixture(File.join('dataverse', 'dataset_files_response', 'valid_response.json'))
-    files_page = Dataverse::DatasetFilesResponse.new(valid_json)
+    files_page = DataverseDatasetFilesResponse.new(valid_json)
     file_ids = [4,5]
 
     parsed_url = URI.parse("http://localhost:3000")
-    service = Dataverse::ProjectService.new(parsed_url.to_s)
+    service = DataverseProjectService.new(parsed_url.to_s)
     project = service.initialize_project
     project.save
 

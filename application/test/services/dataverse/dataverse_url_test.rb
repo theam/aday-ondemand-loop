@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'test_helper'
 
-class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
+class DataverseUrlTest < ActiveSupport::TestCase
   test 'should expose scheme, domain and port' do
     url = 'http://localhost:3001/dataverse/mycollection'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert dataverse_url
     assert_equal 'http', dataverse_url.scheme
@@ -15,7 +15,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should omit port if using default for https' do
     url = 'https://demo.dataverse.org/dataverse/mycollection'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert dataverse_url
     assert_equal 'https', dataverse_url.scheme
@@ -26,7 +26,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should parse dataverse root URL' do
     url = 'https://demo.dataverse.org/'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert dataverse_url
     assert dataverse_url.dataverse?
@@ -35,7 +35,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should parse collection URL' do
     url = 'https://demo.dataverse.org/dataverse/mycollection'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert dataverse_url
     assert dataverse_url.collection?
@@ -46,7 +46,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should parse dataset URL' do
     url = 'https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.1234/XYZ&version=1.0'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert dataverse_url
     assert dataverse_url.dataset?
@@ -59,7 +59,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should parse file URL with persistentId and fileId' do
     url = 'https://demo.dataverse.org/file.xhtml?persistentId=doi:10.1234/XYZ/ABC&fileId=123&version=1.0'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert dataverse_url
     assert dataverse_url.file?
@@ -70,7 +70,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should raise when constructing collection_url without collection_id' do
     url = 'https://demo.dataverse.org/'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert_raises(RuntimeError, 'collection_id is missing') do
       dataverse_url.collection_url
@@ -79,7 +79,7 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
 
   test 'should raise when constructing dataset_url without dataset_id' do
     url = 'https://demo.dataverse.org/dataset.xhtml'
-    dataverse_url = Dataverse::DataverseUrl.parse(url)
+    dataverse_url = DataverseUrl.parse(url)
 
     assert_raises(RuntimeError, 'dataset_id (DOI) is missing') do
       dataverse_url.dataset_url
