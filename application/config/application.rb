@@ -40,7 +40,7 @@ module DataverseForOndemand
         connector_path = connectors_root.join(connector)
         next unless connector_path.directory?
 
-        %w[controllers models helpers services views javascript].each do |sub|
+        %w[controllers models helpers services views javascript locale].each do |sub|
           sub_path = connector_path.join(sub)
           next unless sub_path.directory?
 
@@ -51,6 +51,8 @@ module DataverseForOndemand
           when 'views'
             config.paths['app/views'] << sub_path
             ActionController::Base.prepend_view_path(sub_path)
+          when 'locale'
+            config.i18n.load_path += Dir[sub_path.join('*.yml')]
           when 'helpers'
             config.paths['app/helpers'] << sub_path
             if ActionController::Base.respond_to?(:helpers_path)

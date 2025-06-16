@@ -1,17 +1,17 @@
 <div class="card dataset-header">
-  <div class="card-header"><%= t('.dataset_metadata') %></div>
+  <div class="card-header"><%= t('dataverse.datasets.dataset_metadata.dataset_metadata') %></div>
   <div class="list-group list-group-flush">
     <span class="list-group-item list-group-item-action">
-      <b><%= t('.publication_date') %></b> <%= dataset.data.publication_date %>
+      <b><%= t('dataverse.datasets.dataset_metadata.publication_date') %></b> <%= dataset.data.publication_date %>
     </span>
     <span class="list-group-item list-group-item-action">
-      <b><%= t('.authors') %></b> <%= dataset.authors %>
+      <b><%= t('dataverse.datasets.dataset_metadata.authors') %></b> <%= dataset.authors %>
     </span>
     <span class="list-group-item list-group-item-action">
-      <b><%= t('.subjects') %></b> <%= dataset.subjects %>
+      <b><%= t('dataverse.datasets.dataset_metadata.subjects') %></b> <%= dataset.subjects %>
     </span>
     <span class="list-group-item list-group-item-action">
-      <b><%= t('.license') %></b> <%= image_tag dataset.data.license.icon_uri if dataset.data.license.icon_uri %>
+      <b><%= t('dataverse.datasets.dataset_metadata.license') %></b> <%= image_tag dataset.data.license.icon_uri if dataset.data.license.icon_uri %>
       <%= dataset.data.license.name %>
     </span>
   </div>
