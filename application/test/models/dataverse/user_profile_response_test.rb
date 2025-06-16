@@ -1,10 +1,10 @@
 require "test_helper"
 
-class Dataverse::UserProfileResponseTest < ActiveSupport::TestCase
+class DataverseUserProfileResponseTest < ActiveSupport::TestCase
 
   def setup
     valid_json = load_file_fixture(File.join('dataverse', 'user_profile_response', 'valid_response.json'))
-    @response = Dataverse::UserProfileResponse.new(valid_json)
+    @response = DataverseUserProfileResponse.new(valid_json)
   end
 
   def empty_json
@@ -16,7 +16,7 @@ class Dataverse::UserProfileResponseTest < ActiveSupport::TestCase
   end
 
   test "valid json parses user profile response" do
-    assert_instance_of Dataverse::UserProfileResponse, @response
+    assert_instance_of DataverseUserProfileResponse, @response
     assert_equal "OK", @response.status
     assert_equal "@johndoe", @response.identifier
     assert_equal "John Doe", @response.display_name
@@ -29,12 +29,12 @@ class Dataverse::UserProfileResponseTest < ActiveSupport::TestCase
   end
 
   test "user profile response on empty json does not throw exception" do
-    @invalid_response = Dataverse::UserProfileResponse.new(empty_json)
-    assert_instance_of Dataverse::UserProfileResponse, @invalid_response
+    @invalid_response = DataverseUserProfileResponse.new(empty_json)
+    assert_instance_of DataverseUserProfileResponse, @invalid_response
   end
 
   test "user profile response with empty string raises JSON::ParserError" do
-    assert_raises(JSON::ParserError) { Dataverse::UserProfileResponse.new(empty_string) }
+    assert_raises(JSON::ParserError) { DataverseUserProfileResponse.new(empty_string) }
   end
 
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "test_helper"
 
-class Dataverse::ConnectorMetadataTest < ActiveSupport::TestCase
+class DataverseConnectorMetadataTest < ActiveSupport::TestCase
 
   test "should create read/write methods for any hash field names" do
     metadata = {
@@ -13,7 +13,7 @@ class Dataverse::ConnectorMetadataTest < ActiveSupport::TestCase
     file = DownloadFile.new
     file.metadata = metadata
 
-    target = Dataverse::DownloadConnectorMetadata.new(file)
+    target = DataverseDownloadConnectorMetadata.new(file)
     assert_equal '12345', target.id
     assert_equal 'RUNNING', target.status
     assert_equal '/some/location', target.location
@@ -37,7 +37,7 @@ class Dataverse::ConnectorMetadataTest < ActiveSupport::TestCase
     file = DownloadFile.new
     file.metadata = metadata
 
-    target = Dataverse::DownloadConnectorMetadata.new(file)
+    target = DataverseDownloadConnectorMetadata.new(file)
     assert_equal '12345', target.id
     assert_nil target.other
     assert_nil target.missing
@@ -52,7 +52,7 @@ class Dataverse::ConnectorMetadataTest < ActiveSupport::TestCase
     file = DownloadFile.new
     file.metadata = metadata
 
-    result = Dataverse::DownloadConnectorMetadata.new(file).to_h
+    result = DataverseDownloadConnectorMetadata.new(file).to_h
     assert_equal({'id' => '12345', 'status' => 'RUNNING'}, result)
   end
 end

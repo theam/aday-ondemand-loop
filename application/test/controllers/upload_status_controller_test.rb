@@ -30,7 +30,7 @@ class UploadStatusControllerTest < ActionDispatch::IntegrationTest
 
   def populate
     parsed_url = URI.parse("http://localhost:3000")
-    service = Dataverse::ProjectService.new(parsed_url.to_s)
+    service = DataverseProjectService.new(parsed_url.to_s)
     project = service.initialize_project
     project.save
 
