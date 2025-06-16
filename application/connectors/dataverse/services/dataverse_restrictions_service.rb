@@ -37,6 +37,5 @@ class DataverseRestrictionsService
 
     OpenStruct.new(response)
   end
-  end
 end
 

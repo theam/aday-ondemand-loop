@@ -16,7 +16,7 @@ class DataverseCollectionService < DataverseApiService
     return nil if response.not_found?
     raise UnauthorizedException if response.unauthorized?
     raise "Error getting my dataverse data: #{response.status} - #{response.body}" unless response.success?
-    MyDataverseCollectionsResponse.new(response.body, page: page, per_page: per_page)
+    DataverseCollectionsResponse.new(response.body, page: page, per_page: per_page)
   end
 
   def find_collection_by_id(id)
@@ -25,7 +25,7 @@ class DataverseCollectionService < DataverseApiService
     return nil if response.not_found?
     raise UnauthorizedException if response.unauthorized?
     raise "Error getting dataverse: #{response.status} - #{response.body}" unless response.success?
-    CollectionResponse.new(response.body)
+    DataverseCollectionResponse.new(response.body)
   end
 
   def search_collection_items(dataverse_id, page: 1, per_page: 10, include_collections: true, include_datasets: true)
@@ -38,6 +38,6 @@ class DataverseCollectionService < DataverseApiService
     return nil if response.not_found?
     raise UnauthorizedException if response.unauthorized?
     raise "Error getting dataverse items: #{response.status} - #{response.body}" unless response.success?
-    SearchResponse.new(response.body, page, per_page)
+    DataverseSearchResponse.new(response.body, page, per_page)
   end
   end

@@ -15,7 +15,7 @@ class DataverseDatasetService < DataverseApiService
     return nil if response.not_found?
     raise UnauthorizedException if response.unauthorized?
     raise "Error creating dataset: #{response.status} - #{response.body}" unless response.success?
-    CreateDatasetResponse.new(response.body)
+    DataverseCreateDatasetResponse.new(response.body)
   end
 
   def find_dataset_version_by_persistent_id(persistent_id, version: ':latest-published')
@@ -24,7 +24,7 @@ class DataverseDatasetService < DataverseApiService
     return nil if response.not_found?
     raise UnauthorizedException if response.unauthorized?
     raise "Error getting dataset: #{response.status} - #{response.body}" unless response.success?
-    DatasetVersionResponse.new(response.body)
+    DataverseDatasetVersionResponse.new(response.body)
   end
 
   def search_dataset_files_by_persistent_id(persistent_id, version: ':latest-published', page: 1, per_page: 10)
@@ -34,6 +34,6 @@ class DataverseDatasetService < DataverseApiService
     return nil if response.not_found?
     raise UnauthorizedException if response.unauthorized?
     raise "Error getting dataset files: #{response.status} - #{response.body}" unless response.success?
-    DatasetFilesResponse.new(response.body, page: page, per_page: per_page)
+    DataverseDatasetFilesResponse.new(response.body, page: page, per_page: per_page)
   end
   end

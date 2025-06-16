@@ -1,4 +1,4 @@
-class DataverseMyDataverseCollectionsResponse
+class DataverseCollectionsResponse
     include ActsAsPage
     attr_reader :status, :items
 
