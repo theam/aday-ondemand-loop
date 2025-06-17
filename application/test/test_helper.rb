@@ -9,6 +9,16 @@ require_relative 'utils/logging_common_mock'
 
 require 'rails/test_help'
 require 'mocha/minitest'
+require 'axe/api'
+
+# Default Axe rules enforce WCAG level A. Replace `wcag2a` with `wcag2aa` or
+# `wcag2aaa` below for stricter conformance.
+AXE_OPTIONS = {
+  runOnly: {
+    type: 'tag',
+    values: ['wcag2a']
+  }
+}
 
 module ActiveSupport
   class TestCase
