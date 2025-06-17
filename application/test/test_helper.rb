@@ -9,13 +9,14 @@ require_relative 'utils/logging_common_mock'
 
 require 'rails/test_help'
 require 'mocha/minitest'
-require 'axe/minitest'
+require 'axe/api'
 
 # Configure axe-core API to run with WCAG level A rules by default.
 # Change `wcag2a` to `wcag2aa` or `wcag2aaa` to audit against
 # stricter accessibility standards.
-Axe.configure do |config|
+Axe::API.configure do |config|
   config.options = { runOnly: { type: 'tag', values: ['wcag2a'] } }
+  # To audit against stricter levels, replace `wcag2a` with `wcag2aa` or `wcag2aaa`.
 end
 
 module ActiveSupport
