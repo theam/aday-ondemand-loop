@@ -75,6 +75,8 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
+    axe-core-minitest (4.6.1)
+      axe-core (~> 4.6)
     base64 (0.2.0)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
@@ -292,6 +294,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  axe-core-minitest
   bootsnap
   brakeman
   capybara
