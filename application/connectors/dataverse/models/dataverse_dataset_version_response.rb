@@ -103,5 +103,4 @@ class DataverseDatasetVersionResponse
         end
       end
     end
-  end
 end

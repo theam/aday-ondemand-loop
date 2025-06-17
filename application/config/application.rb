@@ -34,7 +34,7 @@ module DataverseForOndemand
     # ALLOW ANY DOMAINS
     config.hosts.clear
 
-    connectors_root = config.root.join('application', 'connectors')
+    connectors_root = Rails.root.join("connectors")
     if connectors_root.directory?
       Dir.children(connectors_root).each do |connector|
         connector_path = connectors_root.join(connector)

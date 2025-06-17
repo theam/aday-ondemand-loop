@@ -58,6 +58,6 @@ class DataverseHub
     log_error('Error fetching Dataverse Hub data', {url: @url}, e)
     []
   end
-  end
 end
+
 
