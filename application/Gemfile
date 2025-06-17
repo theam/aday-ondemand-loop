@@ -53,8 +53,8 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "mocha"
-  # Accessibility testing via axe-core
-  gem "axe-core-minitest"
+  # Accessibility testing via axe-core API
+  gem "axe-core-api"
 end
 
 gem "cssbundling-rails", "~> 1.4"
