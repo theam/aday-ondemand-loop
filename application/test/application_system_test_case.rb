@@ -7,7 +7,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   private
 
   def assert_accessible(**options)
-    analyzer = Axe::API.new(page, **options)
+    analyzer = Axe::API.new(page, options: AXE_OPTIONS.merge(options))
     result = analyzer.analyze
     violations = result["violations"] || result.violations
     assert violations.empty?, "Accessibility violations:\n#{format_violations(violations)}"

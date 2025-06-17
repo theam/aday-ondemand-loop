@@ -11,13 +11,14 @@ require 'rails/test_help'
 require 'mocha/minitest'
 require 'axe/api'
 
-# Configure axe-core API to run with WCAG level A rules by default.
-# Change `wcag2a` to `wcag2aa` or `wcag2aaa` to audit against
-# stricter accessibility standards.
-Axe::API.configure do |config|
-  config.options = { runOnly: { type: 'tag', values: ['wcag2a'] } }
-  # To audit against stricter levels, replace `wcag2a` with `wcag2aa` or `wcag2aaa`.
-end
+# Default Axe rules enforce WCAG level A. Replace `wcag2a` with `wcag2aa` or
+# `wcag2aaa` below for stricter conformance.
+AXE_OPTIONS = {
+  runOnly: {
+    type: 'tag',
+    values: ['wcag2a']
+  }
+}
 
 module ActiveSupport
   class TestCase
