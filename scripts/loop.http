@@ -1,0 +1,15 @@
+GET https://zenodo.org/api/records/7103705
+Accept: application/json
+###
+
+# curl -H "Authorization: Bearer <TOKEN>" https://zenodo.org/api/deposit/depositions
+GET https://zenodo.org/api/deposit/depositions
+Authorization: Bearer uguwQa6MaaCT8siWNwjZ2x5FTVzvMJDv9G5JVtSBLqarQJcGCk5lVJll4G4g
+###
+
+GET https://zenodo.org/api/deposit/depositions/15693948
+Authorization: Bearer uguwQa6MaaCT8siWNwjZ2x5FTVzvMJDv9G5JVtSBLqarQJcGCk5lVJll4G4g
+
+###
+POST https://zenodo.org/api/deposit/depositions/15693041/actions/newversion
+Authorization: Bearer uguwQa6MaaCT8siWNwjZ2x5FTVzvMJDv9G5JVtSBLqarQJcGCk5lVJll4G4g

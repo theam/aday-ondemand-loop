@@ -75,6 +75,26 @@ en:
 
         submit: "Select Dataset"
         cancel: "Cancel"
+    zenodo:
+      connector_edit_form:
+        field_api_key_label: "Personal Access Token"
+        field_api_key_placeholder: "Enter your personal access token"
+        field_api_key_help: "Provide the access token required to authenticate with the Zenodo server."
+
+        field_key_scope_label: "Store access token for this upload bundle only"
+        field_key_scope_help: "Leave unchecked to store this access token for all bundles using Zenodo."
+      upload_bundle_actions_bar:
+        button_select_record_title: "Select Record"
+        modal_select_record_title: "Select Zenodo record"
+
+        button_create_record_title: "Create Record"
+        modal_create_record_title: "Create Record"
+
+        button_edit_key_title: "Add/Edit Access Token"
+        modal_edit_key_title: "Add/Edit Zenodo Personal Access Token"
+        missing_key_disabled_features_text: "Add access token to enable record features"
+
+
   dataverse:
     collections:
       breadcrumbs:
@@ -100,19 +120,6 @@ en:
         header_search_results_a11y_text: "Search results"
         paginator_bar_a11y_label: "Search result pagination"
         paginator_page_text: "page %{page}"
-  zenodo:
-    landing_page:
-      page_title: "OnDemand Loop - Zenodo"
-      breadcrumb_home_text: "Home"
-      search: "Search"
-      search_placeholder: "Search Zenodo records"
-      search_error: "Search error"
-    datasets:
-      page_title: "Zenodo Dataset"
-      filename: "File"
-      size: "Size"
-      add_files: "Add Files to Active Project"
-      home: "Home"
       show:
         page_title: "OnDemand Loop - Dataverse Collection"
     datasets:
@@ -154,6 +161,21 @@ en:
         breadcrumb_home_title: "Home"
         image_dataverse_icon_alt: "Dataverse icon"
         page_title: "OnDemand Loop - Dataverse Landing page"
+  zenodo:
+    landing_page:
+      index:
+        page_title: "OnDemand Loop - Zenodo"
+        breadcrumb_home_text: "Home"
+        search: "Search"
+        search_placeholder: "Search Zenodo records"
+        search_error: "Search error"
+    datasets:
+      show:
+        page_title: "Zenodo Dataset"
+        filename: "File"
+        size: "Size"
+        add_files: "Add Files to Active Project"
+        home: "Home"
   detached_process:
     file_activity_status:
       icon_downloads_title: "Download process status"

@@ -13,7 +13,7 @@ module Zenodo
           id: f['id'].to_s,
           filename: f['key'],
           filesize: f['size'],
-          download_url: f.dig('links', 'download')
+          download_url: f.dig('links', 'self')
         )
       end
     end

@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 module Repo
   module Resolvers
     class ZenodoResolver < Repo::BaseResolver
       include LoggingCommon
+
+      ZENODO_DOMAINS = ['zenodo.org', 'sandbox.zenodo.org'].freeze
 
       def self.build
         new
@@ -13,11 +17,15 @@ module Repo
 
       def resolve(context)
         return unless context.object_url
-        uri = URI.parse(context.object_url) rescue nil
-        return unless uri
-        return unless uri.host&.include?('zenodo')
+
+        repo_url = Zenodo::ZenodoUrl.parse(context.object_url)
+        return unless repo_url
+        return unless ZENODO_DOMAINS.include?(repo_url.domain)
+
         context.type = ConnectorType::ZENODO
-        context.repo_db.set(uri.host, type: ConnectorType::ZENODO)
+        context.repo_db.set(repo_url.domain, type: ConnectorType::ZENODO)
+
+        log_info("ZenodoResolver matched URL: #{context.object_url}")
       end
     end
   end

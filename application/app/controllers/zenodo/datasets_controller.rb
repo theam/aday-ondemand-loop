@@ -9,13 +9,16 @@ class Zenodo::DatasetsController < ApplicationController
 
   def download
     file_ids = params[:file_ids] || []
-    project = Project.find(params[:project_id]) if params[:project_id]
-    project ||= @project_service.initialize_project
-    unless project.save
-      errors = project.errors.full_messages.join(', ')
-      redirect_back fallback_location: root_path, alert: t('.error_generating_project', errors: errors)
-      return
+    project = Project.find(params[:project_id])
+    if project.nil?
+      project = @project_service.initialize_project
+      unless project.save
+        errors = project.errors.full_messages.join(", ")
+        redirect_back fallback_location: root_path, alert: t(".error_generating_project", errors: errors)
+        return
+      end
     end
+
     download_files = @project_service.initialize_download_files(project, @dataset, file_ids)
     download_files.each do |file|
       unless file.valid?

@@ -19,4 +19,7 @@ en:
     zenodo:
       actions:
         connector_edit:
-          success: "Zenodo settings updated: %{name}"
+          success: "Access token updated: %{name}"
+        upload_bundles:
+          record_not_found: "Zenodo record not found: %{url}. Only published records are supported"
+          created: "Upload bundle created: %{name}"

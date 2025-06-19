@@ -4,13 +4,13 @@
 
     <!-- Repo Logos (left aligned) -->
     <div class="d-flex align-items-center gap-3">
-      <%= image_tag "dataverse_project.svg", alt: "Dataverse", height: 32 %>
-      <%= image_tag "zenodo.svg", alt: "Zenodo", height: 32 %>
+      <%= image_tag "dataverse_project.svg", alt: "Dataverse", height: 35 %>
+      <%= image_tag "zenodo_project.svg", alt: "Zenodo", height: 30, style: 'margin-top: -5px;' %>
       <%= image_tag "doi_logo.svg", alt: "DOI Fundation", height: 32 %>
     </div>
 
     <!-- Resolver Form (right aligned) -->
-    <form action="<%= repo_resolver_path %>" method="post" class="d-flex align-items-center gap-3" style="flex: 1 1 auto; max-width: 60%;">
+    <form data-controller="submit-button" action="<%= repo_resolver_path %>" method="post" class="d-flex align-items-center gap-3" style="flex: 1 1 auto; max-width: 60%;">
       <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
       <input type="text"
@@ -21,7 +21,7 @@
              style="flex: 1 1 auto;">
 
       <button class="btn btn-sm btn-primary px-3" type="submit"
-              data-controller="submit-button"
+              data-submit-button-target="button"
               data-action="click->submit-button#click">
         <span data-submit-button-target="spinner"
               class="spinner-border spinner-border-sm me-1 d-none"

@@ -5,11 +5,11 @@ module Zenodo
     def initialize(object = nil); end
 
     def params_schema
-      %i[remote_repo_url api_key dataset_id]
+      %i[remote_repo_url api_key key_scope dataset_id]
     end
 
     def create(project, request_params)
-      ConnectorResult.new(success: true)
+      Zenodo::Actions::UploadBundleCreate.new.create(project, request_params)
     end
 
     def edit(upload_bundle, request_params)
@@ -17,11 +17,7 @@ module Zenodo
     end
 
     def update(upload_bundle, request_params)
-      metadata = upload_bundle.metadata
-      metadata[:api_key] = request_params[:api_key]
-      metadata[:dataset_id] = request_params[:dataset_id]
-      upload_bundle.update(metadata: metadata)
-      ConnectorResult.new(success: true, message: { notice: I18n.t('connectors.zenodo.actions.connector_edit.success', name: upload_bundle.name) })
+      Zenodo::Actions::ConnectorEdit.new.update(upload_bundle, request_params)
     end
   end
 end

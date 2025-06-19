@@ -1,5 +1,5 @@
 module Zenodo
-  class DatasetService
+  class RecordService
     include LoggingCommon
 
     def initialize(zenodo_url = 'https://zenodo.org', http_client: Common::HttpClient.new(base_url: zenodo_url))
@@ -7,7 +7,7 @@ module Zenodo
       @http_client = http_client
     end
 
-    def find_dataset(record_id)
+    def find_record(record_id)
       url = "/api/records/#{record_id}"
       response = @http_client.get(url)
       return nil unless response.success?
