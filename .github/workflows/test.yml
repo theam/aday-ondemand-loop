@@ -31,6 +31,6 @@ jobs:
       - name: Commit and push badges (only on main push)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          git add docs/coverage
+          git add docs/badges
           git commit -m "Update coverage badges [skip ci]" || echo "No changes"
           git push origin main
