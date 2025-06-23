@@ -1,16 +1,4 @@
 es:
-  connectors:
-    dataverse:
-      upload_bundle_bar:
-        edit_dataset: "Editar conjunto de datos"
-      upload_bundle_form:
-        dataset_url: "URL del conjunto de datos"
-        dataset_url_form_text: "Ingrese la URL del conjunto de datos donde se cargarán los archivos."
-        api_key: "Clave API"
-        api_key_placeholder: "Ingrese su clave API"
-        api_key_form_text: "Proporcione la clave API requerida para autenticarse con el conector."
-        save_changes: "Guardar cambios"
-        cancel: "Cancelar"
   dataverse:
     datasets:
       breadcrumbs:

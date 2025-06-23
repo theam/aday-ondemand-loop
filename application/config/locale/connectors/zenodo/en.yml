@@ -1,0 +1,30 @@
+en:
+  connectors:
+    zenodo:
+      actions:
+        connector_edit:
+          message_success: "Access token updated: %{name}"
+        upload_bundle_create:
+          message_record_not_found: "Zenodo record not found: %{url}. Only published records are supported"
+          message_deposition_not_found: "Zenodo deposition not found: %{url}"
+          message_url_not_supported: "Zenodo URL not supported: %{url}. Only deposition URLs are currently supported"
+          message_success: "Upload bundle created: %{name}"
+        deposition_fetch:
+          message_success: "Successfully fetched deposition: %{name}"
+          message_deposition_not_found: "Zenodo deposition not found: %{repo_url}"
+      connector_edit_form:
+        field_api_key_label: "Personal Access Token"
+        field_api_key_placeholder: "Enter your personal access token"
+        field_api_key_help: "Provide the access token required to authenticate with the Zenodo server."
+        field_key_scope_label: "Store access token for this upload bundle only"
+        field_key_scope_help: "Leave unchecked to store this access token for all bundles using Zenodo."
+      upload_bundle_actions_bar:
+        button_select_deposition_title: "Select Deposition"
+        modal_select_deposition_title: "Select Zenodo deposition"
+        button_deposition_fetch_label: "Fetch Deposition"
+        button_deposition_fetch_title: "Fetch Zenodo deposition metadata"
+        button_create_draft_title: "Create Draft"
+        modal_create_draft_title: "Create Draft"
+        button_edit_key_title: "Add/Edit Access Token"
+        modal_edit_key_title: "Add/Edit Zenodo Personal Access Token"
+        missing_key_disabled_features_text: "Add access token to enable deposition features"
