@@ -4,18 +4,18 @@ class Zenodo::DownloadConnectorStatusTest < ActiveSupport::TestCase
   include ModelHelper
 
   def setup
+    @tmp_dir = Dir.mktmpdir
     @project = create_project
     @file = create_download_file(@project)
     @file.size = 100
     @file.status = FileStatus::DOWNLOADING
-    @file.metadata = {temp_location: File.join(Dir.tmpdir, 'temp'), download_location: File.join(Dir.tmpdir, 'dest')}
+    @file.metadata = {temp_location: File.join(@tmp_dir, 'temp'), download_location: File.join(@tmp_dir, 'dest')}
     File.write(@file.metadata[:temp_location], 'a' * 50)
     @status = Zenodo::DownloadConnectorStatus.new(@file)
   end
 
   def teardown
-    FileUtils.rm_f(@file.metadata[:temp_location])
-    FileUtils.rm_f(@file.metadata[:download_location])
+    FileUtils.rm_rf(@tmp_dir)
   end
 
   test 'calculates progress from temp file' do
