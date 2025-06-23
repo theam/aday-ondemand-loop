@@ -14,7 +14,7 @@ class Zenodo::RecordsController < ApplicationController
       project = @project_service.initialize_project
       unless project.save
         errors = project.errors.full_messages.join(", ")
-        redirect_back fallback_location: root_path, alert: t(".message_project_error", errors: errors)
+        redirect_back fallback_location: root_path, alert: t("zenodo.records.download.message_project_error", errors: errors)
         return
       end
     end
@@ -23,16 +23,16 @@ class Zenodo::RecordsController < ApplicationController
     download_files.each do |file|
       unless file.valid?
         errors = file.errors.full_messages.join(', ')
-        redirect_back fallback_location: root_path, alert: t('.message_validation_file_error', filename: file.filename, errors: errors)
+        redirect_back fallback_location: root_path, alert: t('zenodo.records.download.message_validation_file_error', filename: file.filename, errors: errors)
         return
       end
     end
     save_results = download_files.map(&:save)
     if save_results.include?(false)
-      redirect_back fallback_location: root_path, alert: t('.message_save_file_error')
+      redirect_back fallback_location: root_path, alert: t('zenodo.records.download.message_save_file_error')
       return
     end
-    redirect_back fallback_location: root_path, notice: t('.message_success', project_name: project.name)
+    redirect_back fallback_location: root_path, notice: t('zenodo.records.download.message_success', project_name: project.name)
   end
 
   private
@@ -49,10 +49,10 @@ class Zenodo::RecordsController < ApplicationController
     @record_id = params[:id]
     @record = @service.find_record(@record_id)
     unless @record
-      redirect_to root_path, alert: t('.message_record_not_found', record_id: @record_id)
+      redirect_to root_path, alert: t('zenodo.records.message_record_not_found', record_id: @record_id)
     end
   rescue => e
     log_error('Find record error', { record_id: @record_id }, e)
-    redirect_to root_path, alert: t('.message_record_service_error', record_id: @record_id)
+    redirect_to root_path, alert: t('zenodo.records.message_record_service_error', record_id: @record_id)
   end
 end

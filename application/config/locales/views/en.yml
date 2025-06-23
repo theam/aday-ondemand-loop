@@ -1,71 +1,4 @@
 en:
-  dataverse:
-    collections:
-      breadcrumbs:
-        breadcrumb_dataverse_title: "Dataverse landing page"
-        breadcrumb_home_text: "Home"
-        breadcrumb_home_title: "Home"
-      collection_info:
-        header_dataverse_text: "Dataverse"
-      dataset_item:
-        field_files_label: "Files"
-        field_published_label: "Published"
-        field_publisher_label: "Publisher"
-        field_type_label: "Type"
-        unnamed_dataset_text: "Untitled Dataset"
-      dataverse_item:
-        field_affiliation_label: "Affiliation"
-        field_parent_label: "Parent"
-        field_published_label: "Published"
-        field_type_label: "Type"
-        unnamed_dataverse_text: "Unnamed Dataverse"
-      search_items:
-        content_no_items_found_text: "No items found."
-        header_search_results_a11y_text: "Search results"
-        paginator_bar_a11y_label: "Search result pagination"
-        paginator_page_text: "page %{page}"
-      show:
-        page_title: "OnDemand Loop - Dataverse Collection"
-    datasets:
-      breadcrumbs:
-        breadcrumb_dataverse_title: "Dataverse landing page"
-        breadcrumb_home_text: "Home"
-        breadcrumb_home_title: "Home"
-      dataset_files:
-        button_add_files_text: "Add Files to Active Project"
-        col_file_name_text: "File name"
-        col_published_text: "Published"
-        col_size_text: "Size"
-        col_storage_text: "Storage"
-        checkbox_select_all_label: "Select all files"
-        header_dataset_files_a11y_text: "Dataset files"
-        msg_empty_dataset_text: "The dataset does not contain files to download"
-        paginator_bar_a11y_label: "Search result pagination"
-        paginator_page_text: "page %{page}"
-        table_dataset_files_caption: "Dataset files"
-      dataset_info:
-        header_dataset_text: "Dataset"
-        header_description_text: "Description"
-      dataset_metadata:
-        field_authors_text: "Authors:"
-        field_license_text: "License:"
-        field_publication_date_text: "Publication date:"
-        field_subjects_text: "Subjects:"
-        header_dataset_metadata_text: "Dataset Metadata"
-      show:
-        page_title: "OnDemand Loop - Dataverse Dataset"
-    landing_page:
-      installation_items:
-        paginator_bar_a11y_label: "Landing page pagination"
-        paginator_page_text: "page %{page}"
-        msg_no_items_text: "No items found."
-      index:
-        breadcrumb_dataverse_title: "Dataverse landing page"
-        breadcrumb_home_text: "Home"
-        breadcrumb_home_title: "Home"
-        image_dataverse_icon_alt: "Dataverse icon"
-        page_title: "OnDemand Loop - Dataverse Landing page"
-
   detached_process:
     file_activity_status:
       icon_downloads_title: "Download process status"
@@ -103,8 +36,6 @@ en:
         explore: "Explore"
         icon_alt_text: "Loop Application Icon"
         ood_icon_alt_text: "Open OnDemand Icon"
-        link_dataverse_text: "Dataverse"
-        link_zenodo_text: "Zenodo"
       restart: "Restart"
     footer:
       version_text: "OnDemand Loop"
@@ -213,7 +144,6 @@ en:
   shared:
     breadcrumbs:
       home: "Home"
-      zenodo: "Zenodo"
     button_to:
       button_accessibility_default_label: "Action"
     file_stats_inline:
@@ -269,15 +199,3 @@ en:
       breadcrumbs_text: "Uploads"
       page_title: "OnDemand Loop - Uploads Management"
 
-  zenodo:
-    landing_page:
-      index:
-        page_title: "OnDemand Loop - Zenodo"
-        button_submit_text: "Search"
-        field_search_placeholder: "Query to search in Zenodo records"
-    records:
-      show:
-        page_title: "OnDemand Loop - Zenodo Records"
-        column_record_filename_text: "File"
-        column_record_size_text: "Size"
-        button_submit_text: "Add Files to Active Project"

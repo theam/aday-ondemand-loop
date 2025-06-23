@@ -28,3 +28,38 @@ en:
         button_edit_key_title: "Add/Edit Access Token"
         modal_edit_key_title: "Add/Edit Zenodo Personal Access Token"
         missing_key_disabled_features_text: "Add access token to enable deposition features"
+  layouts:
+    nav:
+      navigation:
+        link_zenodo_text: "Zenodo"
+  helpers:
+    zenodo:
+      badge_key_missing_text: "Access Token missing"
+      badge_key_present_text: "Access Token present"
+  zenodo:
+    records:
+      download:
+        message_project_error: "Error generating project: %{errors}"
+        message_validation_file_error: "Invalid file in selection: %{filename} errors: %{errors}"
+        message_save_file_error: "Error generating the download file"
+        message_success: "Files added to project: %{project_name}"
+      message_record_not_found: "Record not found. Record id: %{record_id}"
+      message_record_service_error: "Zenodo service error. Record id: %{record_id}"
+    landing_page:
+      index:
+        message_search_error: "Zenodo search error while searching: %{query}"
+    views:
+      landing_page:
+        index:
+          page_title: "OnDemand Loop - Zenodo"
+          button_submit_text: "Search"
+          field_search_placeholder: "Query to search in Zenodo records"
+      records:
+        show:
+          page_title: "OnDemand Loop - Zenodo Records"
+          column_record_filename_text: "File"
+          column_record_size_text: "Size"
+          button_submit_text: "Add Files to Active Project"
+    shared:
+      breadcrumbs:
+        zenodo: "Zenodo"
