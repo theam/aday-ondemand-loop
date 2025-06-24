@@ -9,7 +9,7 @@ class DataverseCollectionsHelperTest < ActionView::TestCase
   end
 
   test 'link_to_dataverse_collection delegates to route helper' do
-    stubs(:view_dataverse_url).with('example.com', ':root', dv_port: 443, dv_scheme: 'https').returns('/show')
+    stubs(:view_dataverse_url).with('example.com', ':root', { dv_port: 443, dv_scheme: 'https' }).returns('/show')
     html = link_to_dataverse_collection('Body', 'https://example.com', ':root')
     assert_includes html, 'href="/show"'
   end
@@ -21,7 +21,7 @@ class DataverseCollectionsHelperTest < ActionView::TestCase
   end
 
   test 'link_to_dataset delegates to dataset route helper' do
-    stubs(:view_dataverse_dataset_url).with('example.com', 'id1', dv_port: 443, dv_scheme: 'https').returns('/dataset')
+    stubs(:view_dataverse_dataset_url).with('example.com', 'id1', { dv_port: 443, dv_scheme: 'https' }).returns('/dataset')
     html = link_to_dataset('Ds', 'https://example.com', 'id1')
     assert_includes html, 'href="/dataset"'
   end
