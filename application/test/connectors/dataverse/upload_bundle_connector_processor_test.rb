@@ -26,4 +26,11 @@ class Dataverse::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
     action.expects(:edit).with(@bundle, {form: 'dataset_select'}).returns(:res)
     assert_equal :res, @processor.edit(@bundle, {form: 'dataset_select'})
   end
+
+  test 'update routes dataset_create form' do
+    action = mock('action')
+    Dataverse::Actions::DatasetCreate.expects(:new).returns(action)
+    action.expects(:update).with(@bundle, {form: 'dataset_create'}).returns(:ok)
+    assert_equal :ok, @processor.update(@bundle, {form: 'dataset_create'})
+  end
 end

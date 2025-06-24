@@ -22,4 +22,10 @@ class Dataverse::DisplayRepoControllerResolverTest < ActionDispatch::Integration
     result = @resolver.get_controller_url(url)
     assert_equal '/dv/demo.dataverse.org/datasets/doi:10.1234/DS', result.redirect_url
   end
+
+  test 'collection url returns collection path' do
+    url = 'https://demo.dataverse.org/dataverse/COL1'
+    result = @resolver.get_controller_url(url)
+    assert_equal '/dv/demo.dataverse.org/COL1', result.redirect_url
+  end
 end

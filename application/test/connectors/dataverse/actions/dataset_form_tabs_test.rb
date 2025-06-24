@@ -19,4 +19,31 @@ class Dataverse::Actions::DatasetFormTabsTest < ActiveSupport::TestCase
   test 'update not implemented' do
     assert_raises(NotImplementedError) { @action.update(@bundle, {}) }
   end
+
+  test 'subjects fetches and caches when missing' do
+    meta = OpenStruct.new(dataverse_url: 'https://demo.dv', server_domain: 'demo.dv')
+    @bundle.stubs(:connector_metadata).returns(meta)
+    repo = mock('repo')
+    repo.stubs(:metadata).returns(OpenStruct.new(subjects: nil))
+    RepoRegistry.repo_db.stubs(:get).with('demo.dv').returns(repo)
+    RepoRegistry.repo_db.stubs(:update)
+
+    md_service = mock('md')
+    md_service.expects(:get_citation_metadata).returns(OpenStruct.new(subjects: ['Bio']))
+    Dataverse::MetadataService.stubs(:new).returns(md_service)
+
+    result = @action.send(:subjects, @bundle)
+    assert_includes result, 'Bio'
+  end
+
+  test 'profile fetched via user service' do
+    meta = OpenStruct.new(dataverse_url: 'https://demo.dv', api_key: OpenStruct.new(value: 'k'))
+    @bundle.stubs(:connector_metadata).returns(meta)
+
+    user_service = mock('service')
+    user_service.expects(:get_user_profile).returns('profile')
+    Dataverse::UserService.stubs(:new).returns(user_service)
+
+    assert_equal 'profile', @action.send(:profile, @bundle)
+  end
 end

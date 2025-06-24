@@ -14,4 +14,9 @@ class Zenodo::DownloadConnectorMetadataTest < ActiveSupport::TestCase
   test 'files_url uses record id' do
     assert_match '/records/1', @meta.files_url
   end
+
+  test 'to_h and missing methods' do
+    assert_nil @meta.unknown
+    assert_equal({'record_id'=>1}, @meta.to_h)
+  end
 end

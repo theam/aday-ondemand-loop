@@ -26,4 +26,12 @@ class Dataverse::UploadConnectorProcessorTest < ActiveSupport::TestCase
     assert_equal 'cancellation requested', res[:message]
     assert @processor.cancelled
   end
+
+  test 'process status returns progress' do
+    ctx = {total:1, uploaded:0}
+    @processor.instance_variable_set(:@status_context, ctx)
+    req = OpenStruct.new(command: 'upload.status', body: OpenStruct.new(file_id: @file.id))
+    res = @processor.process(req)
+    assert_equal ctx, res[:status]
+  end
 end

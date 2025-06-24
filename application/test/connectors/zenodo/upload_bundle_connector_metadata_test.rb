@@ -17,4 +17,11 @@ class Zenodo::UploadBundleConnectorMetadataTest < ActiveSupport::TestCase
   test 'to_h returns string keys' do
     assert_equal 't', @meta.to_h['title']
   end
+
+  test 'helpers around draft and api key' do
+    assert @meta.display_title?
+    assert @meta.draft?
+    assert_not @meta.fetch_deposition?
+    refute @meta.api_key_required?
+  end
 end

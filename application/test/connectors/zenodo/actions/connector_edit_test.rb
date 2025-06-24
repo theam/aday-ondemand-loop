@@ -19,4 +19,12 @@ class Zenodo::Actions::ConnectorEditTest < ActiveSupport::TestCase
     result = @action.update(@bundle, {api_key: 'KEY', key_scope: 'server'})
     assert result.success?
   end
+
+  test 'update saves api key in bundle' do
+    meta = {}
+    @bundle.stubs(:metadata).returns(meta)
+    result = @action.update(@bundle, {api_key: 'B', key_scope: 'bundle'})
+    assert result.success?
+    assert_equal 'B', meta[:auth_key]
+  end
 end

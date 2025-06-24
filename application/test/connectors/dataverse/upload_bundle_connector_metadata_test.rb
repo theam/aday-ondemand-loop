@@ -28,4 +28,14 @@ class Dataverse::UploadBundleConnectorMetadataTest < ActiveSupport::TestCase
   test 'to_h converts keys to strings' do
     assert_equal 'My Collection', @meta.to_h['collection_title']
   end
+
+  test 'selection helpers' do
+    assert @meta.display_collection?
+    @meta.dataset_id = nil
+    assert @meta.select_dataset?
+    @meta.dataset_id = 'DS'
+    @meta.dataset_title = 'T'
+    assert @meta.display_dataset?
+    refute @meta.api_key_required?
+  end
 end

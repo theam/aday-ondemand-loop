@@ -32,4 +32,11 @@ class Zenodo::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
     action.expects(:update).with(@bundle, {form: 'deposition_fetch'}).returns(:ok)
     assert_equal :ok, @processor.update(@bundle, {form: 'deposition_fetch'})
   end
+
+  test 'update default routes to connector edit' do
+    action = mock('action')
+    Zenodo::Actions::ConnectorEdit.expects(:new).returns(action)
+    action.expects(:update).with(@bundle, {}).returns(:ok)
+    assert_equal :ok, @processor.update(@bundle, {})
+  end
 end

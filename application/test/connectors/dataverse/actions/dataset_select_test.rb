@@ -23,4 +23,10 @@ class Dataverse::Actions::DatasetSelectTest < ActiveSupport::TestCase
     assert result.success?
     assert_equal 'id', @bundle.metadata[:dataset_id]
   end
+
+  test 'dataset_title helper finds name' do
+    datasets = OpenStruct.new(items: [OpenStruct.new(global_id: 'g', name: 'Title')])
+    @action.stubs(:datasets).returns(datasets)
+    assert_equal 'Title', @action.send(:dataset_title, @bundle, 'g')
+  end
 end

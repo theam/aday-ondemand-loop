@@ -23,4 +23,12 @@ class Dataverse::Actions::CollectionSelectTest < ActiveSupport::TestCase
     assert result.success?
     assert_equal 'c1', @bundle.metadata[:collection_id]
   end
+
+  test 'collections helper uses service' do
+    service = mock('service')
+    service.expects(:get_my_collections).returns(OpenStruct.new(items: []))
+    Dataverse::CollectionService.stubs(:new).returns(service)
+    result = @action.send(:collections, @bundle)
+    assert_equal 0, result.items.size
+  end
 end
