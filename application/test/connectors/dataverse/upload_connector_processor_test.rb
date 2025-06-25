@@ -14,10 +14,10 @@ class Dataverse::UploadConnectorProcessorTest < ActiveSupport::TestCase
     @processor = Dataverse::UploadConnectorProcessor.new(@file)
   end
 
-  test 'upload delegates to uploader and updates key' do
+  test 'upload delegates to uploader and returns success' do
     Upload::MultipartHttpRubyUploader.any_instance.stubs(:upload).yields({total:1, uploaded:1})
-    @processor.upload
-    assert_equal FileStatus::SUCCESS.to_s, FileStatus::SUCCESS.to_s # just to use constant
+    result = @processor.upload
+    assert_equal FileStatus::SUCCESS, result.status
   end
 
   test 'process cancel sets flag' do
