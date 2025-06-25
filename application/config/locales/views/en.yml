@@ -213,31 +213,35 @@ en:
       logo:
         logo_alt_text: "OnDemand Loop Logo"
       navigation:
-        projects: "Projects"
-        downloads: "Downloads"
-        uploads: "Uploads"
-        repositories: "Repositories"
-        explore: "Explore"
-        icon_alt_text: "Loop Application Icon"
-        ood_icon_alt_text: "Open OnDemand Icon"
+        icon_explore_alt: "Loop Application Icon"
+        icon_ood_alt: "Open OnDemand Icon"
         link_dataverse_text: "Dataverse"
+        link_downloads_text: "Downloads"
+        link_explore_text: "Explore"
+        link_projects_text: "Projects"
+        link_repositories_text: "Repositories"
+        link_restart_text: "Restart"
+        link_uploads_text: "Uploads"
         link_zenodo_text: "Zenodo"
-      restart: "Restart"
+    flash_messages:
+      button_close_label: "Close"
     footer:
       version_text: "OnDemand Loop"
     modal:
       button_close_label: "Close"
+      header_loading_text: "Loading..."
     modal_delete_confirmation:
       header_title: "Delete"
       content_text: "Are you sure you want to delete this element? This action cannot be undone."
       button_close_label: "Close"
       button_confirm_text: "Delete"
       button_cancel_text: "Cancel"
+      subtitle_default_text: "This action cannot be undone."
     project_bar:
-      link_open_downloads_title: "Open Project folder"
-      creation_date_title: "Creation date"
-      link_open_metadata_title: "Open Project metadata"
       button_active_project_title: "Active Project"
+      field_creation_date_title: "Creation date"
+      link_open_downloads_title: "Open Project folder"
+      link_open_metadata_title: "Open Project metadata"
     repo_resolver_bar:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
