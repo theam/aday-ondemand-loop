@@ -12,7 +12,7 @@ module Dataverse::Actions
         collection = collection_service.find_collection_by_id(url_data.collection_id)
         return error(I18n.t('connectors.dataverse.actions.upload_bundle_create.message_collection_not_found', url: remote_repo_url)) unless collection
 
-        root_dv = collection.data.parents.first
+        root_dv = collection.data.parents.first || {}
         root_title = root_dv[:name]
         collection_title = collection.data.name
         collection_id = collection.data.alias
