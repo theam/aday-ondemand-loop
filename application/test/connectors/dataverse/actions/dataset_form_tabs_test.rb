@@ -20,6 +20,19 @@ class Dataverse::Actions::DatasetFormTabsTest < ActiveSupport::TestCase
     assert_raises(NotImplementedError) { @action.update(@bundle, {}) }
   end
 
+  test 'datasets fetches via collections service' do
+    meta = OpenStruct.new(dataverse_url: 'https://demo.dv', api_key: mock({value: '12345'}), collection_id: '12345')
+    @bundle.stubs(:connector_metadata).returns(meta)
+
+    collections_service = mock('collections')
+    collections_service.expects(:search_collection_items).returns(Dataverse::SearchResponse.new({}.to_json))
+    Dataverse::CollectionService.stubs(:new).returns(collections_service)
+
+    result = @action.send(:datasets, @bundle)
+    assert_instance_of Dataverse::SearchResponse::Data, result
+    assert_equal result.items, []
+  end
+
   test 'subjects fetches and caches when missing' do
     meta = OpenStruct.new(dataverse_url: 'https://demo.dv', server_domain: 'demo.dv')
     @bundle.stubs(:connector_metadata).returns(meta)
@@ -40,10 +53,11 @@ class Dataverse::Actions::DatasetFormTabsTest < ActiveSupport::TestCase
     meta = OpenStruct.new(dataverse_url: 'https://demo.dv', api_key: OpenStruct.new(value: 'k'))
     @bundle.stubs(:connector_metadata).returns(meta)
 
+    user_data = Dataverse::UserProfileResponse.new({}.to_json)
     user_service = mock('service')
-    user_service.expects(:get_user_profile).returns('profile')
+    user_service.expects(:get_user_profile).returns(user_data)
     Dataverse::UserService.stubs(:new).returns(user_service)
 
-    assert_equal 'profile', @action.send(:profile, @bundle)
+    assert_equal user_data, @action.send(:profile, @bundle)
   end
 end
