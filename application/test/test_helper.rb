@@ -29,6 +29,8 @@ end
 require_relative '../config/environment'
 require_relative 'helpers/file_fixture_helper'
 require_relative 'helpers/model_helper'
+require_relative 'helpers/zenodo_helper'
+require_relative 'helpers/dataverse_helper'
 
 require_relative 'utils/download_files_provider_mock'
 require_relative 'utils/http_mock'
@@ -39,12 +41,13 @@ require 'mocha/minitest'
 
 module ActiveSupport
   class TestCase
-    # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    # Run tests sequentially to preserve accurate coverage metrics
 
     # Add more helper methods to be used by all tests here...
     include FileFixtureHelper
     include ModelHelper
+    include ZenodoHelper
+    include DataverseHelper
 
     setup do
       begin
