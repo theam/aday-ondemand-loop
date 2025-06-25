@@ -18,6 +18,11 @@ class Dataverse::UploadConnectorStatusTest < ActiveSupport::TestCase
     assert_equal 50, @status.upload_progress
   end
 
+  test 'pending file returns 0' do
+    @file.status = FileStatus::PENDING
+    assert_equal 0, @status.upload_progress
+  end
+
   test 'completed file returns 100' do
     @file.status = FileStatus::SUCCESS
     assert_equal 100, @status.upload_progress
