@@ -1,0 +1,22 @@
+---
+es:
+  dataverse:
+    datasets:
+      download:
+        error_generating_project: "Error al generar el proyecto: %{errors}"
+        invalid_file_in_selection: "Archivo inválido en la selección: %{filename} errores: %{errors}"
+        error_generating_the_download_file: "Error al generar el archivo de descarga"
+        files_added_to_project: "Archivos agregados al proyecto: %{project_name}"
+      dataset_not_found: "Conjunto de datos no encontrado. Dataverse: %{dataverse_url} persistentId: %{persistent_id}"
+      dataset_requires_authorization: "El conjunto de datos requiere autorización. Dataverse: %{dataverse_url} persistentId: %{persistent_id}"
+      dataverse_service_error: "Error del servicio de Dataverse. Dataverse: %{dataverse_url} persistentId: %{persistent_id}"
+      dataset_files_not_found: "Archivos del conjunto de datos no encontrados. Dataverse: %{dataverse_url} persistentId: %{persistent_id} página: %{page}"
+      dataset_files_endpoint_requires_authorization: "El punto de acceso a archivos del conjunto de datos requiere autorización. Dataverse: %{dataverse_url} persistentId: %{persistent_id} página: %{page}"
+      dataverse_service_error_searching_files: "Error del servicio de Dataverse al buscar archivos. Dataverse: %{dataverse_url} persistentId: %{persistent_id} página: %{page}"
+    dataverses:
+      index:
+        dataverse_installations_service_error: "Error del servicio de instalaciones de Dataverse."
+      show:
+        dataverse_not_found: "Dataverse no encontrado. Dataverse: %{dataverse_url} Id: %{id}"
+        dataverse_requires_authorization: "Dataverse requiere autorización. Dataverse: %{dataverse_url} Id: %{id}"
+        dataverse_service_error: "Error del servicio de Dataverse. Dataverse: %{dataverse_url} Id: %{id}"
