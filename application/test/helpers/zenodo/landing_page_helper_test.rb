@@ -9,10 +9,12 @@ class ZenodoLandingPageHelperTest < ActionView::TestCase
     stubs(:view_zenodo_landing_path).returns('/prev')
     html = link_to_search_prev_page('q', page, {})
     assert_includes html, '/prev'
+    assert_includes html, 'btn btn-sm btn-outline-dark'
 
     stubs(:view_zenodo_landing_path).returns('/next')
     html = link_to_search_next_page('q', page, {})
     assert_includes html, '/next'
+    assert_includes html, 'btn btn-sm btn-outline-dark'
   end
 
   test 'prev link nil on first page' do
