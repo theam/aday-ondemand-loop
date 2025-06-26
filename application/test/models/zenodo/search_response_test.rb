@@ -9,7 +9,11 @@ class Zenodo::SearchResponseTest < ActiveSupport::TestCase
     resp = Zenodo::SearchResponse.new(json, 1, 2)
     assert_equal 2, resp.items.size
     assert_equal 'Record One', resp.items.first.title
-    assert_equal '1', resp.items.first.id
+    first = resp.items.first
+    assert_equal '1', first.id
+    assert_equal 'Desc one', first.description
+    assert_equal '2024-01-01', first.publication_date
+    assert_equal 1, first.files.size
     assert_equal 1, resp.page
     assert_equal 2, resp.per_page
     assert_equal 2, resp.total_count
