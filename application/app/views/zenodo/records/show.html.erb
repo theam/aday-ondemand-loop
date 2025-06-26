@@ -1,4 +1,4 @@
-<% content_for :title, t('.page_title') %>
+<% content_for :title, t('zenodo.records.show.page_title') %>
 <div class="zenodo container-md content" role="main">
   <%= render partial: '/shared/breadcrumbs', locals: { links: [{text: t('shared.breadcrumbs.zenodo'), url: view_zenodo_landing_path}, {text: @record.title}]} %>
 
@@ -12,8 +12,8 @@
           <thead>
             <tr>
               <th></th>
-              <th><%= t('.column_record_filename_text') %></th>
-              <th><%= t('.column_record_size_text') %></th>
+              <th><%= t('zenodo.records.show.column_record_filename_text') %></th>
+              <th><%= t('zenodo.records.show.column_record_size_text') %></th>
             </tr>
           </thead>
           <tbody>
@@ -26,7 +26,7 @@
           <% end %>
           </tbody>
         </table>
-        <%= submit_tag t('.button_submit_text'), class: 'btn btn-primary' %>
+        <%= submit_tag t('zenodo.records.show.button_submit_text'), class: 'btn btn-primary' %>
       <% end %>
     </div>
   </div>

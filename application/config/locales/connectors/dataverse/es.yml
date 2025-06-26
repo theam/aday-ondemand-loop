@@ -1,0 +1,62 @@
+---
+es:
+  dataverse:
+    datasets:
+      breadcrumbs:
+        home: Inicio
+      dataset_files:
+        page: página %{page}
+        file_name: Nombre del archivo
+        size: Tamaño
+        storage: Almacenamiento
+        published: Publicado
+        add_files_submit: Agregar archivos al proyecto activo
+        empty_dataset_msg: El conjunto de datos no contiene archivos para descargar
+      dataset_info:
+        dataset: Conjunto de datos
+        description: Descripción
+      dataset_metadata:
+        dataset_metadata: Metadatos del conjunto de datos
+        publication_date: 'Fecha de publicación:'
+        authors: 'Autores:'
+        subjects: 'Temas:'
+        license: 'Licencia:'
+    dataverses:
+      breadcrumbs:
+        home: Inicio
+      dataset_item:
+        untitled_dataset: Conjunto de datos sin título
+        published: Publicado
+        type: Tipo
+        publisher: Editor
+        files: Archivos
+      dataverse_info:
+        dataverse: Dataverse
+      dataverse_item:
+        unnamed_dataverse: Dataverse sin nombre
+        published: Publicado
+        type: Tipo
+        affiliation: Afiliación
+        parent: Padre
+      installation_items:
+        page: página %{page}
+        no_items_found: No se encontraron elementos.
+      search_items:
+        page: página %{page}
+        no_items_found: No se encontraron elementos.
+      index:
+        home: Inicio
+        dataverse_icon: Icono de Dataverse
+  connectors:
+    dataverse:
+      upload_bundle_bar:
+        edit_dataset: Editar conjunto de datos
+      upload_bundle_form:
+        dataset_url: URL del conjunto de datos
+        dataset_url_form_text: Ingrese la URL del conjunto de datos donde se cargarán los archivos.
+        api_key: Clave API
+        api_key_placeholder: Ingrese su clave API
+        api_key_form_text: Proporcione la clave API requerida para autenticarse con el conector.
+        save_changes: Guardar cambios
+        cancel: Cancelar
+  helpers: {}
