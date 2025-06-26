@@ -4,9 +4,10 @@ class Zenodo::LandingPageController < ApplicationController
   def index
     @query = params[:query]
     @page = params[:page]&.to_i || 1
+    @per_page = params[:per_page]&.to_i || 10
     if @query.present?
       service = Zenodo::SearchService.new
-      @results = service.search(@query, page: @page)
+      @results = service.search(@query, page: @page, per_page: @per_page)
     end
   rescue => e
     log_error('Search Zenodo error', { query: @query, page: @page }, e)
