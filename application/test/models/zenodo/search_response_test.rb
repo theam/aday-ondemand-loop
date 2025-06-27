@@ -14,6 +14,7 @@ class Zenodo::SearchResponseTest < ActiveSupport::TestCase
     assert_equal 'Desc one', first.description
     assert_equal '2024-01-01', first.publication_date
     assert_equal 1, first.files.size
+    assert_equal 'md5:111', first.files.first.checksum
     assert_equal 1, resp.page
     assert_equal 2, resp.per_page
     assert_equal 2, resp.total_count

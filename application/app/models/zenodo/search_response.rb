@@ -39,6 +39,7 @@ module Zenodo
           id: f['id'].to_s,
           filename: f['key'],
           filesize: f['size'],
+          checksum: f['checksum'],
           download_link: raw_url,
           download_url: encoded_url
         )
