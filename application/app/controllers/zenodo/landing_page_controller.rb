@@ -10,6 +10,6 @@ class Zenodo::LandingPageController < ApplicationController
     end
   rescue => e
     log_error('Search Zenodo error', { query: @query, page: @page }, e)
-    redirect_to root_path, alert: t('.message_search_error', query: @query)
+    redirect_to root_path, alert: t('zenodo.landing_page.index.message_search_error', query: @query)
   end
 end
