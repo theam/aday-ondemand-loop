@@ -4,12 +4,28 @@
 
   <div class="card">
     <div class="card-header py-2">
-      <%= @record.title %>
-      <div class="small text-muted">
-        <%= t('.label_publication_date_text') %> <%= @record.publication_date %> |
-        <%= t('.label_files_text') %> <%= @record.files.size %>
+      <a class="d-flex align-items-start text-decoration-none w-100"
+         data-bs-toggle="collapse"
+         data-controller="utils--icon-toggle"
+         data-utils--icon-toggle-icon-on-value="bi-caret-right"
+         data-utils--icon-toggle-icon-off-value="bi-caret-down"
+         data-action="click->utils--icon-toggle#toggle"
+         href="#record-description"
+         role="button"
+         aria-expanded="false"
+         aria-controls="record-description">
+        <i data-utils--icon-toggle-target="icon" class="bi bi-caret-right me-2 transition" aria-hidden="true"></i>
+        <div>
+          <%= @record.title %>
+          <div class="small text-muted">
+            <%= t('.label_publication_date_text') %> <%= @record.publication_date %> |
+            <%= t('.label_files_text') %> <%= @record.files.size %>
+          </div>
+        </div>
+      </a>
+      <div id="record-description" class="collapse pt-1">
+        <div class="small text-muted"><%= @record.description %></div>
       </div>
-      <div class="small text-muted"><%= @record.description %></div>
     </div>
     <div class="card-body">
       <%= form_with url: download_zenodo_record_files_path, local: true do |f| %>
