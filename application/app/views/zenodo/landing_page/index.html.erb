@@ -9,12 +9,51 @@
     </div>
   <% end %>
   <% if @results %>
-    <ul class="list-group">
-      <% @results.items.each do |item| %>
-        <li class="list-group-item">
-          <%= link_to item.title, view_zenodo_record_path(item.id) %>
-        </li>
+    <div class="card">
+      <div class="card-header d-flex align-items-center">
+        <%= @results.to_s %>
+        <nav aria-label="<%= t('.paginator_bar_a11y_label') %>" class="ms-auto">
+          <div class="d-flex align-items-center gap-2">
+            <%= link_to_search_prev_page(@query, @results, class: 'text-decoration-none') %>
+            <%= t('.paginator_page_text', page: @results.page) %>
+            <%= link_to_search_next_page(@query, @results, class: 'text-decoration-none') %>
+          </div>
+        </nav>
+      </div>
+      <% if @results.items.any? %>
+        <table class="table table-striped table-bordered align-middle mb-0">
+          <caption class="visually-hidden"><%= t('.table_results_caption') %></caption>
+          <thead class="table-light">
+            <tr>
+              <th scope="col"><%= t('.column_title_text') %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @results.items.each do |item| %>
+              <tr>
+                <td>
+                  <%= link_to item.title, view_zenodo_record_path(item.id) %>
+                  <div class="small text-muted">
+                    <%= t('.label_publication_date_text') %> <%= item.publication_date %> |
+                    <%= t('.label_files_text') %> <%= item.files.size %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="alert alert-warning m-3" role="status"><%= t('.msg_no_items_found_text') %></div>
       <% end %>
-    </ul>
+      <div class="card-header d-flex justify-content-end">
+        <nav aria-label="<%= t('.paginator_bar_a11y_label') %>" class="ms-auto">
+          <div class="d-flex align-items-center gap-2">
+            <%= link_to_search_prev_page(@query, @results, class: 'text-decoration-none') %>
+            <%= t('.paginator_page_text', page: @results.page) %>
+            <%= link_to_search_next_page(@query, @results, class: 'text-decoration-none') %>
+          </div>
+        </nav>
+      </div>
+    </div>
   <% end %>
 </div>

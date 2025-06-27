@@ -25,11 +25,20 @@ en:
         column_record_filename_text: "File"
         column_record_size_text: "Size"
         button_submit_text: "Add Files to Active Project"
+        label_publication_date_text: "Publication date:"
+        label_files_text: "Files:"
     landing_page:
       index:
         page_title: "OnDemand Loop - Zenodo"
         button_submit_text: "Search"
         field_search_placeholder: "Query to search in Zenodo records"
+        column_title_text: "Title"
+        label_publication_date_text: "Publication date:"
+        label_files_text: "Files:"
+        paginator_bar_a11y_label: "Search result pagination"
+        paginator_page_text: "page %{page}"
+        table_results_caption: "Search results"
+        msg_no_items_found_text: "No items found."
   helpers:
     zenodo:
       badge_key_missing_text: "Access Token missing"

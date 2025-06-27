@@ -2,7 +2,9 @@ require 'test_helper'
 
 class Zenodo::LandingPageControllerTest < ActionDispatch::IntegrationTest
   test 'search delegates to service' do
-    Zenodo::SearchService.any_instance.stubs(:search).returns(OpenStruct.new(items: []))
+    Zenodo::SearchService.any_instance.expects(:search)
+                         .with('test', page: 1, per_page: 10)
+                         .returns(OpenStruct.new(items: []))
     get view_zenodo_landing_path, params: {query: 'test'}
     assert_response :success
   end
