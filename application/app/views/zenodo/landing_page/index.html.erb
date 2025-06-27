@@ -29,7 +29,13 @@
           <tbody>
             <% @results.items.each do |item| %>
               <tr>
-                <td><%= link_to item.title, view_zenodo_record_path(item.id) %></td>
+                <td>
+                  <%= link_to item.title, view_zenodo_record_path(item.id) %>
+                  <div class="small text-muted">
+                    <%= t('.label_publication_date_text') %> <%= item.publication_date %> |
+                    <%= t('.label_files_text') %> <%= item.files.size %>
+                  </div>
+                </td>
               </tr>
             <% end %>
             <tr>
