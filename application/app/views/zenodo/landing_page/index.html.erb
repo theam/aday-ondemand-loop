@@ -13,9 +13,11 @@
       <div class="card-header d-flex align-items-center">
         <%= @results.to_s %>
         <nav aria-label="<%= t('.paginator_bar_a11y_label') %>" class="ms-auto">
-          <%= link_to_search_prev_page(@query, @results, class: 'text-decoration-none') %>
-          <%= t('.paginator_page_text', page: @results.page) %>
-          <%= link_to_search_next_page(@query, @results, class: 'text-decoration-none') %>
+          <div class="d-flex align-items-center gap-2">
+            <%= link_to_search_prev_page(@query, @results, class: 'text-decoration-none') %>
+            <%= t('.paginator_page_text', page: @results.page) %>
+            <%= link_to_search_next_page(@query, @results, class: 'text-decoration-none') %>
+          </div>
         </nav>
       </div>
       <% if @results.items.any? %>
@@ -41,9 +43,11 @@
             <tr>
               <td class="text-center">
                 <nav aria-label="<%= t('.paginator_bar_a11y_label') %>" class="pagination mb-0">
-                  <%= link_to_search_prev_page(@query, @results, class: 'text-decoration-none bottom-page-link') %>
-                  <%= t('.paginator_page_text', page: @results.page) %>
-                  <%= link_to_search_next_page(@query, @results, class: 'text-decoration-none bottom-page-link') %>
+                  <div class="d-flex align-items-center gap-2">
+                    <%= link_to_search_prev_page(@query, @results, class: 'text-decoration-none bottom-page-link') %>
+                    <%= t('.paginator_page_text', page: @results.page) %>
+                    <%= link_to_search_next_page(@query, @results, class: 'text-decoration-none bottom-page-link') %>
+                  </div>
                 </nav>
               </td>
             </tr>
