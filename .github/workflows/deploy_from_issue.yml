@@ -1,0 +1,65 @@
+# .github/workflows/deploy-from-issue.yml
+name: Deploy From Issue Command
+
+on:
+  repository_dispatch:
+    types: [slash-command-dispatch]
+
+jobs:
+  validate:
+    if: ${{ github.event.client_payload.slash_command.command == 'deploy' }}
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.extract.outputs.tag }}
+      env: ${{ steps.extract.outputs.env }}
+      branch: ${{ steps.extract.outputs.branch }}
+
+    steps:
+      - name: Extract version and map environment to branch
+        id: extract
+        run: |
+          ENVIRONMENT="${{ github.event.client_payload.slash_command.args }}"
+          ISSUE_NUMBER="${{ github.event.client_payload.issue.number }}"
+          TITLE=$(gh issue view "$ISSUE_NUMBER" --json title --jq '.title')
+          TAG=$(echo "$TITLE" | awk '{print $NF}')
+
+          case "$ENVIRONMENT" in
+            QA)
+              BRANCH="iqss_qa"
+              ;;
+            Production)
+              BRANCH="iqss_production"
+              ;;
+            *)
+              echo "❌ Unknown environment: $ENVIRONMENT"
+              exit 1
+              ;;
+          esac
+
+          echo "env=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Require approval for Production
+        if: ${{ steps.extract.outputs.env == 'Production' }}
+        run: |
+          ISSUE=${{ github.event.client_payload.issue.number }}
+          APPROVED=$(gh issue view "$ISSUE" --json comments --jq \
+            '.comments[].body | select(test("(?i)deployment approved"))')
+
+          if [ -z "$APPROVED" ]; then
+            echo "❌ Deployment not approved. Aborting."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: validate
+    uses: ./.github/workflows/deploy-from-tag.yml
+    with:
+      tag: ${{ needs.validate.outputs.tag }}
+      environment: ${{ needs.validate.outputs.env }}
+      branch: ${{ needs.validate.outputs.branch }}
