@@ -18,7 +18,7 @@ jobs:
         run: |
           ENVIRONMENT="${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}"
           ISSUE_NUMBER="${{ github.event.client_payload.github.payload.issue.number }}"
-          TITLE=$(gh issue view "$ISSUE_NUMBER" --json title --jq '.title')
+          TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json title --jq '.title')
           TAG=$(echo "$TITLE" | awk '{print $NF}')
 
           case "$ENVIRONMENT" in
@@ -44,7 +44,7 @@ jobs:
         if: ${{ steps.extract.outputs.env == 'Production' }}
         run: |
           ISSUE=${{ github.event.client_payload.issue.number }}
-          APPROVED=$(gh issue view "$ISSUE" --json comments --jq \
+          APPROVED=$(gh issue view "$ISSUE" --repo "${{ github.repository }}" --json comments --jq \
             '.comments[].body | select(test("(?i)deployment approved"))')
 
           if [ -z "$APPROVED" ]; then
