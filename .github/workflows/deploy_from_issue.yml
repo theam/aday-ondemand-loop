@@ -37,6 +37,15 @@ jobs:
           echo "env=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          
+          # Final validation
+          if [[ -z "$ENVIRONMENT" || -z "$TAG" || -z "$BRANCH" ]]; then
+            echo "❌ Missing one or more required values:"
+            echo "  - ENVIRONMENT: $ENVIRONMENT"
+            echo "  - TAG: $TAG"
+            echo "  - BRANCH: $BRANCH"
+            exit 1
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -61,3 +70,19 @@ jobs:
       tag: ${{ needs.validate.outputs.tag }}
       environment: ${{ needs.validate.outputs.env }}
       branch: ${{ needs.validate.outputs.branch }}
+
+  comment:
+    name: Comment on Deployment Success
+    needs: [ validate, deploy ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add deployment confirmation comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.client_payload.issue.number }}
+          body: |
+            ✅ **Completed deployment**  
+            **Version**: `${{ needs.validate.outputs.tag }}`  
+            **Environment**: `${{ needs.validate.outputs.env }}`
+
