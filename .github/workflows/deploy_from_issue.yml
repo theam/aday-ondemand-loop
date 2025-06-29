@@ -1,13 +1,11 @@
-# .github/workflows/deploy-from-issue.yml
 name: Deploy From Issue Command
 
 on:
   repository_dispatch:
-    types: [slash-command-dispatch]
+    types: [deploy-command]
 
 jobs:
   validate:
-    if: ${{ github.event.client_payload.slash_command.command == 'deploy' }}
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.extract.outputs.tag }}

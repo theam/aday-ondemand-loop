@@ -1,4 +1,3 @@
-# .github/workflows/deploy-from-tag.yml
 name: Build and Deploy from Tag
 
 on:
@@ -19,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Print deployment parameters
+        run: |
+          echo "🔧 Deploying with parameters:"
+          echo "  - tag: ${{ inputs.tag }}"
+          echo "  - environment: ${{ inputs.environment }}"
+          echo "  - branch: ${{ inputs.branch }}"
+
       - name: Checkout Loop Tags
         uses: actions/checkout@v4
         with:

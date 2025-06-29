@@ -1,4 +1,4 @@
-name: Build and Deploy from Tag
+name: Build and Deploy from Tag Manually
 
 on:
   workflow_dispatch:
