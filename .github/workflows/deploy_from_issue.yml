@@ -56,7 +56,7 @@ jobs:
 
   deploy:
     needs: validate
-    uses: ./.github/workflows/deploy-from-tag.yml
+    uses: ./.github/workflows/deploy_from_tag.yml
     with:
       tag: ${{ needs.validate.outputs.tag }}
       environment: ${{ needs.validate.outputs.env }}
