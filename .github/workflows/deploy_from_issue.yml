@@ -16,8 +16,8 @@ jobs:
       - name: Extract version and map environment to branch
         id: extract
         run: |
-          ENVIRONMENT="${{ github.event.client_payload.slash_command.args }}"
-          ISSUE_NUMBER="${{ github.event.client_payload.issue.number }}"
+          ENVIRONMENT="${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}"
+          ISSUE_NUMBER="${{ github.event.client_payload.github.payload.issue.number }}"
           TITLE=$(gh issue view "$ISSUE_NUMBER" --json title --jq '.title')
           TAG=$(echo "$TITLE" | awk '{print $NF}')
 
