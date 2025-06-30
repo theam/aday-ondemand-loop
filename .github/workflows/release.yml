@@ -1,17 +1,15 @@
 name: Create Release
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      bump_type:
-        description: 'Select the version bump type'
+      release_type:
         required: true
-        default: 'patch'
-        type: choice
-        options:
-          - patch
-          - minor
-          - major
+        type: string
+    outputs:
+      version:
+        description: "The version number created"
+        value: ${{ jobs.release.outputs.version }}
 
 jobs:
   release:
@@ -40,7 +38,7 @@ jobs:
 
       - name: Bump version using Docker via Make
         working-directory: src
-        run: make version VERSION_TYPE=${{ github.event.inputs.bump_type }}
+        run: make version VERSION_TYPE=${{ inputs.release_type }}
 
       - name: Commit bumped version
         working-directory: src

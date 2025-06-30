@@ -6,12 +6,13 @@ on:
 
 jobs:
   slash-command:
-    if: contains(github.event.comment.body, '/deploy')
+    if: contains(github.event.comment.body, '/release') || contains(github.event.comment.body, '/deploy')
     runs-on: ubuntu-latest
     steps:
       - uses: peter-evans/slash-command-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commands: |
+            release
             deploy
           permission: write
