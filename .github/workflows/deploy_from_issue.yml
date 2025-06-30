@@ -23,10 +23,10 @@ jobs:
           TAG=$(echo "$TITLE" | awk '{print $NF}')
 
           case "$ENVIRONMENT" in
-            QA)
+            qa)
               BRANCH="iqss_qa"
               ;;
-            Production)
+            production)
               BRANCH="iqss_production"
               ;;
             *)
