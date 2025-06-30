@@ -34,8 +34,6 @@ jobs:
     uses: ./.github/workflows/release.yml
     with:
       release_type: ${{ needs.validate.outputs.release_type }}
-    outputs:
-      version: ${{ steps.release.outputs.version }}
 
   comment:
     name: Comment on Release Result
