@@ -17,6 +17,7 @@ jobs:
         id: extract
         run: |
           ENVIRONMENT="${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}"
+          ENVIRONMENT=$(echo "$ENVIRONMENT" | tr '[:upper:]' '[:lower:]')
           ISSUE_NUMBER="${{ github.event.client_payload.github.payload.issue.number }}"
           TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json title --jq '.title')
           TAG=$(echo "$TITLE" | awk '{print $NF}')
