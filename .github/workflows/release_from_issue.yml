@@ -16,6 +16,12 @@ jobs:
         run: |
           RELEASE_TYPE="${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}"
           ISSUE_NUMBER="${{ github.event.client_payload.github.payload.issue.number }}"
+          TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json title --jq '.title')
+          
+          if [[ ! "$TITLE" =~ ^[Rr]elease ]]; then
+            echo "❌ Issue title must start with 'Release'"
+            exit 1
+          fi
 
           echo "Parsed release type: $RELEASE_TYPE"
           echo "Parsed issue: $ISSUE_NUMBER"
@@ -60,5 +66,6 @@ jobs:
             ${{ steps.title.outputs.title }}
 
             **Release Type**: `${{ needs.validate.outputs.release_type }}`
-            **Version**: `v${{ needs.release.outputs.version }}`
+            **Version**: `${{ needs.release.outputs.version }}`
+            **Notes**: [View GitHub Release Notes](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.release.outputs.version }})
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})

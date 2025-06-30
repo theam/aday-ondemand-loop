@@ -21,6 +21,11 @@ jobs:
           ISSUE_NUMBER="${{ github.event.client_payload.github.payload.issue.number }}"
           TITLE=$(gh issue view "$ISSUE_NUMBER" --repo "${{ github.repository }}" --json title --jq '.title')
           TAG=$(echo "$TITLE" | awk '{print $NF}')
+          
+          if [[ ! "$TITLE" =~ ^[Dd]eployment ]]; then
+            echo "❌ Issue title must start with 'Deployment'"
+            exit 1
+          fi
 
           case "$ENVIRONMENT" in
             qa)
