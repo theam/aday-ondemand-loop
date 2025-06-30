@@ -7,11 +7,15 @@ on:
         required: true
         type: string
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version:
+        description: "The version number created"
+        value: ${{ jobs.release.outputs.version }}
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout Loop SRC - ${{ github.sha }}
