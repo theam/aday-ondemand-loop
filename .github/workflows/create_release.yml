@@ -45,7 +45,7 @@ jobs:
           echo "Parsed release type: $RELEASE_TYPE"
 
           if [[ "$RELEASE_TYPE" != "patch" && "$RELEASE_TYPE" != "minor" && "$RELEASE_TYPE" != "major" ]]; then
-            set_output "message" "❌ **Invalid release type: $RELEASE_TYPE**"
+            set_output "message" "❌ **Invalid release type: ${RELEASE_TYPE:-N/A}**"
             exit 1
           fi
 
