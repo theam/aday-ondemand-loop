@@ -14,7 +14,7 @@ Dataverse will be used as the reference implementation for all features related 
 
 OnDemand Loop has been designed from the ground up to be a companion to the Open OnDemand application.
 It is deployed into the Open OnDemand environment as another passenger app.
-It has been configured to be deployed under /var/www/ood/apps/sys/loop
+It has been configured to be deployed under the folder: /var/www/ood/apps/sys/loop
 
 The OnDemand environment will launch the application in the same way as the Dashboard app.
 The URL will be https://<ood-server>/pun/sys/loop
