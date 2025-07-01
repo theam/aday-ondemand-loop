@@ -1,4 +1,4 @@
-name: Release Verify
+name: Create Release Candidate
 
 on:
   repository_dispatch:
@@ -19,16 +19,16 @@ jobs:
         id: commit
         run: |
           SHA=$(git rev-parse HEAD)
-          echo "commit_sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "commit_hash=$SHA" >> "$GITHUB_OUTPUT"
 
   deploy:
     needs: validate
     uses: ./.github/workflows/deploy_from_hash.yml
     with:
-      commit_sha: ${{ needs.validate.outputs.commit_sha }}
+      commit_hash: ${{ needs.validate.outputs.commit_hash }}
 
   comment:
-    name: Comment on Deployment Success
+    name: Report Result
     needs: [ validate, deploy ]
     runs-on: ubuntu-latest
     if: always()
@@ -58,7 +58,7 @@ jobs:
 
             ${{ needs.validate.outputs.message }}
 
-            **Commit Sha**: `${{ needs.validate.outputs.commit_sha }}`  
+            **Commit Hash**: `${{ needs.validate.outputs.commit_hash }}`  
             **Environment**: `QA`
             **Branch**: `ondemand_loop_qa`
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
