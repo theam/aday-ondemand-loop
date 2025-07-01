@@ -62,7 +62,7 @@ jobs:
         id: version
         working-directory: src/application
         run: |
-          source .github/scripts/utils.sh
+          source ../.github/scripts/utils.sh
 
           version=v$(cat VERSION)
           set_output "version" "$version"
