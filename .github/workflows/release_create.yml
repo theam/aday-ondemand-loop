@@ -2,7 +2,7 @@ name: Release Create
 
 on:
   repository_dispatch:
-    types: [release_create_command]
+    types: [create_release_command]
 
 jobs:
   validate:
