@@ -103,7 +103,10 @@ jobs:
           issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
           body: |
             ${{ steps.title.outputs.title }}
+            
+            ${{ needs.validate.outputs.message }}
 
-            **Release Type**: `${{ needs.validate.outputs.release_type }}`
-            **Version**: `v${{ needs.release.outputs.version }}`
+            **Release Type**: `${{ needs.validate.outputs.release_type || 'N/A' }}`
+            **Version**: `${{ needs.release.outputs.version || 'N/A' }}`
+            **Commit Hash**: `${{ needs.validate.outputs.commit_hash || 'N/A' }}`
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
