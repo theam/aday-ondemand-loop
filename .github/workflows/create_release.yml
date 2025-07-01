@@ -110,5 +110,6 @@ jobs:
 
             **Release Type**: `${{ needs.validate.outputs.release_type || 'N/A' }}`
             **Version**: `${{ needs.release.outputs.version || 'N/A' }}`
+            **Notes**: [View GitHub Release Notes](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.release.outputs.version }})
             **Commit Hash**: `${{ needs.validate.outputs.commit_hash || 'N/A' }}`
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
