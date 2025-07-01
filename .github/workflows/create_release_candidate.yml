@@ -68,4 +68,7 @@ jobs:
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             _This release candidate was deployed for verification. Use `/create_release <type>` after approval to finalize the release._
+            
+            <!-- release-candidate: status=${{ needs.deploy.result }} commit=${{ needs.validate.outputs.commit_hash }} -->
+
       

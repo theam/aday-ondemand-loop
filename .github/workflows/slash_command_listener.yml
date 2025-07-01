@@ -6,7 +6,7 @@ on:
 
 jobs:
   slash-command:
-    if: contains(github.event.comment.body, '/create_release_candidate')
+    if: contains(github.event.comment.body, '/create_release')
     runs-on: ubuntu-latest
     steps:
       - name: Check if user is authorized
@@ -26,4 +26,5 @@ jobs:
           event-type-suffix: _command
           commands: |
             create_release_candidate
+            create_release
           permission: none

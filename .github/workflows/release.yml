@@ -3,6 +3,9 @@ name: Create Release
 on:
   workflow_call:
     inputs:
+      commit_hash:
+        required: true
+        type: string
       release_type:
         required: true
         type: string
@@ -18,11 +21,16 @@ jobs:
       version: ${{ steps.version.outputs.version }}
 
     steps:
-      - name: Checkout Loop SRC - ${{ github.sha }}
+      - name: Checkout Loop SRC
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           path: src
+
+      - name: Checkout specific commit
+        working-directory: src
+        run: |
+          git checkout ${{ inputs.commit_hash }}
 
       - name: Git setup
         working-directory: src
