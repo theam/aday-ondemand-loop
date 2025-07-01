@@ -8,7 +8,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     outputs:
-      commit_sha: ${{ steps.extract.outputs.commit_sha }}
+      commit_hash: ${{ steps.extract.outputs.commit_hash }}
       release_type: ${{ steps.extract.outputs.release_type }}
       message: ${{ steps.extract.outputs.message || steps.approval.outputs.message }}
 
@@ -69,7 +69,7 @@ jobs:
     needs: validate
     uses: ./.github/workflows/release.yml
     with:
-      commit_sha: ${{ needs.validate.outputs.commit_sha }}
+      commit_hash: ${{ needs.validate.outputs.commit_hash }}
       release_type: ${{ needs.validate.outputs.release_type }}
 
   comment:
