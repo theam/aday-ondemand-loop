@@ -33,6 +33,12 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
 
+      - name: Create release temp branch
+        working-directory: src
+        run: |
+          git fetch origin
+          git checkout -b release-temp ${{ inputs.commit_hash }}
+
       - name: Run tests using Docker via Make
         working-directory: src
         run: make test
@@ -45,26 +51,42 @@ jobs:
         working-directory: src
         run: make version VERSION_TYPE=${{ inputs.release_type }}
 
-      - name: Commit bumped version
+      - name: Commit bumped version to temp branch
         working-directory: src
         run: |
           git add application/VERSION
           git commit -m "Create release version"
-          git push origin main
+          git push origin release-temp
 
       - name: Read current version
         id: version
         working-directory: src/application
         run: |
+          source .github/scripts/utils.sh
+
           version=v$(cat VERSION)
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          set_output "version" "$version"
 
       - name: Create and push tag
         working-directory: src
         run: |
-          git tag -f "${{ steps.version.outputs.version }}" "${{ inputs.commit_hash }}"
-          git push origin "${{ steps.version.outputs.version }}" --force
-      
+          git tag -a "${{ steps.version.outputs.version }}" -m "Release ${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.version.outputs.version }}"
+
+      - name: Cherry-pick VERSION commit to main
+        working-directory: src
+        run: |
+          VERSION_COMMIT=$(git rev-parse HEAD)
+          git checkout main
+          git pull origin main
+          git cherry-pick "$VERSION_COMMIT"
+          git push origin main
+
+      - name: Delete release temp branch
+        working-directory: src
+        run: |
+          git push origin --delete release-temp || true
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         env:
@@ -72,6 +94,3 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.version }}
           body_path: src/application/release_notes.md
-
-
-
