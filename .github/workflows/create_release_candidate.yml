@@ -7,6 +7,8 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    outputs:
+      commit_hash: ${{ steps.commit.outputs.commit_hash }}
 
     steps:
       - name: Checkout main
@@ -18,8 +20,10 @@ jobs:
       - name: Get current commit hash
         id: commit
         run: |
+          source .github/scripts/utils.sh
+
           SHA=$(git rev-parse HEAD)
-          echo "commit_hash=$SHA" >> "$GITHUB_OUTPUT"
+          set_output "commit_hash" "$SHA"
 
   deploy:
     needs: validate
