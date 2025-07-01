@@ -1,0 +1,67 @@
+name: Release Verify
+
+on:
+  repository_dispatch:
+    types: [create_release_candidate_command]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Get current commit hash
+        id: commit
+        run: |
+          SHA=$(git rev-parse HEAD)
+          echo "commit_sha=$SHA" >> "$GITHUB_OUTPUT"
+
+    deploy:
+      needs: validate
+      uses: ./.github/workflows/deploy_from_hash.yml
+      with:
+        commit_sha: ${{ needs.validate.outputs.commit_sha }}
+
+    comment:
+      name: Comment on Deployment Success
+      needs: [ validate, deploy ]
+      runs-on: ubuntu-latest
+      if: always()
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v4
+
+        - name: Compose result title
+          id: title
+          run: |
+            source .github/scripts/utils.sh
+
+            STATUS="${{ needs.deploy.result }}"
+            if [ "$STATUS" = "success" ]; then
+              set_output "title" "✅ **Deployment succeeded**"
+            else
+              set_output "title" "❌ **Deployment failed**"
+            fi
+
+        - name: Post deployment comment
+          uses: peter-evans/create-or-update-comment@v4
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
+            body: |
+              ${{ steps.title.outputs.title }}
+
+              ${{ needs.validate.outputs.message }}
+
+              **Commit Sha**: `${{ needs.validate.outputs.commit_sha }}`  
+              **Environment**: `QA`
+              **Branch**: `ondemand_loop_qa`
+              **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+              _This release candidate was deployed for verification. Use `/create_release <type>` after approval to finalize the release._
+      
