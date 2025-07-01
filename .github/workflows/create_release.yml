@@ -13,6 +13,9 @@ jobs:
       message: ${{ steps.extract.outputs.message || steps.approval.outputs.message }}
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Extract commit hash from release candidate comment
         id: extract
         run: |
@@ -78,6 +81,9 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Compose result title
         id: title
         run: |
