@@ -27,11 +27,6 @@ jobs:
           fetch-depth: 0
           path: src
 
-      - name: Checkout specific commit
-        working-directory: src
-        run: |
-          git checkout ${{ inputs.commit_hash }}
-
       - name: Git setup
         working-directory: src
         run: |
@@ -67,8 +62,8 @@ jobs:
       - name: Create and push tag
         working-directory: src
         run: |
-          git tag -f "v${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}" --force
+          git tag -f "${{ steps.version.outputs.version }}" "${{ inputs.commit_hash }}"
+          git push origin "${{ steps.version.outputs.version }}" --force
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
