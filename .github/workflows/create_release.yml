@@ -57,6 +57,8 @@ jobs:
       - name: Require release approval
         id: approval
         run: |
+          source .github/scripts/utils.sh
+
           ISSUE="${{ github.event.client_payload.github.payload.issue.number }}"
           APPROVED=$(gh issue view "$ISSUE" --repo "${{ github.repository }}" --json comments --jq \
             '.comments[].body | select(test("(?i)release approved"))')
