@@ -17,6 +17,29 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      - name: Extract metadata and validate parameters
+        id: extract
+        run: |
+          source .github/scripts/utils.sh
+
+          ISSUE_NUMBER="${{ github.event.client_payload.github.payload.issue.number }}"
+          REPO="${{ github.repository }}"
+
+          # Cache issue JSON
+          cache_issue_json "$ISSUE_NUMBER" "$REPO"
+          ISSUE_JSON=$(get_issue_json_path)
+
+          TITLE=$(jq -r '.title' "$ISSUE_JSON" | tr '[:upper:]' '[:lower:]')
+
+          if [[ ! "$TITLE" =~ ^release ]]; then
+            set_output "message" "❌ **Issue title must start with Release**"
+            exit 1
+          fi
+
+          validate_issue_state_and_assignment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Get current commit hash
         id: commit
         run: |
