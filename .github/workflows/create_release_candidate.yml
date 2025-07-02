@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       commit_hash: ${{ steps.commit.outputs.commit_hash }}
+      branch: release_candidate_build
       message: ${{ steps.extract.outputs.message }}
 
     steps:
@@ -54,6 +55,7 @@ jobs:
     uses: ./.github/workflows/build_from_hash.yml
     with:
       commit_hash: ${{ needs.validate.outputs.commit_hash }}
+      branch: ${{ needs.validate.outputs.branch }}
 
   comment:
     name: Report Result
@@ -87,8 +89,7 @@ jobs:
             ${{ needs.validate.outputs.message }}
 
             **Commit Hash**: `${{ needs.validate.outputs.commit_hash }}`  
-            **Environment**: `QA`
-            **Branch**: `ondemand_loop_qa`
+            **Branch**: `${{ needs.validate.outputs.branch }}`
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             _This release candidate was built for verification in QA. Use `/create_release <type>` after approval to finalize the release._

@@ -6,6 +6,9 @@ on:
       commit_hash:
         required: true
         type: string
+      branch:
+        required: true
+        type: string
 
 jobs:
   deploy:
@@ -41,7 +44,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: IQSS/ondemand-loop
-          ref: ondemand_loop_qa
+          ref: ${{ inputs.branch }}
           path: target
 
       - name: Copy Loop new version
