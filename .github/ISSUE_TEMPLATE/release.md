@@ -33,6 +33,7 @@ Follow the steps below to create a release of OnDemand Loop.
      /create_release type=<patch|minor|major>
      ```
      Replace `<patch|minor|major>` with the desired semantic version bump.
+   - This will use the previously saved commit hash to create a tag and a release with the new version number.
 
 5. **Finish up**
    - Once the release workflow succeeds it will comment the version number and release notes link.
