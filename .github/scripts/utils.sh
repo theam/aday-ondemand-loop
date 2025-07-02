@@ -65,7 +65,7 @@ validate_issue() {
   # Check for required label if provided
   if [[ -n "$required_label" ]]; then
     local label_found
-    label_found=$(jq -r --arg lbl "$required_label" '.labels[].name | select(. == $lbl)' "$issue_file")
+    label_found=$(jq -r --arg lbl "$required_label" '.labels[].name | select(. == $lbl)' "$json_file")
     if [[ -z "$label_found" ]]; then
       set_output "message" "❌ **Issue must be labeled with \`$required_label\`**"
       return 1
