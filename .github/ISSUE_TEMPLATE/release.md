@@ -1,6 +1,6 @@
 ---
 name: Release
-about: Follow these steps to deploy a release candidate and finalize a release
+about: Follow these steps to create a release candidate build, approve it and finalize a release
 title: "Release: "
 labels: release
 assignees: ''
