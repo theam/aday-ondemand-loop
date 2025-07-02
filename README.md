@@ -19,7 +19,7 @@ It has been configured to be deployed under the folder: /var/www/ood/apps/sys/lo
 The OnDemand environment will launch the application in the same way as the Dashboard app.
 The URL will be https://<ood-server>/pun/sys/loop
 
-### 📄 License
+### License
 
 This project is licensed under the [MIT License](LICENSE).
 
