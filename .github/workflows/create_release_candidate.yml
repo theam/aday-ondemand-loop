@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       commit_hash: ${{ steps.commit.outputs.commit_hash }}
+      message: ${{ steps.extract.outputs.message }}
 
     steps:
       - name: Checkout main

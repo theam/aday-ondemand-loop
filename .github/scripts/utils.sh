@@ -26,9 +26,6 @@ cache_issue_json() {
   cache_file=$(get_issue_json_path)
 
   gh issue view "$issue_number" --repo "$repo" --json title,state,assignees,comments,labels > "$cache_file"
-  echo "$cache_file"
-  echo "Issue JSON content:"
-  cat "$cache_file"
 }
 
 
