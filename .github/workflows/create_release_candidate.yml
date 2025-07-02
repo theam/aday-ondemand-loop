@@ -49,15 +49,15 @@ jobs:
           SHA=$(git rev-parse HEAD)
           set_output "commit_hash" "$SHA"
 
-  deploy:
+  build:
     needs: validate
-    uses: ./.github/workflows/deploy_from_hash.yml
+    uses: ./.github/workflows/build_from_hash.yml
     with:
       commit_hash: ${{ needs.validate.outputs.commit_hash }}
 
   comment:
     name: Report Result
-    needs: [ validate, deploy ]
+    needs: [ validate, build ]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -69,14 +69,14 @@ jobs:
         run: |
           source .github/scripts/utils.sh
 
-          STATUS="${{ needs.deploy.result }}"
+          STATUS="${{ needs.build.result }}"
           if [ "$STATUS" = "success" ]; then
-            set_output "title" "✅ **Deployment succeeded**"
+            set_output "title" "✅ **Release Candidate Build succeeded**"
           else
-            set_output "title" "❌ **Deployment failed**"
+            set_output "title" "❌ **Release Candidate Build failed**"
           fi
 
-      - name: Post deployment comment
+      - name: Post build comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -91,8 +91,8 @@ jobs:
             **Branch**: `ondemand_loop_qa`
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-            _This release candidate was deployed for verification. Use `/create_release <type>` after approval to finalize the release._
+            _This release candidate was built for verification in QA. Use `/create_release <type>` after approval to finalize the release._
             
-            <!-- release-candidate: status=${{ needs.deploy.result }} commit=${{ needs.validate.outputs.commit_hash }} -->
+            <!-- release-candidate: status=${{ needs.build.result }} commit=${{ needs.validate.outputs.commit_hash }} -->
 
       

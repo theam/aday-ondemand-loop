@@ -1,4 +1,4 @@
-name: Build and Deploy from Commit
+name: Build from Commit
 
 on:
   workflow_call:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Print deployment parameters
         run: |
-          echo "🔧 Deploying release candidate:"
+          echo "🔧 Building release candidate:"
           echo "  - commit: ${{ inputs.commit_hash }}"
           echo "  - environment: Release QA"
           echo "  - branch: ondemand_loop_qa"
@@ -51,9 +51,9 @@ jobs:
       - name: List contents of target
         run: ls -la target/
 
-      - name: Commit production release
+      - name: Commit build
         working-directory: target
         run: |
           git add .
-          git commit -m "OnDemand Loop deployment for commit ${{ inputs.commit_hash }}"
+          git commit -m "OnDemand Loop build for commit ${{ inputs.commit_hash }}"
           git push
