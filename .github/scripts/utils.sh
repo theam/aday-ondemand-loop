@@ -26,12 +26,14 @@ cache_issue_json() {
   cache_file=$(get_issue_json_path)
 
   if [[ ! -f "$cache_file" ]]; then
-    gh issue view "$issue_number" --repo "$repo" --json title,state,assignees,comments > "$cache_file"
+    gh issue view "$issue_number" --repo "$repo" --json title,state,assignees,comments,labels > "$cache_file"
   fi
 }
 
 
-validate_issue_state_and_assignment() {
+validate_issue() {
+  local required_label="${1:-}"  # optional third argument
+
   echo "🔎 Validating issue..."
 
   local json_file
@@ -59,5 +61,15 @@ validate_issue_state_and_assignment() {
     return 1
   fi
 
-  echo "✅ Issue is open and assigned."
+  # Check for required label if provided
+  if [[ -n "$required_label" ]]; then
+    local label_found
+    label_found=$(jq -r --arg lbl "$required_label" '.labels[].name | select(. == $lbl)' "$issue_file")
+    if [[ -z "$label_found" ]]; then
+      set_output "message" "❌ **Issue must be labeled with \`$required_label\`**"
+      return 1
+    fi
+  fi
+
+  echo "✅ Issue validated."
 }

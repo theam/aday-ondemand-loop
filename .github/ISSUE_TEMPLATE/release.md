@@ -11,6 +11,7 @@ Follow the steps below to create a release of OnDemand Loop.
 1. **Prepare the issue**
    - Ensure the title starts with `Release`.
    - Assign at least one maintainer to this issue.
+   - Add the label `release`
 
 2. **Create a release candidate**
    - Comment the following command on this issue:
