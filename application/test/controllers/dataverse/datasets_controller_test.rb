@@ -5,6 +5,9 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @tmp_dir = Dir.mktmpdir
     @new_id = SecureRandom.uuid.to_s
+    resolver = mock('resolver')
+    resolver.stubs(:resolve).returns(OpenStruct.new(type: ConnectorType::DATAVERSE))
+    Repo::RepoResolverService.stubs(:new).returns(resolver)
   end
 
   def teardown
@@ -37,6 +40,17 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
 
   def files_incomplete_no_data_file_json
     load_file_fixture(File.join('dataverse', 'dataset_files_response', 'incomplete_no_data_file.json'))
+  end
+
+  test "should redirect if dataverse url is not supported" do
+    resolver = mock('resolver')
+    resolver.stubs(:resolve).returns(OpenStruct.new(type: nil))
+    Repo::RepoResolverService.stubs(:new).returns(resolver)
+
+    get view_dataverse_dataset_url('invalid.host', 'id1')
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('dataverse.datasets.url_not_supported', dataverse_url: 'https://invalid.host'), flash[:alert]
   end
 
   test "should redirect to root path after not finding a dataverse host" do
