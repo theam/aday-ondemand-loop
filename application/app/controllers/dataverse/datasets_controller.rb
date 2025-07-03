@@ -53,8 +53,7 @@ class Dataverse::DatasetsController < ApplicationController
     resolver = Repo::RepoResolverService.new(RepoRegistry.resolvers)
     result = resolver.resolve(@dataverse_url)
     unless result.type == ConnectorType::DATAVERSE
-      flash[:alert] = t('dataverse.datasets.url_not_supported', dataverse_url: @dataverse_url)
-      redirect_to root_path
+      redirect_to root_path, alert: t('dataverse.datasets.url_not_supported', dataverse_url: @dataverse_url)
       return
     end
   end
