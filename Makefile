@@ -7,6 +7,7 @@ OOD_GID := $(shell id -g)
 OOD_IMAGE := hmdc/sid-ood:ood-3.1.7.el8
 LOOP_BUILDER_IMAGE := hmdc/ondemand-loop:builder-R3.1
 WORKING_DIR := $(shell pwd)
+DOC_BUILDER_IMAGE := python:3.11-slim
 
 ENV := env OOD_IMAGE=$(OOD_IMAGE) OOD_UID=$(OOD_UID) OOD_GID=$(OOD_GID)
 
@@ -57,3 +58,7 @@ release_notes:
 
 coverage:
 	./scripts/loop_coverage_badge.sh
+
+# Build the user guide using MkDocs
+user_guide:
+	docker run --rm -v $(WORKING_DIR):/docs -w /docs $(DOC_BUILDER_IMAGE) ./scripts/user_guide.sh
