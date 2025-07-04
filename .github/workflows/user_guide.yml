@@ -23,7 +23,8 @@ jobs:
         run: make user_guide
       - uses: actions/upload-pages-artifact@v2
         with:
-          path: ./site
+          # Upload the built documentation from the site directory
+          path: site
 
   deploy:
     needs: build
