@@ -3,6 +3,7 @@ class Dataverse::DatasetsController < ApplicationController
   include Dataverse::CommonHelper
 
   before_action :get_dv_full_hostname
+  before_action :validate_dataverse_url
   before_action :init_service
   before_action :init_project_service, only: [ :download ]
   before_action :find_dataset_by_persistent_id
@@ -46,6 +47,15 @@ class Dataverse::DatasetsController < ApplicationController
 
   def get_dv_full_hostname
     @dataverse_url = current_dataverse_url
+  end
+
+  def validate_dataverse_url
+    resolver = Repo::RepoResolverService.new(RepoRegistry.resolvers)
+    result = resolver.resolve(@dataverse_url)
+    unless result.type == ConnectorType::DATAVERSE
+      redirect_to root_path, alert: t('dataverse.datasets.url_not_supported', dataverse_url: @dataverse_url)
+      return
+    end
   end
 
   def init_service
