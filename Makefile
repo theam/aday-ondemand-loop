@@ -7,7 +7,7 @@ OOD_GID := $(shell id -g)
 OOD_IMAGE := hmdc/sid-ood:ood-3.1.7.el8
 LOOP_BUILDER_IMAGE := hmdc/ondemand-loop:builder-R3.1
 WORKING_DIR := $(shell pwd)
-DOC_BUILDER_IMAGE := squidfunk/mkdocs-material:latest
+DOC_BUILDER_IMAGE := python:3.11-slim
 
 ENV := env OOD_IMAGE=$(OOD_IMAGE) OOD_UID=$(OOD_UID) OOD_GID=$(OOD_GID)
 
