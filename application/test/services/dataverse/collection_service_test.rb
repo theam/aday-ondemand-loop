@@ -25,6 +25,14 @@ class Dataverse::CollectionServiceTest < ActiveSupport::TestCase
     assert_equal 195882, res.data.total_count
   end
 
+  test 'search_collection_items builds url with all parameters' do
+    @client = HttpClientMock.new(file_path: fixture_path('dataverse/search_response/valid_response.json'))
+    @service = Dataverse::CollectionService.new('https://example.com', http_client: @client)
+    @service.search_collection_items('dv', page: 2, per_page: 5, include_collections: false, include_datasets: true, query: 'term')
+    expected = '/api/search?q=term&show_facets=true&sort=date&order=desc&per_page=5&start=5&subtree=dv&type=dataset'
+    assert_equal expected, @client.called_path
+  end
+
   test 'unauthorized requests raise exception' do
     unauthorized_client = HttpClientMock.new(file_path: fixture_path('dataverse/collection_response/valid_response.json'), status_code: 401)
     service = Dataverse::CollectionService.new('https://example.com', http_client: unauthorized_client)
