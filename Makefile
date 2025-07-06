@@ -1,5 +1,5 @@
 all:: loop_up
-.PHONY: loop_up loop_down loop_build remote_dev_build release_build loop_docker_builder clean logs bash test test_bash version release_notes guide
+.PHONY: loop_up loop_down loop_build remote_dev_build release_build loop_docker_builder clean logs bash test test_bash version release_notes guide guide_dev
 
 COMPOSE_CMD = docker compose
 OOD_UID := $(shell id -u)
@@ -61,4 +61,7 @@ coverage:
 
 # Build the user guide using MkDocs
 guide:
-	docker run --rm -it -v $(WORKING_DIR):/docs -w /docs -e DEV=$(DEV) -p 8000:8000 $(DOC_BUILDER_IMAGE) ./scripts/guide.sh
+	docker run --rm -v $(WORKING_DIR):/docs -w /docs $(DOC_BUILDER_IMAGE) ./scripts/guide.sh
+
+guide_dev:
+	docker run --rm -it -v $(WORKING_DIR):/docs -w /docs -e DEV=true -p 8000:8000 $(DOC_BUILDER_IMAGE) ./scripts/guide.sh
