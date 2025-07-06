@@ -4,7 +4,11 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
+# FOLDER TO HAVE DEV AND TESTING FILES
 scratch
+# COMPILE HTMNL SITE FOR THE GUIDE
+site
+
 # Ignore bundler config.
 /.bundle
 application/.bundle

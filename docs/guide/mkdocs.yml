@@ -1,0 +1,46 @@
+site_name: OnDemand Loop Guide
+site_url: https://iqss.github.io/ondemand-loop/
+docs_dir: content
+
+theme:
+  name: material
+  favicon: assets/favicon.png
+  logo: assets/logo.png
+  features:
+    - toc.integrate
+  palette:
+    - scheme: default
+      primary: '#212529'
+      accent: '#a4c6fb'
+    - scheme: slate
+      primary: '#212529'
+      accent: '#a4c6fb'
+
+extra_css:
+  - assets/guide.css
+
+nav:
+  - Home: home.md
+  - User Guide:
+      - Introduction: introduction.md
+      - Getting Started: getting_started.md
+      - Creating Projects: creating_projects.md
+      - Exploring Remote Repositories: exploring_remote_repositories.md
+      - Downloading Files: downloading_files.md
+      - Uploading Files: uploading_files.md
+      - Using the File Browser: using_the_file_browser.md
+      - Viewing Download and Upload Status: viewing_download_and_upload_status.md
+  - Admin Guide: admin.md
+  - Installation Guide: installation.md
+  - Development Guide: development.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - codehilite
+  - footnotes
+  - tables
+
+plugins:
+  - search

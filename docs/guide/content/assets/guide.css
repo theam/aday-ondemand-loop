@@ -1,0 +1,54 @@
+:root > * {
+    --md-primary-fg-color: #212529;
+    --md-primary-bg-color: #212529;
+    --md-accent-fg-color: #5863d2;
+    /* Soften the white background to reduce eye strain */
+    --md-default-bg-color: #f1f3f5 !important;
+
+    --custom-primary-color: #a4c6fb;
+}
+
+/* Apply softer white to body as a fallback */
+/* Set soft white background for the whole page */
+body, .md-content, .md-main {
+    background-color: var(--md-default-bg-color);
+}
+
+/* Remove active sidebar scrollspy */
+.md-nav__link--passed {
+    color: inherit !important;
+}
+
+.md-nav__item .md-nav__link--active,
+.md-nav__item .md-nav__link--active code {
+    color: #000;
+    font-weight: bold;
+}
+
+/* Header topic should stand out from navigation */
+.md-header__topic {
+    color: var(--custom-primary-color);
+}
+
+/* Add a border to the search box for visibility */
+.md-search__form .md-search__input {
+    color: var(--custom-primary-color);
+    border: 1px solid var(--custom-primary-color);
+}
+
+.md-search__form .md-search__input::placeholder {
+    color: var(--custom-primary-color);
+}
+
+.md-search__form .md-search__icon {
+    color: var(--custom-primary-color);
+}
+
+/* LOGO AND NAVIGATION SIZE */
+.md-header__button.md-logo img {
+    height: 2.5rem;
+}
+
+.md-header__button.md-logo {
+    align-items: center;
+}

@@ -1,5 +1,0 @@
-site_name: OnDemand Loop Guide
-docs_dir: .
-nav:
-  - Home: index.md
-  - Development Guide: development.md
