@@ -20,7 +20,7 @@ extra_css:
   - assets/guide.css
 
 nav:
-  - Home: home.md
+  - Home: index.md
   - User Guide:
       - Introduction: introduction.md
       - Getting Started: getting_started.md
