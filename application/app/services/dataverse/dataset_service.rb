@@ -11,7 +11,8 @@ module Dataverse
       raise ApiKeyRequiredException unless @api_key
 
       headers = { 'Content-Type' => 'application/json', AUTH_HEADER => @api_key }
-      url = "/api/dataverses/#{dataverse_id}/datasets"
+      path = "/api/dataverses/#{URI.encode_www_form_component(dataverse_id)}/datasets"
+      url = URI::Generic.build(path: path).to_s
       response = @http_client.post(url, body: dataset_data.to_body, headers: headers)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
@@ -20,7 +21,13 @@ module Dataverse
     end
 
     def find_dataset_version_by_persistent_id(persistent_id, version: ':latest-published')
-      url = "/api/datasets/:persistentId/versions/#{version}?persistentId=#{persistent_id}&returnOwners=true&excludeFiles=true"
+      path = "/api/datasets/:persistentId/versions/#{URI.encode_www_form_component(version) }"
+      query_params = {
+        persistentId: persistent_id,
+        returnOwners: true,
+        excludeFiles: true
+      }
+      url = URI::Generic.build(path: path, query: URI.encode_www_form(query_params)).to_s
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?

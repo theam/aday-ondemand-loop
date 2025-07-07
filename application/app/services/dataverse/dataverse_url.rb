@@ -50,8 +50,11 @@ module Dataverse
     private
 
     def build_dataverse_url
-      port_part = @base.port ? ":#{@base.port}" : ''
-      "#{@base.scheme}://#{@base.domain}#{port_part}"
+      URI::Generic.build(
+        scheme: @base.scheme,
+        host: @base.domain,
+        port: @base.port
+      ).to_s
     end
 
     def parse_type_and_ids

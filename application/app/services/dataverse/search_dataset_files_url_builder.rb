@@ -10,12 +10,12 @@ module Dataverse
       @query = query
     end
 
-    def build
-      raise 'persistent_id is required' if persistent_id.nil? || persistent_id.strip.empty?
+  def build
+    raise 'persistent_id is required' if persistent_id.nil? || persistent_id.strip.empty?
 
-      offset = (page - 1) * per_page
-
-      path = "/api/datasets/:persistentId/versions/#{version}/files"
+    offset = (page - 1) * per_page
+      encoded_version = URI.encode_www_form_component(version)
+      path = "/api/datasets/:persistentId/versions/#{encoded_version}/files"
       query_params = {
         persistentId: persistent_id,
         offset: offset,

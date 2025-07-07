@@ -11,7 +11,7 @@ module Dataverse
       raise ApiKeyRequiredException unless @api_key
 
       headers = { 'Content-Type' => 'application/json', AUTH_HEADER => @api_key }
-      url = "/api/users/:me"
+      url = URI::Generic.build(path: '/api/users/:me').to_s
       response = @http_client.get(url, headers: headers)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?

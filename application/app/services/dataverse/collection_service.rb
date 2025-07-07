@@ -12,7 +12,19 @@ module Dataverse
 
       headers = { 'Content-Type' => 'application/json', AUTH_HEADER => @api_key }
       start = (page-1) * per_page
-      url = "/api/mydata/retrieve?role_ids=1&role_ids=3&role_ids=5&role_ids=7&dvobject_types=Dataverse&start=#{start}&per_page=#{per_page}&published_states=Published&published_states=Unpublished"
+      query_pairs = [
+        ['role_ids', 1],
+        ['role_ids', 3],
+        ['role_ids', 5],
+        ['role_ids', 7],
+        ['dvobject_types', 'Dataverse'],
+        ['start', start],
+        ['per_page', per_page],
+        ['published_states', 'Published'],
+        ['published_states', 'Unpublished']
+      ]
+      query = URI.encode_www_form(query_pairs)
+      url = URI::Generic.build(path: '/api/mydata/retrieve', query: query).to_s
       response = @http_client.get(url, headers: headers)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
@@ -21,7 +33,8 @@ module Dataverse
     end
 
     def find_collection_by_id(id)
-      url = "/api/dataverses/#{id}?returnOwners=true"
+      path = "/api/dataverses/#{URI.encode_www_form_component(id)}"
+      url = URI::Generic.build(path: path, query: URI.encode_www_form(returnOwners: true)).to_s
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
