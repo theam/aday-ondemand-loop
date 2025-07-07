@@ -29,7 +29,7 @@ class Dataverse::CollectionServiceTest < ActiveSupport::TestCase
     @client = HttpClientMock.new(file_path: fixture_path('dataverse/search_response/valid_response.json'))
     @service = Dataverse::CollectionService.new('https://example.com', http_client: @client)
     @service.search_collection_items('dv', page: 2, per_page: 5, include_collections: false, include_datasets: true, query: 'term')
-    expected = '/api/search?q=term&show_facets=true&sort=date&order=desc&per_page=5&start=5&subtree=dv&type=dataset'
+    expected = '/api/search?order=desc&per_page=5&q=term&show_facets=true&sort=date&start=5&subtree=dv&type=dataset'
     assert_equal expected, @client.called_path
   end
 
