@@ -11,8 +11,12 @@ module Dataverse
       raise ApiKeyRequiredException unless @api_key
 
       headers = { 'Content-Type' => 'application/json', AUTH_HEADER => @api_key }
-      path = "/api/dataverses/#{URI.encode_www_form_component(dataverse_id)}/datasets"
-      url = URI::Generic.build(path: path).to_s
+      url = FluentUrl.new('')
+              .add_path('api')
+              .add_path('dataverses')
+              .add_path(dataverse_id)
+              .add_path('datasets')
+              .to_s
       response = @http_client.post(url, body: dataset_data.to_body, headers: headers)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
@@ -21,13 +25,16 @@ module Dataverse
     end
 
     def find_dataset_version_by_persistent_id(persistent_id, version: ':latest-published')
-      path = "/api/datasets/:persistentId/versions/#{URI.encode_www_form_component(version) }"
-      query_params = {
-        persistentId: persistent_id,
-        returnOwners: true,
-        excludeFiles: true
-      }
-      url = URI::Generic.build(path: path, query: URI.encode_www_form(query_params)).to_s
+      url = FluentUrl.new('')
+              .add_path('api')
+              .add_path('datasets')
+              .add_path(':persistentId')
+              .add_path('versions')
+              .add_path(version)
+              .add_param('persistentId', persistent_id)
+              .add_param('returnOwners', true)
+              .add_param('excludeFiles', true)
+              .to_s
       response = @http_client.get(url)
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?

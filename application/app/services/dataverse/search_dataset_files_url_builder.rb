@@ -14,17 +14,18 @@ module Dataverse
     raise 'persistent_id is required' if persistent_id.nil? || persistent_id.strip.empty?
 
     offset = (page - 1) * per_page
-      encoded_version = URI.encode_www_form_component(version)
-      path = "/api/datasets/:persistentId/versions/#{encoded_version}/files"
-      query_params = {
-        persistentId: persistent_id,
-        offset: offset,
-        limit: per_page
-      }
-      query_params[:searchText] = @query if @query
-
-      query_string = Rack::Utils.build_query(query_params)
-      URI::Generic.build(path: path, query: query_string).to_s
+    url = FluentUrl.new('')
+              .add_path('api')
+              .add_path('datasets')
+              .add_path(':persistentId')
+              .add_path('versions')
+              .add_path(version)
+              .add_path('files')
+              .add_param('persistentId', persistent_id)
+              .add_param('offset', offset)
+              .add_param('limit', per_page)
+    url.add_param('searchText', @query) if @query
+    url.to_s
     end
   end
 end

@@ -38,8 +38,7 @@ module Dataverse
     end
 
     def dataverse_url
-      uri_class = @base.https? ? URI::HTTPS : URI::HTTP
-      uri_class.build(host: @base.domain, port: @base.port).to_s
+      build_dataverse_url
     end
 
     def initialize(base_parser)
@@ -50,11 +49,9 @@ module Dataverse
     private
 
     def build_dataverse_url
-      URI::Generic.build(
-        scheme: @base.scheme,
-        host: @base.domain,
-        port: @base.port
-      ).to_s
+      base = "#{@base.scheme}://#{@base.domain}"
+      base += ":#{@base.port}" if @base.port
+      FluentUrl.new(base).to_s
     end
 
     def parse_type_and_ids
