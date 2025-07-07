@@ -34,7 +34,7 @@ module Zenodo::Concerns::ZenodoUrlBuilder
   end
 
   def deposition_url
-    raise 'record_id is missing' unless deposition_id
+    raise 'deposition_id is missing' unless deposition_id
 
     FluentUrl.new(zenodo_url)
       .add_path('deposit')
@@ -43,7 +43,7 @@ module Zenodo::Concerns::ZenodoUrlBuilder
   end
 
   def deposition_edit_url
-    raise 'record_id is missing' unless deposition_id
+    raise 'deposition_id is missing' unless deposition_id
 
     FluentUrl.new(zenodo_url)
       .add_path('deposit')
