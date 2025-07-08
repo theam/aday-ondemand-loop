@@ -28,7 +28,7 @@ class Zenodo::UserServiceTest < ActiveSupport::TestCase
     service = Zenodo::UserService.new(@base, http_client: http, api_key: 'KEY')
     records = service.list_user_records(q: 'test query', page: 2, per_page: 10, all_versions: true)
     assert_equal 2, records.length
-    assert_equal '/api/records?q=test+query&all_versions=true&page=2&size=10', http.called_path
+    assert_equal '/api/records?all_versions=true&page=2&q=test%20query&size=10', http.called_path
   end
 
   test 'get_user_profile returns profile info' do
