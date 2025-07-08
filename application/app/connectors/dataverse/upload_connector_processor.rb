@@ -36,7 +36,7 @@ module Dataverse
       file.upload_bundle.update({ metadata: connector_metadata.to_h})
 
       upload_processor = Upload::MultipartHttpRubyUploader.new(upload_url, source_location, payload, headers)
-      upload_processor.upload do |context|
+      response_body = upload_processor.upload do |context|
         @status_context = context
         cancelled
       end
@@ -45,10 +45,21 @@ module Dataverse
         return response(FileStatus::CANCELLED, 'file upload cancelled')
       end
 
-      #TODO verify md5 checksum in the server once the file is uploaded
+      md5_valid = true
+      if response_body
+        upload_response = Dataverse::UploadFileResponse.new(response_body)
+        server_md5 = upload_response.data.files.first&.data_file&.md5
+        md5_valid = verify(source_location, server_md5) if server_md5
+      end
 
       connector_metadata.key_verified!
-      response(FileStatus::SUCCESS, 'file upload completed')
+      log_info('Upload completed', {id: file.id, md5_valid: md5_valid})
+
+      if md5_valid
+        response(FileStatus::SUCCESS, 'file upload completed')
+      else
+        response(FileStatus::ERROR, 'file upload completed, md5 check failed')
+      end
     end
 
     def process(request)
@@ -70,6 +81,20 @@ module Dataverse
     end
 
     private
+
+    def verify(file_path, expected_md5)
+      log_info('Verifying uploaded file', {file_path: file_path, expected_md5: expected_md5})
+      return true unless expected_md5
+
+      file_md5 = Digest::MD5.file(file_path).hexdigest
+      if file_md5 == expected_md5
+        log_info('Checksum verification success', {file_path: file_path, expected_md5: expected_md5})
+        true
+      else
+        log_error('Checksum verification failed', {file_path: file_path, expected_md5: expected_md5, current_md5: file_md5})
+        false
+      end
+    end
 
     def response(file_status, message)
       OpenStruct.new({status: file_status, message: message})

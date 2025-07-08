@@ -59,6 +59,8 @@ en:
         total_datasets: "%{total} datasets found"
         submit: "Select Dataset"
         cancel: "Cancel"
+      upload_connector_processor:
+        upload_payload_description: "File uploaded from OnDemand Loop application"
   dataverse:
     collections:
       breadcrumbs:
