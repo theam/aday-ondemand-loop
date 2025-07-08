@@ -16,7 +16,13 @@ module Dataverse
     end
 
     def upload
-      upload_url = "#{connector_metadata.dataverse_url}/api/datasets/:persistentId/add?persistentId=#{connector_metadata.dataset_id}"
+      upload_url = FluentUrl.new(connector_metadata.dataverse_url)
+                             .add_path('api')
+                             .add_path('datasets')
+                             .add_path(':persistentId')
+                             .add_path('add')
+                             .add_param(:persistentId, connector_metadata.dataset_id)
+                             .to_s
       source_location = file.file_location
       temp_location ="#{source_location}.part"
       headers = { "X-Dataverse-key" => connector_metadata.api_key&.value }
