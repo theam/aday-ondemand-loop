@@ -3,6 +3,8 @@ name: Build and Deploy Guide
 on:
   push:
     branches: [main]
+    paths:
+      - 'docs/guide/**'
   workflow_dispatch:
 
 permissions:
