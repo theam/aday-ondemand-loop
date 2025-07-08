@@ -7,7 +7,7 @@ on:
     inputs:
       release_tag:
         description: 'Release tag to use (e.g. v1.0.0+2025-07-01)'
-        required: false
+        required: true
 
 jobs:
   label_completed_issues:
@@ -43,9 +43,9 @@ jobs:
           repo = g.get_repo(repo_name)
 
           # Determine the release tag to use
-          tag = os.environ.get('GITHUB_REF_NAME')
+          tag = os.environ.get('INPUT_RELEASE_TAG')
           if not tag or not tag.strip():
-              tag = os.environ.get('INPUT_RELEASE_TAG')
+              tag = os.environ.get('GITHUB_REF_NAME')
           if not tag or not tag.strip():
               print('No release tag provided via GITHUB_REF_NAME or workflow_dispatch input. Exiting.')
               exit(0)
