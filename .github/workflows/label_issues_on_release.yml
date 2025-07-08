@@ -1,0 +1,90 @@
+name: Label Issues With Release Tag
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to use (e.g. v1.0.0+2025-07-01)'
+        required: false
+
+jobs:
+  label_completed_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install PyGithub
+        run: pip install PyGithub
+
+      - name: Label completed issues since last release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_RELEASE_TAG: ${{ github.event.inputs.release_tag }}
+        run: |
+          import os
+          from github import Github
+
+          repo_name = os.environ['GITHUB_REPOSITORY']
+          token = os.environ['GITHUB_TOKEN']
+
+          g = Github(token)
+          repo = g.get_repo(repo_name)
+
+          # Determine the release tag to use
+          tag = os.environ.get('GITHUB_REF_NAME')
+          if not tag or not tag.strip():
+              tag = os.environ.get('INPUT_RELEASE_TAG')
+          if not tag or not tag.strip():
+              print('No release tag provided via GITHUB_REF_NAME or workflow_dispatch input. Exiting.')
+              exit(0)
+          print(f'Using release tag: {tag}')
+
+          # Find the release matching the tag and the one immediately before it
+          releases = sorted(list(repo.get_releases()), key=lambda r: r.published_at, reverse=False)
+          target_idx = None
+          for i, rel in enumerate(releases):
+              if rel.tag_name == tag:
+                  target_idx = i
+                  break
+          if target_idx is None:
+              print(f'Release with tag {tag} not found. Exiting.')
+              exit(0)
+          if target_idx == 0:
+              print(f'No previous release found before {tag}. Exiting.')
+              exit(0)
+
+          prev_release = releases[target_idx - 1]
+          this_release = releases[target_idx]
+
+          prev_released_at = prev_release.published_at
+          this_released_at = this_release.published_at
+
+          print(f"Labeling issues closed between {prev_released_at} and {this_released_at}")
+
+          new_label = f"released:{tag}"
+          label_names = [l.name for l in repo.get_labels()]
+          if new_label not in label_names:
+              repo.create_label(new_label, "A020F0")  # bright purple
+
+          # Find issues closed between prev_released_at and this_released_at
+          issues = repo.get_issues(state='closed', since=prev_released_at)
+          for issue in issues:
+              if issue.pull_request is not None:
+                  continue
+              if prev_released_at < issue.closed_at <= this_released_at:
+                  print(f"Labeling issue #{issue.number}")
+                  issue.add_to_labels(new_label)
+
+        shell: python
