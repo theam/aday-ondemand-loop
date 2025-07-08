@@ -49,10 +49,9 @@ module Dataverse
       if response_body
         upload_response = Dataverse::UploadFileResponse.new(response_body)
         server_md5 = upload_response.data.files.first&.data_file&.md5
-        md5_valid = verify(source_location, server_md5) if server_md5
+        md5_valid = verify(source_location, server_md5)
       end
 
-      connector_metadata.key_verified!
       log_info('Upload completed', {id: file.id, md5_valid: md5_valid})
 
       if md5_valid
@@ -83,7 +82,6 @@ module Dataverse
     private
 
     def verify(file_path, expected_md5)
-      log_info('Verifying uploaded file', {file_path: file_path, expected_md5: expected_md5})
       return true unless expected_md5
 
       file_md5 = Digest::MD5.file(file_path).hexdigest
