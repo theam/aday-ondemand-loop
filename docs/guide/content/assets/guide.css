@@ -1,6 +1,8 @@
 :root > * {
     --md-primary-fg-color: #212529;
     --md-primary-bg-color: #212529;
+    --md-footer-fg-color: #000;
+    --md-footer-bg-color: #f1f3f5;
     --md-accent-fg-color: #5863d2;
     /* Soften the white background to reduce eye strain */
     --md-default-bg-color: #f1f3f5 !important;
@@ -12,6 +14,10 @@
 /* Set soft white background for the whole page */
 body, .md-content, .md-main {
     background-color: var(--md-default-bg-color);
+}
+
+.md-header__button.md-icon {
+    color: var(--custom-primary-color);
 }
 
 /* Remove active sidebar scrollspy */
