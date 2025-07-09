@@ -60,7 +60,7 @@ module Dataverse
       if segments.length == 2 && segments[0] == 'dataverse'
         @type = 'collection'
         @collection_id = segments[1]
-      elsif segments == ['dataset.xhtml']
+      elsif segments.length == 1 && %w[dataset.xhtml citation citation.xhtml].include?(segments[0])
         @type = 'dataset'
         @dataset_id = @base.params[:persistentId]
         @version = @base.params[:version]
