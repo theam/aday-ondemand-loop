@@ -3,7 +3,7 @@
   "data": {
     "files": [
       {
-        "description": "Translation missing: en.connectors.dataverse.upload_connector_processor.upload_payload_description",
+        "description": "File upload from OnDemand Loop",
         "label": "bolide-01_02-Nov-1960_1.tar",
         "restricted": false,
         "version": 1,
@@ -16,7 +16,7 @@
           "contentType": "application/x-tar",
           "friendlyType": "TAR Archive",
           "filesize": 265678336,
-          "description": "Translation missing: en.connectors.dataverse.upload_connector_processor.upload_payload_description",
+          "description": "File upload from OnDemand Loop",
           "storageIdentifier": "s3://demo-dataverse-org:197e71ded51-40e972ee4158",
           "rootDataFileId": -1,
           "md5": "5f02321dba2a37355a9f1f810565c1c8",

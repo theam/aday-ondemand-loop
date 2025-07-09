@@ -12,5 +12,7 @@ class Dataverse::UploadFileResponseTest < ActiveSupport::TestCase
     file = @response.data.files.first
     assert_equal 'bolide-01_02-Nov-1960_1.tar', file.label
     assert_equal 2657799, file.data_file.id
+    assert_equal 265678336, file.data_file.filesize
+    assert_equal '5f02321dba2a37355a9f1f810565c1c8', file.data_file.md5
   end
 end
