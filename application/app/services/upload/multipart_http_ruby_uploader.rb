@@ -51,11 +51,13 @@ module Upload
 
       request = Net::HTTP::Post::Multipart.new(uri.request_uri, multipart, default_headers.merge(headers))
 
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
-        response = http.request(request)
-        raise "Upload failed. code=#{response.code} body=#{response.body}" unless response.is_a?(Net::HTTPSuccess)
-        log_info('Upload complete.', { status: response.code })
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+        res = http.request(request)
+        raise "Upload failed. code=#{res.code} body=#{res.body}" unless res.is_a?(Net::HTTPSuccess)
+        log_info('Upload complete.', { status: res.code })
+        res
       end
+      response.body
     ensure
       file_io&.close
     end

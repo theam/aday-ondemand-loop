@@ -31,12 +31,16 @@ class Upload::MultipartHttpRubyUploaderTest < ActiveSupport::TestCase
         response
       end
     }.new
-    Net::HTTP.stubs(:start).yields(http)
+    Net::HTTP.stubs(:start).yields(http).returns(response)
 
     uploader = Upload::MultipartHttpRubyUploader.new('https://ex.org/upload', @tmp_file.path)
     progress = []
-    uploader.upload { |ctx| progress << ctx.dup }
+    body = uploader.upload do |ctx|
+      progress << ctx.dup
+      false
+    end
 
     assert progress.last[:uploaded] > 0
+    assert_equal 'ok', body
   end
 end

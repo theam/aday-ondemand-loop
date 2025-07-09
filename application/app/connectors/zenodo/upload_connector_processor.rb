@@ -37,8 +37,6 @@ module Zenodo
 
       return response(FileStatus::CANCELLED, 'file upload cancelled') if cancelled
 
-      # TODO: Zenodo does not verify MD5 on upload — this must be done client-side or skipped.
-      connector_metadata.key_verified!
       response(FileStatus::SUCCESS, 'file upload completed')
     end
 
