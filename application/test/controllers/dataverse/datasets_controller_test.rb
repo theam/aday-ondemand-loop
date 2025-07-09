@@ -69,6 +69,32 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Dataset not found. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
   end
 
+  test "should redirect back to internal referer when dataset is not found" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    internal_referer = view_dataverse_landing_path.to_s
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { "HTTP_REFERER" => internal_referer }
+    assert_redirected_to internal_referer
+    assert_equal "Dataset not found. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect back to internal referer when dataset is not found with script name" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    internal_referer = "/pun/sys/loop" + view_dataverse_landing_path.to_s
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { "HTTP_REFERER" => internal_referer }, env: { "SCRIPT_NAME" => "/pun/sys/loop" }
+    assert_redirected_to internal_referer
+    assert_equal "Dataset not found. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect to root path when referer is external and dataset is not found" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: {HTTP_REFERER: "http://external.com/another/page"}, env: { "SCRIPT_NAME" => "/pun/sys/loop" }
+    assert_redirected_to root_path
+    assert_equal "Dataset not found. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
   test "should redirect to root path after raising exception" do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
@@ -77,10 +103,62 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Dataverse service error. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
   end
 
+  test "should redirect to internal referrer after raising exception" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    internal_referer = view_dataverse_landing_path.to_s
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { "HTTP_REFERER" => internal_referer }
+    assert_redirected_to internal_referer
+    assert_equal "Dataverse service error. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect to internal referrer after raising exception with script name" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    internal_referer = "/pun/sys/loop" + view_dataverse_landing_path.to_s
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { "HTTP_REFERER" => internal_referer }, env: { "SCRIPT_NAME" => "/pun/sys/loop" }
+    assert_redirected_to internal_referer
+    assert_equal "Dataverse service error. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect to root path after raising exception coming from external referrer" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises("error")
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { HTTP_REFERER: "http://external.com/another/page"}, env: { "SCRIPT_NAME" => "/pun/sys/loop" }
+    assert_redirected_to root_path
+    assert_equal "Dataverse service error. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
   test "should redirect to root path after raising Unauthorized exception" do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
     get view_dataverse_dataset_url(@new_id, "random_id")
+    assert_redirected_to root_path
+    assert_equal "Dataset requires authorization. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect to internal referrer after raising Unauthorized exception" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    internal_referer = view_dataverse_landing_path.to_s
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { "HTTP_REFERER" => internal_referer }
+    assert_redirected_to internal_referer
+    assert_equal "Dataset requires authorization. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect to internal referrer after raising Unauthorized exception with script name" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    internal_referer = "/pun/sys/loop" + view_dataverse_landing_path.to_s
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { "HTTP_REFERER" => internal_referer }, env: { "SCRIPT_NAME" => "/pun/sys/loop" }
+    assert_redirected_to internal_referer
+    assert_equal "Dataset requires authorization. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
+  end
+
+  test "should redirect to root path after raising Unauthorized exception coming from external referrer" do
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
+    get view_dataverse_dataset_url(@new_id, "random_id"), headers: { HTTP_REFERER: "http://external.com/another/page"}, env: { "SCRIPT_NAME" => "/pun/sys/loop" }
     assert_redirected_to root_path
     assert_equal "Dataset requires authorization. Dataverse: https://#{@new_id} persistentId: random_id", flash[:alert]
   end

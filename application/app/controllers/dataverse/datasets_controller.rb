@@ -71,16 +71,16 @@ class Dataverse::DatasetsController < ApplicationController
     begin
       @dataset = @service.find_dataset_version_by_persistent_id(@persistent_id)
       unless @dataset
-        log_error('Dataset not found.', {dataverse: @dataverse_url, persistent_id: @persistent_id})
-        redirect_back fallback_location: root_path, alert: t("dataverse.datasets.dataset_not_found", dataverse_url: @dataverse_url, persistent_id: @persistent_id)
+        log_error('Dataset not found.', { dataverse: @dataverse_url, persistent_id: @persistent_id })
+        redirect_back_to_app(alert: t("dataverse.datasets.dataset_not_found", dataverse_url: @dataverse_url, persistent_id: @persistent_id))
         return
       end
     rescue Dataverse::DatasetService::UnauthorizedException => e
-      log_error('Dataset requires authorization', {dataverse: @dataverse_url, persistent_id: @persistent_id}, e)
-      redirect_back fallback_location: root_path, alert: t("dataverse.datasets.dataset_requires_authorization", dataverse_url: @dataverse_url, persistent_id: @persistent_id)
-    rescue Exception => e
-      log_error('Dataverse service error', {dataverse: @dataverse_url, persistent_id: @persistent_id}, e)
-      redirect_back fallback_location: root_path, alert: t("dataverse.datasets.dataverse_service_error", dataverse_url: @dataverse_url, persistent_id: @persistent_id)
+      log_error('Dataset requires authorization', { dataverse: @dataverse_url, persistent_id: @persistent_id }, e)
+      redirect_back_to_app(alert: t("dataverse.datasets.dataset_requires_authorization", dataverse_url: @dataverse_url, persistent_id: @persistent_id))
+    rescue => e
+      log_error('Dataverse service error', { dataverse: @dataverse_url, persistent_id: @persistent_id }, e)
+      redirect_back_to_app(alert: t("dataverse.datasets.dataverse_service_error", dataverse_url: @dataverse_url, persistent_id: @persistent_id))
       return
     end
   end
@@ -107,4 +107,27 @@ class Dataverse::DatasetsController < ApplicationController
       return
     end
   end
+
+  def redirect_back_to_app(fallback: root_path, **options)
+    if redirect_back?
+      redirect_back(fallback_location: fallback, **options)
+    else
+      redirect_to(fallback, **options)
+    end
+  end
+
+  def redirect_back?
+    return false unless request.referer
+
+    begin
+      referer_uri = URI.parse(request.referer)
+    rescue URI::InvalidURIError
+      return false
+    end
+
+    return true if referer_uri.host == request.host
+    return false unless request.script_name
+    return referer_uri.path.start_with?(request.script_name)
+  end
+
 end
