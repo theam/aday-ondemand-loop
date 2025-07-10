@@ -52,9 +52,9 @@ cd loop
 ### 2. Build Elsewhere and Copy
 
 If you prefer to compile the application in a controlled environment, run the
-build steps on another machine and then copy the entire `loop` directory to
-`/var/www/ood/apps/sys/` on your production server. Ensure file permissions are
-preserved during the transfer.
+build steps on another machine and then copy `ondemand-loop/application` directory to
+`/var/www/ood/apps/sys` on your production server. Then rename it to `loop`, ie: `/var/www/ood/apps/sys/loop`.
+Ensure file permissions are preserved during the transfer.
 
 ### 3. Deploy with Puppet
 
