@@ -36,8 +36,7 @@ nav:
   - Installation Guide: installation.md
   - Development Guide:
       - Overview: development_guide/index.md
-      - General Architecture: development_guide/architecture.md
-      - Code Structure: development_guide/code_structure.md
+      - Architecture and Code Structure: development_guide/architecture.md
       - Connectors: development_guide/connectors.md
       - Creating a Connector: development_guide/creating_connector.md
       - Local Environment: development_guide/local_environment.md

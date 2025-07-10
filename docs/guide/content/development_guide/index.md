@@ -2,8 +2,7 @@
 
 This section explains how to run and modify OnDemand Loop. Each topic below is covered in its own page:
 
-- [General Architecture](architecture.md)
-- [Code Structure](code_structure.md)
+- [Architecture and Code Structure](architecture.md)
 - [Connectors](connectors.md)
 - [Creating a Connector](creating_connector.md)
 - [Local Environment](local_environment.md)
