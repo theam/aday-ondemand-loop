@@ -17,9 +17,11 @@ exposed through the `CommandRegistry`.  This design keeps the runtime
 lightweight while avoiding the need for a separate job queue.
 
 Connectors encapsulate repository specific logic and are loaded dynamically
-through `ConnectorClassDispatcher`.  They provide processors for downloads,
-uploads and metadata extraction as well as controllers used to display
-repository content.
+through `ConnectorClassDispatcher`. They make Loop extensible by providing
+custom processors and controllers for each repository. The reference
+implementation is the Dataverse connector, with Zenodo as an additional
+example. See the [Connectors](connectors.md) section for the exact features a
+connector must implement.
 
 ## Project Layout
 

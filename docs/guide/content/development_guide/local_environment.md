@@ -1,6 +1,6 @@
 # Local Environment
 
-The repository contains a Docker based setup that mirrors an Open OnDemand installation. A `Makefile` exposes handy commands.
+The repository contains a Docker based setup that mirrors an Open OnDemand installation. A `Makefile` exposes handy commands so you don't need to install Ruby, Node or any other dependencies on your workstation.
 
 ## Prerequisites
 - [Docker](https://www.docker.com/)
