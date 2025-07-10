@@ -39,14 +39,16 @@ JavaScript assets. The same steps can be performed manually by executing the
 
 ### 1. Build on the Server
 
-Clone the repository (or a release tag) directly into the OOD `sys` directory
-and run the build script:
+Clone the repository (or a release tag) directly into the OOD server, run the build script,
+and copy the built application into the OOD `sys` folder:
 
 ```bash
-cd /var/www/ood/apps/sys
+cd /tmp
 git clone <repo-or-release> loop
 cd loop
 ./scripts/loop_build.sh
+mkdir /var/www/ood/apps/sys/loop
+cp -R ./application/* /var/www/ood/apps/sys/loop/
 ```
 
 ### 2. Build Elsewhere and Copy
