@@ -28,7 +28,7 @@ make release_build
 ```
 
 The script stores Ruby gems under `vendor/bundle` and Node packages in
-`node_modules` within the application directory so that the build is isolated
+`node_modules` within the `application` directory so that the build is isolated
 from system packages.
 
 This command installs all Ruby and Node dependencies and precompiles the CSS and
