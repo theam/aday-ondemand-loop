@@ -46,7 +46,7 @@ and run the build script:
 cd /var/www/ood/apps/sys
 git clone <repo-or-release> loop
 cd loop
-./loop_build.sh
+./scripts/loop_build.sh
 ```
 
 ### 2. Build Elsewhere and Copy
