@@ -16,7 +16,7 @@ The web interface communicates with these services via simple command endpoints
 exposed through the `CommandRegistry`.  This design keeps the runtime
 lightweight while avoiding the need for a separate job queue.
 
-Connectors encapsulate repository specific logic and are loaded dynamically
+Connectors encapsulate repository-specific logic and are loaded dynamically
 through `ConnectorClassDispatcher`. They make Loop extensible by providing
 custom processors and controllers for each repository. The reference
 implementation is the [Dataverse](https://dataverse.org) connector, with [Zenodo](https://zenodo.org) as an additional
