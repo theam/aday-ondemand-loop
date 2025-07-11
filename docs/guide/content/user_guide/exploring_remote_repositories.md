@@ -1,8 +1,8 @@
 # Exploring Remote Repositories
 
-You can reach a repository either by pasting a URL or by browsing from the navigation bar.
+Exploring repositories is the entry point for selecting files to download or datasets to upload. There are two ways to find data:
 
-- If you already have a direct link to a dataset or record, click **Explore** in the top bar to open the resolver, paste the URL and press **Connect**. Loop analyses the address and redirects you to the appropriate page so you can start navigating immediately.
-- To browse first, open the **Repositories** menu and choose a connector. Selecting **Dataverse** lists available installations you can drill into, while **Zenodo** presents a search form for finding records.
+- **Paste a repository URL or DOI.** Use the remote repository's interface to locate or create a dataset, copy its URL—or just its DOI such as `https://doi.org/10.7910/DVN/MYSRMN`—then click **Explore** in the top bar. Paste the address and press **Connect**. Loop resolves the URL, invokes the appropriate connector, and displays the dataset's metadata and files so you can download what you need.
+- **Browse inside Loop.** Open the **Repositories** menu and choose a connector. This built-in view offers basic search and navigation until you find the dataset you want. The remote repository's own website remains the fastest way to browse large collections.
 
-In both cases you end up on an interface that shows dataset metadata and files. Select the items you need and add them to your active project.
+Either approach leads to the same page where you can select files and add them to your active project. The current version only supports public, published Dataverse collections and datasets and Zenodo records.
