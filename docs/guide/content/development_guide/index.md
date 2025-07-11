@@ -5,7 +5,7 @@ Whether you're fixing a bug, extending functionality, or integrating with a new 
 
 ## Quick Start
 
-Clone the repository and start the local environment using the built in `Makefile` targets:
+Clone the [repository](https://github.com/IQSS/ondemand-loop) and start the local environment using the built in `Makefile` targets:
 
 ```bash
 make loop_build
