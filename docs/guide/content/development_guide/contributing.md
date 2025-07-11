@@ -8,7 +8,7 @@ This project welcomes contributions! Follow the steps below to submit code impro
 
 ## 2. Implement the Change with Tests
 - Create a topic branch from `main`.
-- Follow the style guidelines in [CONTRIBUTING.md](../../../../CONTRIBUTING.md).
+- Follow the style guidelines in [CONTRIBUTING.md](https://github.com/IQSS/ondemand-loop/blob/main/CONTRIBUTING.md).
 - Write tests using Minitest and Mocha to cover your change.
 
 ## 3. Run the Test Suite
