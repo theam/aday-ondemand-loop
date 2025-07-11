@@ -1,7 +1,7 @@
 # Architecture and Code Structure
 
 OnDemand Loop is a Ruby on Rails application that runs as an Open OnDemand
-passenger app.  The project follows standard Rails conventions as long as they do
+Passenger app.  The project follows standard Rails conventions as long as they do
 not interfere with simplicity or functionality.  Instead of a traditional
 database it stores project and file metadata in YAML files on disk.  A small set
 of models like `Project`, `DownloadFile`, and `UploadBundle` inherit from
