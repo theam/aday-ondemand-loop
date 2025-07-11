@@ -1,0 +1,13 @@
+<% content_for :title, t('.page_title') %>
+<div class="container-md content" role="main">
+  <%= render partial: '/shared/breadcrumbs', locals: { links: [{text: t('.breadcrumbs_text')}]} %>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-group">
+        <% @repositories.each do |domain, entry| %>
+          <%= render partial: 'repository', locals: { domain: domain, entry: entry } %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

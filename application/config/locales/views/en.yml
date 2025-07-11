@@ -243,3 +243,7 @@ en:
     index:
       breadcrumbs_text: "Uploads"
       page_title: "OnDemand Loop - Uploads Management"
+  repository_settings:
+    index:
+      breadcrumbs_text: "Repository Settings"
+      page_title: "OnDemand Loop - Repository Settings"

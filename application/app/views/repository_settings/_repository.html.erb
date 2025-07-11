@@ -1,0 +1,13 @@
+<li class="card mb-3 shadow-sm rounded">
+  <div class="card-header bg-light">
+    <a class="d-flex align-items-center text-decoration-none text-secondary" data-bs-toggle="collapse" href="#repo-<%= domain.parameterize %>" role="button" aria-expanded="false" aria-controls="repo-<%= domain.parameterize %>">
+      <span class="me-2"><%= connector_icon(entry.type) %></span>
+      <strong><%= domain %></strong>
+    </a>
+  </div>
+  <div class="collapse" id="repo-<%= domain.parameterize %>">
+    <div class="card-body">
+      <%= render partial: "/connectors/#{entry.type.to_s.downcase}/repo_settings", locals: { domain: domain, metadata: entry.metadata } %>
+    </div>
+  </div>
+</li>
