@@ -115,3 +115,11 @@ jobs:
             **Notes**: [View GitHub Release Notes](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.release.outputs.version }})
             **Commit Hash**: `${{ needs.validate.outputs.commit_hash || 'N/A' }}`
             **Run**: [View workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+  label_issues:
+    name: Label Issues With Release Tag
+    needs: [release, comment]
+    if: needs.release.result == 'success'
+    uses: ./.github/workflows/label_issues_on_release.yml
+    with:
+      release_tag: ${{ needs.release.outputs.version }}
