@@ -19,7 +19,7 @@ lightweight while avoiding the need for a separate job queue.
 Connectors encapsulate repository specific logic and are loaded dynamically
 through `ConnectorClassDispatcher`. They make Loop extensible by providing
 custom processors and controllers for each repository. The reference
-implementation is the Dataverse connector, with Zenodo as an additional
+implementation is the [Dataverse](https://dataverse.org) connector, with [Zenodo](https://zenodo.org) as an additional
 example. See the [Connectors](connectors.md) section for the exact features a
 connector must implement.
 
