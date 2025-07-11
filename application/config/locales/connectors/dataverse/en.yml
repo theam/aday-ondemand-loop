@@ -158,7 +158,7 @@ en:
 
     restrictions:
       dataset_file:
-        restricted_message: "File is restricted. Restricted files not supported"
+        unavailable_message: "Restricted or embargoed files cannot be downloaded"
         missing_file_message: "File data is not present"
         file_size_message: "Files bigger than %{max_size} are not supported"
   helpers:
