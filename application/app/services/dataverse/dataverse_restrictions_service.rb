@@ -22,10 +22,10 @@ module Dataverse
     def validate_dataset_file(file)
       response = { valid?: true, message: nil }
 
-      if file.restricted
+      if !file.public?
         response = {
           valid?: false,
-          message: I18n.t('dataverse.restrictions.dataset_file.restricted_message')
+          message: I18n.t('dataverse.restrictions.dataset_file.unavailable_message')
         }
       elsif file.data_file.nil?
         response = {
