@@ -27,6 +27,8 @@ Line Coverage: 92.38% (3272 / 3542)
 Branch Coverage: 67.72% (579 / 855)
 ```
 
+If you changed any documentation run `make guide` to build the MkDocs site locally. Use `make guide_dev` to serve it at `http://localhost:8000` for quick previews.
+
 ## 4. Create a Pull Request
 - Push your branch and open a PR referencing the issue.
 - Describe what you changed and why.

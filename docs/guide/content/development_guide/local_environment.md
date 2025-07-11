@@ -19,3 +19,18 @@ make loop_up
 Open the app at [https://localhost:33000/pun/sys/loop](https://localhost:33000/pun/sys/loop).
 
 A test user `ood/ood` is configured. The environment uses a self‑signed certificate so your browser will warn about the connection.
+
+Stop the containers with:
+
+```bash
+make loop_down
+```
+
+Useful development commands:
+
+| Command | Purpose |
+|---------|---------|
+| `make logs` | Tail the application logs |
+| `make bash` | Open a shell inside the running container |
+| `make test` | Run the test suite |
+| `make guide_dev` | Serve this documentation at `http://localhost:8000` |
