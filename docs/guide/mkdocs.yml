@@ -38,7 +38,6 @@ nav:
       - Overview: development_guide/index.md
       - Architecture and Code Structure: development_guide/architecture.md
       - Connectors: development_guide/connectors.md
-      - Creating a Connector: development_guide/creating_connector.md
       - Local Environment: development_guide/local_environment.md
       - Docker Images: development_guide/docker_images.md
       - Upgrading Open OnDemand: development_guide/upgrade_ood.md

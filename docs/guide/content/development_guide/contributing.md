@@ -19,17 +19,13 @@ make test
 This command runs `bundle exec rake test` to execute the tests. The suite generates a coverage report using [SimpleCov](https://github.com/simplecov-ruby/simplecov). The HTML report is saved under `application/tmp/coverage/index.html`, open to view details.
 
 The coverage results are printed in the test output. Example:
-```
+```bash
 Finished in 10.208027s, 59.7569 runs/s, 167.3193 assertions/s.
 610 runs, 1708 assertions, 0 failures, 0 errors, 0 skips
 Coverage report generated for Minitest to /usr/local/app/tmp/coverage.
 Line Coverage: 92.38% (3272 / 3542)
 Branch Coverage: 67.72% (579 / 855)
 ```
-
-The coverage badges in `docs/badges` are generated automatically by the GitHub
-Actions workflow. You can also run `make coverage` locally to regenerate them
-manually if desired.
 
 ## 4. Create a Pull Request
 - Push your branch and open a PR referencing the issue.

@@ -46,24 +46,10 @@ Inside `application/app` important subfolders include:
 | `process/` | Lightweight background execution framework used by the services. |
 | `javascript/` and `assets/` | Front‑end JavaScript and stylesheets. |
 
-Configuration files live under `config/`.  The file
+The main configuration class lives under `config/`.  The file
 `configuration_singleton.rb` defines all adjustable settings which can be
 overridden via YAML or environment variables (see the Admin Guide for
 details).
-
-### Scripts
-
-The `scripts/` folder contains small helper scripts used by the Makefile:
-
-| Script | Purpose |
-|--------|---------|
-| `loop_build.sh` | Precompiles Rails assets inside the builder image. |
-| `loop_test.sh` | Runs the full test suite and generates coverage data. |
-| `loop_release_notes.sh` | Creates release notes from Git history. |
-| `loop_version.sh` | Bumps the version file for releases. |
-| `loop_coverage_badge.sh` | Updates the coverage badges in `docs/badges`. |
-| `guide.sh` | Builds or serves this documentation via MkDocs. |
-| `install_fontawesome_css.sh` | Downloads Font Awesome files used by the UI. |
 
 ## Development Environment
 
