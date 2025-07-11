@@ -27,7 +27,7 @@ class Dataverse::DataverseRestrictionsServiceTest < ActiveSupport::TestCase
     response = validation_service.validate_dataset_file(file)
 
     assert_not response.valid?, 'File should be invalid when not public'
-    assert_equal 'File is not publicly downloadable', response.message
+    assert_equal 'Restricted or embargoed files cannot be downloaded', response.message
   end
 
   test 'should validate file within max_size constraint' do
