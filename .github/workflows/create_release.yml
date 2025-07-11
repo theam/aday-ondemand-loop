@@ -118,7 +118,7 @@ jobs:
 
   label_issues:
     name: Label Issues With Release Tag
-    needs: [release, comment]
+    needs: [release]
     if: needs.release.result == 'success'
     uses: ./.github/workflows/label_issues_on_release.yml
     with:
