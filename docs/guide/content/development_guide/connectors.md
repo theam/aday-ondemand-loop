@@ -2,7 +2,7 @@
 
 Connectors are a key extension point of OnDemand Loop. They abstract repository specific
 behaviour so that the core application can support multiple remote repositories
-without changing its own code. Dataverse and Zenodo are already implemented with
+without changing its own code. [Dataverse](https://dataverse.org) and [Zenodo](https://zenodo.org) are already implemented with
 Dataverse acting as the reference implementation.
 
 Every connector must provide logic for:
