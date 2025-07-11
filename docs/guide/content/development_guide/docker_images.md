@@ -19,4 +19,3 @@ The `scripts/` folder contains small helper scripts used by the Makefile and Doc
 | `loop_version.sh` | Bumps the version file for releases. |
 | `loop_coverage_badge.sh` | Updates the coverage badges in `docs/badges`. |
 | `guide.sh` | Builds or serves this documentation via MkDocs. |
-| `install_fontawesome_css.sh` | Downloads Font Awesome files used by the UI. |

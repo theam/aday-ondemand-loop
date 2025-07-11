@@ -22,7 +22,7 @@ A connector typically contains:
 - `upload_bundle_connector_processor.rb` – creates and manages upload bundles.
 - `display_repo_controller_resolver.rb` – resolves a repository URL into a controller/action inside OnDemand Loop.
 
-Dataverse and Zenodo connectors are included as examples. All connector classes are dynamically loaded using `ConnectorClassDispatcher` so adding a new connector only requires following the same naming conventions.
+Dataverse and Zenodo connectors are already implemented and can be used as a reference. All connector classes are dynamically loaded using `ConnectorClassDispatcher` so adding a new connector only requires following the same naming conventions.
 
 ### Creating a Connector
 

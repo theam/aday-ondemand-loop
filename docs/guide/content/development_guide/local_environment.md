@@ -1,6 +1,7 @@
 # Local Environment
 
-The repository contains a Docker based setup that mirrors an Open OnDemand installation. A `Makefile` exposes handy commands so you don't need to install Ruby, Node or any other dependencies on your workstation.
+The repository contains a Docker based setup that mirrors an Open OnDemand installation.
+A `Makefile` exposes handy commands so you don't need to install Ruby, Node or any other dependencies on your workstation.
 
 ## Prerequisites
 - [Docker](https://www.docker.com/)
@@ -26,11 +27,14 @@ Stop the containers with:
 make loop_down
 ```
 
-Useful development commands:
+Make development commands:
 
-| Command | Purpose |
-|---------|---------|
-| `make logs` | Tail the application logs |
-| `make bash` | Open a shell inside the running container |
-| `make test` | Run the test suite |
-| `make guide_dev` | Serve this documentation at `http://localhost:8000` |
+| Command           | Purpose                                                                              |
+|-------------------|--------------------------------------------------------------------------------------|
+| `make loop_build` | Install the dependencies into `application/vendor/bundle` and builds the application |
+| `make loop_up`    | Starts the local environment                                                         |
+| `make loop_down`  | Shuts down the local environment                                                     |
+| `make logs`       | Tail the application logs                                                            |
+| `make bash`       | Open a shell inside the running container                                            |
+| `make test`       | Run the test suite                                                                   |
+| `make guide_dev`  | Serve this documentation at `http://localhost:8000`                                  |

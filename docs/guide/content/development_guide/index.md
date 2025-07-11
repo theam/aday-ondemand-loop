@@ -3,7 +3,7 @@
 This section provides everything you need to understand, run, customize, and contribute to the [OnDemand Loop](https://github.com/IQSS/ondemand-loop) application.
 Whether you're fixing a bug, extending functionality, or integrating with a new repository, this guide is your entry point.
 
-## Quick Start
+### Quick Start
 
 Clone the [repository](https://github.com/IQSS/ondemand-loop) and start the local environment using the built in `Makefile` targets:
 
@@ -13,18 +13,16 @@ make loop_up
 ```
 
 Once the containers are running visit [https://localhost:33000/pun/sys/loop](https://localhost:33000/pun/sys/loop) and log in with the test user `ood/ood`.
+
 Run `make loop_down` to stop the containers when you are finished.
 
 The documentation is organized by topic to help you find what you need quickly:
 
-- [Architecture and Code Structure](architecture.md)  
+- [Architecture and Code](architecture.md)  
   Overview of the system design, key components, and how the codebase is organized.
 
 - [Connectors](connectors.md)  
   Details on how OnDemand Loop interacts with external repositories like Dataverse, Figshare, or Zenodo.
-
-- [Creating a Connector](connectors.md#creating-a-connector)
-  Step-by-step instructions to add support for a new remote repository.
 
 - [Local Environment](local_environment.md)  
   How to set up and run OnDemand Loop locally for development.
