@@ -1,6 +1,6 @@
 # Development Guide
 
-This section provides everything you need to understand, run, customize, and contribute to the OnDemand Loop application.
+This section provides everything you need to understand, run, customize, and contribute to the [OnDemand Loop](https://github.com/IQSS/ondemand-loop) application.
 Whether you're fixing a bug, extending functionality, or integrating with a new repository, this guide is your entry point.
 
 ## Quick Start
