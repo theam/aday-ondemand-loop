@@ -3,7 +3,7 @@ module Dataverse::Actions
     def edit(upload_bundle, request_params)
       connector_metadata = upload_bundle.connector_metadata
       repo_db = RepoRegistry.repo_db
-      dataverse_data = repo_db.get(connezctor_metadata.server_domain)
+      dataverse_data = repo_db.get(connector_metadata.server_domain)
       if dataverse_data.metadata.subjects.nil?
         dv_metadata_service = Dataverse::MetadataService.new(connector_metadata.dataverse_url)
         subjects = dv_metadata_service.get_citation_metadata.subjects

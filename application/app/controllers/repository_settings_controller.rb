@@ -4,26 +4,30 @@ class RepositorySettingsController < ApplicationController
   end
 
   def create
-    repo_url = params[:repo_url]
+    repo_url = params[:repo_url].to_s.strip
+    if repo_url.blank?
+      redirect_to repository_settings_path, alert: t('.message_invalid_request', url: repo_url) and return
+    end
+
     repo_resolver = Repo::RepoResolverService.new(RepoRegistry.resolvers)
     result = repo_resolver.resolve(repo_url)
 
     if result.unknown?
-      redirect_to repository_settings_path, alert: t('.invalid_repo', url: repo_url) and return
+      redirect_to repository_settings_path, alert: t('.message_invalid_url', url: repo_url) and return
     end
 
-    redirect_to repository_settings_path, notice: t('.repo_added', type: result.type.to_s)
+    redirect_to repository_settings_path, notice: t('.message_success', url: result.object_url, type: result.type.to_s)
   end
 
   def update
     domain = params[:domain]
     repo = RepoRegistry.repo_db.get(domain)
     unless repo
-      redirect_to repository_settings_path, alert: t('.repo_not_found', domain: domain) and return
+      redirect_to repository_settings_path, alert: t('.message_not_found', domain: domain) and return
     end
 
     metadata = params.fetch(:metadata, {}).permit!.to_h
     RepoRegistry.repo_db.update(domain, metadata: metadata)
-    redirect_to repository_settings_path, notice: t('.repo_updated', domain: domain)
+    redirect_to repository_settings_path, notice: t('.message_success', domain: domain)
   end
 end

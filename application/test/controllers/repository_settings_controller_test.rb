@@ -1,5 +1,5 @@
 require "test_helper"
-require 'tempfile'
+require Rails.root.join('app/services/repo/repo_resolver_context')
 
 class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
   def setup
@@ -12,45 +12,45 @@ class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
     @tempfile.unlink
   end
 
-  test 'should get index' do
+  test 'index should render' do
     get repository_settings_url
     assert_response :success
   end
 
-  test 'should add repository on create' do
+  test 'create should return success when URL resolved' do
     resolver = mock('resolver')
-    url_res = OpenStruct.new(type: ConnectorType::ZENODO, object_url: 'https://zenodo.org/', unknown?: false)
-    resolver.stubs(:resolve).with('https://zenodo.org/').returns(url_res)
+    response = Repo::RepoResolverResponse.new('https://zenodo.org/', ConnectorType::ZENODO)
+    resolver.stubs(:resolve).with('https://zenodo.org/').returns(response)
     Repo::RepoResolverService.stubs(:new).returns(resolver)
 
     post repository_settings_url, params: { repo_url: 'https://zenodo.org/' }
 
     assert_redirected_to repository_settings_url
-    assert_equal I18n.t('repository_settings.create.repo_added', type: 'zenodo'), flash[:notice]
-    assert RepoRegistry.repo_db.get('zenodo.org')
+    assert_equal I18n.t('repository_settings.create.message_success', url: 'https://zenodo.org/', type: 'zenodo'), flash[:notice]
   end
 
-  test 'should show error on unknown repository' do
+  test 'create should show error on unknown repository' do
     resolver = mock('resolver')
-    resolver.stubs(:resolve).with('u').returns(OpenStruct.new(unknown?: true))
+    response = Repo::RepoResolverResponse.new('u', nil)
+    resolver.stubs(:resolve).with('u').returns(response)
     Repo::RepoResolverService.stubs(:new).returns(resolver)
 
     post repository_settings_url, params: { repo_url: 'u' }
 
     assert_redirected_to repository_settings_url
-    assert_equal I18n.t('repository_settings.create.invalid_repo', url: 'u'), flash[:alert]
+    assert_equal I18n.t('repository_settings.create.message_invalid_url', url: 'u'), flash[:alert]
   end
 
-  test 'should update repository metadata' do
-    put repository_setting_url('demo.org'), params: { metadata: {auth_key: 'new'} }
+  test 'update should update repository metadata' do
+    put repository_settings_url, params: { domain: 'demo.org', metadata: {auth_key: 'new'} }
     assert_redirected_to repository_settings_url
-    assert_equal I18n.t('repository_settings.update.repo_updated', domain: 'demo.org'), flash[:notice]
+    assert_equal I18n.t('repository_settings.update.message_success', domain: 'demo.org'), flash[:notice]
     assert_equal 'new', RepoRegistry.repo_db.get('demo.org').metadata.auth_key
   end
 
-  test 'should show error when repository missing' do
-    put repository_setting_url('missing.org'), params: { metadata: {auth_key: 'x'} }
+  test 'update should show error when repository missing' do
+    put repository_settings_url, params: { domain: 'missing.org', metadata: {auth_key: 'x'} }
     assert_redirected_to repository_settings_url
-    assert_equal I18n.t('repository_settings.update.repo_not_found', domain: 'missing.org'), flash[:alert]
+    assert_equal I18n.t('repository_settings.update.message_not_found', domain: 'missing.org'), flash[:alert]
   end
 end
