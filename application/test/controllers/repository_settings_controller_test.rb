@@ -17,6 +17,30 @@ class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should add repository on create' do
+    resolver = mock('resolver')
+    url_res = OpenStruct.new(type: ConnectorType::ZENODO, object_url: 'https://zenodo.org/', unknown?: false)
+    resolver.stubs(:resolve).with('https://zenodo.org/').returns(url_res)
+    Repo::RepoResolverService.stubs(:new).returns(resolver)
+
+    post repository_settings_url, params: { repo_url: 'https://zenodo.org/' }
+
+    assert_redirected_to repository_settings_url
+    assert_equal I18n.t('repository_settings.create.repo_added', type: 'zenodo'), flash[:notice]
+    assert RepoRegistry.repo_db.get('zenodo.org')
+  end
+
+  test 'should show error on unknown repository' do
+    resolver = mock('resolver')
+    resolver.stubs(:resolve).with('u').returns(OpenStruct.new(unknown?: true))
+    Repo::RepoResolverService.stubs(:new).returns(resolver)
+
+    post repository_settings_url, params: { repo_url: 'u' }
+
+    assert_redirected_to repository_settings_url
+    assert_equal I18n.t('repository_settings.create.invalid_repo', url: 'u'), flash[:alert]
+  end
+
   test 'should update repository metadata' do
     put repository_setting_url('demo.org'), params: { metadata: {auth_key: 'new'} }
     assert_redirected_to repository_settings_url

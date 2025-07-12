@@ -244,6 +244,11 @@ en:
       breadcrumbs_text: "Uploads"
       page_title: "OnDemand Loop - Uploads Management"
   repository_settings:
+    actions:
+      actions_bar_title_a11y_label: "Repositories actions bar"
+      button_add_repository_label: "Add Repository"
+      button_add_repository_placeholder: "Repository URL"
+      button_add_repository_title: "Add Repository"
     index:
       breadcrumbs_text: "Repository Settings"
       page_title: "OnDemand Loop - Repository Settings"
