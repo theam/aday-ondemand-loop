@@ -1,0 +1,12 @@
+<div class="text-end bg-white z-index-999" aria-label="<%= t('.actions_bar_title_a11y_label') %>">
+  <%= render partial: 'shared/inline_field_submit', locals: {
+    url: repository_settings_path,
+    type: 'form',
+    field_name: 'repo_url',
+    label: t('.button_add_repository_label'),
+    placeholder: t('.button_add_repository_placeholder'),
+    title: t('.button_add_repository_title'),
+    icon: 'bi bi-plus-square-fill'
+  } %>
+</div>
+<hr>
