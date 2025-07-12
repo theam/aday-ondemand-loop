@@ -1,9 +1,23 @@
 <li class="card mb-3 shadow-sm rounded">
   <div class="card-header bg-light">
-    <a class="d-flex align-items-center text-decoration-none text-secondary" data-bs-toggle="collapse" href="#repo-<%= domain.parameterize %>" role="button" aria-expanded="false" aria-controls="repo-<%= domain.parameterize %>">
-      <span class="me-2"><%= connector_icon(entry.type) %></span>
-      <strong><%= domain %></strong>
+
+    <a class="d-flex align-items-center text-decoration-none text-secondary"
+       data-bs-toggle="collapse"
+       data-controller="utils--icon-toggle"
+       data-utils--icon-toggle-icon-on-value="bi-plus-square"
+       data-utils--icon-toggle-icon-off-value="bi-dash-square"
+       data-action="click->utils--icon-toggle#toggle"
+       href="#repo-<%= domain.parameterize %>"
+       role="button"
+       aria-expanded="false"
+       aria-controls="repo-<%= domain.parameterize %>">
+      <i data-utils--icon-toggle-target="icon" class="bi bi-plus-square me-2 transition" style="line-height: 1;" aria-hidden="true"></i>
+      <span class="me-2 d-inline-flex align-items-center" style="line-height: 1;">
+        <%= connector_icon(entry.type) %>
+      </span>
+      <strong class="d-inline-block"><%= domain %></strong>
     </a>
+
   </div>
   <div class="collapse" id="repo-<%= domain.parameterize %>">
     <div class="card-body">
