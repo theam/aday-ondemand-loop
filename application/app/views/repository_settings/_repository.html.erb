@@ -1,5 +1,5 @@
 <li class="card mb-3 shadow-sm rounded">
-  <div class="card-header bg-light">
+  <div class="card-header bg-light d-flex justify-content-between align-items-center">
 
     <a class="d-flex align-items-center text-decoration-none text-secondary"
        data-bs-toggle="collapse"
@@ -17,6 +17,19 @@
       </span>
       <strong class="d-inline-block"><%= domain %></strong>
     </a>
+
+    <%= render partial: "shared/button_to", locals: {
+      url: repository_settings_path,
+      method: 'DELETE',
+      title: t('.button_delete_repository_title'),
+      class: 'btn-sm btn-outline-dark icon-hover-danger',
+      icon: 'bi bi-trash-fill',
+      params: { domain: domain },
+      modal_id: 'modal-delete-confirmation',
+      modal_title: t('.modal_delete_confirmation_title'),
+      modal_subtitle: domain,
+      modal_content: t('.modal_delete_confirmation_content')
+    } %>
 
   </div>
   <div class="collapse" id="repo-<%= domain.parameterize %>">

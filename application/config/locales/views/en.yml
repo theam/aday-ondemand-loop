@@ -252,3 +252,7 @@ en:
     index:
       breadcrumbs_text: "Repository Settings"
       page_title: "OnDemand Loop - Repository Settings"
+    repository_header:
+      button_delete_repository_title: "Delete repository"
+      modal_delete_confirmation_title: "Delete Repository"
+      modal_delete_confirmation_content: "This will remove the repository from the app."

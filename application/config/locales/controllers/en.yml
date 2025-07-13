@@ -33,6 +33,9 @@ en:
     update:
       message_not_found: "Repository %{domain} not found"
       message_success: "Repository %{domain} updated"
+    destroy:
+      message_not_found: "Repository %{domain} not found"
+      message_deleted: "Repository %{domain} (%{type}) deleted"
   upload_bundles:
     create:
       invalid_project: "Invalid project id: %{id}"
