@@ -32,7 +32,7 @@ class RepositorySettingsController < ApplicationController
   end
 
   def destroy
-    domain = params[:domain]
+    domain = params[:domain].to_s.strip
     repo = RepoRegistry.repo_db.get(domain)
     unless repo
       redirect_to repository_settings_path, alert: t('.message_not_found', domain: domain) and return
