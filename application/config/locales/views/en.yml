@@ -129,6 +129,8 @@ en:
       breadcrumbs_text: "Projects"
       page_title: "OnDemand Loop - Project detail"
     actions:
+      actions_bar_title: "Projects"
+      actions_bar_title_a11y_label: "Project List"
       button_create_project_text: "Create Project"
       button_downloads_root_directory_text: "Downloads Root Directory"
     download_files:
@@ -253,7 +255,7 @@ en:
       breadcrumbs_text: "Repository Settings"
       page_title: "OnDemand Loop - Repository Settings"
     repository:
-      link_open_repository_title: "Open repository"
+      link_open_repository_title: "Open remote repository site"
       button_browse_repository_label: "Browse"
       button_browse_repository_title: "Browse repository"
       button_delete_repository_title: "Delete repository"

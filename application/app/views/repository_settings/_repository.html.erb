@@ -19,16 +19,17 @@
     </a>
 
     <div class="d-flex align-items-center gap-2">
-      <%= link_to repo_url, target: '_blank', class: 'btn btn-sm btn-outline-secondary',
-                    title: t('.link_open_repository_title') do %>
+      <%= link_to repo_url, target: '_blank',
+                  class: 'btn btn-sm btn-outline-dark',
+                  title: t('.link_open_repository_title') do %>
         <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
         <span class="visually-hidden"><%= t('.link_open_repository_title') %></span>
       <% end %>
 
       <%= link_to browse_repository_path(repo_url, entry),
-                  class: 'btn btn-sm btn-outline-dark icon-hover-danger',
+                  class: 'btn btn-sm btn-outline-dark',
                   title: t('.button_browse_repository_title') do %>
-        <i class="bi bi-folder2-open" aria-hidden="true"></i>
+        <i class="bi bi-display" aria-hidden="true"></i>
         <span class="visually-hidden"><%= t('.button_browse_repository_label') %></span>
       <% end %>
 
