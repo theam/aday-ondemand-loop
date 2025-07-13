@@ -6,8 +6,8 @@
       <%= render partial: 'actions' %>
 
       <ul class="list-group">
-        <% @repositories.each do |domain, entry| %>
-          <%= render partial: 'repository', locals: { domain: domain, entry: entry } %>
+        <% @repositories.each do |repo_url, entry| %>
+          <%= render partial: 'repository', locals: { repo_url: repo_url, entry: entry } %>
         <% end %>
       </ul>
     </div>

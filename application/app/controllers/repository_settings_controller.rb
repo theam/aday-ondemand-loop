@@ -20,25 +20,25 @@ class RepositorySettingsController < ApplicationController
   end
 
   def update
-    domain = params[:domain]
-    repo = RepoRegistry.repo_db.get(domain)
+    repo_url = params[:repo_url]
+    repo = RepoRegistry.repo_db.get(repo_url)
     unless repo
-      redirect_to repository_settings_path, alert: t('.message_not_found', domain: domain) and return
+      redirect_to repository_settings_path, alert: t('.message_not_found', domain: repo_url) and return
     end
 
     metadata = params.fetch(:metadata, {}).permit!.to_h
-    RepoRegistry.repo_db.update(domain, metadata: metadata)
-    redirect_to repository_settings_path, notice: t('.message_success', domain: domain)
+    RepoRegistry.repo_db.update(repo_url, metadata: metadata)
+    redirect_to repository_settings_path, notice: t('.message_success', domain: repo_url)
   end
 
   def destroy
-    domain = params[:domain].to_s.strip
-    repo = RepoRegistry.repo_db.get(domain)
+    repo_url = params[:repo_url].to_s.strip
+    repo = RepoRegistry.repo_db.get(repo_url)
     unless repo
-      redirect_to repository_settings_path, alert: t('.message_not_found', domain: domain) and return
+      redirect_to repository_settings_path, alert: t('.message_not_found', domain: repo_url) and return
     end
 
-    RepoRegistry.repo_db.delete(domain)
-    redirect_to repository_settings_path, notice: t('.message_deleted', domain: domain, type: repo.type.to_s)
+    RepoRegistry.repo_db.delete(repo_url)
+    redirect_to repository_settings_path, notice: t('.message_deleted', domain: repo_url, type: repo.type.to_s)
   end
 end

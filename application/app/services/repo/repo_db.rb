@@ -26,40 +26,40 @@ module Repo
       @data = load_data
     end
 
-    def get(domain)
-      @data[domain]
+    def get(repo_url)
+      @data[repo_url]
     end
 
-    def set(domain, type:, metadata: nil)
+    def set(repo_url, type:, metadata: nil)
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
-      metadata = @data[domain]&[:metadata] || {} if metadata.nil?
-      @data[domain] = Entry.new(
+      metadata = @data[repo_url]&.metadata.to_h if metadata.nil?
+      @data[repo_url] = Entry.new(
         type: type.to_s,
         last_updated: Time.now.to_s,
         metadata: metadata
       )
       persist!
-      log_info('Entry added', {domain: domain, type: type})
+      log_info('Entry added', {repo_url: repo_url, type: type})
     end
 
-    def update(domain, metadata:)
-      raise ArgumentError, "Unknown domain: #{domain}" unless @data.key?(domain)
+    def update(repo_url, metadata:)
+      raise ArgumentError, "Unknown repo url: #{repo_url}" unless @data.key?(repo_url)
 
-      entry = @data[domain]
+      entry = @data[repo_url]
       entry.last_updated = Time.now.to_s
       entry[:metadata] ||= {}
       entry[:metadata] = entry[:metadata].merge(metadata)
       persist!
-      log_info('Entry updated', { domain: domain, type: entry.type })
+      log_info('Entry updated', { repo_url: repo_url, type: entry.type })
     end
 
-    def delete(domain)
-      return unless @data.key?(domain)
+    def delete(repo_url)
+      return unless @data.key?(repo_url)
 
-      entry = @data.delete(domain)
+      entry = @data.delete(repo_url)
       persist!
-      log_info('Entry deleted', { domain: domain, type: entry&.type })
+      log_info('Entry deleted', { repo_url: repo_url, type: entry&.type })
     end
 
     def size
