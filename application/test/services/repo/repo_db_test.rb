@@ -20,16 +20,19 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
     assert entry
     assert_equal @type, entry.type
     assert_equal 'abc123', entry.metadata.token
+    assert_not_nil entry.creation_date
     assert_not_nil entry.last_updated
   end
 
   test 'should update metadata' do
     @db.set('https://demo.org', type: @type, metadata: { token: 'abc123' })
+    original_created = @db.get('https://demo.org').creation_date
     @db.update('https://demo.org', metadata: { token: 'xyz789', user: 'alice' })
 
     entry = @db.get('https://demo.org')
     assert_equal 'xyz789', entry.metadata.token
     assert_equal 'alice', entry.metadata.user
+    assert_equal original_created, entry.creation_date
   end
 
   test 'should raise error when updating unknown domain' do
@@ -58,12 +61,14 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
 
   test 'should persist and reload from file' do
     @db.set('https://demo.org', type: @type, metadata: { token: 'abc123' })
+    created = @db.get('https://demo.org').creation_date
 
     reloaded = Repo::RepoDb.new(db_path: @tempfile.path)
     entry = reloaded.get('https://demo.org')
 
     assert entry
     assert_equal 'abc123', entry.metadata.token
+    assert_equal created, entry.creation_date
   end
 
   test 'should not persist invalid type' do
