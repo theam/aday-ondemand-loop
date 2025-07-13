@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   resources :repository_settings, path: 'repositories/settings', only: [:index, :create] do
     collection do
       put :update
+      delete :destroy
     end
   end
 

@@ -53,4 +53,17 @@ class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to repository_settings_url
     assert_equal I18n.t('repository_settings.update.message_not_found', domain: 'missing.org'), flash[:alert]
   end
+
+  test 'destroy should delete repository' do
+    delete repository_settings_url, params: { domain: 'demo.org' }
+    assert_redirected_to repository_settings_url
+    assert_equal I18n.t('repository_settings.destroy.message_deleted', domain: 'demo.org', type: 'dataverse'), flash[:notice]
+    assert_nil RepoRegistry.repo_db.get('demo.org')
+  end
+
+  test 'destroy should show error when repository missing' do
+    delete repository_settings_url, params: { domain: 'missing.org' }
+    assert_redirected_to repository_settings_url
+    assert_equal I18n.t('repository_settings.destroy.message_not_found', domain: 'missing.org'), flash[:alert]
+  end
 end

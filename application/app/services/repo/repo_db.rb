@@ -55,7 +55,11 @@ module Repo
     end
 
     def delete(domain)
-      @data.delete(domain)
+      return unless @data.key?(domain)
+
+      entry = @data.delete(domain)
+      persist!
+      log_info('Entry deleted', { domain: domain, type: entry&.type })
     end
 
     def size

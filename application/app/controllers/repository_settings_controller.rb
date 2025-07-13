@@ -30,4 +30,15 @@ class RepositorySettingsController < ApplicationController
     RepoRegistry.repo_db.update(domain, metadata: metadata)
     redirect_to repository_settings_path, notice: t('.message_success', domain: domain)
   end
+
+  def destroy
+    domain = params[:domain]
+    repo = RepoRegistry.repo_db.get(domain)
+    unless repo
+      redirect_to repository_settings_path, alert: t('.message_not_found', domain: domain) and return
+    end
+
+    RepoRegistry.repo_db.delete(domain)
+    redirect_to repository_settings_path, notice: t('.message_deleted', domain: domain, type: repo.type.to_s)
+  end
 end
