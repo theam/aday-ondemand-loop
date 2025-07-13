@@ -37,6 +37,7 @@ application/vendor/bundle
 .idea
 /application/app/assets/builds/*
 !/application/app/assets/builds/.keep
+/application/bun.lock
 
 /application/node_modules
 

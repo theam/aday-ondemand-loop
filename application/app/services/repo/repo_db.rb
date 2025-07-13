@@ -4,7 +4,7 @@ module Repo
   class RepoDb
     include LoggingCommon
 
-    class Entry < Struct.new(:type, :last_updated, :metadata, keyword_init: true)
+    class Entry < Struct.new(:type, :creation_date, :last_updated, :metadata, keyword_init: true)
       def type
         ConnectorType.get(self[:type])
       end
@@ -33,9 +33,12 @@ module Repo
     def set(repo_url, type:, metadata: nil)
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
-      metadata = @data[repo_url]&.metadata.to_h if metadata.nil?
+      existing = @data[repo_url]
+      metadata = existing&.metadata.to_h if metadata.nil?
+      creation_date = existing&.creation_date || Time.now.to_s
       @data[repo_url] = Entry.new(
         type: type.to_s,
+        creation_date: creation_date,
         last_updated: Time.now.to_s,
         metadata: metadata
       )
@@ -80,6 +83,7 @@ module Repo
         v = v.symbolize_keys
         Entry.new(
           type: v[:type],
+          creation_date: v[:creation_date],
           last_updated: v[:last_updated],
           metadata: v[:metadata] || {}
         )
