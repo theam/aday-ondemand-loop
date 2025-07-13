@@ -3,6 +3,7 @@
 module Repo
   class RepoDb
     include LoggingCommon
+    include DateTimeCommon
 
     class Entry < Struct.new(:type, :creation_date, :last_updated, :metadata, keyword_init: true)
       def type
@@ -35,7 +36,7 @@ module Repo
 
       existing = @data[repo_url]
       metadata = existing&.metadata.to_h if metadata.nil?
-      creation_date = existing&.creation_date || Time.now.to_s
+      creation_date = existing&.creation_date || now
       @data[repo_url] = Entry.new(
         type: type.to_s,
         creation_date: creation_date,
