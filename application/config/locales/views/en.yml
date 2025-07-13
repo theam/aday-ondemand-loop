@@ -253,6 +253,9 @@ en:
       breadcrumbs_text: "Repository Settings"
       page_title: "OnDemand Loop - Repository Settings"
     repository:
+      link_open_repository_title: "Open repository"
+      button_browse_repository_label: "Browse"
+      button_browse_repository_title: "Browse repository"
       button_delete_repository_title: "Delete repository"
       modal_delete_confirmation_title: "Delete Repository"
       modal_delete_confirmation_content: "This will remove the repository settings from the app. No local or remote file will be affected"
