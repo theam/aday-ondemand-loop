@@ -19,7 +19,7 @@ module Zenodo::Actions
         title = record.title
         concept_id = record.concept_id
       elsif url_data.deposition?
-        repo_info = RepoRegistry.repo_db.get(url_data.domain)
+        repo_info = RepoRegistry.repo_db.get(url_data.zenodo_url)
         if repo_info.metadata.auth_key.present?
           deposition_service = Zenodo::DepositionService.new(url_data.zenodo_url, api_key: repo_info.metadata.auth_key)
           deposition = deposition_service.find_deposition(url_data.deposition_id)
