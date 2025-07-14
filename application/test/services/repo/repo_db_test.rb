@@ -18,6 +18,7 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
     entry = @db.get('https://demo.org')
 
     assert entry
+    assert_equal 'https://demo.org', entry.repo_url
     assert_equal @type, entry.type
     assert_equal 'abc123', entry.metadata.token
     assert_not_nil entry.creation_date
@@ -30,6 +31,7 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
     @db.update('https://demo.org', metadata: { token: 'xyz789', user: 'alice' })
 
     entry = @db.get('https://demo.org')
+    assert_equal 'https://demo.org', entry.repo_url
     assert_equal 'xyz789', entry.metadata.token
     assert_equal 'alice', entry.metadata.user
     assert_equal original_created, entry.creation_date
@@ -57,6 +59,9 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
     all = @db.all
     assert_kind_of Hash, all
     assert_equal %w[https://demo.org https://example.com].sort, all.keys.sort
+    all.each do |url, e|
+      assert_equal url, e.repo_url
+    end
   end
 
   test 'should persist and reload from file' do
@@ -67,6 +72,7 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
     entry = reloaded.get('https://demo.org')
 
     assert entry
+    assert_equal 'https://demo.org', entry.repo_url
     assert_equal 'abc123', entry.metadata.token
     assert_equal created, entry.creation_date
   end
