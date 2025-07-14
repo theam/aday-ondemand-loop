@@ -24,8 +24,7 @@ extra_css:
 nav:
   - Home: index.md
   - User Guide:
-      - Introduction: user_guide/introduction.md
-      - Getting Started: user_guide/getting_started.md
+      - Introduction: user_guide/index.md
       - Creating Projects: user_guide/creating_projects.md
       - Finding Data: user_guide/finding_data.md
       - Downloading Files: user_guide/downloading_files.md
@@ -53,6 +52,9 @@ markdown_extensions:
   - codehilite
   - footnotes
   - tables
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 plugins:
   - search
