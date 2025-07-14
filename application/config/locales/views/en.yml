@@ -129,6 +129,8 @@ en:
       breadcrumbs_text: "Projects"
       page_title: "OnDemand Loop - Project detail"
     actions:
+      actions_bar_title: "Projects"
+      actions_bar_title_a11y_label: "Project List"
       button_create_project_text: "Create Project"
       button_downloads_root_directory_text: "Downloads Root Directory"
     download_files:
@@ -243,3 +245,19 @@ en:
     index:
       breadcrumbs_text: "Uploads"
       page_title: "OnDemand Loop - Uploads Management"
+  repository_settings:
+    actions:
+      actions_bar_title_a11y_label: "Repositories actions bar"
+      button_add_repository_label: "Add Repository"
+      button_add_repository_placeholder: "Repository URL"
+      button_add_repository_title: "Add Repository"
+    index:
+      breadcrumbs_text: "Repository Settings"
+      page_title: "OnDemand Loop - Repository Settings"
+    repository:
+      link_open_repository_title: "Open remote repository site"
+      button_browse_repository_label: "Browse"
+      button_browse_repository_title: "Browse repository"
+      button_delete_repository_title: "Delete repository"
+      modal_delete_confirmation_title: "Delete Repository"
+      modal_delete_confirmation_content: "This will remove the repository settings from the app. No local or remote file will be affected"
