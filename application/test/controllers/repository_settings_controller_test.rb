@@ -41,15 +41,20 @@ class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('repository_settings.create.message_invalid_url', url: 'u'), flash[:alert]
   end
 
-  test 'update should update repository metadata' do
-    put repository_settings_url, params: { repo_url: 'https://demo.org', metadata: {auth_key: 'new'} }
+  test 'update delegates to processor' do
+    repo = RepoRegistry.repo_db.get('https://demo.org')
+    processor = mock('processor')
+    ConnectorClassDispatcher.stubs(:repository_settings_processor).with(repo.type).returns(processor)
+    processor.stubs(:params_schema).returns([:repo_url, :auth_key])
+    processor.expects(:update).with(repo, { 'repo_url' => 'https://demo.org', 'auth_key' => 'new' }).returns(ConnectorResult.new(message: { notice: 'ok' }, success: true))
+
+    put repository_settings_url, params: { repo_url: 'https://demo.org', auth_key: 'new' }
     assert_redirected_to repository_settings_url
-    assert_equal I18n.t('repository_settings.update.message_success', domain: 'https://demo.org'), flash[:notice]
-    assert_equal 'new', RepoRegistry.repo_db.get('https://demo.org').metadata.auth_key
+    assert_equal 'ok', flash[:notice]
   end
 
   test 'update should show error when repository missing' do
-    put repository_settings_url, params: { repo_url: 'missing.org', metadata: {auth_key: 'x'} }
+    put repository_settings_url, params: { repo_url: 'missing.org', auth_key: 'x' }
     assert_redirected_to repository_settings_url
     assert_equal I18n.t('repository_settings.update.message_not_found', domain: 'missing.org'), flash[:alert]
   end

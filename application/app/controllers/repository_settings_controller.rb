@@ -26,9 +26,11 @@ class RepositorySettingsController < ApplicationController
       redirect_to repository_settings_path, alert: t('.message_not_found', domain: repo_url) and return
     end
 
-    metadata = params.fetch(:metadata, {}).permit!.to_h
-    RepoRegistry.repo_db.update(repo_url, metadata: metadata)
-    redirect_to repository_settings_path, notice: t('.message_success', domain: repo_url)
+    processor = ConnectorClassDispatcher.repository_settings_processor(repo.type)
+    processor_params = params.permit(*processor.params_schema).to_h
+    result = processor.update(repo, processor_params)
+
+    redirect_to repository_settings_path, **result.message
   end
 
   def destroy

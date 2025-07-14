@@ -11,6 +11,8 @@ en:
           message_success: "Dataset created: %{id} > %{title}"
         dataset_select:
           message_success: "Dataset selected: %{title}"
+        repository_settings_create:
+          message_success: "Repository %{domain} updated"
         upload_bundle_create:
           message_collection_not_found: "Dataverse collection not found: %{url}. Only public and published collections are supported"
           message_dataset_not_found: "Dataverse dataset not found: %{url}.<br />Only public and published datasets are supported"
