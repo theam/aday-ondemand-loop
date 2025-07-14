@@ -97,16 +97,16 @@ module Repo
       return {} unless File.exist?(db_path)
 
       raw = YAML.load_file(db_path) || {}
-      raw.map do |url, v|
+      raw.each_with_object({}) do |(url, v), data|
         v = v.symbolize_keys
-        [url, Entry.new(
+        data[url] = Entry.new(
           repo_url: url,
           type: v[:type],
           creation_date: v[:creation_date],
           last_updated: v[:last_updated],
           metadata: v[:metadata] || {}
-        )]
-      end.to_h
+        )
+      end
     end
 
     def persist!
