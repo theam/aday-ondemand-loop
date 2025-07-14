@@ -41,7 +41,6 @@ module Zenodo::Actions
         bundle.type = ConnectorType::ZENODO
         bundle.creation_date = now
         bundle.metadata = {
-          server_domain: url_data.domain,
           zenodo_url: url_data.zenodo_url,
           title: title,
           record_id: url_data.record_id,

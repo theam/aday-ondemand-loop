@@ -17,10 +17,6 @@ module Dataverse
       nil
     end
 
-    def server_domain
-      @server_domain ||= URI.parse(dataverse_url).host
-    end
-
     # TODO: Improve this logic
     def api_key
       return OpenStruct.new({ bundle?: true, server?: false, value: @metadata[:auth_key] }) if @metadata[:auth_key]
