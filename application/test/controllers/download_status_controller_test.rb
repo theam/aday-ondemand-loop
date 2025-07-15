@@ -25,6 +25,13 @@ class DownloadStatusControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "files renders partial" do
+    DownloadStatusController.any_instance.stubs(:download_status).returns(OpenStruct.new(idle?: true))
+    ScriptLauncher.any_instance.stubs(:launch_script).returns(true)
+    get download_status_files_url
+    assert_response :success
+  end
+
   private
 
   def populate
