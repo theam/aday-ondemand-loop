@@ -8,8 +8,7 @@ class DownloadFilesController < ApplicationController
     file = DownloadFile.find(project_id, file_id)
 
     if file.nil?
-      redirect_back fallback_location: root_path,
-                    alert: t('.file_not_found_for_project', file_id: file_id, project_id: project_id)
+      render json: t('.file_not_found_for_project', file_id: file_id, project_id: project_id), status: :not_found
       return
     end
 
