@@ -92,6 +92,7 @@ en:
       download_files:
         badge_repository_files_tooltip: "Repository Files"
         button_delete_file_title: "Delete File"
+        button_retry_file_title: "Retry Download"
         field_completion_date_title: "Completion date"
         field_download_start_date_title: "Download start date"
         field_schedule_date_title: "Schedule date"
