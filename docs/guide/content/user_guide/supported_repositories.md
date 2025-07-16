@@ -36,11 +36,37 @@ You can find a list of known public Dataverse instances on the <a href="https://
 - Upload to an existing dataset or create a new dataset inside a collection.
 - Files are transferred using the Dataverse API and verified with checksums.
 
+## Known Dataverse Releases
+
+| Version | Release Date   | Status              |
+|---------|----------------|---------------------|
+| 4.20    | 2020‑04‑06     | ❌ Not supported     |
+| 5.12.1  | 2022‑11‑04     | ⚠️ Pending testing   |
+| 5.13    | 2023‑02‑14     | ⚠️ Pending testing   |
+| 5.14    | 2023‑08‑04     | ⚠️ Pending testing   |
+| 6.0     | 2023‑09‑08     | ⚠️ Pending testing   |
+| 6.1     | 2023‑12‑12     | ⚠️ Pending testing   |
+| 6.2     | 2024‑04‑01     | ⚠️ Pending testing   |
+| 6.3     | 2024‑07‑03     | ⚠️ Pending testing   |
+| 6.4     | 2024‑09‑30     | ⚠️ Pending testing   |
+| 6.5     | 2024‑12‑12     | ✅ Supported         |
+| 6.6     | 2025‑03‑18     | ✅ Supported         |
+
+!!! note
+
+    ✅ Supported = Confirmed compatible and actively maintained  
+    ⚠️ Pending testing = Not yet verified with OnDemand Loop  
+    ❌ Not supported = Not compatible or no longer in scope
+
 ### Zenodo
-Zenodo stores research outputs such as datasets, papers, and software. The connector supports the official Zenodo instances:
+Zenodo stores research outputs such as datasets, papers, and software.  
+The connector supports the official Zenodo instances:
 
 - <a href="https://zenodo.org" target="_blank" rel="noopener noreferrer">Zenodo Production</a>
 - <a href="https://sandbox.zenodo.org" target="_blank" rel="noopener noreferrer">Zenodo Sandbox</a>
+
+Zenodo does not currently expose a version number through its public API.  
+We began testing and supporting Zenodo in OnDemand Loop as of **June 2025** and will continue to validate compatibility with future Zenodo API updates.
 
 **Explore**
 

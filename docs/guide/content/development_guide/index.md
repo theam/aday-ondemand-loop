@@ -30,7 +30,7 @@ The documentation is organized by topic to help you find what you need quickly:
 - [Docker Images](docker_images.md)  
   Information on the Docker-based setup and available images.
 
-- [Upgrading Open OnDemand](upgrade_ood.md)  
+- [Open OnDemand](ood)  
   Guidance for updating the Open OnDemand environment.
 
 - [Dataverse Integration](dataverse_integration.md)  

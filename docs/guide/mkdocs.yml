@@ -39,7 +39,7 @@ nav:
       - Connectors: development_guide/connectors.md
       - Local Environment: development_guide/local_environment.md
       - Docker Images: development_guide/docker_images.md
-      - Upgrading Open OnDemand: development_guide/upgrade_ood.md
+      - Open OnDemand: development_guide/ood.md
       - Dataverse Integration: development_guide/dataverse_integration.md
       - Contributing a Change: development_guide/contributing.md
       - GitHub Actions: development_guide/github_actions.md
