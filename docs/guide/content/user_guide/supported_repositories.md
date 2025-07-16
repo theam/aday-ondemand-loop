@@ -1,12 +1,22 @@
 # Supported Repositories
 
-OnDemand Loop connects to remote data repositories using pluggable **connectors**. Each connector handles the details of exploring data, downloading files, and uploading results. The application currently ships with two connectors: **Dataverse** and **Zenodo**. Additional repositories may be added in future releases.
+OnDemand Loop integrates with remote data repositories using pluggable **connectors**.  
+Each connector manages browsing, downloading, and uploading data workflows.
 
-## Dataverse
+Currently supported connectors:
 
-![Dataverse](../assets/dataverse_project.svg)
+- [**Dataverse**](#dataverse)
+- [**Zenodo**](#zenodo)
 
-Dataverse repositories host published research datasets. The connector supports public installations that respond to the standard Dataverse API.
+<div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; margin-top: 1rem;">
+  <img src="../../assets/dataverse_project.svg" alt="Dataverse" width="200">
+  <img src="../../assets/zenodo_project.svg" alt="Zenodo" width="200">
+</div>
+
+### Dataverse
+Dataverse repositories host published research datasets.
+The connector supports public installations that respond to the standard Dataverse API.
+You can find a list of known public Dataverse instances on the <a href="https://dataverse.org/installations" target="_blank" rel="noopener noreferrer">Dataverse Website</a>.
 
 **Explore**
 
@@ -26,11 +36,11 @@ Dataverse repositories host published research datasets. The connector supports 
 - Upload to an existing dataset or create a new dataset inside a collection.
 - Files are transferred using the Dataverse API and verified with checksums.
 
-## Zenodo
+### Zenodo
+Zenodo stores research outputs such as datasets, papers, and software. The connector supports the official Zenodo instances:
 
-![Zenodo](../assets/zenodo_project.svg)
-
-Zenodo stores research outputs such as datasets, papers, and software. The connector works with `zenodo.org` and `sandbox.zenodo.org`.
+- <a href="https://zenodo.org" target="_blank" rel="noopener noreferrer">Zenodo Production</a>
+- <a href="https://sandbox.zenodo.org" target="_blank" rel="noopener noreferrer">Zenodo Sandbox</a>
 
 **Explore**
 
