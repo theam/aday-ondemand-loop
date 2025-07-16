@@ -36,27 +36,53 @@ You can find a list of known public Dataverse instances on the <a href="https://
 - Upload to an existing dataset or create a new dataset inside a collection.
 - Files are transferred using the Dataverse API and verified with checksums.
 
-## Known Dataverse Releases
+### Known Dataverse Releases
 
-| Version | Release Date   | Status              |
-|---------|----------------|---------------------|
-| 4.20    | 2020‑04‑06     | ❌ Not supported     |
-| 5.12.1  | 2022‑11‑04     | ⚠️ Pending testing   |
-| 5.13    | 2023‑02‑14     | ⚠️ Pending testing   |
-| 5.14    | 2023‑08‑04     | ⚠️ Pending testing   |
-| 6.0     | 2023‑09‑08     | ⚠️ Pending testing   |
-| 6.1     | 2023‑12‑12     | ⚠️ Pending testing   |
-| 6.2     | 2024‑04‑01     | ⚠️ Pending testing   |
-| 6.3     | 2024‑07‑03     | ⚠️ Pending testing   |
-| 6.4     | 2024‑09‑30     | ⚠️ Pending testing   |
-| 6.5     | 2024‑12‑12     | ✅ Supported         |
-| 6.6     | 2025‑03‑18     | ✅ Supported         |
+```
+dataverse_versions:
+  - version: 4.20    - ⚠️ Partial Support
+  - version: 5.0     - ⏳ Testing pending
+  - version: 5.2     - ⏳ Testing pending
+  - version: 5.3     - ⏳ Testing pending
+  - version: 5.5     - ⏳ Testing pending
+  - version: 5.6     - ⏳ Testing pending
+  - version: 5.8     - ⏳ Testing pending
+  - version: 5.9     - ⏳ Testing pending
+  - version: 5.10.1  - ⚠️ Partial Support
+  - version: 5.11.1  - ⏳ Testing pending
+  - version: 5.12    - ⏳ Testing pending
+  - version: 5.12.1  - ⏳ Testing pending
+  - version: 5.13    - ⏳ Testing pending
+  - version: 5.14    - ⏳ Testing pending
+  - version: 6.0     - 🟢 Minor UI Issues
+  - version: 6.1     - 🟢 Minor UI Issues
+  - version: 6.2     - ✅ Supported
+  - version: 6.3     - ✅ Supported
+  - version: 6.4     - ✅ Supported
+  - version: 6.5     - ✅ Supported
+  - version: 6.6     - ✅ Supported - Reference Implementation
 
-!!! note
+```
 
-    ✅ Supported = Confirmed compatible and actively maintained  
-    ⚠️ Pending testing = Not yet verified with OnDemand Loop  
-    ❌ Not supported = Not compatible or no longer in scope
+!!! note "Supported Capabilities"
+
+    **✅ Supported**  
+    Fully tested and confirmed compatible with OnDemand Loop. Actively maintained.
+
+    **🟢 Minor UI Issues**  
+    All core functionality works — browsing, downloading, and uploading —
+    but some UI elements may be missing metadata or render inconsistently.
+
+    **⚠️ Partial Support**  
+    Core features like browsing and downloading work. Upload functionality may be limited or broken.
+    Some UI elements may be incomplete or missing.
+
+    **⏳ Testing Pending**  
+    Detected in the wild but not yet tested with OnDemand Loop.
+
+    **❌ Not Supported**  
+    Known to be incompatible or out of scope for testing.
+
 
 ### Zenodo
 Zenodo stores research outputs such as datasets, papers, and software.  
