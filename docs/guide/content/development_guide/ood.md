@@ -14,18 +14,18 @@ Compatibility testing with the **4.x** series is planned soon.
 
 #### Known OOD Releases
 
-| OOD Version | Release Date     | Status              |
-|-------------|------------------|---------------------|
-| 3.1.7       | 2023‑05‑03       | ✅ Tested            |
-| 3.1.13      | 2025‑05‑23       | ⚠️ Pending testing  |
-| 3.1.14      | 2025‑07‑11       | ⚠️ Pending testing  |
-| 4.0.0       | 2025‑01‑24       | 🔜 Planned testing  |
-| 4.0.1       | 2025‑02‑13       | 🔜 Planned testing  |
-| 4.0.2       | 2025‑03‑25       | 🔜 Planned testing  |
-| 4.0.3       | 2025‑04‑23       | 🔜 Planned testing  |
-| 4.0.4       | 2025‑05‑21       | 🔜 Planned testing  |
-| 4.0.5       | 2025‑05‑27       | 🔜 Planned testing  |
-| 4.0.6       | 2025‑07‑10       | 🔜 Planned testing  |
+| OOD Version | Release Date | Status               |
+|-------------|--------------|----------------------|
+| 3.1.7       | 2023‑05‑03   | ✅ Tested            |
+| 3.1.13      | 2025‑05‑23   | 🚫 Not in test scope |
+| 3.1.14      | 2025‑07‑11   | 🔜 Planned testing   |
+| 4.0.0       | 2025‑01‑24   | 🔜 Planned testing   |
+| 4.0.1       | 2025‑02‑13   | 🚫 Not in test scope |
+| 4.0.2       | 2025‑03‑25   | 🚫 Not in test scope |
+| 4.0.3       | 2025‑04‑23   | 🚫 Not in test scope |
+| 4.0.4       | 2025‑05‑21   | 🚫 Not in test scope |
+| 4.0.5       | 2025‑05‑27   | 🚫 Not in test scope |
+| 4.0.6       | 2025‑07‑10   | ✅ Tested            |
 
 
 !!! note
