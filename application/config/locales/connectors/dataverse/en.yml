@@ -136,6 +136,7 @@ en:
         header_dataset_text: "Dataset"
         header_description_text: "Description"
         header_dataset_metadata_text: "Dataset Metadata"
+        link_open_dataset_title: "Open dataset on Dataverse"
       search_bar:
         button_submit_text: "Search Files"
         field_search_label: "Search files within the dataset"
