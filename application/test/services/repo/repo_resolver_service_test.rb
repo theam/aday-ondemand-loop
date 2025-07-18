@@ -67,4 +67,22 @@ class Repo::RepoResolverServiceTest < ActiveSupport::TestCase
 
     assert result.unknown?
   end
+
+  test 'records history on successful resolution' do
+    resolvers = [DummyResolver.new(true)]
+    tmp = Tempfile.new('history')
+    history = Repo::RepoHistory.new(history_path: tmp.path)
+    RepoRegistry.stubs(:repo_history).returns(history)
+
+    service = Repo::RepoResolverService.new(resolvers)
+    result = service.resolve('https://demo.dataverse.org')
+
+    assert result.resolved?
+    assert_equal 1, history.size
+    entry = history.all.first
+    assert_equal 'https://demo.dataverse.org', entry.object_url
+    assert_equal ConnectorType::DATAVERSE, entry.type
+  ensure
+    tmp.unlink
+  end
 end

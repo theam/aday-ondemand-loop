@@ -10,6 +10,7 @@
 module RepoRegistry
   mattr_accessor :resolvers
   mattr_accessor :repo_db
+  mattr_accessor :repo_history
 
   # Method to find all resolvers within the Doi::Resolvers module
   def self.build_resolvers
@@ -30,12 +31,18 @@ module RepoRegistry
   def self.build_repo_db
     Repo::RepoDb.new(db_path: ::Configuration.repo_db_file)
   end
+
+  def self.build_repo_history
+    Repo::RepoHistory.new(history_path: ::Configuration.repo_history_file)
+  end
 end
 
 Rails.application.config.to_prepare do
   RepoRegistry.resolvers = RepoRegistry.build_resolvers
   RepoRegistry.repo_db = RepoRegistry.build_repo_db
+  RepoRegistry.repo_history = RepoRegistry.build_repo_history
 
   Rails.logger.info "[RepoRegistry] Resolvers loaded: #{RepoRegistry.resolvers.map { |r| "#{r.class} (#{r.priority})" }.join(', ')}"
   Rails.logger.info "[RepoRegistry] RepoDb created entries: #{RepoRegistry.repo_db.size} path: #{RepoRegistry.repo_db.db_path}"
+  Rails.logger.info "[RepoRegistry] RepoHistory path: #{RepoRegistry.repo_history.history_path} entries: #{RepoRegistry.repo_history.size}"
 end

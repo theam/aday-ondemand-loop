@@ -20,6 +20,9 @@ module Repo
 
       result = context.result
       log_info('Resolution completed', { object_url: result.object_url, type: result.type })
+      if result.resolved?
+        RepoRegistry.repo_history&.add(object_url: result.object_url, type: result.type)
+      end
       result
     end
   end
