@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 
 require 'test_helper'
 
@@ -188,10 +188,10 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
 
   test 'loads configuration from LOOP_CONFIG_DIRECTORY' do
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'foo.yml'), { dataverse: { restrictions: true } }.to_yaml)
+      File.write(File.join(dir, 'foo.yml'), { dataverse: { restrictions: 'some_value' } }.deep_stringify_keys.to_yaml)
       ENV['LOOP_CONFIG_DIRECTORY'] = dir
       config = ConfigurationSingleton.new
-      assert_equal true, config.connector_config(:dataverse)[:restrictions]
+      assert_equal 'some_value', config.connector_config(:dataverse)[:restrictions]
     ensure
       ENV.delete('LOOP_CONFIG_DIRECTORY')
     end
