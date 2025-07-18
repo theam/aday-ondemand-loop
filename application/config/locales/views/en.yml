@@ -130,11 +130,6 @@ en:
         modal_delete_confirmation_content: "This will remove the file from the upload bundle. The file will remain on disk and in the remote repository if already uploaded."
       breadcrumbs_text: "Projects"
       page_title: "OnDemand Loop - Project detail"
-    actions:
-      actions_bar_title: "Projects"
-      actions_bar_title_a11y_label: "Project List"
-      button_create_project_text: "Create Project"
-      button_downloads_root_directory_text: "Downloads Root Directory"
     download_files:
       schedule_date: "Schedule date"
       repository_files: "Repository Files"
@@ -143,28 +138,6 @@ en:
       delete_file: "Delete file"
     project:
       download_files: "Download Files"
-    project_header:
-      button_active_project_title: "Active project"
-      button_cancel_title: "Cancel"
-      button_delete_project_title: "Delete project"
-      button_edit_project_name_title: "Edit Project name"
-      button_open_project_folder_title: "Open Project workspace folder"
-      button_save_project_name_title: "Save project name"
-      button_set_as_active_project_title: "Set as Active Project"
-      field_creation_date_title: "Creation Date"
-      modal_delete_confirmation_title: "Delete Project"
-      modal_delete_confirmation_content: "This will remove the project from the app. Files on disk and in remote repositories will remain untouched."
-      section_project_actions_label: "Project actions section"
-      section_rename_project_label: "Rename project section"
-    project_summary:
-      button_metadata_folder_title: "Open project metadata folder"
-      button_toggle_label: "Project Summary"
-      tab_download_label: "Download Files"
-    project_summary_downloads:
-      tab_title: "Downloads"
-      button_download_folder_title: "Open Project workspace folder"
-    project_summary_bundle:
-      creation_date_title: "Creation date"
     upload_bundle:
       schedule_date: "Schedule date"
       repository_files: "Repository Files"
@@ -172,6 +145,33 @@ en:
       upload_start_date: "Upload start date"
       delete_file: "Delete file"
     index:
+      actions:
+        actions_bar_title: "Projects"
+        actions_bar_title_a11y_label: "Project List"
+        button_create_project_text: "Create Project"
+        button_downloads_root_directory_text: "Downloads Root Directory"
+      project_header:
+        button_active_project_title: "Active project"
+        button_cancel_title: "Cancel"
+        button_delete_project_title: "Delete project"
+        button_edit_project_name_title: "Edit Project name"
+        button_open_project_folder_title: "Open Project workspace folder"
+        button_save_project_name_title: "Save project name"
+        button_set_as_active_project_title: "Set as Active Project"
+        field_creation_date_title: "Creation Date"
+        modal_delete_confirmation_title: "Delete Project"
+        modal_delete_confirmation_content: "This will remove the project from the app. Files on disk and in remote repositories will remain untouched."
+        section_project_actions_label: "Project actions section"
+        section_rename_project_label: "Rename project section"
+      project_summary:
+        button_metadata_folder_title: "Open project metadata folder"
+        button_toggle_label: "Project Summary"
+        tab_download_label: "Download Files"
+      project_summary_downloads:
+        tab_title: "Downloads"
+        button_download_folder_title: "Open Project workspace folder"
+      project_summary_bundle:
+        creation_date_title: "Creation date"
       breadcrumbs_text: "Projects"
       page_title: "OnDemand Loop - Projects"
       welcome_title: "Welcome to OnDemand Loop!"
