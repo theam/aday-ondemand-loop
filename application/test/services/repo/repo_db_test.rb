@@ -91,7 +91,7 @@ class Repo::RepoDbTest < ActiveSupport::TestCase
 
     entry = @db.get('https://demo.org')
     assert_equal '2.0', entry.metadata.api_version
-    assert_equal 'abc123', entry.metadata.token
+    assert_nil entry.metadata.token
     assert_nil entry.metadata.extra
     assert_equal created, entry.creation_date
   end

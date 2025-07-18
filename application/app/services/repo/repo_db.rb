@@ -51,17 +51,14 @@ module Repo
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
       existing = @data[repo_url]
-      existing_metadata = existing&.metadata.to_h || {}
-      incoming_metadata = metadata&.to_h&.compact_blank || {}
-      merged_metadata = existing_metadata.merge(incoming_metadata).compact_blank
+      return update(repo_url, metadata: metadata) if existing.present?
 
-      creation_date = existing&.creation_date || now
       @data[repo_url] = Entry.new(
         repo_url: repo_url,
         type: type.to_s,
-        creation_date: creation_date,
+        creation_date: now,
         last_updated: Time.now.to_s,
-        metadata: merged_metadata
+        metadata: metadata
       )
       persist!
       log_info('Entry added', {repo_url: repo_url, type: type})
@@ -73,7 +70,7 @@ module Repo
       entry = @data[repo_url]
       entry.last_updated = Time.now.to_s
       entry[:metadata] ||= {}
-      entry[:metadata] = entry[:metadata].merge(metadata)
+      entry[:metadata] = entry[:metadata].merge(metadata).compact_blank
       persist!
       log_info('Entry updated', { repo_url: repo_url, type: entry.type })
     end
