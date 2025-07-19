@@ -40,6 +40,19 @@ en:
       record_actions:
         actions_bar_title_a11y_label: "Record actions bar"
         link_open_record_title: "Open record on Zenodo"
+      record_info:
+        header_record_text: "Record"
+        button_toggle_label: "Record details"
+        field_publication_date_text: "Publication date:"
+        field_files_text: "Files:"
+      record_files:
+        button_add_files_text: "Add Files to Active Project"
+        col_file_name_text: "File name"
+        col_size_text: "Size"
+        checkbox_select_all_label: "Select all files"
+        header_record_files_a11y_text: "Record files"
+        msg_empty_record_text: "The record does not contain files to download"
+        table_record_files_caption: "Record files"
       show:
         page_title: "OnDemand Loop - Zenodo Records"
         caption_files_text: "Zenodo record files"
