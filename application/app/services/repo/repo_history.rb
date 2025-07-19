@@ -41,7 +41,7 @@ module Repo
         metadata: metadata
       )
       @data.unshift(entry)
-      @data = @data.first(@max_entries)
+      @data.pop if @data.size > @max_entries
       persist!
       log_info('Entry added', { object_url: object_url, type: type })
       entry
@@ -64,7 +64,7 @@ module Repo
     def load_data
       return [] unless File.exist?(history_path)
       raw = YAML.load_file(history_path) || []
-      raw.map do |v|
+      raw.first(@max_entries).map do |v|
         v = v.symbolize_keys
         Entry.new(
           object_url: v[:object_url],
@@ -72,7 +72,7 @@ module Repo
           creation_date: v[:creation_date],
           metadata: v[:metadata] || {}
         )
-      end.first(@max_entries)
+      end
     end
 
     def persist!
