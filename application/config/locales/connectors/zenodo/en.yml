@@ -55,7 +55,7 @@ en:
         table_record_files_caption: "Record files"
       show:
         page_title: "OnDemand Loop - Zenodo Records"
-        caption_files_text: "Zenodo record files"
+        caption_files_text: "Zenodo record files (%{count})"
         checkbox_select_all_label: "Select all files"
         column_record_filename_text: "File"
         column_record_size_text: "Size"
