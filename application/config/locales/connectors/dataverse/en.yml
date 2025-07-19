@@ -87,6 +87,8 @@ en:
         button_toggle_label: "Collection details"
         header_dataverse_text: "Dataverse collection"
         link_open_collection_title: "Open collection on Dataverse"
+        button_create_bundle_label: "Create Collection Bundle"
+        button_create_bundle_title: "Create Collection Bundle"
       dataset_item:
         field_files_label: "Files"
         field_published_label: "Published"
@@ -137,6 +139,8 @@ en:
         header_description_text: "Description"
         header_dataset_metadata_text: "Dataset Metadata"
         link_open_dataset_title: "Open dataset on Dataverse"
+        button_create_bundle_label: "Create Collection Bundle"
+        button_create_bundle_title: "Create Collection Bundle"
       search_bar:
         button_submit_text: "Search Files"
         field_search_label: "Search files within the dataset"
