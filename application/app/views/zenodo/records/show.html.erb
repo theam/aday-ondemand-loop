@@ -2,6 +2,12 @@
 <div class="zenodo container-md content" role="main">
   <%= render partial: '/shared/breadcrumbs', locals: { links: [{text: t('shared.breadcrumbs.zenodo'), url: view_zenodo_landing_path}, {text: @record.title}]} %>
 
+  <div class="row">
+    <div class="col-md-12">
+      <%= render partial: 'zenodo/records/record_actions', locals: { record: @record } %>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-header py-2">
       <a class="d-flex align-items-start text-decoration-none w-100"

@@ -37,6 +37,11 @@ en:
 
   zenodo:
     records:
+      record_actions:
+        actions_bar_title_a11y_label: "Record actions bar"
+        button_create_bundle_label: "Create Record Bundle"
+        button_create_bundle_title: "Create Record Bundle from this record"
+        link_open_record_title: "Open record on Zenodo"
       show:
         page_title: "OnDemand Loop - Zenodo Records"
         caption_files_text: "Zenodo record files"
