@@ -33,7 +33,10 @@ module RepoRegistry
   end
 
   def self.build_repo_history
-    Repo::RepoHistory.new(history_path: ::Configuration.repo_history_file)
+    Repo::RepoHistory.new(
+      history_path: ::Configuration.repo_history_file,
+      max_entries: ::Configuration.repo_history_max_entries
+    )
   end
 end
 

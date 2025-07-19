@@ -23,11 +23,12 @@ module Repo
       alias_method :to_hash, :to_h
     end
 
-    attr_reader :history_path
+    attr_reader :history_path, :max_entries
 
-    def initialize(history_path:)
+    def initialize(history_path:, max_entries: 100)
       @history_path = history_path
-      @data = load_data
+      @max_entries = max_entries
+      @data = load_data.first(@max_entries)
     end
 
     def add(object_url:, type:, metadata: {})
@@ -39,7 +40,8 @@ module Repo
         creation_date: now,
         metadata: metadata
       )
-      @data << entry
+      @data.unshift(entry)
+      @data = @data.first(@max_entries)
       persist!
       log_info('Entry added', { object_url: object_url, type: type })
       entry
@@ -70,7 +72,7 @@ module Repo
           creation_date: v[:creation_date],
           metadata: v[:metadata] || {}
         )
-      end
+      end.first(@max_entries)
     end
 
     def persist!

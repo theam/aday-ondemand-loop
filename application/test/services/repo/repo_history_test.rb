@@ -32,4 +32,21 @@ class Repo::RepoHistoryTest < ActiveSupport::TestCase
     assert found
     assert_equal 'https://demo.org', found.object_url
   end
+
+  test 'entries are added to the beginning' do
+    @history.add(object_url: 'https://first.org', type: @type)
+    @history.add(object_url: 'https://second.org', type: @type)
+    urls = @history.all.map(&:object_url)
+    assert_equal ['https://second.org', 'https://first.org'], urls
+  end
+
+  test 'limits number of stored entries' do
+    limited = Repo::RepoHistory.new(history_path: @tempfile.path, max_entries: 2)
+    limited.add(object_url: 'https://1.org', type: @type)
+    limited.add(object_url: 'https://2.org', type: @type)
+    limited.add(object_url: 'https://3.org', type: @type)
+
+    urls = limited.all.map(&:object_url)
+    assert_equal ['https://3.org', 'https://2.org'], urls
+  end
 end
