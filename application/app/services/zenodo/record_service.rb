@@ -24,7 +24,7 @@ module Zenodo
         ApiService::AUTH_HEADER => "Bearer #{api_key}"
       }
 
-      log_info('Getting deposition', { record: record_id, concept: concept_id })
+      log_info('Getting/Creating deposition', { record: record_id, concept: concept_id })
       unless concept_id
         record_url = FluentUrl.new('')
                        .add_path('api')
@@ -87,7 +87,9 @@ module Zenodo
       raise ApiService::UnauthorizedException if dep_resp.unauthorized?
       raise "Error retrieving deposition #{deposition_id}: #{dep_resp.status} - #{dep_resp.body}" unless dep_resp.success?
 
-      DepositionResponse.new(dep_resp.body)
+      DepositionResponse.new(dep_resp.body).tap do |deposition|
+        log_info('Completed', { record: record_id, concept: concept_id, result: deposition })
+      end
     end
   end
 end
