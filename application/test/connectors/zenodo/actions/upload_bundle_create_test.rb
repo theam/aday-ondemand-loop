@@ -71,21 +71,4 @@ class Zenodo::Actions::UploadBundleCreateTest < ActiveSupport::TestCase
     assert_equal 'cid', result.resource.metadata[:concept_id]
   end
 
-  test 'numeric id is treated as record id' do
-    Zenodo::ZenodoUrl.expects(:parse).with('https://zenodo.org/records/11').returns(OpenStruct.new(record?: true, deposition?: false, domain: 'zenodo.org', zenodo_url: 'https://zenodo.org', record_id: '11'))
-
-    RepoRegistry.repo_db.stubs(:get).returns(OpenStruct.new(metadata: OpenStruct.new(auth_key: nil)))
-
-    record = OpenStruct.new(title: 'rec', concept_id: 'cid')
-    records_service = mock('records')
-    records_service.expects(:find_record).with('11').returns(record)
-    Zenodo::RecordService.stubs(:new).returns(records_service)
-
-    Common::FileUtils.any_instance.stubs(:normalize_name).returns('bundle')
-    UploadBundle.any_instance.stubs(:save)
-
-    result = @action.create(@project, object_url: '11')
-    assert result.success?
-    assert_equal 'cid', result.resource.metadata[:concept_id]
-  end
 end

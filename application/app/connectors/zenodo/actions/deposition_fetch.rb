@@ -17,7 +17,11 @@ module Zenodo::Actions
         deposition = deposition_service.find_deposition(connector_metadata.deposition_id)
       else
         record_service = Zenodo::RecordService.new(connector_metadata.zenodo_url)
-        deposition = record_service.get_or_create_deposition(connector_metadata.record_id, api_key: api_key)
+        deposition = record_service.get_or_create_deposition(
+          connector_metadata.record_id,
+          api_key: api_key,
+          concept_id: connector_metadata.concept_id
+        )
       end
 
       return error(I18n.t('connectors.zenodo.actions.fetch_deposition.message_deposition_not_found', url: upload_bundle.repo_url)) unless deposition

@@ -35,7 +35,7 @@ class Zenodo::RecordServiceTest < ActiveSupport::TestCase
     http.expects(:get).with('/api/deposit/depositions/5', headers: headers).returns(dep_resp)
 
     service = Zenodo::RecordService.new(@base, http_client: http)
-    dep = service.get_or_create_deposition('11', api_key: 'KEY')
+    dep = service.get_or_create_deposition('11', api_key: 'KEY', concept_id: nil)
     assert_instance_of Zenodo::DepositionResponse, dep
   end
 
@@ -54,21 +54,21 @@ class Zenodo::RecordServiceTest < ActiveSupport::TestCase
     http.expects(:get).with('/api/deposit/depositions/9', headers: headers).returns(dep_resp)
 
     service = Zenodo::RecordService.new(@base, http_client: http)
-    dep = service.get_or_create_deposition('11', api_key: 'KEY')
+    dep = service.get_or_create_deposition('11', api_key: 'KEY', concept_id: nil)
     assert_equal 'https://zenodo.org/api/files/123', dep.bucket_url
   end
 
   test 'get_or_create_deposition handles not found' do
     client = HttpClientMock.new(file_path: fixture_path('zenodo/record_response.json'), status_code: 404)
     service = Zenodo::RecordService.new(@base, http_client: client)
-    assert_nil service.get_or_create_deposition('11', api_key: 'KEY')
+    assert_nil service.get_or_create_deposition('11', api_key: 'KEY', concept_id: nil)
   end
 
   test 'get_or_create_deposition raises unauthorized' do
     client = HttpClientMock.new(file_path: fixture_path('zenodo/record_response.json'), status_code: 401)
     service = Zenodo::RecordService.new(@base, http_client: client)
     assert_raises(Zenodo::ApiService::UnauthorizedException) do
-      service.get_or_create_deposition('11', api_key: 'KEY')
+      service.get_or_create_deposition('11', api_key: 'KEY', concept_id: nil)
     end
   end
 end

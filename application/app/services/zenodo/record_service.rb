@@ -18,25 +18,27 @@ module Zenodo
       RecordResponse.new(response.body)
     end
 
-    def get_or_create_deposition(record_id, api_key:)
+    def get_or_create_deposition(record_id, api_key:, concept_id: nil)
       headers = {
         'Content-Type' => 'application/json',
         ApiService::AUTH_HEADER => "Bearer #{api_key}"
       }
 
-      # Step 1: get record to extract conceptrecid
-      record_url = FluentUrl.new('')
-                     .add_path('api')
-                     .add_path('records')
-                     .add_path(record_id)
-                     .to_s
-      record_resp = @http_client.get(record_url, headers: headers)
-      return nil if record_resp.not_found?
-      raise ApiService::UnauthorizedException if record_resp.unauthorized?
-      raise "Error retrieving record #{record_id}: #{record_resp.status} - #{record_resp.body}" unless record_resp.success?
+      log_info('Getting deposition', { record: record_id, concept: concept_id })
+      unless concept_id
+        record_url = FluentUrl.new('')
+                       .add_path('api')
+                       .add_path('records')
+                       .add_path(record_id)
+                       .to_s
+        record_resp = @http_client.get(record_url, headers: headers)
+        return nil if record_resp.not_found?
+        raise ApiService::UnauthorizedException if record_resp.unauthorized?
+        raise "Error retrieving record #{record_id}: #{record_resp.status} - #{record_resp.body}" unless record_resp.success?
 
-      record_body = JSON.parse(record_resp.body)
-      concept_id = record_body['conceptrecid'].to_s
+        record_body = JSON.parse(record_resp.body)
+        concept_id = record_body['conceptrecid'].to_s
+      end
 
       # Step 2: look for existing draft depositions
       list_url = FluentUrl.new('')
