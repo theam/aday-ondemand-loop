@@ -5,7 +5,13 @@ module Zenodo::Actions
 
     def create(project, request_params)
       remote_repo_url = request_params[:object_url]
-      url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)
+
+      if remote_repo_url =~ /^\d+$/
+        parsed_url = "https://zenodo.org/records/#{remote_repo_url}"
+        url_data = Zenodo::ZenodoUrl.parse(parsed_url)
+      else
+        url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)
+      end
 
       unless url_data.deposition? || url_data.record?
         return error(I18n.t('connectors.zenodo.actions.upload_bundle_create.message_url_not_supported', url: remote_repo_url))
