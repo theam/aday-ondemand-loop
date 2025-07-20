@@ -24,6 +24,8 @@ en:
         field_api_key_help: "Provide the access token required to authenticate with the Zenodo server."
         field_key_scope_label: "Store access token for this upload bundle only"
         field_key_scope_help: "Leave unchecked to store this access token for all bundles using Zenodo."
+        submit: "Save Changes"
+        cancel: "Cancel"
       upload_bundle_actions_bar:
         button_select_deposition_title: "Select Deposition"
         modal_select_deposition_title: "Select Zenodo deposition"
