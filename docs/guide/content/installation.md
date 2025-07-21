@@ -7,11 +7,16 @@ the standard Dashboard app.
 
 ## System Requirements
 
-OnDemand Loop targets the same software versions used by Open OnDemand itself.
-Use the versions below (or the versions bundled with your OOD release):
+OnDemand Loop targets the same software versions bundled with Open OnDemand.
+The Makefile includes a matrix mapping OOD releases to the appropriate Ruby and
+Node versions (see `tools/make/ood_versions.mk`). Development began with OOD
+**3.1.7**, which ships Ruby **3.1** and Node.js **18**. OOD 4.x releases use
+Ruby **3.3** and Node.js **20**. Use the versions below (or the ones bundled
+with your OOD release):
 
-- **Ruby** 3.1
-- **Node.js** 18
+- **Ruby** 3.1 or 3.3
+- **Bundler** *(typically installed with Ruby; installs Rails as a dependency)*
+- **Node.js** 18 or 20
 - **Open OnDemand** 3.1 or newer
 
 ## Building the Application
@@ -32,23 +37,25 @@ The script stores Ruby gems under `vendor/bundle` and Node packages in
 from system packages.
 
 This command installs all Ruby and Node dependencies and precompiles the CSS and
-JavaScript assets. The same steps can be performed manually by executing the
-`scripts/loop_build.sh` script on a machine that has Ruby and Node available.
+JavaScript assets. If you run the build manually make sure to execute the
+`scripts/loop_build.sh` script **from inside the `application` directory** so
+that `bundle` and `npm` find the `Gemfile` and `package.json` files.
 
 ## Deployment Options
 
 ### 1. Build on the Server
 
 Clone the repository (or a release tag) directly into the OOD server, run the build script,
-and copy the built application into the OOD `sys` folder:
+and copy the built application into the OOD `sys` folder. The official source repository is
+[github.com/IQSS/ondemand-loop](https://github.com/IQSS/ondemand-loop):
 
 ```bash
 cd /tmp
-git clone <repo-or-release> loop
-cd loop
-./scripts/loop_build.sh
+git clone --branch <tag-or-branch> https://github.com/IQSS/ondemand-loop.git loop
+cd loop/application
+../scripts/loop_build.sh
 mkdir /var/www/ood/apps/sys/loop
-cp -R ./application/* /var/www/ood/apps/sys/loop/
+cp -R ./* /var/www/ood/apps/sys/loop/
 ```
 
 ### 2. Build Elsewhere and Copy
@@ -111,3 +118,9 @@ curl --location 'http://localhost:8080/api/admin/externalTools' \
 
 For production deployments, adjust the Dataverse URL and the `toolUrl` to match
 your server names.
+
+## Verify the Installation
+
+1. Ensure `manifest.yml` exists in `/var/www/ood/apps/sys/loop` with a title and description.
+2. Restart the web server or passenger if required.
+3. Visit `https://<your-server>/pun/sys/loop` in a browser. The application should load after clicking **Initialize** once.
