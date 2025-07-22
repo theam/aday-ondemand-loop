@@ -36,20 +36,46 @@ Compatibility testing with the **4.x** series is planned soon.
 
 ### Upgrading Open OnDemand (Development)
 
-The Open OnDemand container used in development comes from the [ondemand_development](https://github.com/hmdc/ondemand_development) project.
-Docker images are published under [hmdc/sid-ood on Docker Hub](https://hub.docker.com/r/hmdc/sid-ood/tags) and follow the naming convention: `ood-<version>.el8`
+The Open OnDemand container used in development comes from the [ondemand_development](https://github.com/hmdc/ondemand_development) project.  
+Docker images are published under [hmdc/sid-ood on Docker Hub](https://hub.docker.com/r/hmdc/sid-ood/tags) and follow the naming convention:  
+`ood-<version>.el8` (e.g., `ood-3.1.7.el8`)
 
-For example: `ood-3.1.7.el8`
+!!! info "Currently Supported Open OnDemand versions:"
 
-The exact image used by the development environment is specified by the `OOD_IMAGE` variable in the `Makefile`.
+    The following images have been configured for compatibility testing and local development:
 
-#### To upgrade the OOD image:
+    - v3.1.7
+    - v3.1.14
+    - v4.0.0
+    - v4.0.6
 
-1. Open `Makefile` and update the `OOD_IMAGE` variable to the desired version, e.g.  
-   `OOD_IMAGE = hmdc/sid-ood:ood-3.1.8.el8`
-2. Stop any running containers:  
-   `make loop_down`
-3. Restart the environment with the new image:  
-   `make loop_up`
+#### OOD version configuration
 
-If the updated image requires a newer Ruby or Node.js version, update the **builder image** in the same way to ensure OnDemand Loop can be rebuilt successfully.
+The environment is configured via the `tools/make/ood_versions.mk` file.  
+This file maps each supported Open OnDemand version to its corresponding:
+
+- Docker image (`OOD_IMAGE`)
+- Ruby version (`RUBY_VERSION`)
+- Node.js version (`NODE_VERSION`)
+- Builder image (`LOOP_BUILDER_IMAGE`)
+
+The version is selected using the `OOD_VERSION` variable, which can be set explicitly or defaults to `3.1.7`.
+
+#### To build and start the environment with a specific OOD version:
+
+```sh
+make clean
+make release_build OOD_VERSION=3.1.14
+make loop_up OOD_VERSION=3.1.14
+```
+
+### Development Application Deployment
+
+For development purposes, you can build and deploy OnDemand Loop as a development application within your Open OnDemand environment.
+This approach is useful for testing, customization, or contributing to the project.
+
+```sh
+make clean
+make remote_dev_build
+# Copy the ./application folder with the built artifacts into your OnDemand development directory
+```
