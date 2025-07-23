@@ -24,7 +24,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <%= render partial: 'dataverse/datasets/dataset_files', locals: { error_message: error_message, files_page: @files_page, dataverse_url: @dataverse_url, dataset: @dataset} %>
+      <%= render partial: 'dataverse/datasets/dataset_files', locals: { error_message: error_message, files_page: @files_page, dataverse_url: @dataverse_url, dataset: @dataset, version: @version } %>
     </div>
   </div>
 </div>

@@ -180,6 +180,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/GCN7US")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 2
+    assert_select "input[type=hidden][name=version][value=':latest-published']", 1
   end
 
   test "dataset view shows active project button text when project active" do
@@ -222,6 +223,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/LLIZ6Q")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 0
+    assert_select "input[type=hidden][name=version][value=':latest-published']", 1
   end
 
   test "should display the dataset incomplete with no data file" do
@@ -232,6 +234,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/LLIZ6Q")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 2
+    assert_select "input[type=hidden][name=version][value=':latest-published']", 1
   end
 
   test "should redirect if project fails to save" do
@@ -246,13 +249,14 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
     Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
 
-    post download_dataverse_dataset_files_url, params: {
-      file_ids: ["123"],
-      project_id: nil,
-      dataverse_url: "https://example.dataverse.org",
-      persistent_id: "doi:10.5072/FK2/GCN7US",
-      page: 1
-    }
+      post download_dataverse_dataset_files_url, params: {
+        file_ids: ["123"],
+        project_id: nil,
+        dataverse_url: "https://example.dataverse.org",
+        persistent_id: "doi:10.5072/FK2/GCN7US",
+        page: 1,
+        version: ':latest-published'
+      }
 
     assert_redirected_to root_path
     assert_equal "Error generating project: Project save failed", flash[:alert]
@@ -276,13 +280,14 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
     Dataverse::ProjectService.any_instance.stubs(:initialize_download_files).returns([valid_file, invalid_file])
 
-    post download_dataverse_dataset_files_url, params: {
-      file_ids: ["1", "2"],
-      project_id: nil,
-      dataverse_url: "https://example.dataverse.org",
-      persistent_id: "doi:10.5072/FK2/GCN7US",
-      page: 1
-    }
+      post download_dataverse_dataset_files_url, params: {
+        file_ids: ["1", "2"],
+        project_id: nil,
+        dataverse_url: "https://example.dataverse.org",
+        persistent_id: "doi:10.5072/FK2/GCN7US",
+        page: 1,
+        version: ':latest-published'
+      }
 
     assert_redirected_to root_path
     assert_match "Invalid file in selection", flash[:alert]
@@ -305,13 +310,14 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
     Dataverse::ProjectService.any_instance.stubs(:initialize_download_files).returns([valid_file])
 
-    post download_dataverse_dataset_files_url, params: {
-      file_ids: ["1"],
-      project_id: nil,
-      dataverse_url: "https://example.dataverse.org",
-      persistent_id: "doi:10.5072/FK2/GCN7US",
-      page: 1
-    }
+      post download_dataverse_dataset_files_url, params: {
+        file_ids: ["1"],
+        project_id: nil,
+        dataverse_url: "https://example.dataverse.org",
+        persistent_id: "doi:10.5072/FK2/GCN7US",
+        page: 1,
+        version: ':latest-published'
+      }
 
     assert_redirected_to root_path
     assert_equal "Error generating the download file", flash[:alert]
@@ -338,13 +344,14 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     Dataverse::ProjectService.any_instance.stubs(:initialize_project).returns(project)
     Dataverse::ProjectService.any_instance.stubs(:initialize_download_files).returns([file1, file2])
 
-    post download_dataverse_dataset_files_url, params: {
-      file_ids: ["1", "2"],
-      project_id: nil,
-      dataverse_url: "https://example.dataverse.org",
-      persistent_id: "doi:10.5072/FK2/GCN7US",
-      page: 1
-    }
+      post download_dataverse_dataset_files_url, params: {
+        file_ids: ["1", "2"],
+        project_id: nil,
+        dataverse_url: "https://example.dataverse.org",
+        persistent_id: "doi:10.5072/FK2/GCN7US",
+        page: 1,
+        version: ':latest-published'
+      }
 
     assert_redirected_to root_path
     assert_equal "Files added to project: Test Project", flash[:notice]
