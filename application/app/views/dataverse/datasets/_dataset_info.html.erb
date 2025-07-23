@@ -4,13 +4,13 @@
       <div class="flex-grow-1 d-flex flex-column">
         <h2 class="mb-0 text-nowrap h5">
           <%= t('.header_dataset_text') %> <%= dataset.data.dataset_persistent_id %>
-          <% if defined?(version) && version.present? %>
-            <span class="badge text-bg-secondary ms-2"><%= version %></span>
-          <% end %>
         </h2>
         <span class="text-muted" style="font-size: 0.8rem;">
           <strong><%= dataset.metadata_field('title').to_s %></strong>
         </span>
+        <% if defined?(version) && version.present? %>
+          <span class="badge text-bg-info align-self-start mt-1"><%= version %></span>
+        <% end %>
       </div>
     </div>
     <div class="mt-2">
