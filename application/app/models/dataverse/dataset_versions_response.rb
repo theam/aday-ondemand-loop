@@ -11,22 +11,25 @@ module Dataverse
     end
 
     class Data
-      attr_reader :id, :dataset_id, :dataset_persistent_id, :dataset_type,
-                  :storage_identifier, :internal_version_number, :version_state,
-                  :last_update_time, :create_time, :publication_date
+      attr_reader :persistent_id, :version_number, :version_minor_number,
+                  :version_state, :last_update_time, :create_time,
+                  :publication_date
 
       def initialize(data)
         data ||= {}
-        @id = data[:id]
-        @dataset_id = data[:datasetId]
-        @dataset_persistent_id = data[:datasetPersistentId]
-        @dataset_type = data[:datasetType]
-        @storage_identifier = data[:storageIdentifier]
-        @internal_version_number = data[:internalVersionNumber]
+        @persistent_id = data[:datasetPersistentId]
+        @version_number = data[:versionNumber]
+        @version_minor_number = data[:versionMinorNumber]
         @version_state = data[:versionState]
         @last_update_time = data[:lastUpdateTime]
         @create_time = data[:createTime]
         @publication_date = data[:publicationDate]
+      end
+
+      def version
+        return ':draft' if version_state.to_s.casecmp('DRAFT').zero?
+
+        [version_number, version_minor_number].compact.join('.')
       end
     end
   end

@@ -57,7 +57,8 @@ class Dataverse::DatasetServiceTest < ActiveSupport::TestCase
     res = service.dataset_versions_by_persistent_id('doi:1')
     assert_instance_of Dataverse::DatasetVersionsResponse, res
     assert_equal 2, res.versions.size
-    assert_equal 340089, res.versions.first.id
+    assert_equal 'doi:10.70122/FK2/O9JYAO', res.versions.first.persistent_id
+    assert_equal ':draft', res.versions.first.version
     assert_includes @client.called_path, 'excludeMetadataBlocks=true'
   end
 

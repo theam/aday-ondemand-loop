@@ -11,8 +11,8 @@ class Dataverse::DatasetVersionsResponseTest < ActiveSupport::TestCase
     assert_equal "OK", @versions.status
     assert_equal 2, @versions.versions.size
     first = @versions.versions.first
-    assert_equal 340089, first.id
-    assert_equal 'doi:10.70122/FK2/O9JYAO', first.dataset_persistent_id
+    assert_equal 'doi:10.70122/FK2/O9JYAO', first.persistent_id
+    assert_equal ':draft', first.version
   end
 end
 
