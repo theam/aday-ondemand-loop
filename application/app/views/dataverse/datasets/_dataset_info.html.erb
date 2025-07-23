@@ -8,8 +8,8 @@
         <span class="text-muted" style="font-size: 0.8rem;">
           <strong><%= dataset.metadata_field('title').to_s %></strong>
         </span>
-        <% if defined?(version) && version.present? %>
-          <span class="badge text-bg-info align-self-start mt-1"><%= version %></span>
+        <% if dataset.version.present? %>
+          <span class="badge text-bg-info align-self-start mt-1"><%= dataset.version %></span>
         <% end %>
       </div>
     </div>

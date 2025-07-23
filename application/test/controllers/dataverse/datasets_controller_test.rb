@@ -180,7 +180,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/GCN7US")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 2
-    assert_select "input[type=hidden][name=version][value=':latest-published']", 1
+    assert_select "input[type=hidden][name=version][value='2.0']", 1
   end
 
   test "dataset view shows active project button text when project active" do
@@ -223,7 +223,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/LLIZ6Q")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 0
-    assert_select "input[type=hidden][name=version][value=':latest-published']", 1
+    assert_select "input[type=hidden][name=version][value='']", 1
   end
 
   test "should display the dataset incomplete with no data file" do
@@ -234,7 +234,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/LLIZ6Q")
     assert_response :success
     assert_select "input[type=checkbox][name='file_ids[]']", 2
-    assert_select "input[type=hidden][name=version][value=':latest-published']", 1
+    assert_select "input[type=hidden][name=version][value='']", 1
   end
 
   test "should redirect if project fails to save" do
@@ -255,7 +255,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
         dataverse_url: "https://example.dataverse.org",
         persistent_id: "doi:10.5072/FK2/GCN7US",
         page: 1,
-        version: ':latest-published'
+        version: '2.0'
       }
 
     assert_redirected_to root_path
@@ -286,7 +286,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
         dataverse_url: "https://example.dataverse.org",
         persistent_id: "doi:10.5072/FK2/GCN7US",
         page: 1,
-        version: ':latest-published'
+        version: '2.0'
       }
 
     assert_redirected_to root_path
@@ -316,7 +316,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
         dataverse_url: "https://example.dataverse.org",
         persistent_id: "doi:10.5072/FK2/GCN7US",
         page: 1,
-        version: ':latest-published'
+        version: '2.0'
       }
 
     assert_redirected_to root_path
@@ -350,7 +350,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
         dataverse_url: "https://example.dataverse.org",
         persistent_id: "doi:10.5072/FK2/GCN7US",
         page: 1,
-        version: ':latest-published'
+        version: '2.0'
       }
 
     assert_redirected_to root_path

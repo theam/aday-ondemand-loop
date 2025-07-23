@@ -33,7 +33,7 @@ class Dataverse::ProjectServiceTest < ActiveSupport::TestCase
     files_page = Dataverse::DatasetFilesResponse.new(valid_json)
     project = @service.initialize_project
     assert project.save
-    download_files = @service.initialize_download_files(project, dataset.data.dataset_persistent_id, dataset, files_page, [4], ':latest-published')
+    download_files = @service.initialize_download_files(project, dataset.data.dataset_persistent_id, dataset, files_page, [4])
     assert download_files.kind_of?(Array)
     assert_equal 1, download_files.count
     assert download_files[0].kind_of?(DownloadFile)
@@ -47,7 +47,7 @@ class Dataverse::ProjectServiceTest < ActiveSupport::TestCase
 
     assert_equal '4', download_files[0].metadata[:id]
     assert_equal 'https://example.com', download_files[0].metadata[:dataverse_url]
-    assert_equal ':latest-published', download_files[0].metadata[:version]
+    assert_equal '2.0', download_files[0].metadata[:version]
     assert_equal 'local://1946f5acedb-fdf849a8d0f3', download_files[0].metadata[:storage]
     assert_equal '13035cba04a51f54dd8101fe726cda5c', download_files[0].metadata[:md5]
     assert_equal 'image/png', download_files[0].metadata[:content_type]

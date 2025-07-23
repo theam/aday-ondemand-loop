@@ -25,7 +25,7 @@ class Dataverse::DatasetsController < ApplicationController
       end
     end
 
-    download_files = @project_service.initialize_download_files(project, @persistent_id, @dataset, @files_page, file_ids, @version)
+    download_files = @project_service.initialize_download_files(project, @persistent_id, @dataset, @files_page, file_ids)
     download_files.each do |file|
       unless file.valid?
         errors = file.errors.full_messages.join(", ")
@@ -87,6 +87,7 @@ class Dataverse::DatasetsController < ApplicationController
         redirect_back_to_app(alert: t("dataverse.datasets.dataset_not_found", dataverse_url: @dataverse_url, persistent_id: @persistent_id))
         return
       end
+      @version = @dataset.version
     rescue Dataverse::DatasetService::UnauthorizedException => e
       log_error('Dataset requires authorization', { dataverse: @dataverse_url, persistent_id: @persistent_id }, e)
       redirect_back_to_app(alert: t("dataverse.datasets.dataset_requires_authorization", dataverse_url: @dataverse_url, persistent_id: @persistent_id))
