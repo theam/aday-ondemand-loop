@@ -13,7 +13,7 @@ module Dataverse
       Project.new(id: name, name: name)
     end
 
-    def initialize_download_files(project, dataset_id, dataset, files_page, file_ids)
+    def initialize_download_files(project, dataset_id, dataset, files_page, file_ids, version)
       dataset_files = files_page.files_by_ids(file_ids)
       dataset_files.each.map do |dataset_file|
         DownloadFile.new.tap do |f|
@@ -27,6 +27,7 @@ module Dataverse
           f.metadata = {
             dataverse_url: @dataverse_url,
             dataset_id: dataset_id,
+            version: version,
             parents: dataset.data.parents,
             id: dataset_file.data_file.id.to_s,
             content_type: dataset_file.content_type,
