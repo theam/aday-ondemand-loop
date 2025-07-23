@@ -22,13 +22,14 @@
           dv_port: dv_url.port,
           version: v.version
         ) %>
-      <li class="list-group-item d-flex justify-content-between align-items-center gap-3">
-        <div class="flex-grow-1 d-flex align-items-center gap-3">
-          <span><%= v.create_time %></span>
-          <span class="badge text-bg-info"><%= v.version %></span>
-          <span><%= v.publication_date %></span>
-        </div>
-        <%= link_to version_path, class: 'btn btn-sm btn-outline-dark', title: t('connectors.dataverse.dataset_versions_widget.button_browse_version_title') do %>
+      <li class="list-group-item p-0">
+        <%= link_to version_path, class: 'd-flex justify-content-between align-items-center gap-3 p-2 text-decoration-none' do %>
+          <div class="flex-grow-1 d-flex align-items-center gap-3">
+            <%= render partial: '/shared/file_row_date',
+                       locals: { date: v.create_time, title: t('connectors.dataverse.dataset_versions_widget.field_creation_date_text') } %>
+            <span class="badge text-bg-info"><%= v.version %></span>
+            <span><%= v.publication_date %></span>
+          </div>
           <i class="bi bi-display" aria-hidden="true"></i>
           <span class="visually-hidden"><%= t('connectors.dataverse.dataset_versions_widget.button_browse_version_label') %></span>
         <% end %>
