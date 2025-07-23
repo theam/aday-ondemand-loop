@@ -57,6 +57,7 @@ class Dataverse::DatasetServiceTest < ActiveSupport::TestCase
     res = service.dataset_versions_by_persistent_id('doi:1')
     assert_instance_of Dataverse::DatasetVersionsResponse, res
     assert_equal 2, res.versions.size
+    assert_equal 340089, res.versions.first.id
     assert_includes @client.called_path, 'excludeMetadataBlocks=true'
   end
 
@@ -67,3 +68,4 @@ class Dataverse::DatasetServiceTest < ActiveSupport::TestCase
     end
   end
 end
+

@@ -1,7 +1,29 @@
 {
   "status": "OK",
   "data": [
-    { "versionNumber": 1, "versionMinorNumber": 0, "versionState": "RELEASED" },
-    { "versionNumber": 2, "versionMinorNumber": 0, "versionState": "DRAFT" }
+    {
+      "id": 340089,
+      "datasetId": 2608996,
+      "datasetPersistentId": "doi:10.70122/FK2/O9JYAO",
+      "datasetType": "dataset",
+      "storageIdentifier": "s3://10.70122/FK2/O9JYAO",
+      "internalVersionNumber": 1,
+      "versionState": "DRAFT",
+      "lastUpdateTime": "2025-07-23T17:08:57Z",
+      "createTime": "2025-07-23T17:08:57Z",
+      "publicationDate": "2025-06-27"
+    },
+    {
+      "id": 339645,
+      "datasetId": 2608996,
+      "datasetPersistentId": "doi:10.70122/FK2/O9JYAO",
+      "datasetType": "dataset",
+      "storageIdentifier": "s3://10.70122/FK2/O9JYAO",
+      "internalVersionNumber": 16,
+      "versionState": "RELEASED",
+      "lastUpdateTime": "2025-07-23T17:04:03Z",
+      "createTime": "2025-07-07T22:59:49Z",
+      "publicationDate": "2025-06-27"
+    }
   ]
 }
