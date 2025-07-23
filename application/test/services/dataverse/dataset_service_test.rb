@@ -50,4 +50,20 @@ class Dataverse::DatasetServiceTest < ActiveSupport::TestCase
     @service.find_dataset_version_by_persistent_id('doi:1', version: '2.0')
     assert_includes @client.called_path, '/versions/2.0'
   end
+
+  test 'dataset_versions_by_persistent_id parses response and requires key' do
+    @client = HttpClientMock.new(file_path: fixture_path('dataverse/dataset_versions_response/valid_response.json'))
+    service = Dataverse::DatasetService.new('https://example.com', http_client: @client, api_key: 'KEY')
+    res = service.dataset_versions_by_persistent_id('doi:1')
+    assert_instance_of Dataverse::DatasetVersionsResponse, res
+    assert_equal 2, res.versions.size
+    assert_includes @client.called_path, 'excludeMetadataBlocks=true'
+  end
+
+  test 'dataset_versions_by_persistent_id raises ApiKeyRequiredException when missing key' do
+    service = Dataverse::DatasetService.new('https://example.com', http_client: @client)
+    assert_raises(Dataverse::DatasetService::ApiKeyRequiredException) do
+      service.dataset_versions_by_persistent_id('doi:1')
+    end
+  end
 end

@@ -44,9 +44,9 @@ module Dataverse
       DatasetVersionResponse.new(response.body)
     end
 
-    def search_dataset_files_by_persistent_id(persistent_id, version: ':latest-published', page: 1, per_page: 10, query: nil)
-      headers = {}
-      headers[AUTH_HEADER] = @api_key if @api_key && version != ':latest-published'
+  def search_dataset_files_by_persistent_id(persistent_id, version: ':latest-published', page: 1, per_page: 10, query: nil)
+    headers = {}
+    headers[AUTH_HEADER] = @api_key if @api_key && version != ':latest-published'
       url = SearchDatasetFilesUrlBuilder.new(
         persistent_id: persistent_id,
         version: version,
@@ -58,7 +58,27 @@ module Dataverse
       return nil if response.not_found?
       raise UnauthorizedException if response.unauthorized?
       raise "Error getting dataset files: #{response.status} - #{response.body}" unless response.success?
-      DatasetFilesResponse.new(response.body, page: page, per_page: per_page, query: query)
-    end
+    DatasetFilesResponse.new(response.body, page: page, per_page: per_page, query: query)
+  end
+
+  def dataset_versions_by_persistent_id(persistent_id)
+    raise ApiKeyRequiredException unless @api_key
+
+    headers = { AUTH_HEADER => @api_key }
+    url = FluentUrl.new('')
+            .add_path('api')
+            .add_path('datasets')
+            .add_path(':persistentId')
+            .add_path('versions')
+            .add_param('persistentId', persistent_id)
+            .add_param('excludeFiles', true)
+            .add_param('excludeMetadataBlocks', true)
+            .to_s
+    response = @http_client.get(url, headers: headers)
+    return nil if response.not_found?
+    raise UnauthorizedException if response.unauthorized?
+    raise "Error getting dataset versions: #{response.status} - #{response.body}" unless response.success?
+    DatasetVersionsResponse.new(response.body)
+  end
   end
 end
