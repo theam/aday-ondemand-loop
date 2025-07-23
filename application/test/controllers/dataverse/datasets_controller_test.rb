@@ -182,6 +182,36 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[type=checkbox][name='file_ids[]']", 2
   end
 
+  test "dataset view shows active project button text when project active" do
+    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    user_settings_mock = mock("UserSettings")
+    user_settings_mock.stubs(:user_settings).returns(OpenStruct.new(active_project: "proj"))
+    Current.stubs(:settings).returns(user_settings_mock)
+
+    get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/GCN7US")
+    assert_response :success
+    label = I18n.t('dataverse.datasets.dataset_files.button_add_files_active_project_text')
+    assert_select "input[type=submit][value='#{label}']", 1
+  end
+
+  test "dataset view shows new project button text when no active project" do
+    dataset = Dataverse::DatasetVersionResponse.new(dataset_valid_json)
+    Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
+    files_page = Dataverse::DatasetFilesResponse.new(files_valid_json)
+    Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(files_page)
+    user_settings_mock = mock("UserSettings")
+    user_settings_mock.stubs(:user_settings).returns(OpenStruct.new(active_project: nil))
+    Current.stubs(:settings).returns(user_settings_mock)
+
+    get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/GCN7US")
+    assert_response :success
+    label = I18n.t('dataverse.datasets.dataset_files.button_add_files_new_project_text')
+    assert_select "input[type=submit][value='#{label}']", 1
+  end
+
   test "should display the dataset incomplete with no data" do
     dataset = Dataverse::DatasetVersionResponse.new(dataset_incomplete_json_no_data)
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(dataset)
