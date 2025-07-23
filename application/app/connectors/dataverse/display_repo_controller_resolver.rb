@@ -17,7 +17,13 @@ module Dataverse
       elsif dataverse_url.collection?
         redirect_url = @url_helper.view_dataverse_path(dataverse_url.domain, dataverse_url.collection_id, dv_scheme: dataverse_url.scheme_override, dv_port: dataverse_url.port)
       elsif dataverse_url.dataset? || dataverse_url.file?
-        redirect_url = @url_helper.view_dataverse_dataset_path(dv_hostname: dataverse_url.domain, persistent_id: dataverse_url.dataset_id, dv_scheme: dataverse_url.scheme_override, dv_port: dataverse_url.port)
+        redirect_url = @url_helper.view_dataverse_dataset_path(
+          dv_hostname: dataverse_url.domain,
+          persistent_id: dataverse_url.dataset_id,
+          dv_scheme: dataverse_url.scheme_override,
+          dv_port: dataverse_url.port,
+          version: dataverse_url.version
+        )
       end
 
       ConnectorResult.new(

@@ -4,6 +4,7 @@ class Dataverse::DatasetsController < ApplicationController
 
   before_action :get_dv_full_hostname
   before_action :validate_dataverse_url
+  before_action :set_version
   before_action :init_service
   before_action :init_project_service, only: [ :download ]
   before_action :find_dataset_by_persistent_id
@@ -58,8 +59,15 @@ class Dataverse::DatasetsController < ApplicationController
     end
   end
 
+  def set_version
+    @version = params[:version] || ':latest-published'
+  end
+
   def init_service
-    @service = Dataverse::DatasetService.new(@dataverse_url)
+    repo_info = RepoRegistry.repo_db.get(@dataverse_url)
+    api_key = repo_info&.metadata&.auth_key
+    @api_available = repo_info&.metadata&.api_version.present?
+    @service = Dataverse::DatasetService.new(@dataverse_url, api_key: api_key)
   end
 
   def init_project_service
@@ -69,7 +77,11 @@ class Dataverse::DatasetsController < ApplicationController
   def find_dataset_by_persistent_id
     @persistent_id = params[:persistent_id]
     begin
-      @dataset = @service.find_dataset_version_by_persistent_id(@persistent_id)
+      if @api_available
+        @dataset = @service.find_dataset_version_by_persistent_id(@persistent_id, version: @version)
+      else
+        @dataset = @service.find_dataset_version_by_persistent_id(@persistent_id)
+      end
       unless @dataset
         log_error('Dataset not found.', { dataverse: @dataverse_url, persistent_id: @persistent_id })
         redirect_back_to_app(alert: t("dataverse.datasets.dataset_not_found", dataverse_url: @dataverse_url, persistent_id: @persistent_id))
@@ -89,7 +101,17 @@ class Dataverse::DatasetsController < ApplicationController
     @page = params[:page] ? params[:page].to_i : 1
     @search_query = params[:query].present? ? ActionView::Base.full_sanitizer.sanitize(params[:query]) : nil
     begin
-      @files_page = @service.search_dataset_files_by_persistent_id(@persistent_id, page: @page, per_page: 10, query: @search_query)
+      if @api_available
+        @files_page = @service.search_dataset_files_by_persistent_id(
+          @persistent_id,
+          version: @version,
+          page: @page,
+          per_page: 10,
+          query: @search_query
+        )
+      else
+        @files_page = @service.search_dataset_files_by_persistent_id(@persistent_id, page: @page, per_page: 10, query: @search_query)
+      end
       unless @files_page
         log_error('Dataset files not found.', {dataverse: @dataverse_url, persistent_id: @persistent_id, page: @page})
         flash[:alert] = t("dataverse.datasets.dataset_files_not_found", dataverse_url: @dataverse_url, persistent_id: @persistent_id, page: @page)
