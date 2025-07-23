@@ -162,8 +162,7 @@ en:
       dataset_versions_widget:
         button_browse_version_label: "Browse"
         button_browse_version_title: "Browse dataset version"
-        field_creation_date_text: "Creation date:"
-        field_publication_date_text: "Publication date:"
+        field_creation_date_title: "Creation date"
       dataset_actions:
         actions_bar_title_a11y_label: "Dataset actions bar"
         button_create_bundle_label: "Create Collection Bundle"
