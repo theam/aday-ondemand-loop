@@ -17,12 +17,8 @@ Uploads are organized into **Upload Bundles**, which group a set of files and li
     - Click the **pencil icon** to enter your key and choose whether to save it globally or only for this bundle.
 
 3. **Select or Create a Dataset**  
-   Depending on the type of URL provided and the rules of the remote repository,  
-   additional steps may be required before files can be uploaded.
-
-   The interface will guide you through any necessary actions to fully configure the dataset destination.  
+   Depending on the type of URL provided and the rules of the remote repository, additional steps may be required before files can be uploaded. The interface will guide you through any necessary actions to fully configure the dataset destination.
    These actions may include:
-
     - Selecting a dataset from within a collection
     - Creating a new dataset if required or desired
     - Fetching additional metadata from the repository
@@ -34,13 +30,12 @@ Uploads are organized into **Upload Bundles**, which group a set of files and li
    Use this interface to navigate your HPC project directory and select the files to be uploaded.
    For help using the Upload File Selector, see [Upload File Selector](./upload_file_selector.md).
 
-   Once selected, files are automatically staged and uploaded. You can monitor progress in the bundle view or the global **Uploads** page.  
-   Upload tasks can be cancelled before or during transfer.s
+   Once selected, files are automatically staged and uploaded. You can monitor progress in the bundle view or the global **Uploads** page.
+   Upload tasks can be cancelled before or during transfers.
 
 !!! note
 
-    This view does **not auto-refresh**. Reload the page manually to see updated statuses.
-
+    The file list in the **Upload Bundle** view does **not auto-refresh**. Reload the page manually to see updated statuses.
 ---
 
 ### Creating an Upload Bundle
@@ -163,3 +158,11 @@ At the top of the global Uploads page, a summary panel displays the current syst
     Files cannot be deleted directly from the global **Uploads** page. 
     To remove a file, go to the corresponding project and use the **Delete** action inside the appropriate upload bundle.
     Click the project name to jump directly to its Upload Bundles tab.
+
+### Checksum verification
+
+A checksum verification is done after each file is uploaded to **Dataverse**. In case of invalid verification, `error` state
+will be displayed for that file despite being transferred entirely. Uploads checksum verification will be implemented for
+other connectors like **Zenodo** in the future.
+
+---
