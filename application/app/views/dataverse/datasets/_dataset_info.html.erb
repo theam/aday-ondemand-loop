@@ -8,14 +8,14 @@
           </h2>
           <% if dataset.version.present? %>
             <a class="d-flex align-items-center text-decoration-none text-secondary"
-               data-bs-toggle="collapse"
                data-controller="utils--icon-toggle lazy-loader"
                data-utils--icon-toggle-icon-on-value="bi-plus-square"
                data-utils--icon-toggle-icon-off-value="bi-dash-square"
                data-action="click->utils--icon-toggle#toggle click->lazy-loader#toggle"
                data-lazy-loader-container-id-value="dataset-versions-content"
                data-lazy-loader-url-value="<%= widgets_path(widget_path: 'dataverse_dataset_versions', dataverse_url: dataverse_url, persistent_id: dataset.data.dataset_persistent_id) %>"
-               href="#dataset-versions"
+               data-lazy-loader-reload-on-toggle-value="false"
+               href="#"
                role="button"
                aria-expanded="false"
                aria-controls="dataset-versions">
@@ -28,8 +28,10 @@
           <strong><%= dataset.metadata_field('title').to_s %></strong>
         </span>
         <% if dataset.version.present? %>
-          <div class="collapse" id="dataset-versions">
-            <div class="pt-2 d-none" id="dataset-versions-content"></div>
+          <div class="py-2 d-none position-relative" id="dataset-versions-content">
+            <div class="d-flex justify-content-center align-items-center" style="min-height: 3rem;">
+              <div class="spinner-border text-secondary" role="status" aria-hidden="true"></div>
+            </div>
           </div>
         <% end %>
       </div>
