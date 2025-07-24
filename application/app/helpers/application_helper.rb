@@ -62,18 +62,4 @@ module ApplicationHelper
     content_tag(:span, t("status.#{status}"), class: "badge file-status #{color}", title: title, role: 'status', "aria-label" => aria_label)
   end
 
-  # Returns the label and optional title for add-files buttons.
-  # The +translation_prefix+ should correspond to the i18n scope containing
-  # button_add_files_active_project_text, button_add_files_new_project_text,
-  # and button_add_files_new_project_title keys.
-  def add_files_button_info(translation_prefix)
-    if Current.settings.user_settings.active_project.present?
-      [t("#{translation_prefix}.button_add_files_active_project_text"), nil]
-    else
-      [
-        t("#{translation_prefix}.button_add_files_new_project_text"),
-        t("#{translation_prefix}.button_add_files_new_project_title")
-      ]
-    end
-  end
 end

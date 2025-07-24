@@ -194,7 +194,8 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
     get view_dataverse_dataset_url(@new_id, "doi:10.5072/FK2/GCN7US")
     assert_response :success
     label = I18n.t('dataverse.datasets.dataset_files.button_add_files_active_project_text')
-    assert_select "input[type=submit][value='#{label}']", 1
+    title = I18n.t('dataverse.datasets.dataset_files.button_add_files_active_project_title')
+    assert_select "input[type=submit][value='#{label}'][title='#{title}']", 1
   end
 
   test "dataset view shows new project button text when no active project" do
