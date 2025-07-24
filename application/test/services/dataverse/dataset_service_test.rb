@@ -62,11 +62,4 @@ class Dataverse::DatasetServiceTest < ActiveSupport::TestCase
     assert_includes @client.called_path, 'excludeMetadataBlocks=true'
   end
 
-  test 'dataset_versions_by_persistent_id raises ApiKeyRequiredException when missing key' do
-    service = Dataverse::DatasetService.new('https://example.com', http_client: @client)
-    assert_raises(Dataverse::DatasetService::ApiKeyRequiredException) do
-      service.dataset_versions_by_persistent_id('doi:1')
-    end
-  end
 end
-

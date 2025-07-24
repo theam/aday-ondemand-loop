@@ -64,9 +64,8 @@ module Dataverse
     end
 
     def dataset_versions_by_persistent_id(persistent_id)
-      raise ApiKeyRequiredException unless @api_key
-
-      headers = { AUTH_HEADER => @api_key }
+      headers = {}
+      headers[AUTH_HEADER] = @api_key if @api_key
       url = FluentUrl.new('')
               .add_path('api')
               .add_path('datasets')
