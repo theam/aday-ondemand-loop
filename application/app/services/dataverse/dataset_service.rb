@@ -46,8 +46,9 @@ module Dataverse
     end
 
     def search_dataset_files_by_persistent_id(persistent_id, version: ':latest-published', page: 1, per_page: 10, query: nil)
+      version ||= ':latest-published'
       headers = {}
-      headers[AUTH_HEADER] = @api_key if @api_key && version != ':latest-published'
+      headers[AUTH_HEADER] = @api_key if @api_key
       url = SearchDatasetFilesUrlBuilder.new(
         persistent_id: persistent_id,
         version: version,
