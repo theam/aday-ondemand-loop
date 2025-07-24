@@ -38,7 +38,8 @@ class Zenodo::RecordsControllerTest < ActionDispatch::IntegrationTest
     get view_zenodo_record_path('1')
     assert_response :success
     label = I18n.t('zenodo.records.record_files.button_add_files_new_project_text')
-    assert_select "input[type=submit][value='#{label}']", 1
+    title = I18n.t('zenodo.records.record_files.button_add_files_new_project_title')
+    assert_select "input[type=submit][value='#{label}'][title='#{title}']", 1
   end
 
   test 'show redirects when not found' do

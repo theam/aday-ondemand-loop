@@ -42,12 +42,14 @@
         </table>
       </div>
       <div class="text-center">
-        <% add_files_label = if Current.settings.user_settings.active_project.present?
-                             t('.button_add_files_active_project_text')
-                           else
-                             t('.button_add_files_new_project_text')
-                           end %>
-        <%= submit_tag add_files_label, class: 'btn btn-primary', data: {'utils--checkbox-target' => 'submitButton'} %>
+        <% add_files_label, add_files_title = if Current.settings.user_settings.active_project.present?
+                                               [t('.button_add_files_active_project_text'), nil]
+                                             else
+                                               [t('.button_add_files_new_project_text'),
+                                                t('.button_add_files_new_project_title')]
+                                             end %>
+        <%= submit_tag add_files_label, class: 'btn btn-primary',
+                     data: {'utils--checkbox-target' => 'submitButton'}, title: add_files_title %>
       </div>
     <% end %>
   <% else %>
