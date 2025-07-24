@@ -25,6 +25,7 @@ module Dataverse
     end
 
     def find_dataset_version_by_persistent_id(persistent_id, version: ':latest-published')
+      version ||= ':latest-published'
       headers = {}
       headers[AUTH_HEADER] = @api_key if @api_key && version != ':latest-published'
       url = FluentUrl.new('')
