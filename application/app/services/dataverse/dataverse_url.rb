@@ -8,6 +8,23 @@ module Dataverse
 
     attr_reader :type, :collection_id, :dataset_id, :file_id, :version
 
+    def self.dataverse_from_parts(domain, scheme: 'https', port: nil)
+      base = build_base_url(domain, scheme: scheme, port: port)
+      parse(base)
+    end
+
+    def self.collection_from_parts(domain, collection_id, scheme: 'https', port: nil)
+      base = build_base_url(domain, scheme: scheme, port: port)
+      url = Dataverse::Concerns::DataverseUrlBuilder.collection_url(base, collection_id)
+      parse(url)
+    end
+
+    def self.dataset_from_parts(domain, dataset_id, scheme: 'https', port: nil)
+      base = build_base_url(domain, scheme: scheme, port: port)
+      url = Dataverse::Concerns::DataverseUrlBuilder.dataset_url(base, dataset_id)
+      parse(url)
+    end
+
     def self.parse(url)
       base = UrlParser.parse(url)
       return nil unless base
@@ -16,6 +33,13 @@ module Dataverse
     end
 
     private_class_method :new
+
+    def self.build_base_url(domain, scheme: 'https', port: nil)
+      url = "#{scheme}://#{domain}"
+      url += ":#{port}" if port
+      url
+    end
+    private_class_method :build_base_url
 
     TYPES.each do |t|
       define_method("#{t}?") { type == t }
