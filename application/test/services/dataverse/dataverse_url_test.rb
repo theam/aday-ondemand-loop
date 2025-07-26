@@ -77,6 +77,44 @@ class Dataverse::DataverseUrlTest < ActiveSupport::TestCase
     assert_nil dataverse_url.version
   end
 
+  test 'should build collection url from parts' do
+    dataverse_url = Dataverse::DataverseUrl.collection_from_parts('demo.dataverse.org', 'mycollection', scheme: 'http')
+
+    assert dataverse_url.collection?
+    assert_equal 'mycollection', dataverse_url.collection_id
+    assert_equal 'http', dataverse_url.scheme
+  end
+
+  test 'should build dataverse url from parts' do
+    dataverse_url = Dataverse::DataverseUrl.dataverse_from_parts('demo.dataverse.org', port: 8443)
+
+    assert dataverse_url.dataverse?
+    assert_equal 'https', dataverse_url.scheme
+    assert_equal 8443, dataverse_url.port
+  end
+
+  test 'should build dataset url from parts' do
+    dataverse_url = Dataverse::DataverseUrl.dataset_from_parts('demo.dataverse.org', 'doi:10.1234/XYZ', port: 8443)
+
+    assert dataverse_url.dataset?
+    assert_equal 'doi:10.1234/XYZ', dataverse_url.dataset_id
+    assert_equal 8443, dataverse_url.port
+  end
+
+  test 'should build collection_url with passed id' do
+    dataverse_url = Dataverse::DataverseUrl.parse('https://demo.dataverse.org/')
+
+    url = dataverse_url.collection_url('mycollection')
+    assert_equal 'https://demo.dataverse.org/dataverse/mycollection', url
+  end
+
+  test 'should build dataset_url with passed id' do
+    dataverse_url = Dataverse::DataverseUrl.parse('https://demo.dataverse.org/')
+
+    url = dataverse_url.dataset_url('doi:10.1234/XYZ')
+    assert_equal 'https://demo.dataverse.org/dataset.xhtml?persistentId=doi%3A10.1234%2FXYZ', url
+  end
+
   test 'should parse file URL with persistentId and fileId' do
     url = 'https://demo.dataverse.org/file.xhtml?persistentId=doi:10.1234/XYZ/ABC&fileId=123&version=1.0'
     dataverse_url = Dataverse::DataverseUrl.parse(url)
