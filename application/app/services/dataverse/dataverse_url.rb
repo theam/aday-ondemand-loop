@@ -21,10 +21,32 @@ module Dataverse
       new(base)
     end
 
-    private_class_method :new
+    def self.collection_from_parts(domain, collection_id, scheme: 'https', port: nil)
+      raise 'domain is missing' unless domain
+      raise 'collection_id is missing' unless collection_id
+
+      dataverse_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataverse_url(scheme, domain, port)
+      collection_url = Dataverse::Concerns::DataverseUrlBuilder.build_collection_url(dataverse_url, collection_id)
+      self.parse(collection_url)
+    end
+
+    def self.dataset_from_parts(domain, dataset_id, version: nil, scheme: 'https', port: nil)
+      raise 'domain is missing' unless domain
+      raise 'dataset_id is missing' unless dataset_id
+
+      dataverse_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataverse_url(scheme, domain, port)
+      dataset_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url(dataverse_url, dataset_id, version: version)
+      self.parse(dataset_url)
+    end
 
     TYPES.each do |t|
       define_method("#{t}?") { type == t }
+    end
+
+    private_class_method :new
+    def initialize(base_parser)
+      @base = base_parser
+      parse_type_and_ids
     end
 
     def scheme_override
@@ -44,21 +66,10 @@ module Dataverse
     end
 
     def dataverse_url
-      build_dataverse_url
-    end
-
-    def initialize(base_parser)
-      @base = base_parser
-      parse_type_and_ids
+      build_dataverse_url(@base.scheme, @base.domain, @base.port)
     end
 
     private
-
-    def build_dataverse_url
-      base = "#{@base.scheme}://#{@base.domain}"
-      base += ":#{@base.port}" if @base.port
-      FluentUrl.new(base).to_s
-    end
 
     def parse_type_and_ids
       segments = @base.path_segments

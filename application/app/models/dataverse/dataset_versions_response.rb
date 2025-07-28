@@ -31,6 +31,10 @@ module Dataverse
 
         [version_number, version_minor_number].compact.join('.')
       end
+
+      def draft?
+        version == ':draft'
+      end
     end
   end
 end

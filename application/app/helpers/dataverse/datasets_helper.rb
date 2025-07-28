@@ -56,6 +56,15 @@ module Dataverse::DatasetsHelper
     identifier.to_s.split(":", 3)[0..1].join(":") if identifier
   end
 
+  # TODO: TO BE REFACTORED INTO DataverseUrl to avoid using PARAMS
+  # SAME AS OTHER METHOD IN THIS CLASS
+  def dataset_versions_url(dataverse_url, persistent_id)
+      url_options = {}
+      url_options[:dv_port] = params[:dv_port]
+      url_options[:dv_scheme] = params[:dv_scheme]
+      view_dataverse_dataset_versions_path(URI.parse(dataverse_url).hostname, persistent_id, url_options)
+  end
+
   def external_dataset_url(dataverse_url, persistent_id, version = nil)
     url = FluentUrl.new(dataverse_url)
             .add_path('dataset.xhtml')
