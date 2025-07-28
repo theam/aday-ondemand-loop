@@ -16,12 +16,13 @@ module Dataverse::DatasetsHelper
     retrictions_service.validate_dataset_file(file)
   end
 
-  def link_to_dataset_prev_page(dataverse_url, persistent_id, page, html_options = {})
+  def link_to_dataset_prev_page(dataverse_url, persistent_id, version, page, html_options = {})
     unless page.first_page?
       uri = URI.parse(dataverse_url)
       url_options = {}
       url_options[:dv_port] = uri.port if uri.port != 443
       url_options[:dv_scheme] = uri.scheme if uri.scheme != 'https'
+      url_options[:version] = version
       url_options[:page] = page.prev_page
       url_options[:query] = page.query if page.query.present?
       html_options['aria-label'] = I18n.t("acts_as_page.link_prev_page_a11y_label")
@@ -34,12 +35,13 @@ module Dataverse::DatasetsHelper
     end
   end
 
-  def link_to_dataset_next_page(dataverse_url, persistent_id, page, html_options = {})
+  def link_to_dataset_next_page(dataverse_url, persistent_id, version, page, html_options = {})
     unless page.last_page?
       uri = URI.parse(dataverse_url)
       url_options = {}
       url_options[:dv_port] = uri.port if uri.port != 443
       url_options[:dv_scheme] = uri.scheme if uri.scheme != 'https'
+      url_options[:version] = version
       url_options[:page] = page.next_page
       url_options[:query] = page.query if page.query.present?
       html_options['aria-label'] = I18n.t("acts_as_page.link_next_page_a11y_label")
