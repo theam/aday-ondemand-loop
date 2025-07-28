@@ -19,7 +19,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <%= render partial: 'dataverse/datasets/search_bar', locals: { dataverse_url: @dataverse_url, persistent_id: @persistent_id} %>
+      <%= render partial: 'dataverse/datasets/search_bar', locals: { dataverse_url: @dataverse_url, persistent_id: @persistent_id, version: @dataset.version} %>
     </div>
   </div>
   <div class="row">
