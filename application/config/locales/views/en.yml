@@ -205,6 +205,7 @@ en:
       badge_completed_text: "Completed"
       badge_error_text: "Error"
       badge_pending_text: "Pending"
+      badge_in_progress_text: "In Progress"
       badge_total_text: "Total"
     files_process_header:
       download:

@@ -1,6 +1,7 @@
 <%# Ensure values have defaults %>
 <% completed = summary.success + summary.cancelled + summary.error %>
 <% total = summary.total %>
+<% in_progress = summary.downloading.to_i + summary.uploading.to_i %>
 
 <%
   percent = total == 0 ? 0 : (completed * 100 / total.to_f).round(1).to_i
@@ -45,8 +46,10 @@
   <div class="d-flex flex-column justify-content-start">
     <div class="d-flex flex-wrap align-items-center gap-2 file-summary">
       <span class="badge badge-project-pending">Pending: <%= summary.pending %></span>
-      <span class="badge badge-project-progress">In Progress: <%= summary.downloading %></span>
+      <span class="badge badge-project-progress">In Progress: <%= in_progress %></span>
       <span class="badge badge-project-completed">Completed: <%= completed %></span>
+      <span class="badge badge-project-cancel">Cancelled: <%= summary.cancelled %></span>
+      <span class="badge badge-project-error">Error: <%= summary.error %></span>
       <span class="badge badge-project-total">Total: <%= summary.total %></span>
     </div>
   </div>
