@@ -26,8 +26,10 @@ You can find a list of known public Dataverse instances on the <a href="https://
 
 **Download**
 
-- Download individual files from public datasets.
-- Files must be available without authentication and under 10&nbsp;GB in size.
+- Download individual files from public or draft datasets.
+- Public dataset versions are available by default. 
+- Draft dataset versions require the presence of an API token.
+- Files must be under 10&nbsp;GB in size.
 - Checksums are verified after download.
 
 **Upload**
@@ -113,3 +115,23 @@ We began testing and supporting Zenodo in OnDemand Loop as of **June 2025** and 
 - Uploads target a *draft deposition* (existing or newly created in Zenodo).
 - Files are streamed directly to the deposition's bucket via HTTP PUT.
 
+### Repository Settings
+
+The **Repository Settings** section allows you to configure connector-specific settings for repositories you've previously used in the application.
+
+Whenever a new repository is accessed, its metadata is saved automatically. This metadata includes the repository's domain and allows the application to store and manage settings such as API keys, which are specific to each connector. These keys enable secure access and streamline future interactions with that repository.
+
+#### Repository Settings Page
+
+You can access the **Settings** page from the **Repositories** dropdown in the top navigation bar. This page displays a list of repositories you've previously interacted with. If an API key was added for a repository, it will be shown here.
+
+From this page, you can:
+
+- View all previously used repositories.
+- Edit existing API keys.
+- Add API keys for newly used repositories.
+- **Delete repositories** to remove their saved settings.
+
+Deleting a repository clears its associated settings and credentials from the application. This can be helpful for managing outdated or incorrect configurations.
+
+Configuring API keys ahead of time simplifies upload and download operations, particularly when working with draft datasets from platforms like **Dataverse**.
