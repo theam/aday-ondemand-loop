@@ -4,6 +4,7 @@ class TraceTest < ActiveSupport::TestCase
   def setup
     @tmp_dir = Dir.mktmpdir
     Trace.stubs(:metadata_root_directory).returns(@tmp_dir)
+    Project.stubs(:metadata_root_directory).returns(@tmp_dir)
   end
 
   def teardown
@@ -12,7 +13,7 @@ class TraceTest < ActiveSupport::TestCase
 
   test 'add and find trace for project' do
     trace = Trace.add(entity_type: 'project', entity_ids: ['p1'], message: 'created')
-    file = Trace.filename('project', ['p1'], trace.id)
+    file = Trace.project_file('p1')
     assert File.exist?(file)
 
     loaded = Trace.find('project', ['p1'], trace.id)

@@ -11,63 +11,85 @@ class Trace < ApplicationDiskRecord
   validates_presence_of :id, :entity_type, :creation_date, :message
 
   def self.add(entity_type:, entity_ids:, message:)
+    entity_ids = Array(entity_ids)
     trace = new(
       id: generate_id,
       entity_type: entity_type.to_s,
-      entity_ids: Array(entity_ids),
+      entity_ids: entity_ids,
       creation_date: DateTimeCommon.now,
       message: message
     )
-    trace.save
+    trace.save(entity_ids.first)
     trace
   end
 
   def self.record(entity, message)
-    entity_type, ids = parse_entity(entity)
-    add(entity_type: entity_type, entity_ids: ids, message: message)
+    info = parse_entity(entity)
+    add(entity_type: info[:entity_type], entity_ids: info[:ids], message: message)
   end
 
-  def save
+  def save(project_id)
     return false unless valid?
 
-    store_to_file(self.class.filename(entity_type, entity_ids, id))
+    file = self.class.project_file(project_id)
+    traces = self.class.load_all_from_file(file)
+    traces << to_h.deep_stringify_keys
+    ensure_storage_directory!(file)
+    File.open(file, 'w') { |f| f.write(traces.to_yaml) }
+    true
   end
 
   def self.all(entity_type = nil, entity_ids = [])
-    directory = directory(entity_type, entity_ids)
-    return [] unless Dir.exist?(directory)
-
-    Dir.glob(File.join(directory, '*.yml'))
-       .sort_by { |f| -File.ctime(f).to_f }
-       .map { |f| load_from_file(f) }
-       .compact
+    if entity_type.nil?
+      project_files.flat_map { |f| load_all_from_file(f).map { |h| from_hash(h) } }
+                  .sort_by { |t| -DateTimeCommon.to_time(t.creation_date).to_f }
+    else
+      project_id = Array(entity_ids).first
+      traces = load_all_from_file(project_file(project_id)).map { |h| from_hash(h) }
+      traces.select! { |t| t.entity_type == entity_type }
+      traces.select! { |t| t.entity_ids == Array(entity_ids) } if entity_ids.any?
+      traces.sort_by { |t| -DateTimeCommon.to_time(t.creation_date).to_f }
+    end
   end
 
   def self.find(entity_type, entity_ids, trace_id)
-    file = filename(entity_type, entity_ids, trace_id)
-    return nil unless File.exist?(file)
-
-    load_from_file(file)
+    project_id = Array(entity_ids).first
+    traces = load_all_from_file(project_file(project_id)).map { |h| from_hash(h) }
+    traces.find { |t| t.id == trace_id && t.entity_type == entity_type && t.entity_ids == Array(entity_ids) }
   end
 
-  def self.directory(entity_type, ids)
-    File.join(metadata_root_directory, 'traces', entity_type.to_s, *Array(ids))
+  def self.project_file(project_id)
+    File.join(Project.project_metadata_dir(project_id), 'traces.yml')
   end
 
-  def self.filename(entity_type, ids, trace_id)
-    File.join(directory(entity_type, ids), "#{trace_id}.yml")
+  def self.project_files
+    Dir.glob(File.join(Project.metadata_directory, '*', 'traces.yml'))
   end
 
+  def self.load_all_from_file(file)
+    return [] unless File.exist?(file)
+
+    data = YAML.safe_load(File.read(file), permitted_classes: [Hash])
+    data.is_a?(Array) ? data : []
+  rescue StandardError
+    []
+  end
+
+  def self.from_hash(hash)
+    new.tap do |t|
+      ATTRIBUTES.each { |attr| t.public_send("#{attr}=", hash[attr.to_s]) }
+    end
+  end
   def self.parse_entity(entity)
     case entity
     when Project
-      ['project', [entity.id]]
+      { entity_type: 'project', ids: [entity.id] }
     when DownloadFile
-      ['download_file', [entity.project_id, entity.id]]
+      { entity_type: 'download_file', ids: [entity.project_id, entity.id] }
     when UploadBundle
-      ['upload_bundle', [entity.project_id, entity.id]]
+      { entity_type: 'upload_bundle', ids: [entity.project_id, entity.id] }
     when UploadFile
-      ['upload_file', [entity.project_id, entity.upload_bundle_id, entity.id]]
+      { entity_type: 'upload_file', ids: [entity.project_id, entity.upload_bundle_id, entity.id] }
     else
       raise ArgumentError, "Unknown entity type: #{entity.class}"
     end
