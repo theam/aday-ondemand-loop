@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { showFlash } from 'utils/flash_message'
 
 export default class extends Controller {
     static values = {
@@ -7,7 +8,8 @@ export default class extends Controller {
         stopOnInactive: Boolean,
         containerId: String,
         eventName: String,
-        reloadOnToggle: { type: Boolean, default: true }
+        reloadOnToggle: { type: Boolean, default: true },
+        displayErrors: { type: Boolean, default: false }
     }
 
     connect() {
@@ -41,21 +43,33 @@ export default class extends Controller {
             return
         }
 
+        this.container.classList.remove("d-none")
+
         fetch(this.urlValue, {
             headers: { "Accept": "text/html" }
-        })
-            .then(response => {
+        }).then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json().then(data => { throw data; });
+                    } else {
+                        throw { error: window.loop_app_config.i18n.generic_server_error };
+                    }
                 }
                 return response.text();
             })
             .then(html => {
-                this.container.classList.remove("d-none")
                 this.container.innerHTML = html
             })
             .catch(error => {
-                console.error("LazyLoaderController: Error loading content:", error)
+                if (this.displayErrorsValue) {
+                    // CLEAR CONTENT
+                    this.container.innerHTML = ''
+                    const message = error.error ?? window.loop_app_config.i18n.generic_server_error
+                    showFlash('error', message, this.container)
+                } else {
+                    console.error("LazyLoaderController: Error loading content:", error)
+                }
             })
     }
 
