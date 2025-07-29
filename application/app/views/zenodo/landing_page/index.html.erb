@@ -2,7 +2,12 @@
 <div class="zenodo container-md content" role="main">
   <%= render partial: '/shared/breadcrumbs', locals: { links: [{text: t('shared.breadcrumbs.zenodo')}]} %>
 
-  <div class="my-4 pb-1"><%= image_tag "zenodo_project.svg", alt: t('connectors.zenodo.title'), width: 280 %></div>
+  <div class="my-4 pb-1">
+    <%= link_to 'https://zenodo.org/', target: '_blank', rel: 'noopener', aria: { label: t('connectors.zenodo.aria_label') } do %>
+      <%= image_tag 'zenodo_project.svg', alt: t('connectors.zenodo.title'), width: 280 %>
+    <% end %>
+  </div>
+
 
   <%= form_with url: view_zenodo_landing_path, method: :get,local: true do |f| %>
     <div class="input-group mb-3">

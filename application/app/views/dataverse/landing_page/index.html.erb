@@ -10,7 +10,11 @@
       </li>
     </ol>
   </nav>
-  <div class="my-4"><%= image_tag('dataverse_project.svg', alt: t('dataverse.landing_page.index.image_dataverse_icon_alt'), width: 300) %></div>
+  <div class="my-4">
+    <%= link_to 'https://dataverse.org/', target: '_blank', rel: 'noopener', aria: { label: t('dataverse.landing_page.index.image_dataverse_icon_aria_label') } do %>
+      <%= image_tag('dataverse_project.svg', alt: t('dataverse.landing_page.index.image_dataverse_icon_alt'), width: 300) %>
+    <% end %>
+  </div>
   <div class="row">
     <div class="col-md-12">
       <%= render partial: 'dataverse/landing_page/installation_items', locals: { installations_page: @installations_page} %>

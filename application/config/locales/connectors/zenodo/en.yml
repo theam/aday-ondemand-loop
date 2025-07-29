@@ -3,6 +3,7 @@ en:
   connectors:
     zenodo:
       title: "Zenodo"
+      aria_label: "Visit the Zenodo project homepage"
 
       actions:
         connector_edit:
