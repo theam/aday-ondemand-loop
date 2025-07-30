@@ -27,6 +27,8 @@ class ConfigurationSingleton
       ::ConfigurationProperty.integer(:max_upload_file_size, default: 1024 * 1024 * 1024), # 1 GIGABYTE
       ::ConfigurationProperty.boolean(:zenodo_enabled, default: false),
       ::ConfigurationProperty.property(:guide_url, default: 'https://iqss.github.io/ondemand-loop/'),
+      ::ConfigurationProperty.integer(:history_max_per_type, default: 10),
+      ::ConfigurationProperty.integer(:history_save_interval, default: 15 * 60)
     ].freeze
   end
 
@@ -39,7 +41,19 @@ class ConfigurationSingleton
   end
 
   def repo_db_file
-    File.join(metadata_root, 'repos', 'repo_db.yml')
+    File.join(metadata_root, 'cache', 'repo_db.yml')
+  end
+
+  def history_tracker_file
+    File.join(metadata_root, 'cache', 'history.yml')
+  end
+
+  def history
+    @history ||= HistoryTracker.new(
+      file_path: history_tracker_file,
+      max_per_type: history_max_per_type,
+      save_interval: history_save_interval
+    )
   end
 
   def config

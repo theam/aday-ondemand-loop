@@ -51,18 +51,26 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
     assert_equal 10_000, @config_instance.detached_process_status_interval
     assert_equal 10 * 1024 * 1024 * 1024, @config_instance.max_download_file_size
     assert_equal 1024 * 1024 * 1024, @config_instance.max_upload_file_size
+    assert_equal 10, @config_instance.history_max_per_type
+    assert_equal 15 * 60, @config_instance.history_save_interval
   end
 
   test 'should override integer values from ENV' do
     ENV['OOD_LOOP_UI_FEEDBACK_DELAY'] = '3000'
     ENV['OOD_LOOP_MAX_UPLOAD_FILE_SIZE'] = '2048'
+    ENV['OOD_LOOP_HISTORY_MAX_PER_TYPE'] = '7'
+    ENV['OOD_LOOP_HISTORY_SAVE_INTERVAL'] = '8'
 
     config = ConfigurationSingleton.new
     assert_equal 3000, config.ui_feedback_delay
     assert_equal 2048, config.max_upload_file_size
+    assert_equal 7, config.history_max_per_type
+    assert_equal 8, config.history_save_interval
   ensure
     ENV.delete('OOD_LOOP_UI_FEEDBACK_DELAY')
     ENV.delete('OOD_LOOP_MAX_UPLOAD_FILE_SIZE')
+    ENV.delete('OOD_LOOP_HISTORY_MAX_PER_TYPE')
+    ENV.delete('OOD_LOOP_HISTORY_SAVE_INTERVAL')
   end
 
   test 'should return default boolean values when ENV is not set' do
@@ -110,8 +118,21 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
   end
 
   test 'should return path to repo_db_file based on metadata_root' do
-    expected = File.join(@config_instance.metadata_root, 'repos', 'repo_db.yml')
+    expected = File.join(@config_instance.metadata_root, 'cache', 'repo_db.yml')
     assert_equal expected, @config_instance.repo_db_file
+  end
+
+  test 'should return path to history_tracker_file based on metadata_root' do
+    expected = File.join(@config_instance.metadata_root, 'cache', 'history.yml')
+    assert_equal expected, @config_instance.history_tracker_file
+  end
+
+  test 'history accessor returns a HistoryTracker with config values' do
+    hist = @config_instance.history
+    assert_instance_of HistoryTracker, hist
+    assert_equal @config_instance.history_tracker_file, hist.instance_variable_get(:@file_path).to_s
+    assert_equal @config_instance.history_max_per_type, hist.instance_variable_get(:@max_per_type)
+    assert_equal @config_instance.history_save_interval, hist.instance_variable_get(:@save_interval)
   end
 
   test 'rails_env should fall back to development if no ENV vars are set' do
