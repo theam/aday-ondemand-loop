@@ -41,8 +41,6 @@ Follow the steps in the [Installation Guide](https://iqss.github.io/ondemand-loo
 Refer to the [Development Guide](https://iqss.github.io/ondemand-loop/development_guide/) for running the application locally and contributing changes.
 
 ### 🚀 Quick Start
-
-### 🚀 Quick Start
 To quickly set up and run OnDemand Loop in a local development environment,
 follow the steps below or refer to the [Quick Start section of the Development Guide](https://iqss.github.io/ondemand-loop/development_guide/#quick-start).
 
