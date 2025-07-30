@@ -40,6 +40,10 @@ Follow the steps in the [Installation Guide](https://iqss.github.io/ondemand-loo
 ## 🛠️ Development
 Refer to the [Development Guide](https://iqss.github.io/ondemand-loop/development_guide/) for running the application locally and contributing changes.
 
+### 🚀 Quick Start
+To quickly set up and run OnDemand Loop in a local development environment,
+follow the steps outlined in the [Quick Start section of the Development Guide](https://iqss.github.io/ondemand-loop/development_guide/#quick-start).
+
 ## ⚙️ Available Make Commands
 A list of `make` commands is maintained in the [Development Guide](https://iqss.github.io/ondemand-loop/development_guide/local_environment/#make-commands).
 
