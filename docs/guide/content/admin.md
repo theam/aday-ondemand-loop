@@ -77,6 +77,8 @@ You can define environment variables in one of the following ways:
 - [max_upload_file_size](#max_upload_file_size)
 - [zenodo_enabled](#zenodo_enabled)
 - [guide_url](#guide_url)
+- [history_max_per_type](#history_max_per_type)
+- [history_save_interval](#history_save_interval)
 
 ---
 
@@ -246,6 +248,24 @@ URL to the external documentation site. This is used for help links in the inter
 
 ---
 
+<a id="history_max_per_type"></a>
+**`history_max_per_type`**
+Maximum number of values stored per history type. Older entries are discarded when this limit is reached.
+
+- **Default**: `10`
+- **Environment Variable**: `OOD_LOOP_HISTORY_MAX_PER_TYPE`
+
+---
+
+<a id="history_save_interval"></a>
+**`history_save_interval`**
+Minimum seconds between automatic history flushes to disk. Updates before this interval are kept in memory.
+
+- **Default**: `900` (15 minutes)
+- **Environment Variable**: `OOD_LOOP_HISTORY_SAVE_INTERVAL`
+
+---
+
 ### Other Environment Variables
 - [OOD_LOOP_CONFIG_DIRECTORY](#ood_loop_config_directory)
 - [OOD_LOOP_COMMAND_SERVER_FILE](#ood_loop_command_server_file)
@@ -320,6 +340,8 @@ max_download_file_size: 15_000_000_000
 max_upload_file_size: 2_000_000_000
 zenodo_enabled: true
 guide_url: https://example.com/loop
+history_max_per_type: 15
+history_save_interval: 30
 ```
 
 #### `.env` File example
@@ -347,4 +369,6 @@ OOD_LOOP_MAX_DOWNLOAD_FILE_SIZE=15_000_000_000
 OOD_LOOP_MAX_UPLOAD_FILE_SIZE=2_000_000_000
 OOD_LOOP_ZENODO_ENABLED=true
 OOD_LOOP_GUIDE_URL=https://example.com/loop
+OOD_LOOP_HISTORY_MAX_PER_TYPE=15
+OOD_LOOP_HISTORY_SAVE_INTERVAL=30
 ```
