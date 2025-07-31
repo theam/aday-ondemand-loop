@@ -131,6 +131,8 @@ At the top of the global Uploads page, a summary panel displays the current syst
     - **Pending** – Files queued for upload.
     - **In Progress** – Files currently being uploaded.
     - **Completed** – Files uploaded successfully.
+    - **Cancelled** – Uploads that were manually cancelled before completion.
+    - **Error** – Uploads that encountered a problem during transfer.
     - **Total** – Total number of files in the current batch.
 
 #### Files Metadata

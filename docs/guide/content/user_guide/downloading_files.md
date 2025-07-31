@@ -48,6 +48,7 @@ At the top of the Downloads tab, a summary panel displays key information about 
 - **Status Summary Counters**  
   A visual breakdown of all download requests associated with this project:
     - **Pending** – Files waiting to be processed.
+    - **In Progress** – Files currently being downloaded.
     - **Completed** – Successfully downloaded files.
     - **Cancelled** – Downloads that were manually cancelled before completion.
     - **Error** – Downloads that failed due to network, a repository issue or a failed checksum verification.
@@ -97,6 +98,8 @@ At the top of the global **Downloads** page, a summary panel displays the curren
     - **Pending** – Files queued for download but not yet started.
     - **In Progress** – Files currently being downloaded.
     - **Completed** – Successfully downloaded files.
+    - **Cancelled** – Downloads that were manually cancelled before completion.
+    - **Error** – Downloads that failed while in progress.
     - **Total** – The total number of files in the current job.
 
 #### Files Metadata
