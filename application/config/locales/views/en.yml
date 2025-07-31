@@ -50,7 +50,6 @@ en:
       logo:
         logo_alt_text: "OnDemand Loop Logo"
       navigation:
-        icon_explore_alt: "Loop Application Icon"
         icon_ood_alt: "Open OnDemand Icon"
         link_projects_text: "Projects"
         link_downloads_text: "Downloads"
@@ -59,7 +58,6 @@ en:
         link_dataverse_text: "Dataverse"
         link_zenodo_text: "Zenodo"
         link_repo_settings_text: "Settings"
-        link_explore_text: "Explore"
         link_help_text: "Help"
         link_guide_text: "Guide"
         link_sitemap_text: "Sitemap"
@@ -86,7 +84,8 @@ en:
     repo_resolver_bar:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
-      button_submit_text: "Connect"
+      button_submit_text: "Explore"
+      button_submit_icon_alt: "OnDemand Loop Application Icon"
   projects:
     show:
       download_actions:
@@ -227,6 +226,13 @@ en:
     ood_folder_button:
       button_open_in_ondemand_title: "Open in OnDemand"
       image_ood_icon_alt: "Open OnDemand Icon"
+    project_selection:
+      project_select_label: "Choose an existing project"
+      option_create_project_text: "➕ Create new project"
+      button_submit_aria_label: "Add selected files to project"
+      button_submit_text: "Add Files to Project"
+      button_open_project_title: "Open selected project details page"
+      button_open_project_label: "Open selected project"
     tabs_scrollable:
       button_tabs_scroll_left_label: "Scroll tabs left"
       button_tabs_scroll_right_label: "Scroll tabs right"

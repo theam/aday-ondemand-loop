@@ -1,11 +1,14 @@
 <%
   id = local_assigns.fetch(:id, 'repo-resolver-bar')
+  input_id = "#{id}_input"
+  color = local_assigns.fetch(:color, 'bg-primary-subtle')
+  collapse = local_assigns.fetch(:collapse, false)
   show_images = local_assigns.fetch(:show_images, true)
 %>
-<div id="<%= id %>" class="collapse bg-light" style="transition: none;"
+<div id="<%= id %>" class="shadow-sm <%= color %> <%= 'collapse' if collapse %>" style="transition: none;"
      data-controller="focus-on-event"
      data-focus-on-event-event-value="shown.bs.collapse"
-     data-focus-on-event-element-id-value="input_repo_url">
+     data-focus-on-event-element-id-value="<%= input_id %>">
   <div class="d-flex align-items-center justify-content-between py-3 px-5 border-bottom">
 
     <% if show_images %>
@@ -25,18 +28,19 @@
 
       <input type="text"
              name="repo_url"
-             id="input_repo_url"
+             id="<%= input_id %>"
              placeholder="<%= t('.input_repo_url_placeholder') %>"
              aria-label="<%= t('.input_repo_url_label') %>"
              class="form-control"
              style="flex: 1 1 auto;">
 
-      <button class="btn btn-sm btn-primary px-3" type="submit"
+      <button class="btn btn-primary-dark ps-2 pe-3 d-inline-flex align-items-center" type="submit"
               data-submit-button-target="button"
               data-action="click->submit-button#click">
         <span data-submit-button-target="spinner" aria-live="polite"
               class="spinner-border spinner-border-sm me-1 d-none"
               role="status" aria-hidden="true"></span>
+        <%= image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class me-2') %>
         <span data-submit-button-target="label"><%= t('.button_submit_text') %></span>
       </button>
     </form>
