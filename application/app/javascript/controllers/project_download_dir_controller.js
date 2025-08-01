@@ -1,21 +1,20 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["modal", "browser", "path", "form"]
+    static targets = ["modal", "path", "form"]
+    static values = { browserId: String }
 
     connect() {
         this.modalInstance = bootstrap.Modal.getOrCreateInstance(this.modalTarget)
         this.boundUpdate = this.updatePathFromEvent.bind(this)
-        if (this.hasBrowserTarget) {
-            const id = this.browserTarget.id
-            document.addEventListener(`file-browser:path-change:${id}`, this.boundUpdate)
+        if (this.browserIdValue) {
+            document.addEventListener(`file-browser:path-change:${this.browserIdValue}`, this.boundUpdate)
         }
     }
 
     disconnect() {
-        if (this.hasBrowserTarget) {
-            const id = this.browserTarget.id
-            document.removeEventListener(`file-browser:path-change:${id}`, this.boundUpdate)
+        if (this.browserIdValue) {
+            document.removeEventListener(`file-browser:path-change:${this.browserIdValue}`, this.boundUpdate)
         }
     }
 
@@ -31,9 +30,11 @@ export default class extends Controller {
 
     select(event) {
         if (event) event.preventDefault()
-        // get current path from browser
-        const input = this.browserTarget.querySelector('[data-file-browser-target="pathInput"]')
-        if (input) this.pathTarget.value = input.value
+        const browser = document.getElementById(this.browserIdValue)
+        if (browser) {
+            const input = browser.querySelector('[data-file-browser-target="pathInput"]')
+            if (input) this.pathTarget.value = input.value
+        }
         this.formTarget.requestSubmit()
     }
 }

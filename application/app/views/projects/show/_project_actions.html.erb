@@ -15,15 +15,20 @@
       <span class="visually-hidden"><%= t('.button_open_project_folder_label') %></span>
     </a>
 
-    <div data-controller="project-download-dir">
+    <% file_browser_id = project_download_dir_browser_id(project) %>
+    <div data-controller="project-download-dir"
+         data-project-download-dir-browser-id-value="<%= file_browser_id %>">
       <button type="button" class="btn btn-sm btn-outline-secondary"
-              data-action="project-download-dir#open"
+              data-controller="lazy-loader"
+              data-lazy-loader-container-id-value="<%= file_browser_id %>"
+              data-lazy-loader-url-value="<%= file_browser_path(path: project.download_dir) %>"
+              data-action="click->lazy-loader#load click->project-download-dir#open"
               title="<%= t('.button_edit_download_dir_title') %>"
               aria-label="<%= t('.button_edit_download_dir_label') %>">
         <i class="bi bi-pencil-square" aria-hidden="true"></i>
         <span class="visually-hidden"><%= t('.button_edit_download_dir_label') %></span>
       </button>
-      <%= render partial: '/projects/show/edit_download_dir_modal', locals: { project: project } %>
+      <%= render partial: '/projects/show/edit_download_dir_modal', locals: { project: project, file_browser_id: file_browser_id } %>
     </div>
 
     <%= render partial: '/shared/file_row_date', locals: { date: project.creation_date, title: t('.field_creation_date_title'), classes: 'me-1' } %>
