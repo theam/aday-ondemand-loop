@@ -30,11 +30,7 @@ export default class extends Controller {
 
     select(event) {
         if (event) event.preventDefault()
-        const browser = document.getElementById(this.browserIdValue)
-        if (browser) {
-            const input = browser.querySelector('[data-file-browser-target="pathInput"]')
-            if (input) this.pathTarget.value = input.value
-        }
+        // pathTarget stays updated via the file-browser:path-change event
         this.formTarget.requestSubmit()
     }
 }
