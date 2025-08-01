@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     # post /projects/:project_id/downloads/files/:id/cancel => cancel download file
     resources :download_files, path: 'downloads/files', only: [ :destroy ] do
       post :cancel, on: :member
+      post :retry, on: :member
     end
 
     # post /projects/:project_id/uploads => create new upload batch
