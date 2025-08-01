@@ -15,6 +15,17 @@
       <span class="visually-hidden"><%= t('.button_open_project_folder_label') %></span>
     </a>
 
+    <div data-controller="project-download-dir">
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+              data-action="project-download-dir#open"
+              title="<%= t('.button_edit_download_dir_title') %>"
+              aria-label="<%= t('.button_edit_download_dir_label') %>">
+        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+        <span class="visually-hidden"><%= t('.button_edit_download_dir_label') %></span>
+      </button>
+      <%= render partial: '/projects/show/edit_download_dir_modal', locals: { project: project } %>
+    </div>
+
     <%= render partial: '/shared/file_row_date', locals: { date: project.creation_date, title: t('.field_creation_date_title'), classes: 'me-1' } %>
 
     <h2 class="mb-0 fs-4 h5" data-project-name-target="name display"><%= project.name %></h2>
