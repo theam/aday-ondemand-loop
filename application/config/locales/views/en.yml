@@ -93,6 +93,8 @@ en:
         header_download_files_text: "Downloads"
         button_add_files_text: "Add Files"
         button_add_files_title: "Add dataset to browse and select files"
+        button_edit_download_dir_title: "Change Project folder"
+        button_edit_download_dir_label: "Change folder"
       download_files:
         badge_repository_files_tooltip: "Repository Files"
         button_delete_file_title: "Delete File"
