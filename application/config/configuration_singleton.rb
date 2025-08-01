@@ -26,6 +26,7 @@ class ConfigurationSingleton
       ::ConfigurationProperty.integer(:max_download_file_size, default: 10 * 1024 * 1024 * 1024), # 10 GIGABYTE
       ::ConfigurationProperty.integer(:max_upload_file_size, default: 1024 * 1024 * 1024), # 1 GIGABYTE
       ::ConfigurationProperty.boolean(:zenodo_enabled, default: false),
+      ::ConfigurationProperty.integer(:repo_history_max_entries, default: 100),
       ::ConfigurationProperty.property(:guide_url, default: 'https://iqss.github.io/ondemand-loop/'),
       ::ConfigurationProperty.property(:http_proxy, read_from_env: false),
       ::ConfigurationProperty.integer(:default_connect_timeout, default: 5),
@@ -44,6 +45,10 @@ class ConfigurationSingleton
 
   def repo_db_file
     File.join(metadata_root, 'repos', 'repo_db.yml')
+  end
+
+  def repo_history_file
+    File.join(metadata_root, 'repos', 'repo_history.yml')
   end
 
   def config
