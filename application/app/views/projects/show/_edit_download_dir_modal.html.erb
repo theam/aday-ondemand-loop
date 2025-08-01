@@ -8,7 +8,7 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><%= t('.header_title') %></h5>
+        <h5 class="modal-title"><%= t('.header_title', project_name: project.name) %></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<%= t('layouts.modal.button_close_label') %>"></button>
       </div>
       <div class="modal-body">
@@ -16,7 +16,7 @@
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <%= hidden_field_tag :_method, 'put' %>
           <div class="mb-3">
-            <input type="text" readonly name="download_dir" class="form-control" value="<%= project.download_dir %>" data-project-download-dir-target="path" aria-label="<%= t('.field_path_label') %>">
+            <input type="text" readonly name="download_dir" class="form-control bg-light text-muted" value="<%= project.download_dir %>" data-project-download-dir-target="path" aria-label="<%= t('.field_path_label') %>">
           </div>
           <%= render partial: '/file_browser/file_browser', locals: { id: file_browser_id, class: 'mb-3 d-none' } %>
           <div class="d-flex justify-content-end gap-2 mt-4">

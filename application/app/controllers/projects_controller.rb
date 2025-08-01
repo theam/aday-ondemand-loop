@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  include LoggingCommon
 
   def index
     @projects = Project.all
@@ -19,7 +20,7 @@ class ProjectsController < ApplicationController
       flash[:alert] = t(".project_create_error", errors: project.errors.full_messages)
     end
 
-    redirect_to projects_path
+    redirect_back fallback_location: projects_path
   end
 
   def update
@@ -41,11 +42,13 @@ class ProjectsController < ApplicationController
         format.html { redirect_back fallback_location: projects_path, notice: t(".project_updated_successfully", project_name: project.name) }
         format.json { render json: project.to_json, status: :ok }
       end
+      log_info('Project updated successfully', { project_id: project_id })
     else
       respond_to do |format|
         format.html { redirect_back fallback_location: projects_path, alert: t(".project_update_error", errors: project.errors.full_messages) }
         format.json { render json: { error: project.errors.full_messages }, status: :unprocessable_entity }
       end
+      log_error('Unable to update project', { project_id: project_id, errors: project.errors.full_messages })
     end
   end
 
@@ -70,6 +73,6 @@ class ProjectsController < ApplicationController
     end
 
     project.destroy
-    redirect_to projects_path, notice: t(".project_deleted_successfully", project_name: project.name)
+    redirect_back fallback_location: projects_path, notice: t(".project_deleted_successfully", project_name: project.name)
   end
 end
