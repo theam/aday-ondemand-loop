@@ -106,6 +106,24 @@ class UrlParserTest < ActiveSupport::TestCase
     assert_nil UrlParser.parse('123://bad')
   end
 
+  test 'build should default to https scheme' do
+    parser = UrlParser.build('example.org')
+
+    assert parser
+    assert_equal 'https', parser.scheme
+    assert_equal 'example.org', parser.domain
+    assert_nil parser.port
+  end
+
+  test 'build should accept custom scheme and port' do
+    parser = UrlParser.build('localhost', scheme: 'http', port: 8080)
+
+    assert parser
+    assert_equal 'http', parser.scheme
+    assert_equal 'localhost', parser.domain
+    assert_equal 8080, parser.port
+  end
+
   test 'should raise NoMethodError when calling new directly' do
     assert_raises(NoMethodError) do
       UrlParser.new('https://example.com/path')

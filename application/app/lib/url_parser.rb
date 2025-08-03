@@ -20,6 +20,16 @@ class UrlParser
     nil
   end
 
+  def self.build(domain, scheme: nil, port: nil)
+    scheme = 'https' if scheme.blank?
+    url = Addressable::URI.new(
+      scheme: scheme,
+      host: domain,
+      port: port
+    ).to_s
+    parse(url)
+  end
+
   private_class_method :new
 
   def https?
