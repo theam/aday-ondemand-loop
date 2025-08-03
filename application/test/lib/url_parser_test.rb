@@ -124,6 +124,11 @@ class UrlParserTest < ActiveSupport::TestCase
     assert_equal 8080, parser.port
   end
 
+  test 'build should return nil when domain is blank' do
+    assert_nil UrlParser.build(nil)
+    assert_nil UrlParser.build('')
+  end
+
   test 'should raise NoMethodError when calling new directly' do
     assert_raises(NoMethodError) do
       UrlParser.new('https://example.com/path')
