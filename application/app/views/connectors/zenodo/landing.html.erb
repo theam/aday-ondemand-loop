@@ -1,0 +1,47 @@
+<% content_for :title, t('zenodo.landing_page.index.page_title') %>
+<div class="zenodo container-md content" role="main">
+  <%= render partial: '/shared/breadcrumbs', locals: { links: [{text: t('shared.breadcrumbs.zenodo')}]} %>
+
+  <div class="my-4 pb-1">
+    <%= link_to 'https://zenodo.org/', target: '_blank', rel: 'noopener', aria: { label: t('connectors.zenodo.aria_label') } do %>
+      <%= image_tag 'zenodo_project.svg', alt: t('connectors.zenodo.title'), width: 280 %>
+    <% end %>
+  </div>
+
+  <%= form_with url: explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'actions', object_id: 'landing'), method: :get, local: true do |f| %>
+    <div class="input-group mb-3">
+      <%= f.text_field :query, class: 'form-control', value: query, placeholder: t('zenodo.landing_page.index.field_search_placeholder') %>
+      <%= f.submit t('zenodo.landing_page.index.button_submit_text'), class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+
+  <% if results %>
+    <div class="card">
+      <% if results.items.any? %>
+        <table class="table table-striped table-bordered align-middle mb-0">
+          <caption class="visually-hidden"><%= t('zenodo.landing_page.index.table_results_caption') %></caption>
+          <thead class="table-light">
+            <tr>
+              <th scope="col"><%= t('zenodo.landing_page.index.column_title_text') %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% results.items.each do |item| %>
+              <tr>
+                <td>
+                  <%= link_to item.title, explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'records', object_id: item.id) %>
+                  <div class="small text-muted">
+                    <%= t('zenodo.landing_page.index.label_publication_date_text') %> <%= item.publication_date %> |
+                    <%= t('zenodo.landing_page.index.label_files_text') %> <%= item.files.size %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="alert alert-warning m-3" role="status"><%= t('zenodo.landing_page.index.msg_no_items_found_text') %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

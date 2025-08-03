@@ -27,6 +27,10 @@ class ConnectorResult
     data[:partial]
   end
 
+  def template
+    data[:template] || data[:partial]
+  end
+
   def locals
     data[:locals] || {}
   end
