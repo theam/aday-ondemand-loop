@@ -65,3 +65,4 @@ en:
     show:
       message_success: "Explore route processed"
       message_action_not_found: "Explore action %{action} not found"
+      message_invalid_repo_url: "Invalid repository URL"

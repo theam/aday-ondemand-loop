@@ -8,7 +8,7 @@
     <% end %>
   </div>
 
-  <%= form_with url: explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'actions', object_id: 'landing'), method: :get, local: true do |f| %>
+  <%= form_with url: explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'actions', object_id: 'landing', server_scheme: server_scheme, server_port: server_port), method: :get, local: true do |f| %>
     <div class="input-group mb-3">
       <%= f.text_field :query, class: 'form-control', value: query, placeholder: t('zenodo.landing_page.index.field_search_placeholder') %>
       <%= f.submit t('zenodo.landing_page.index.button_submit_text'), class: 'btn btn-primary' %>
@@ -29,7 +29,7 @@
             <% results.items.each do |item| %>
               <tr>
                 <td>
-                  <%= link_to item.title, explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'records', object_id: item.id) %>
+                  <%= link_to item.title, explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'records', object_id: item.id, server_scheme: server_scheme, server_port: server_port) %>
                   <div class="small text-muted">
                     <%= t('zenodo.landing_page.index.label_publication_date_text') %> <%= item.publication_date %> |
                     <%= t('zenodo.landing_page.index.label_files_text') %> <%= item.files.size %>

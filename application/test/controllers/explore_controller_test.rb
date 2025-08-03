@@ -15,9 +15,13 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'zenodo landing action delegates to search service' do
-    Zenodo::SearchService.any_instance.expects(:search)
-                         .with('test', page: 1, per_page: 10)
-                         .returns(OpenStruct.new(items: []))
+    service = mock
+    service.expects(:search)
+           .with('test', page: 1, per_page: 10)
+           .returns(OpenStruct.new(items: []))
+    Zenodo::SearchService.expects(:new)
+                          .with('https://zenodo.org')
+                          .returns(service)
 
     get explore_url(
       connector_type: 'zenodo',
@@ -28,5 +32,12 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_response :success
+  end
+
+  test 'redirects when repo url is invalid' do
+    get '/explore/zenodo/%20/actions/landing'
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('explore.show.message_invalid_repo_url'), flash[:alert]
   end
 end
