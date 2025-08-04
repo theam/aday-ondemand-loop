@@ -1,0 +1,25 @@
+<% content_for :title, t('zenodo.records.show.page_title') %>
+<div class="zenodo container-md content" role="main">
+  <%= render partial: '/shared/breadcrumbs', locals: { links: [
+    { text: t('shared.breadcrumbs.zenodo'), url: explore_path(connector_type: 'zenodo', server_domain: server_domain, object_type: 'actions', object_id: 'landing', server_scheme: server_scheme, server_port: server_port) },
+    { text: record.title }
+  ] } %>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= render partial: 'zenodo/records/record_actions', locals: { record: record, zenodo_url: repo_url.server_url } %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= render partial: 'zenodo/records/record_info', locals: { record: record } %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <%= render partial: 'zenodo/records/record_files', locals: { record: record, record_id: record_id, server_domain: server_domain, server_scheme: server_scheme, server_port: server_port } %>
+    </div>
+  </div>
+</div>

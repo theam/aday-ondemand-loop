@@ -18,5 +18,12 @@ module Dataverse
         success: true
       )
     end
+
+    def create(_request_params)
+      ConnectorResult.new(
+        message: { notice: I18n.t('explore.show.message_success') },
+        success: true
+      )
+    end
   end
 end
