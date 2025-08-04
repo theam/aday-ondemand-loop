@@ -12,7 +12,7 @@ class Zenodo::DownloadConnectorMetadataTest < ActiveSupport::TestCase
   end
 
   test 'files_url uses record id' do
-    assert_match '/records/1', @meta.files_url
+    assert_equal '/explore/zenodo/zenodo.org/records/1', @meta.files_url
   end
 
   test 'to_h and missing methods' do
