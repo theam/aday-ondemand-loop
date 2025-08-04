@@ -22,7 +22,7 @@ class Zenodo::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
 
   test 'edit returns connector result' do
     result = @processor.edit(@bundle, {})
-    assert_equal '/connectors/zenodo/connector_edit_form', result.partial
+    assert_equal '/connectors/zenodo/connector_edit_form', result.template
     assert_equal({upload_bundle: @bundle}, result.locals)
   end
 

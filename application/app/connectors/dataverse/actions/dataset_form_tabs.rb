@@ -6,7 +6,7 @@ module Dataverse::Actions
       profile = profile(upload_bundle)
 
       ConnectorResult.new(
-        partial: '/connectors/dataverse/dataset_form_tabs',
+        template: '/connectors/dataverse/dataset_form_tabs',
         locals: { upload_bundle: upload_bundle, data: datasets, profile: profile, subjects: subjects },
       )
     end

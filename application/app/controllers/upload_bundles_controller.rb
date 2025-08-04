@@ -43,7 +43,7 @@ class UploadBundlesController < ApplicationController
     processor_params = params.permit(*processor.params_schema).to_h
     result = processor.edit(upload_bundle, processor_params)
 
-    render partial: result.partial, layout: false, locals: result.locals
+    render partial: result.template, layout: false, locals: result.locals
   end
 
   def update

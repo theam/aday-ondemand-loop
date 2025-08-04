@@ -23,12 +23,8 @@ class ConnectorResult
     data[:redirect_url]
   end
 
-  def partial
-    data[:partial]
-  end
-
   def template
-    data[:template] || data[:partial]
+    data[:template]
   end
 
   def locals

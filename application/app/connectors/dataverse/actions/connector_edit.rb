@@ -2,7 +2,7 @@ module Dataverse::Actions
   class ConnectorEdit
     def edit(upload_bundle, request_params)
       ConnectorResult.new(
-        partial: '/connectors/dataverse/connector_edit_form',
+        template: '/connectors/dataverse/connector_edit_form',
         locals: { upload_bundle: upload_bundle }
       )
     end

@@ -15,33 +15,29 @@ module Zenodo
     end
 
     def show(request_params)
-      action = ConnectorActionDispatcher.load(
-        request_params[:connector_type],
-        request_params[:object_type],
-        request_params[:object_id]
-      )
+      action_type = request_params[:object_type]
+      object_id = request_params[:object_id]
+      action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
       action.show(request_params)
     rescue ConnectorActionDispatcher::ConnectorNotSupported => e
-      log_error('Zenodo explore action not found', { action: request_params[:object_id] }, e)
+      log_error('Zenodo explore action not found', { action_type: action_type, object_id: object_id }, e)
       ConnectorResult.new(
         template: '/connectors/zenodo/explore_placeholder',
         locals: { data: request_params },
-        message: { alert: I18n.t('explore.show.message_action_not_found', action: request_params[:object_id]) },
+        message: { alert: I18n.t('explore.show.message_action_not_found', action: action_type) },
         success: false
       )
     end
 
     def create(request_params)
-      action = ConnectorActionDispatcher.load(
-        request_params[:connector_type],
-        request_params[:object_type],
-        request_params[:object_id]
-      )
+      action_type = request_params[:object_type]
+      object_id = request_params[:object_id]
+      action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
       action.create(request_params)
     rescue ConnectorActionDispatcher::ConnectorNotSupported => e
-      log_error('Zenodo explore action not found', { action: request_params[:object_id] }, e)
+      log_error('Zenodo explore action not found', { action_type: action_type, object_id: object_id }, e)
       ConnectorResult.new(
-        message: { alert: I18n.t('explore.show.message_action_not_found', action: request_params[:object_id]) },
+        message: { alert: I18n.t('explore.show.message_action_not_found', action: action_type) },
         success: false
       )
     end

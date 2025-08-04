@@ -13,7 +13,7 @@ class Dataverse::Actions::DatasetSelectTest < ActiveSupport::TestCase
   test 'edit returns select form' do
     @action.stubs(:datasets).returns(OpenStruct.new(items: []))
     result = @action.edit(@bundle, {})
-    assert_equal '/connectors/dataverse/dataset_select_form', result.partial
+    assert_equal '/connectors/dataverse/dataset_select_form', result.template
   end
 
   test 'update stores dataset id and title' do

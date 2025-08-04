@@ -17,7 +17,7 @@ class Dataverse::Actions::DatasetCreateTest < ActiveSupport::TestCase
     Dataverse::MetadataService.stubs(:new).returns(metadata_service)
     RepoRegistry.stubs(:repo_db).returns(stub(get: OpenStruct.new(metadata: OpenStruct.new(subjects: nil)), update: true))
     result = @action.edit(@bundle, {})
-    assert_equal '/connectors/dataverse/dataset_create_form', result.partial
+    assert_equal '/connectors/dataverse/dataset_create_form', result.template
   end
 
   test 'update stores dataset metadata' do
