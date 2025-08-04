@@ -27,12 +27,6 @@ module Zenodo::Actions
         },
         success: true
       )
-    rescue => e
-      log_error('Find record error', { record_id: @record_id }, e)
-      ConnectorResult.new(
-        message: { alert: I18n.t('zenodo.records.message_record_service_error', record_id: @record_id) },
-        success: false
-      )
     end
 
     def create(request_params)
@@ -66,9 +60,6 @@ module Zenodo::Actions
         return ConnectorResult.new(message: { alert: I18n.t('zenodo.records.download.message_save_file_error') }, success: false)
       end
       ConnectorResult.new(message: { notice: I18n.t('zenodo.records.download.message_success', project_name: project.name) }, success: true)
-    rescue => e
-      log_error('Download files error', { record_id: @record_id }, e)
-      ConnectorResult.new(message: { alert: I18n.t('zenodo.records.message_record_service_error', record_id: @record_id) }, success: false)
     end
   end
 end
