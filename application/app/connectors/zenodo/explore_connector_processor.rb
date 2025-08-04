@@ -8,8 +8,8 @@ module Zenodo
 
     def params_schema
       [
-        :connector_type, :server_domain, :object_type, :object_id,
-        :server_scheme, :server_port, :query, :page, :per_page,
+        :connector_type, :object_type, :object_id,
+        :query, :page, :per_page,
         :project_id, { file_ids: [] }
       ]
     end

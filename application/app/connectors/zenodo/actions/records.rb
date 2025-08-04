@@ -8,9 +8,6 @@ module Zenodo::Actions
 
     def show(request_params)
       repo_url = request_params[:repo_url]
-      server_domain = request_params[:server_domain]
-      server_scheme = request_params[:server_scheme]
-      server_port = request_params[:server_port]
 
       service = Zenodo::RecordService.new(repo_url.server_url)
       record = service.find_record(@record_id)
@@ -28,9 +25,6 @@ module Zenodo::Actions
         locals: {
           record: record,
           record_id: @record_id,
-          server_domain: server_domain,
-          server_scheme: server_scheme,
-          server_port: server_port,
           repo_url: repo_url
         },
         success: true
