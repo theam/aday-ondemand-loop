@@ -9,7 +9,7 @@ module Zenodo
     def params_schema
       [
         :connector_type, :object_type, :object_id,
-        :query, :page, :per_page,
+        :query, :page,
         :project_id, { file_ids: [] }
       ]
     end
