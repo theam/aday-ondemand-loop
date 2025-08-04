@@ -5,7 +5,7 @@ module Zenodo
       html_options['aria-label'] = I18n.t('acts_as_page.link_prev_page_a11y_label')
       html_options[:title] = I18n.t('acts_as_page.link_prev_page_title')
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
-      link_to(explore_path(connector_type: 'zenodo',
+      link_to(explore_path(connector_type: ConnectorType::ZENODO.to_s,
                            server_domain: repo_url.domain,
                            object_type: 'actions',
                            object_id: 'landing',
@@ -23,7 +23,7 @@ module Zenodo
       html_options['aria-label'] = I18n.t('acts_as_page.link_next_page_a11y_label')
       html_options[:title] = I18n.t('acts_as_page.link_next_page_title')
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
-      link_to(explore_path(connector_type: 'zenodo',
+      link_to(explore_path(connector_type: ConnectorType::ZENODO.to_s,
                            server_domain: repo_url.domain,
                            object_type: 'actions',
                            object_id: 'landing',
