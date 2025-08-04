@@ -1,25 +1,7 @@
 module Dataverse::Actions
   class DatasetCreate
     def edit(upload_bundle, request_params)
-      connector_metadata = upload_bundle.connector_metadata
-      repo_db = RepoRegistry.repo_db
-      dataverse_data = repo_db.get(connector_metadata.dataverse_url)
-      if dataverse_data.metadata.subjects.nil?
-        dv_metadata_service = Dataverse::MetadataService.new(connector_metadata.dataverse_url)
-        subjects = dv_metadata_service.get_citation_metadata.subjects
-        repo_db.update(connector_metadata.dataverse_url, metadata: { subjects: subjects })
-      else
-        subjects = dataverse_data.metadata.subjects
-      end
-
-      api_key = connector_metadata.api_key.value
-      user_service = Dataverse::UserService.new(connector_metadata.dataverse_url, api_key: api_key)
-      user_profile = user_service.get_user_profile
-
-      ConnectorResult.new(
-        template: '/connectors/dataverse/dataset_create_form',
-        locals: { upload_bundle: upload_bundle, profile: user_profile, subjects: subjects }
-      )
+      raise NotImplementedError, 'Only update is supported for DatasetCreate'
     end
 
     def update(upload_bundle, request_params)

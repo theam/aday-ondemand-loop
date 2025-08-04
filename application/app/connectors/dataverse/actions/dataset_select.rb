@@ -1,12 +1,7 @@
 module Dataverse::Actions
   class DatasetSelect
     def edit(upload_bundle, request_params)
-      datasets = datasets(upload_bundle)
-
-      ConnectorResult.new(
-        template: '/connectors/dataverse/dataset_select_form',
-        locals: { upload_bundle: upload_bundle, data: datasets },
-      )
+      raise NotImplementedError, 'Only update is supported for DatasetSelect'
     end
 
     def update(upload_bundle, request_params)
@@ -30,7 +25,7 @@ module Dataverse::Actions
       api_key = upload_bundle.connector_metadata.api_key.value
       service = Dataverse::CollectionService.new(dataverse_url, api_key: api_key)
       collection_id = upload_bundle.connector_metadata.collection_id
-      service.search_collection_items(collection_id, page: 1, per_page: 100, include_collections: false).data
+      service.search_collection_items(collection_id, page: 1, per_page: 100, include_collections: false, include_drafts: true).data
     end
 
     def dataset_title(upload_bundle, dataset_id)

@@ -10,14 +10,8 @@ class Dataverse::Actions::DatasetCreateTest < ActiveSupport::TestCase
     @action = Dataverse::Actions::DatasetCreate.new
   end
 
-  test 'edit returns dataset create form' do
-    user_service = mock('service'); user_service.stubs(:get_user_profile).returns(Dataverse::UserProfileResponse.new({}.to_json))
-    Dataverse::UserService.stubs(:new).returns(user_service)
-    metadata_service = mock('meta'); metadata_service.stubs(:get_citation_metadata).returns(OpenStruct.new(subjects: []))
-    Dataverse::MetadataService.stubs(:new).returns(metadata_service)
-    RepoRegistry.stubs(:repo_db).returns(stub(get: OpenStruct.new(metadata: OpenStruct.new(subjects: nil)), update: true))
-    result = @action.edit(@bundle, {})
-    assert_equal '/connectors/dataverse/dataset_create_form', result.template
+  test 'edit not implemented' do
+    assert_raises(NotImplementedError) { @action.edit(@bundle, {}) }
   end
 
   test 'update stores dataset metadata' do

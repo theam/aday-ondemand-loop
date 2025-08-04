@@ -22,7 +22,7 @@ module Dataverse::Actions
       api_key = upload_bundle.connector_metadata.api_key.value
       service = Dataverse::CollectionService.new(dataverse_url, api_key: api_key)
       collection_id = upload_bundle.connector_metadata.collection_id
-      service.search_collection_items(collection_id, page: 1, per_page: 100, include_collections: false).data
+      service.search_collection_items(collection_id, page: 1, per_page: 100, include_collections: false, include_drafts: true).data
     end
 
     def subjects(upload_bundle)
