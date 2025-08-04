@@ -15,12 +15,10 @@ class ProjectsController < ApplicationController
     project_name = params[:project_name] || ProjectNameGenerator.generate
     project = Project.new(id: project_name, name: project_name)
     if project.save
-      flash[:notice] = t(".project_created", project_name: project_name)
+      redirect_to  project_path(id: project.id), notice: t(".project_created", project_name: project_name)
     else
-      flash[:alert] = t(".project_create_error", errors: project.errors.full_messages)
+      redirect_back fallback_location: projects_path, alert: t(".project_create_error", errors: project.errors.full_messages)
     end
-
-    redirect_back fallback_location: projects_path
   end
 
   def update
@@ -73,6 +71,6 @@ class ProjectsController < ApplicationController
     end
 
     project.destroy
-    redirect_back fallback_location: projects_path, notice: t(".project_deleted_successfully", project_name: project.name)
+    redirect_to projects_path, notice: t(".project_deleted_successfully", project_name: project.name)
   end
 end

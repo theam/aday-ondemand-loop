@@ -41,14 +41,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should create project with generated name" do
     ProjectNameGenerator.stubs(:generate).returns("generated_project")
     post projects_url
-    assert_redirected_to projects_url
+    assert_redirected_to project_url(id: 'generated_project')
     follow_redirect!
     assert_match "Project generated_project created", flash[:notice]
   end
 
   test "should create project with provided name" do
     post projects_url, params: { project_name: "manual_project" }
-    assert_redirected_to projects_url
+    assert_redirected_to project_url(id: 'manual_project')
     follow_redirect!
     assert_match "Project manual_project created", flash[:notice]
   end
