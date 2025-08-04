@@ -129,6 +129,24 @@ class UrlParserTest < ActiveSupport::TestCase
     assert_nil UrlParser.build('')
   end
 
+  test 'scheme_override returns nil for https and scheme for others' do
+    https_parser = UrlParser.parse('https://example.com')
+    http_parser = UrlParser.parse('http://example.com')
+
+    assert_nil https_parser.scheme_override
+    assert_equal 'http', http_parser.scheme_override
+  end
+
+  test 'port_override returns nil for default ports and value for non-standard ports' do
+    https_default = UrlParser.parse('https://example.com')
+    http_default = UrlParser.parse('http://example.com:80')
+    http_custom = UrlParser.parse('http://example.com:8080')
+
+    assert_nil https_default.port_override
+    assert_nil http_default.port_override
+    assert_equal 8080, http_custom.port_override
+  end
+
   test 'should raise NoMethodError when calling new directly' do
     assert_raises(NoMethodError) do
       UrlParser.new('https://example.com/path')

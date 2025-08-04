@@ -52,6 +52,16 @@ class UrlParser
     ).to_s
   end
 
+  def scheme_override
+    https? ? nil : scheme
+  end
+
+  def port_override
+    return nil unless port
+
+    port == default_port(scheme) ? nil : port
+  end
+
   private
 
   def initialize(uri)
