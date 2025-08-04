@@ -14,13 +14,11 @@ module Zenodo
     end
 
     def download
-      project = Project.find(file.project_id)
       download_url = connector_metadata.download_url
-      download_location = File.join(project.download_dir, file.filename)
+      download_location = file.download_location
       temp_location = "#{download_location}.part"
       FileUtils.mkdir_p(File.dirname(download_location))
 
-      connector_metadata.download_location = download_location
       connector_metadata.temp_location = temp_location
       file.update({metadata: connector_metadata.to_h})
 
