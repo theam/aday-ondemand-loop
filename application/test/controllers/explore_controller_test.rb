@@ -37,7 +37,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     get '/explore/zenodo/%20/actions/landing'
 
     assert_redirected_to root_path
-    assert_equal I18n.t('explore.show.message_invalid_repo_url'), flash[:alert]
+    assert_equal I18n.t('explore.show.message_invalid_repo_url', repo_url: ''), flash[:alert]
   end
 
   test 'zenodo records action renders record view' do

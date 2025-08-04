@@ -8,27 +8,25 @@ module Zenodo
 
     def get_controller_url(object_url)
       zurl = Zenodo::ZenodoUrl.parse(object_url)
-      scheme_param = zurl.scheme == 'https' ? nil : zurl.scheme
-      port_param = zurl.port
 
       if zurl.record?
         redirect_url = @url_helper.explore_path(
-          connector_type: 'zenodo',
+          connector_type: ConnectorType::ZENODO.to_s,
           server_domain: zurl.domain,
           object_type: 'records',
           object_id: zurl.record_id,
-          server_scheme: scheme_param,
-          server_port: port_param
+          server_scheme: zurl.scheme_override,
+          server_port: zurl.port_override
         )
       else
         message = { alert: I18n.t('connectors.zenodo.display_repo_controller.message_url_not_supported', url: object_url) }
         redirect_url = @url_helper.explore_path(
-          connector_type: 'zenodo',
+          connector_type: ConnectorType::ZENODO.to_s,
           server_domain: zurl.domain,
           object_type: 'actions',
           object_id: 'landing',
-          server_scheme: scheme_param,
-          server_port: port_param
+          server_scheme: zurl.scheme_override,
+          server_port: zurl.port_override
         )
       end
 

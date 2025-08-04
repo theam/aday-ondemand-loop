@@ -10,7 +10,7 @@ class ExploreController < ApplicationController
     )
 
     if repo_url.nil?
-      redirect_back fallback_location: root_path, alert: I18n.t('explore.show.message_invalid_repo_url')
+      redirect_back fallback_location: root_path, alert: I18n.t('explore.show.message_invalid_repo_url', repo_url: repo_url.to_s)
       return
     end
 
@@ -22,6 +22,9 @@ class ExploreController < ApplicationController
     return redirect_to root_path, **result.message unless result.success?
 
     render template: result.template, locals: result.locals
+  rescue => e
+    log_error('Error processing Explore.show processor/action', { connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
+    return redirect_to root_path, alert: I18n.t('explore.show.message_processor_error', connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id])
   end
 
   def create
@@ -33,7 +36,7 @@ class ExploreController < ApplicationController
     )
 
     if repo_url.nil?
-      redirect_back fallback_location: root_path, alert: I18n.t('explore.show.message_invalid_repo_url')
+      redirect_back fallback_location: root_path, alert: I18n.t('explore.create.message_invalid_repo_url', repo_url: repo_url.to_s)
       return
     end
 
@@ -43,5 +46,8 @@ class ExploreController < ApplicationController
     result = processor.create(processor_params)
 
     redirect_back fallback_location: root_path, **result.message
+  rescue => e
+    log_error('Error processing Explore.create processor/action', { connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
+    return redirect_back fallback_location: root_path, alert: I18n.t('explore.create.message_processor_error', connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id])
   end
 end

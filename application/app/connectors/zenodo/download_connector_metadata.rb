@@ -19,10 +19,9 @@ module Zenodo
     end
 
     def files_url
-      zenodo_url = @metadata[:zenodo_url] || Zenodo::RecordsHelper::DEFAULT_ZENODO_URL
       repo_url = Repo::RepoUrl.parse(zenodo_url)
       Rails.application.routes.url_helpers.explore_path(
-        connector_type: 'zenodo',
+        connector_type: ConnectorType::ZENODO.to_s,
         server_domain: repo_url.domain,
         object_type: 'records',
         object_id: record_id,
