@@ -12,6 +12,8 @@ module Dataverse
 
     def get_controller_url(object_url)
       dataverse_url = Dataverse::DataverseUrl.parse(object_url)
+      message = nil
+
       if dataverse_url.nil?
         redirect_url = @url_helper.view_dataverse_landing_path
       elsif dataverse_url.dataverse? || (dataverse_url.file? && dataverse_url.dataset_id.nil?)
@@ -28,10 +30,12 @@ module Dataverse
         )
       else
         redirect_url = @url_helper.view_dataverse_landing_path
+        message = { alert: I18n.t('connectors.dataverse.display_repo_controller.message_url_not_supported', url: object_url) }
       end
 
       ConnectorResult.new(
         redirect_url: redirect_url,
+        message: message,
         success: true,
         )
     end
