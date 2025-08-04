@@ -4,7 +4,7 @@ module Dataverse::Actions
       datasets = datasets(upload_bundle)
 
       ConnectorResult.new(
-        partial: '/connectors/dataverse/dataset_select_form',
+        template: '/connectors/dataverse/dataset_select_form',
         locals: { upload_bundle: upload_bundle, data: datasets },
       )
     end

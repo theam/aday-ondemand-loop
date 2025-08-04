@@ -106,7 +106,7 @@ class UploadBundlesControllerTest < ActionDispatch::IntegrationTest
     UploadBundle.stubs(:find).returns(bundle)
     processor = stub('proc', params_schema: [])
     result = ConnectorResult.new(
-      partial: '/connectors/dataverse/dataset_create_form',
+      template: '/connectors/dataverse/dataset_create_form',
       locals: {
         upload_bundle: bundle,
         profile: OpenStruct.new(full_name: 'User', email: 'user@example.com'),
@@ -129,7 +129,7 @@ class UploadBundlesControllerTest < ActionDispatch::IntegrationTest
     processor = stub('proc', params_schema: [])
     data = OpenStruct.new(total_count: 1, items: [OpenStruct.new(global_id: 'ds1', name: 'Dataset 1')])
     result = ConnectorResult.new(
-      partial: '/connectors/dataverse/dataset_select_form',
+      template: '/connectors/dataverse/dataset_select_form',
       locals: { upload_bundle: bundle, data: data }
     )
     processor.stubs(:edit).returns(result)
@@ -149,7 +149,7 @@ class UploadBundlesControllerTest < ActionDispatch::IntegrationTest
     data = OpenStruct.new(total_count: 1,
                           items: [OpenStruct.new(identifier: 'c1', name: 'Col1', parent_dataverse_name: 'Root')])
     result = ConnectorResult.new(
-      partial: '/connectors/dataverse/collection_select_form',
+      template: '/connectors/dataverse/collection_select_form',
       locals: { upload_bundle: bundle, data: data }
     )
     processor.stubs(:edit).returns(result)
@@ -168,7 +168,7 @@ class UploadBundlesControllerTest < ActionDispatch::IntegrationTest
     UploadBundle.stubs(:find).returns(bundle)
     processor = stub('proc', params_schema: [])
     result = ConnectorResult.new(
-      partial: '/connectors/zenodo/connector_edit_form',
+      template: '/connectors/zenodo/connector_edit_form',
       locals: { upload_bundle: bundle }
     )
     processor.stubs(:edit).returns(result)

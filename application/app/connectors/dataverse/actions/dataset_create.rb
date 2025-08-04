@@ -17,7 +17,7 @@ module Dataverse::Actions
       user_profile = user_service.get_user_profile
 
       ConnectorResult.new(
-        partial: '/connectors/dataverse/dataset_create_form',
+        template: '/connectors/dataverse/dataset_create_form',
         locals: { upload_bundle: upload_bundle, profile: user_profile, subjects: subjects }
       )
     end

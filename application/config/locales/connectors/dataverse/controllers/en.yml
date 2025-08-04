@@ -28,3 +28,7 @@ en:
     landing_page:
       index:
         dataverse_installations_service_error: "Dataverse Installations service error."
+  connectors:
+    dataverse:
+      display_repo_controller:
+        message_url_not_supported: "Dataverse URL not supported: %{url}"

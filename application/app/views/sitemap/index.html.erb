@@ -9,7 +9,7 @@
     <ul>
       <li><%= link_to t('layouts.nav.navigation.link_dataverse_text'), view_dataverse_landing_path %></li>
       <% if ::Configuration.zenodo_enabled %>
-        <li><%= link_to t('layouts.nav.navigation.link_zenodo_text'), view_zenodo_landing_path %></li>
+        <li><%= link_to t('layouts.nav.navigation.link_zenodo_text'), explore_path(connector_type: ConnectorType::ZENODO.to_s, server_domain: 'zenodo.org', object_type: 'actions', object_id: 'landing') %></li>
       <% end %>
       <li><%= link_to t('layouts.nav.navigation.link_repo_settings_text'), repository_settings_path %></li>
     </ul>

@@ -2,33 +2,27 @@
 
 module Zenodo
   class ZenodoUrl
+    DEFAULT_SERVER = 'zenodo.org'
     TYPES = %w[zenodo record deposition file unknown].freeze
 
     attr_reader :type, :record_id, :deposition_id, :file_name
+    delegate :domain, :scheme, :scheme_override, :port, :port_override, to: :base
 
     def self.parse(url)
-      base = UrlParser.parse(url)
+      base = Repo::RepoUrl.parse(url)
       return nil unless base
 
       new(base)
     end
 
-    private_class_method :new
-
     TYPES.each do |t|
       define_method("#{t}?") { type == t }
     end
 
-    def scheme
-      @base.scheme
-    end
-
-    def domain
-      @base.domain
-    end
-
-    def port
-      @base.port
+    private_class_method :new
+    def initialize(base_parser)
+      @base = base_parser
+      parse_type_and_ids
     end
 
     def zenodo_url
@@ -37,12 +31,11 @@ module Zenodo
       FluentUrl.new(base).to_s
     end
 
-    def initialize(base_parser)
-      @base = base_parser
-      parse_type_and_ids
-    end
-
     private
+
+    def base
+      @base
+    end
 
     def parse_type_and_ids
       segments = @base.path_segments

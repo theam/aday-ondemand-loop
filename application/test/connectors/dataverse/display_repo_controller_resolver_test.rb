@@ -353,21 +353,21 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
     assert_respond_to result, :data
     assert_respond_to result, :message
     assert_respond_to result, :resource
-    assert_respond_to result, :partial
+    assert_respond_to result, :template
     assert_respond_to result, :locals
     assert_respond_to result, :to_h
 
     # Test default values
     assert_kind_of Hash, result.message
     assert_nil result.resource
-    assert_nil result.partial
+    assert_nil result.template
     assert_kind_of Hash, result.locals
     assert_equal result.data, result.to_h
   end
 
   # Test URL parsing integration
   test 'should handle malformed URLs gracefully' do
-    # Note: This depends on how UrlParser handles malformed URLs
+    # Note: This depends on how Repo::RepoUrl handles malformed URLs
     # If it returns nil, the resolver should handle it gracefully
     assert_nothing_raised do
       @resolver.get_controller_url('not-a-valid-url')

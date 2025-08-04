@@ -7,7 +7,7 @@ module Repo
 
     def initialize(input, http_client: Common::HttpClient.new, repo_db: RepoRegistry.repo_db)
       @input = input
-      @parsed_input = UrlParser.parse(input)
+      @parsed_input = RepoUrl.parse(input)
       @http_client = http_client
       @repo_db = repo_db
     end

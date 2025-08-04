@@ -13,7 +13,7 @@ class Dataverse::Actions::DatasetFormTabsTest < ActiveSupport::TestCase
     @action.stubs(:subjects).returns([])
     @action.stubs(:profile).returns(nil)
     result = @action.edit(@bundle, {})
-    assert_equal '/connectors/dataverse/dataset_form_tabs', result.partial
+    assert_equal '/connectors/dataverse/dataset_form_tabs', result.template
   end
 
   test 'update not implemented' do

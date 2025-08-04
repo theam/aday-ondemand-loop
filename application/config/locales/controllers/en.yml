@@ -61,3 +61,10 @@ en:
     cancel:
       compulsory_fields_error: "project_id and file_id are compulsory"
       file_not_found: "file not found project_id=%{project_id} upload_bundle_id=%{upload_bundle_id} id=%{file_id}"
+  explore:
+    show:
+      message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
+      message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
+    create:
+      message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
+      message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"

@@ -10,7 +10,7 @@ class Dataverse::Actions::ConnectorEditTest < ActiveSupport::TestCase
 
   test 'edit returns connector edit form' do
     result = @action.edit(@bundle, {})
-    assert_equal '/connectors/dataverse/connector_edit_form', result.partial
+    assert_equal '/connectors/dataverse/connector_edit_form', result.template
     assert_equal({upload_bundle: @bundle}, result.locals)
   end
 

@@ -12,3 +12,7 @@ en:
     landing_page:
       index:
         message_search_error: "Zenodo search error while searching: %{query}"
+  connectors:
+    zenodo:
+      display_repo_controller:
+        message_url_not_supported: "Zenodo URL not supported: %{url}. Only record URLs are currently supported for exploring"

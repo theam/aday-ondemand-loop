@@ -11,7 +11,7 @@ class Zenodo::Actions::ConnectorEditTest < ActiveSupport::TestCase
 
   test 'edit returns connector form' do
     result = @action.edit(@bundle, {})
-    assert_equal '/connectors/zenodo/connector_edit_form', result.partial
+    assert_equal '/connectors/zenodo/connector_edit_form', result.template
   end
 
   test 'update saves api key in repo' do

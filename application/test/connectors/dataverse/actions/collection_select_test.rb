@@ -13,7 +13,7 @@ class Dataverse::Actions::CollectionSelectTest < ActiveSupport::TestCase
   test 'edit returns form' do
     @action.stubs(:collections).returns([])
     result = @action.edit(@bundle, {})
-    assert_equal '/connectors/dataverse/collection_select_form', result.partial
+    assert_equal '/connectors/dataverse/collection_select_form', result.template
   end
 
   test 'update stores collection data' do
