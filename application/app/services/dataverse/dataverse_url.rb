@@ -15,7 +15,7 @@ module Dataverse
     attr_reader :type, :collection_id, :dataset_id, :file_id, :version
 
     def self.parse(url)
-      base = UrlParser.parse(url)
+      base = Repo::RepoUrl.parse(url)
       return nil unless base
 
       new(base)

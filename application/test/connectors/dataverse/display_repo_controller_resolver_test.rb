@@ -367,7 +367,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   # Test URL parsing integration
   test 'should handle malformed URLs gracefully' do
-    # Note: This depends on how UrlParser handles malformed URLs
+    # Note: This depends on how Repo::RepoUrl handles malformed URLs
     # If it returns nil, the resolver should handle it gracefully
     assert_nothing_raised do
       @resolver.get_controller_url('not-a-valid-url')

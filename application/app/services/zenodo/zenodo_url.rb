@@ -7,7 +7,7 @@ module Zenodo
     attr_reader :type, :record_id, :deposition_id, :file_name
 
     def self.parse(url)
-      base = UrlParser.parse(url)
+      base = Repo::RepoUrl.parse(url)
       return nil unless base
 
       new(base)

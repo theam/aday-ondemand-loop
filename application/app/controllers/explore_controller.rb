@@ -3,7 +3,7 @@ class ExploreController < ApplicationController
 
   def show
     connector_type = ConnectorType.get(params[:connector_type])
-    repo_url = UrlParser.build(
+    repo_url = Repo::RepoUrl.build(
       params[:server_domain],
       scheme: params[:server_scheme],
       port: params[:server_port]
@@ -27,7 +27,7 @@ class ExploreController < ApplicationController
 
   def create
     connector_type = ConnectorType.get(params[:connector_type])
-    repo_url = UrlParser.build(
+    repo_url = Repo::RepoUrl.build(
       params[:server_domain],
       scheme: params[:server_scheme],
       port: params[:server_port]
