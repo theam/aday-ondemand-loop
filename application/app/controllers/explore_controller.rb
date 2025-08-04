@@ -16,12 +16,11 @@ class ExploreController < ApplicationController
 
     processor = ConnectorClassDispatcher.explore_connector_processor(connector_type)
     processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: repo_url)
-    log_info('Explore', processor_params)
+    log_info('Explore show', { repo_url: repo_url, connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] })
     result = processor.show(processor_params)
 
-    if result.message.present?
-      result.message.each { |k, v| flash.now[k] = v }
-    end
+    return redirect_to root_path, **result.message unless result.success?
+
     render template: result.template, locals: result.locals
   end
 
@@ -40,12 +39,9 @@ class ExploreController < ApplicationController
 
     processor = ConnectorClassDispatcher.explore_connector_processor(connector_type)
     processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: repo_url)
-    log_info('Explore', processor_params)
+    log_info('Explore create', { repo_url: repo_url, connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] })
     result = processor.create(processor_params)
 
-    if result.message.present?
-      result.message.each { |k, v| flash[k] = v }
-    end
-    redirect_back fallback_location: root_path
+    redirect_back fallback_location: root_path, **result.message
   end
 end

@@ -14,7 +14,6 @@ module Dataverse
       ConnectorResult.new(
         template: '/connectors/dataverse/explore_placeholder',
         locals: { data: request_params },
-        message: { notice: I18n.t('explore.show.message_success') },
         success: true
       )
     end

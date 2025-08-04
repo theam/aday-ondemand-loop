@@ -21,8 +21,6 @@ module Zenodo::Actions
       rescue => e
         log_error('Search Zenodo error', { query: query, page: page }, e)
         ConnectorResult.new(
-          template: '/connectors/zenodo/landing',
-          locals: { query: query, results: nil, page: page, repo_url: repo_url },
           message: { alert: I18n.t('zenodo.landing_page.index.message_search_error', query: query) },
           success: false
         )

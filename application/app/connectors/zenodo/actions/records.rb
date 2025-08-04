@@ -13,8 +13,6 @@ module Zenodo::Actions
       record = service.find_record(@record_id)
       if record.nil?
         return ConnectorResult.new(
-          template: '/connectors/zenodo/explore_placeholder',
-          locals: { data: request_params },
           message: { alert: I18n.t('zenodo.records.message_record_not_found', record_id: @record_id) },
           success: false
         )
@@ -32,8 +30,6 @@ module Zenodo::Actions
     rescue => e
       log_error('Find record error', { record_id: @record_id }, e)
       ConnectorResult.new(
-        template: '/connectors/zenodo/explore_placeholder',
-        locals: { data: request_params },
         message: { alert: I18n.t('zenodo.records.message_record_service_error', record_id: @record_id) },
         success: false
       )

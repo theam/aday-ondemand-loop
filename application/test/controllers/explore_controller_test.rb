@@ -11,7 +11,6 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'div.alert-info'
-    assert_equal I18n.t('explore.show.message_success'), flash.now[:notice]
   end
 
   test 'zenodo landing action delegates to search service' do
