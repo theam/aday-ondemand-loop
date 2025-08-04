@@ -13,7 +13,7 @@ module Zenodo::Actions
         results = service.search(query, page: page)
       end
       ConnectorResult.new(
-        template: '/connectors/zenodo/landing',
+        template: '/connectors/zenodo/landing/index',
         locals: { query: query, results: results, page: page, repo_url: repo_url },
         success: true
       )

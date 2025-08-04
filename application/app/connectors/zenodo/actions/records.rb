@@ -19,7 +19,7 @@ module Zenodo::Actions
       end
 
       ConnectorResult.new(
-        template: '/connectors/zenodo/record',
+        template: '/connectors/zenodo/records/show',
         locals: {
           record: record,
           record_id: @record_id,
