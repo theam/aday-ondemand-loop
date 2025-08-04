@@ -17,7 +17,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
   test 'zenodo landing action delegates to search service' do
     service = mock
     service.expects(:search)
-           .with('test', page: 1, per_page: 10)
+           .with('test', page: 1)
            .returns(OpenStruct.new(items: []))
     Zenodo::SearchService.expects(:new)
                           .with('https://zenodo.org')
