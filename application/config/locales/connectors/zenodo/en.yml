@@ -43,29 +43,31 @@ en:
         link_zenodo_title: "Open Zenodo"
         link_dataset_title: "Open Zenodo dataset: %{name}"
 
+      shared:
+        zenodo_record_actions:
+          actions_bar_title_a11y_label: "Record actions bar"
+          link_open_record_title: "Open record on Zenodo"
+          button_create_bundle_label: "Create Upload Bundle"
+          button_create_bundle_title: "Create Upload Bundle from this record on the selected project"
+          button_open_project_title: "Open selected project details page"
+          button_open_project_label: "Open selected project"
+        zenodo_record_info:
+          header_record_text: "Record"
+          badge_draft_text: "Draft"
+          badge_published_text: "Published"
+          button_toggle_label: "Record details"
+          field_publication_date_text: "Publication date:"
+          field_files_text: "Files:"
+        zenodo_record_files:
+          col_file_name_text: "File name"
+          col_size_text: "Size"
+          checkbox_select_all_label: "Select all files"
+          header_record_files_a11y_text: "Record files"
+          msg_empty_record_text: "The record does not contain files to download"
+          table_record_files_caption: "Record files"
+
   zenodo:
     records:
-      record_actions:
-        actions_bar_title_a11y_label: "Record actions bar"
-        link_open_record_title: "Open record on Zenodo"
-        button_create_bundle_label: "Create Upload Bundle"
-        button_create_bundle_title: "Create Upload Bundle from this record on the selected project"
-        button_open_project_title: "Open selected project details page"
-        button_open_project_label: "Open selected project"
-      record_info:
-        header_record_text: "Record"
-        badge_draft_text: "Draft"
-        badge_published_text: "Published"
-        button_toggle_label: "Record details"
-        field_publication_date_text: "Publication date:"
-        field_files_text: "Files:"
-      record_files:
-        col_file_name_text: "File name"
-        col_size_text: "Size"
-        checkbox_select_all_label: "Select all files"
-        header_record_files_a11y_text: "Record files"
-        msg_empty_record_text: "The record does not contain files to download"
-        table_record_files_caption: "Record files"
       show:
         page_title: "OnDemand Loop - Zenodo Records"
         caption_files_text: "Zenodo record files (%{count})"
