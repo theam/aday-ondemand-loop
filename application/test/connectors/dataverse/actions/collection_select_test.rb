@@ -37,4 +37,12 @@ class Dataverse::Actions::CollectionSelectTest < ActiveSupport::TestCase
     result = @action.send(:collections, @bundle)
     assert_equal 0, result.items.size
   end
+
+  test 'collection_title finds name and returns nil when missing' do
+    json = { success: true, data: { items: [{ identifier: 'c1', name: 'Title1' }], total_count: 1 } }.to_json
+    response = Dataverse::MyDataverseCollectionsResponse.new(json)
+    @action.stubs(:collections).returns(response)
+    assert_equal 'Title1', @action.send(:collection_title, @bundle, 'c1')
+    assert_nil @action.send(:collection_title, @bundle, 'c2')
+  end
 end

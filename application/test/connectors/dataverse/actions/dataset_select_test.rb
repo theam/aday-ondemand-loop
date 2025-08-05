@@ -33,4 +33,13 @@ class Dataverse::Actions::DatasetSelectTest < ActiveSupport::TestCase
     @action.stubs(:datasets).returns(datasets)
     assert_nil @action.send(:dataset_title, @bundle, 'missing')
   end
+
+  test 'datasets fetches via collection service' do
+    service = mock('collections')
+    service.expects(:search_collection_items)
+           .with('COL1', page: 1, per_page: 100, include_collections: false, include_drafts: true)
+           .returns(OpenStruct.new(data: :results))
+    Dataverse::CollectionService.expects(:new).with('http://dv.org', api_key: 'KEY').returns(service)
+    assert_equal :results, @action.send(:datasets, @bundle)
+  end
 end

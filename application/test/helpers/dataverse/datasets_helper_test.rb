@@ -43,4 +43,28 @@ class DataverseDatasetsHelperTest < ActionView::TestCase
     assert_equal 's3://bucket', storage_identifier('s3://bucket:12345')
     assert_nil storage_identifier(nil)
   end
+
+  test 'dataverse_dataset_view_url builds path with overrides' do
+    stubs(:view_dataverse_dataset_path).with('host', 'pid', { dv_port: 8080, dv_scheme: 'http', version: '1.0', page: 2, query: 'q' }).returns('/view')
+    url = dataverse_dataset_view_url('http://host:8080', 'pid', version: '1.0', page: 2, query: 'q')
+    assert_equal '/view', url
+  end
+
+  test 'dataset_versions_url uses params for overrides' do
+    stubs(:params).returns({ dv_port: '1234', dv_scheme: 'http' })
+    stubs(:view_dataverse_dataset_versions_path).with('host', 'pid', { dv_port: '1234', dv_scheme: 'http' }).returns('/versions')
+    url = dataset_versions_url('http://host', 'pid')
+    assert_equal '/versions', url
+  end
+
+  test 'external_dataset_url builds correct link' do
+    url = external_dataset_url('http://dv.example', 'pid', '1.0')
+    assert_equal 'http://dv.example/dataset.xhtml?persistentId=pid&version=1.0', url
+  end
+
+  test 'sort_by_draft orders drafts first' do
+    list = [OpenStruct.new(version: '1'), OpenStruct.new(version: ':draft'), OpenStruct.new(version: '2')]
+    sorted = sort_by_draft(list)
+    assert_equal ':draft', sorted.first.version
+  end
 end
