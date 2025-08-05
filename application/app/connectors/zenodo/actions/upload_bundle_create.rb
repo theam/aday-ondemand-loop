@@ -1,11 +1,13 @@
 module Zenodo::Actions
   class UploadBundleCreate
     include LoggingCommon
+
     include DateTimeCommon
 
     def create(project, request_params)
       remote_repo_url = request_params[:object_url]
       url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)
+      log_info('Creating upload bundle', { project_id: project.id, remote_repo_url: remote_repo_url })
 
       unless url_data.deposition? || url_data.record?
         return error(I18n.t('connectors.zenodo.actions.upload_bundle_create.message_url_not_supported', url: remote_repo_url))
@@ -51,6 +53,7 @@ module Zenodo::Actions
         }
       end
       upload_bundle.save
+      log_info('Upload bundle created', { bundle_id: upload_bundle.id })
 
       ConnectorResult.new(
         resource: upload_bundle,

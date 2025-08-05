@@ -1,11 +1,13 @@
 module Dataverse::Actions
   class UploadBundleCreate
     include LoggingCommon
+
     include DateTimeCommon
 
     def create(project, request_params)
       remote_repo_url = request_params[:object_url]
       url_data = Dataverse::DataverseUrl.parse(remote_repo_url)
+      log_info('Creating upload bundle', { project_id: project.id, remote_repo_url: remote_repo_url })
 
       if url_data.collection?
         collection_service = Dataverse::CollectionService.new(url_data.dataverse_url)
@@ -60,6 +62,7 @@ module Dataverse::Actions
         }
       end
       upload_bundle.save
+      log_info('Upload bundle created', { bundle_id: upload_bundle.id })
 
       ConnectorResult.new(
         resource: upload_bundle,
