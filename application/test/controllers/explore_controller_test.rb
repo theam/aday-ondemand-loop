@@ -65,7 +65,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     project = Project.new(name: 'P')
     project.stubs(:save).returns(true)
     Zenodo::ProjectService.any_instance.stubs(:initialize_project).returns(project)
-    Zenodo::ProjectService.any_instance.stubs(:initialize_download_files).returns([])
+    Zenodo::ProjectService.any_instance.stubs(:create_files_from_record).returns([])
 
     post explore_url(
       connector_type: 'zenodo',
@@ -75,6 +75,6 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     )
 
     assert_redirected_to root_path
-    assert_equal I18n.t('zenodo.records.download.message_success', project_name: 'P'), flash[:notice]
+    assert_equal I18n.t('zenodo.records.message_success', files: 0, project_name: 'P'), flash[:notice]
   end
 end
