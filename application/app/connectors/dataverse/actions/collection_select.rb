@@ -3,12 +3,12 @@ module Dataverse::Actions
     include LoggingCommon
 
     def edit(upload_bundle, request_params)
-      collections = collections(upload_bundle)
-      log_info('Collection select edit', { upload_bundle: upload_bundle.id, collections: collections.items.size })
+      user_collections_response = collections(upload_bundle)
+      log_info('Collection select edit', { upload_bundle: upload_bundle.id, collections: user_collections_response.items.size })
 
       ConnectorResult.new(
         template: '/connectors/dataverse/collection_select_form',
-        locals: { upload_bundle: upload_bundle, data: collections },
+        locals: { upload_bundle: upload_bundle, data: user_collections_response },
       )
     end
 
@@ -38,8 +38,8 @@ module Dataverse::Actions
     end
 
     def collection_title(upload_bundle, collection_id)
-      collections = collections(upload_bundle)
-      collections.items.select{|c| c.identifier == collection_id}.first&.name
+      user_collections_response = collections(upload_bundle)
+      user_collections_response.items.select { |c| c.identifier == collection_id }.first&.name
     end
   end
 end
