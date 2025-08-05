@@ -1,9 +1,12 @@
 module Dataverse::Actions
   class DatasetFormTabs
+    include LoggingCommon
+
     def edit(upload_bundle, request_params)
       datasets = datasets(upload_bundle)
       subjects = subjects(upload_bundle)
       profile = profile(upload_bundle)
+      log_info('Dataset form tabs', { upload_bundle: upload_bundle.id, datasets: datasets.items.size, subjects: subjects.size })
 
       ConnectorResult.new(
         template: '/connectors/dataverse/dataset_form_tabs',

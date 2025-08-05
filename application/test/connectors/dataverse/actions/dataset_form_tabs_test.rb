@@ -9,7 +9,7 @@ class Dataverse::Actions::DatasetFormTabsTest < ActiveSupport::TestCase
   end
 
   test 'edit returns tabs form partial' do
-    @action.stubs(:datasets).returns([])
+    @action.stubs(:datasets).returns(OpenStruct.new(items: []))
     @action.stubs(:subjects).returns([])
     @action.stubs(:profile).returns(nil)
     result = @action.edit(@bundle, {})

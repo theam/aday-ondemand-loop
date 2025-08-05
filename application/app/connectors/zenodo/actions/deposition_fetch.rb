@@ -1,6 +1,7 @@
 module Zenodo::Actions
   class DepositionFetch
     include LoggingCommon
+
     include DateTimeCommon
 
     def edit(upload_bundle, request_params)
@@ -11,6 +12,7 @@ module Zenodo::Actions
       connector_metadata = upload_bundle.connector_metadata
       connector_metadata.api_key
       api_key = connector_metadata.api_key.value
+      log_info('Fetching deposition', { upload_bundle: upload_bundle.id, deposition_id: connector_metadata.deposition_id, record_id: connector_metadata.record_id })
 
       if connector_metadata.deposition_id.present?
         deposition_service = Zenodo::DepositionService.new(connector_metadata.zenodo_url, api_key: api_key)
@@ -31,6 +33,7 @@ module Zenodo::Actions
       connector_metadata.deposition_id ||= deposition.id.to_s
       connector_metadata.draft = deposition.draft?
       upload_bundle.update({ metadata: connector_metadata.to_h })
+      log_info('Deposition fetched', { upload_bundle: upload_bundle.id, deposition_id: connector_metadata.deposition_id })
 
       ConnectorResult.new(
         resource: upload_bundle,

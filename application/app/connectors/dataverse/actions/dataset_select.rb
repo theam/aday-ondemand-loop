@@ -1,5 +1,7 @@
 module Dataverse::Actions
   class DatasetSelect
+    include LoggingCommon
+
     def edit(upload_bundle, request_params)
       raise NotImplementedError, 'Only update is supported for DatasetSelect'
     end
@@ -11,6 +13,8 @@ module Dataverse::Actions
       metadata[:dataset_id] = dataset_id
       metadata[:dataset_title] = dataset_title
       upload_bundle.update({ metadata: metadata })
+
+      log_info('Dataset selected', { upload_bundle: upload_bundle.id, dataset_id: dataset_id })
 
       ConnectorResult.new(
         message: { notice: I18n.t('connectors.dataverse.actions.dataset_select.message_success', title: dataset_title) },

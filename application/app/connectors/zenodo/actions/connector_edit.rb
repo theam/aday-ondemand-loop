@@ -12,6 +12,7 @@ module Zenodo::Actions
     def update(upload_bundle, request_params)
       repo_key = request_params[:api_key]
       scope = request_params[:key_scope]
+      log_info('Updating API key', { upload_bundle: upload_bundle.id, scope: scope })
       if scope == 'bundle'
         metadata = upload_bundle.metadata
         metadata[:auth_key] = repo_key

@@ -1,11 +1,14 @@
 module Dataverse::Actions
   class CollectionSelect
+    include LoggingCommon
+
     def edit(upload_bundle, request_params)
-      collections = collections(upload_bundle)
+      user_collections_response = collections(upload_bundle)
+      log_info('Collection select edit', { upload_bundle: upload_bundle.id, collections: user_collections_response.items.size })
 
       ConnectorResult.new(
         template: '/connectors/dataverse/collection_select_form',
-        locals: { upload_bundle: upload_bundle, data: collections },
+        locals: { upload_bundle: upload_bundle, data: user_collections_response },
       )
     end
 
@@ -16,6 +19,8 @@ module Dataverse::Actions
       metadata[:collection_id] = collection_id
       metadata[:collection_title] = collection_title
       upload_bundle.update({ metadata: metadata })
+
+      log_info('Collection selected', { upload_bundle: upload_bundle.id, collection_id: collection_id })
 
       ConnectorResult.new(
         message: { notice: I18n.t('connectors.dataverse.actions.collection_select.message_success', title: collection_title) },
@@ -33,8 +38,8 @@ module Dataverse::Actions
     end
 
     def collection_title(upload_bundle, collection_id)
-      collections = collections(upload_bundle)
-      collections.items.select{|c| c.identifier == collection_id}.first&.name
+      user_collections_response = collections(upload_bundle)
+      user_collections_response.items.select { |c| c.identifier == collection_id }.first&.name
     end
   end
 end
