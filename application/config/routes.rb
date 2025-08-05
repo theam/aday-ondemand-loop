@@ -59,11 +59,6 @@ Rails.application.routes.draw do
   get "/view/dataverse/*dv_hostname/datasets/*persistent_id" => "dataverse/datasets#show", as: :view_dataverse_dataset, format: false
   get "/view/dataverse/*dv_hostname/dataverses/:id" => "dataverse/collections#show", as: :view_dataverse, format: false
 
-  # ZENODO ROUTES
-  post "/view/zenodo/download/record" => "zenodo/records#download", as: :download_zenodo_record_files
-  get "/view/zenodo" => "zenodo/landing_page#index", as: :view_zenodo_landing
-  get "/view/zenodo/records/:id" => "zenodo/records#show", as: :view_zenodo_record, format: false
-
   # EXPLORE ROUTE
   get "/explore/:connector_type/*server_domain/:object_type/:object_id" => "explore#show", as: :explore
   post "/explore/:connector_type/*server_domain/:object_type/:object_id" => "explore#create"

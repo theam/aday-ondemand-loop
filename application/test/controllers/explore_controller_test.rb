@@ -41,7 +41,11 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'zenodo records action renders record view' do
-    record = OpenStruct.new(id: '1', title: 'rec', files: [])
+    record = Struct.new(:id, :title, :description, :publication_date, :files) do
+      def draft?
+        false
+      end
+    end.new('1', 'rec', '', '', [])
     Zenodo::RecordService.any_instance.expects(:find_record).with('1').returns(record)
     user_settings_mock = mock('UserSettings')
     user_settings_mock.stubs(:user_settings).returns(OpenStruct.new(active_project: nil))
@@ -59,7 +63,11 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'zenodo records download redirects with notice' do
-    record = OpenStruct.new(id: '1', title: 'rec', files: [])
+    record = Struct.new(:id, :title, :description, :publication_date, :files) do
+      def draft?
+        false
+      end
+    end.new('1', 'rec', '', '', [])
     Zenodo::RecordService.any_instance.stubs(:find_record).returns(record)
     Project.stubs(:find).returns(nil)
     project = Project.new(name: 'P')

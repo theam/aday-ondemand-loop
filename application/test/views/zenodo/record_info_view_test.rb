@@ -10,10 +10,10 @@ class ZenodoRecordInfoViewTest < ActionView::TestCase
       end
     end.new('10', 'Title', '', '', [])
 
-    html = render partial: 'zenodo/records/record_info', locals: { record: draft_record }
+    html = render partial: 'connectors/zenodo/shared/zenodo_record_info', locals: { record: draft_record }
 
     assert_includes html, 'badge text-bg-info'
-    assert_includes html, I18n.t('zenodo.records.record_info.badge_draft_text')
+    assert_includes html, I18n.t('connectors.zenodo.shared.zenodo_record_info.badge_draft_text')
   end
 
   test 'renders published badge when not draft' do
@@ -23,9 +23,9 @@ class ZenodoRecordInfoViewTest < ActionView::TestCase
       end
     end.new('10', 'Title', '', '', [])
 
-    html = render partial: 'zenodo/records/record_info', locals: { record: published_record }
+    html = render partial: 'connectors/zenodo/shared/zenodo_record_info', locals: { record: published_record }
 
     assert_includes html, 'badge text-bg-info'
-    assert_includes html, I18n.t('zenodo.records.record_info.badge_published_text')
+    assert_includes html, I18n.t('connectors.zenodo.shared.zenodo_record_info.badge_published_text')
   end
 end
