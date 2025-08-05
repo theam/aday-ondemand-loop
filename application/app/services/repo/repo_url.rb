@@ -63,6 +63,16 @@ module Repo
       port == default_port(scheme) ? nil : port
     end
 
+    def to_s
+      Addressable::URI.new(
+        scheme: scheme,
+        host: domain,
+        port: port,
+        path: path,
+        query_values: params.presence
+      ).to_s
+    end
+
     private
 
     def initialize(uri)

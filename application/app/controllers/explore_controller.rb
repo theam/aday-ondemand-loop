@@ -16,12 +16,15 @@ class ExploreController < ApplicationController
 
     processor = ConnectorClassDispatcher.explore_connector_processor(connector_type)
     processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: repo_url)
-    log_info('Explore show', { repo_url: repo_url, connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] })
     result = processor.show(processor_params)
 
-    return redirect_to root_path, **result.message unless result.success?
+    unless result.success?
+      log_error('Explore.show action error', { repo_url: repo_url, connector_type: connector_type, processor: processor.class.name, object_type: params[:object_type], object_id: params[:object_id] }.merge(result.message))
+      return redirect_to root_path, **result.message
+    end
 
     render template: result.template, locals: result.locals
+    log_info('Explore.show completed', { repo_url: repo_url, connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] })
   rescue => e
     log_error('Error processing Explore.show processor/action', { connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
     return redirect_to root_path, alert: I18n.t('explore.show.message_processor_error', connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id])
@@ -42,10 +45,10 @@ class ExploreController < ApplicationController
 
     processor = ConnectorClassDispatcher.explore_connector_processor(connector_type)
     processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: repo_url)
-    log_info('Explore create', { repo_url: repo_url, connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] })
     result = processor.create(processor_params)
 
     redirect_back fallback_location: root_path, **result.message
+    log_info('Explore.create completed', { success: result.success?, repo_url: repo_url, connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] })
   rescue => e
     log_error('Error processing Explore.create processor/action', { connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
     return redirect_back fallback_location: root_path, alert: I18n.t('explore.create.message_processor_error', connector_type: connector_type, object_type: params[:object_type], object_id: params[:object_id])
