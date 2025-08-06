@@ -24,5 +24,13 @@ module Dataverse
         success: true
       )
     end
+
+    def landing(request_params)
+      ConnectorResult.new(
+        template: '/connectors/dataverse/explore_placeholder',
+        locals: { data: request_params },
+        success: true
+      )
+    end
   end
 end

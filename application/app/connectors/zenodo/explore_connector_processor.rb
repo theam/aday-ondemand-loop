@@ -27,5 +27,12 @@ module Zenodo
       action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
       action.create(request_params)
     end
+
+    def landing(_request_params)
+      ConnectorResult.new(
+        message: { alert: I18n.t('connectors.zenodo.actions.landing.message_action_not_supported') },
+        success: false
+      )
+    end
   end
 end

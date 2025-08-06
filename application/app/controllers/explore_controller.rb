@@ -1,6 +1,24 @@
 class ExploreController < ApplicationController
   include LoggingCommon
 
+  def landing
+    connector_type = ConnectorType.get(params[:connector_type])
+    processor = ConnectorClassDispatcher.explore_connector_processor(connector_type)
+    processor_params = params.permit(*processor.params_schema).to_h
+    result = processor.landing(processor_params)
+
+    unless result.success?
+      log_error('Explore.landing action error', { connector_type: connector_type, processor: processor.class.name }.merge(result.message))
+      return redirect_to root_path, **result.message
+    end
+
+    render template: result.template, locals: result.locals
+    log_info('Explore.landing completed', { connector_type: connector_type })
+  rescue => e
+    log_error('Error processing Explore.landing processor/action', { connector_type: connector_type }, e)
+    return redirect_to root_path, alert: I18n.t('explore.landing.message_processor_error', connector_type: connector_type)
+  end
+
   def show
     connector_type = ConnectorType.get(params[:connector_type])
     repo_url = Repo::RepoUrl.build(

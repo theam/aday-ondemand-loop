@@ -68,3 +68,5 @@ en:
     create:
       message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
       message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
+    landing:
+      message_processor_error: "Error processing request for repository: %{connector_type}"
