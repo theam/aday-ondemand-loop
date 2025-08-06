@@ -22,6 +22,13 @@ module Zenodo
       load_explorer(request_params).create(request_params)
     end
 
+    def landing(_request_params)
+      ConnectorResult.new(
+        message: { alert: I18n.t('connectors.zenodo.actions.landing.message_action_not_supported') },
+        success: false
+      )
+    end
+
     private
 
     def load_explorer(request_params)
@@ -32,13 +39,6 @@ module Zenodo
       else
         ConnectorActionDispatcher.explorer(request_params[:connector_type], :explorers, explorer_type)
       end
-    end
-
-    def landing(_request_params)
-      ConnectorResult.new(
-        message: { alert: I18n.t('connectors.zenodo.actions.landing.message_action_not_supported') },
-        success: false
-      )
     end
   end
 end
