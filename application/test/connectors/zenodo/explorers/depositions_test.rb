@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Zenodo::Actions::DepositionsTest < ActiveSupport::TestCase
+class Zenodo::Explorers::DepositionsTest < ActiveSupport::TestCase
   def setup
-    @action = Zenodo::Actions::Depositions.new('10')
+    @explorer = Zenodo::Explorers::Depositions.new('10')
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
   end
 
@@ -14,7 +14,7 @@ class Zenodo::Actions::DepositionsTest < ActiveSupport::TestCase
     service.expects(:find_deposition).with('10').returns(:deposition)
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
 
-    result = @action.show(repo_url: @repo_url)
+    result = @explorer.show(repo_url: @repo_url)
     assert result.success?
   end
 
@@ -22,7 +22,7 @@ class Zenodo::Actions::DepositionsTest < ActiveSupport::TestCase
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: nil))
     RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
-    result = @action.show(repo_url: @repo_url)
+    result = @explorer.show(repo_url: @repo_url)
     refute result.success?
     assert_equal I18n.t('zenodo.depositions.message_api_key_required'), result.message[:alert]
   end
@@ -33,7 +33,7 @@ class Zenodo::Actions::DepositionsTest < ActiveSupport::TestCase
     service = mock('service')
     service.expects(:find_deposition).with('10').returns(nil)
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
-    result = @action.show(repo_url: @repo_url)
+    result = @explorer.show(repo_url: @repo_url)
     refute result.success?
   end
 
@@ -59,7 +59,7 @@ class Zenodo::Actions::DepositionsTest < ActiveSupport::TestCase
     proj_service.expects(:create_files_from_deposition).with(project, :deposition, ['f1']).returns([file])
     Zenodo::ProjectService.expects(:new).with('https://zenodo.org').returns(proj_service)
 
-    result = @action.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
+    result = @explorer.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
     assert result.success?
   end
 end

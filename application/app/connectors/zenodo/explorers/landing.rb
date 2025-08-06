@@ -1,4 +1,4 @@
-module Zenodo::Actions
+module Zenodo::Explorers
   class Landing
     include LoggingCommon
 

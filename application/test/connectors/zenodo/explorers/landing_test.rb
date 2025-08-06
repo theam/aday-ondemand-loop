@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Zenodo::Actions::LandingTest < ActiveSupport::TestCase
+class Zenodo::Explorers::LandingTest < ActiveSupport::TestCase
   def setup
-    @action = Zenodo::Actions::Landing.new
+    @explorer = Zenodo::Explorers::Landing.new
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
   end
 
@@ -11,13 +11,13 @@ class Zenodo::Actions::LandingTest < ActiveSupport::TestCase
     results = OpenStruct.new(items: [])
     service.expects(:search).with('q', page: 2).returns(results)
     Zenodo::SearchService.expects(:new).with('https://zenodo.org').returns(service)
-    res = @action.show(query: 'q', page: 2, repo_url: @repo_url)
+    res = @explorer.show(query: 'q', page: 2, repo_url: @repo_url)
     assert res.success?
     assert_equal results, res.locals[:results]
   end
 
   test 'show without query skips search' do
-    res = @action.show(query: nil, repo_url: @repo_url)
+    res = @explorer.show(query: nil, repo_url: @repo_url)
     assert res.success?
     assert_nil res.locals[:results]
   end

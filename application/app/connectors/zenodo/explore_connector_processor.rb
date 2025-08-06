@@ -15,17 +15,11 @@ module Zenodo
     end
 
     def show(request_params)
-      action_type = request_params[:object_type]
-      object_id = request_params[:object_id]
-      action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
-      action.show(request_params)
+      load_explorer(request_params).show(request_params)
     end
 
     def create(request_params)
-      action_type = request_params[:object_type]
-      object_id = request_params[:object_id]
-      action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
-      action.create(request_params)
+      load_explorer(request_params).create(request_params)
     end
 
     def landing(_request_params)
@@ -33,6 +27,18 @@ module Zenodo
         message: { alert: I18n.t('connectors.zenodo.actions.landing.message_action_not_supported') },
         success: false
       )
+    end
+
+    private
+
+    def load_explorer(request_params)
+      explorer_type = request_params[:object_type]
+      object_id = request_params[:object_id]
+      if object_id.present?
+        ConnectorActionDispatcher.explorer(request_params[:connector_type], explorer_type, object_id)
+      else
+        ConnectorActionDispatcher.explorer(request_params[:connector_type], :explorers, explorer_type)
+      end
     end
   end
 end

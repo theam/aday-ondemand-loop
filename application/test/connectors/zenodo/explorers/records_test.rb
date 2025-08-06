@@ -1,16 +1,16 @@
 require 'test_helper'
 
-class Zenodo::Actions::RecordsTest < ActiveSupport::TestCase
+class Zenodo::Explorers::RecordsTest < ActiveSupport::TestCase
   def setup
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
-    @action = Zenodo::Actions::Records.new('123')
+    @explorer = Zenodo::Explorers::Records.new('123')
   end
 
   test 'show renders record when found' do
     service = mock('service')
     service.expects(:find_record).with('123').returns(:record)
     Zenodo::RecordService.expects(:new).with('https://zenodo.org').returns(service)
-    res = @action.show(repo_url: @repo_url)
+    res = @explorer.show(repo_url: @repo_url)
     assert res.success?
     assert_equal :record, res.locals[:record]
   end
@@ -19,7 +19,7 @@ class Zenodo::Actions::RecordsTest < ActiveSupport::TestCase
     service = mock('service')
     service.expects(:find_record).with('123').returns(nil)
     Zenodo::RecordService.expects(:new).with('https://zenodo.org').returns(service)
-    res = @action.show(repo_url: @repo_url)
+    res = @explorer.show(repo_url: @repo_url)
     refute res.success?
   end
 
@@ -43,7 +43,7 @@ class Zenodo::Actions::RecordsTest < ActiveSupport::TestCase
     proj_service.expects(:create_files_from_record).with(project, :record, ['f1']).returns([file])
     Zenodo::ProjectService.expects(:new).with('https://zenodo.org').returns(proj_service)
 
-    res = @action.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
+    res = @explorer.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
     assert res.success?
   end
 
@@ -51,7 +51,7 @@ class Zenodo::Actions::RecordsTest < ActiveSupport::TestCase
     service = mock('service')
     service.expects(:find_record).with('123').returns(nil)
     Zenodo::RecordService.expects(:new).with('https://zenodo.org').returns(service)
-    res = @action.create(repo_url: @repo_url, file_ids: [], project_id: '1')
+    res = @explorer.create(repo_url: @repo_url, file_ids: [], project_id: '1')
     refute res.success?
   end
 end
