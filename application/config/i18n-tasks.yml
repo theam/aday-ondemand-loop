@@ -1,0 +1,6 @@
+base_locale: en
+data:
+  read:
+    - config/locales/**/*.{yml,rb}
+ignore_unused:
+  - 'js.*'

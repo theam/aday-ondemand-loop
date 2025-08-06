@@ -1,12 +1,15 @@
 ---
 en:
   download_files:
-    compulsory_fields_error: "project_id and id are compulsory"
-    file_not_found_for_project: "File: %{file_id} not found for project: %{project_id}"
-    file_in_progress: "File: %{filename} cannot be deleted while is being downloaded"
-    download_file_deleted_successfully: "Download file deleted: %{filename}"
+    cancel:
+      file_not_found_for_project: "File: %{file_id} not found for project: %{project_id}"
+    destroy:
+      file_not_found_for_project: "File: %{file_id} not found for project: %{project_id}"
+      file_in_progress: "File: %{filename} cannot be deleted while is being downloaded"
+      download_file_deleted_successfully: "Download file deleted: %{filename}"
   file_browser:
-    directory_forbidden: "You do not have permission to access this directory."
+    index:
+      directory_forbidden: "You do not have permission to access this directory."
   projects:
     show:
       project_not_found: "Project %{id} not found"
@@ -34,7 +37,6 @@ en:
       message_success: "Repository added: %{url} type: %{type}"
     update:
       message_not_found: "Repository %{domain} not found"
-      message_success: "Repository %{domain} updated"
     destroy:
       message_not_found: "Repository %{domain} not found"
       message_deleted: "Repository %{domain} (%{type}) deleted"
@@ -59,11 +61,11 @@ en:
       file_in_progress: "File: %{filename} cannot be deleted while is being uploaded"
       upload_file_removed: "Upload file removed from bundle: %{filename}"
     cancel:
-      compulsory_fields_error: "project_id and file_id are compulsory"
       file_not_found: "file not found project_id=%{project_id} upload_bundle_id=%{upload_bundle_id} id=%{file_id}"
   explore:
     show:
       message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
+      message_success: "Repository URL processed successfully"
       message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
     create:
       message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
