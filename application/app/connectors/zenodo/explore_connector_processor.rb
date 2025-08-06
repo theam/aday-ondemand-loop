@@ -15,17 +15,17 @@ module Zenodo
     end
 
     def show(request_params)
-      action_type = request_params[:object_type]
+      explorer_type = request_params[:object_type]
       object_id = request_params[:object_id]
-      action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
-      action.show(request_params)
+      explorer = ConnectorActionDispatcher.explorer(request_params[:connector_type], explorer_type, object_id)
+      explorer.show(request_params)
     end
 
     def create(request_params)
-      action_type = request_params[:object_type]
+      explorer_type = request_params[:object_type]
       object_id = request_params[:object_id]
-      action = ConnectorActionDispatcher.load(request_params[:connector_type], action_type, object_id)
-      action.create(request_params)
+      explorer = ConnectorActionDispatcher.explorer(request_params[:connector_type], explorer_type, object_id)
+      explorer.create(request_params)
     end
 
     def landing(_request_params)

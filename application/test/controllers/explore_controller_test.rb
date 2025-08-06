@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ExploreControllerTest < ActionDispatch::IntegrationTest
   def stub_processor(action, result: nil, exception: nil)
@@ -112,4 +112,3 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('explore.create.message_processor_error', connector_type: 'zenodo', object_type: 'records', object_id: '1'), flash[:alert]
   end
 end
-

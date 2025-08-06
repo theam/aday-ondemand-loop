@@ -1,14 +1,21 @@
 # frozen_string_literal: true
 
-# Class to dynamically load connector actions.
+# Class to dynamically load connector actions or explorers.
 # Builds a class name based on connector_type, object_type and object_id
-# and instantiates the corresponding action class.
+# and instantiates the corresponding class.
 class ConnectorActionDispatcher
-  def self.load(connector_type, object_type, object_id)
-    module_name = connector_type.to_s.camelize
-    object_module = 'Actions'
+  def self.action(connector_type, object_type, object_id)
+    load_from_module(connector_type, object_type, object_id, 'Actions')
+  end
 
-    if object_type.to_s == 'actions'
+  def self.explorer(connector_type, object_type, object_id)
+    load_from_module(connector_type, object_type, object_id, 'Explorers')
+  end
+
+  def self.load_from_module(connector_type, object_type, object_id, object_module)
+    module_name = connector_type.to_s.camelize
+
+    if object_type.to_s == object_module.downcase
       class_name = object_id.to_s.camelize
       connector_class = "#{module_name}::#{object_module}::#{class_name}"
       connector_class.constantize.new
@@ -20,6 +27,8 @@ class ConnectorActionDispatcher
   rescue NameError
     raise ConnectorNotSupported, "Invalid connector action #{connector_class}"
   end
+
+  private_class_method :load_from_module
 
   class ConnectorNotSupported < StandardError; end
 end
