@@ -13,24 +13,14 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert-info'
   end
 
-  test 'zenodo landing action delegates to search service' do
-    service = mock
-    service.expects(:search)
-           .with('test', page: 1)
-           .returns(OpenStruct.new(items: []))
-    Zenodo::SearchService.expects(:new)
-                          .with('https://zenodo.org')
-                          .returns(service)
-
-    get explore_url(
+  test 'zenodo landing action is not supported' do
+    get explore_landing_url(
       connector_type: 'zenodo',
-      server_domain: 'zenodo.org',
-      object_type: 'actions',
-      object_id: 'landing',
       query: 'test'
     )
 
-    assert_response :success
+    assert_redirected_to root_path
+    assert_equal I18n.t('connectors.zenodo.actions.landing.message_action_not_supported'), flash[:alert]
   end
 
   test 'redirects when repo url is invalid' do

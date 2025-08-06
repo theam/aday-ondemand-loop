@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get "/view/dataverse/*dv_hostname/dataverses/:id" => "dataverse/collections#show", as: :view_dataverse, format: false
 
   # EXPLORE ROUTE
+  get "/explore/:connector_type/landing" => "explore#landing", as: :explore_landing
   get "/explore/:connector_type/*server_domain/:object_type/:object_id" => "explore#show", as: :explore
   post "/explore/:connector_type/*server_domain/:object_type/:object_id" => "explore#create"
 
