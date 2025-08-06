@@ -8,7 +8,7 @@ class DownloadFilesController < ApplicationController
     file = DownloadFile.find(project_id, file_id)
 
     if file.nil?
-      render json: t('.file_not_found_for_project', file_id: file_id, project_id: project_id), status: :not_found
+      render json: t('download_files.file_not_found_for_project', file_id: file_id, project_id: project_id), status: :not_found
       return
     end
 
@@ -29,17 +29,17 @@ class DownloadFilesController < ApplicationController
     file_id = params[:id]
     file = DownloadFile.find(project_id, file_id)
     if file.nil?
-      redirect_back fallback_location: root_path, alert: t('.file_not_found_for_project', file_id: file_id, project_id: project_id)
+      redirect_back fallback_location: root_path, alert: t('download_files.file_not_found_for_project', file_id: file_id, project_id: project_id)
       return
     end
 
     if file.status.downloading?
-      redirect_back fallback_location: root_path, alert: t(".file_in_progress", filename: file.filename)
+      redirect_back fallback_location: root_path, alert: t('download_files.file_in_progress', filename: file.filename)
       return
     end
 
     file.destroy
-    redirect_back fallback_location: root_path, notice: t('.download_file_deleted_successfully', filename: file.filename)
+    redirect_back fallback_location: root_path, notice: t('download_files.download_file_deleted_successfully', filename: file.filename)
   end
 
 end

@@ -25,16 +25,10 @@ en:
         link_collection_title: "Open Dataverse collection: %{name}"
         link_dataset_title: "Open Dataverse dataset: %{name}"
       upload_bundle_actions_bar:
-        button_edit_dataset_title: "Edit Dataset"
-        modal_edit_dataset_title: "Edit Dataset"
         button_select_collection_title: "Select Collection"
         modal_select_collection_title: "Select Dataverse Collection"
         button_dataset_form_tabs_title: "Select/Create Dataset"
         modal_dataset_form_tabs_title: "Select/Create %{collection} Dataset"
-        button_create_dataset_title: "Create Dataset"
-        modal_create_dataset_title: "Create Dataset"
-        button_select_dataset_title: "Select Dataset"
-        modal_select_dataset_title: "Select Dataset"
         button_edit_key_title: "Add/Edit API Token"
         modal_edit_key_title: "Add/Edit Dataverse API Token"
         missing_key_disabled_features_text: "Add key to enable Collection/Dataset features"
@@ -94,9 +88,6 @@ en:
       collection_info:
         button_toggle_label: "Collection details"
         header_dataverse_text: "Dataverse collection"
-        link_open_collection_title: "Open collection on Dataverse"
-        button_create_bundle_label: "Create Collection Bundle"
-        button_create_bundle_title: "Create Collection Bundle"
       collection_actions:
         actions_bar_title_a11y_label: "Collection actions bar"
         button_create_bundle_label: "Create Collection Bundle"
@@ -116,7 +107,6 @@ en:
         unnamed_dataverse_text: "Unnamed Dataverse"
       search_bar:
         button_submit_text: "Search Inside"
-        field_search_label: "Search items within the collection"
         field_search_placeholder: "Search items within the collection"
       search_items:
         content_no_items_found_text: "No items found."
@@ -143,17 +133,11 @@ en:
         table_dataset_files_caption: "Dataset files"
       dataset_info:
         button_toggle_label: "Dataset details"
-        button_versions_toggle_label: "Dataset versions"
         field_authors_text: "Authors:"
         field_license_text: "License:"
         field_publication_date_text: "Publication date:"
         field_subjects_text: "Subjects:"
         header_dataset_text: "Dataset"
-        header_description_text: "Description"
-        header_dataset_metadata_text: "Dataset Metadata"
-        link_open_dataset_title: "Open dataset on Dataverse"
-        button_create_bundle_label: "Create Collection Bundle"
-        button_create_bundle_title: "Create Collection Bundle"
       versions:
         message_missing_api_key_text: "<strong>Draft versions are restricted.</strong> Add an API token in repository settings to access draft content when available."
         field_version_label: "Dataset version: %{version}"
@@ -170,7 +154,6 @@ en:
         button_open_project_label: "Open selected project"
       search_bar:
         button_submit_text: "Search Files"
-        field_search_label: "Search files within the dataset"
         field_search_placeholder: "Search files within the dataset"
       show:
         page_title: "OnDemand Loop - Dataverse Dataset"
@@ -185,7 +168,6 @@ en:
         paginator_page_text: "page %{page}"
         msg_no_items_text: "No items found."
       index:
-        breadcrumb_dataverse_title: "Dataverse landing page"
         breadcrumb_home_text: "Home"
         breadcrumb_home_title: "Home"
         image_dataverse_icon_alt: "Dataverse icon"

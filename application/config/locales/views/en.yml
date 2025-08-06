@@ -15,7 +15,6 @@ en:
       button_cancel_download_a11y_text: "Cancel download of %{filename}"
       button_cancel_download_title: "Cancel download"
       field_creation_date_title: "Creation date"
-      header_scheduled_downloads_text: "Scheduled Downloads"
       field_project_title: "Project: %{name}"
       field_file_title: "Download file: %{filename}"
     index:
@@ -120,8 +119,6 @@ en:
         button_open_project_folder_label: "Open Project workspace folder"
         button_open_project_folder_title: "Open Project workspace folder"
         button_open_project_metadata_title: "Open Project metadata folder"
-        button_edit_download_dir_title: "Change Project folder"
-        button_edit_download_dir_label: "Change folder"
         field_creation_date_title: "Creation date"
         modal_delete_confirmation_title: "Delete Project"
         modal_delete_confirmation_content: "This will remove the project from the app. Files on disk and in remote repositories will remain untouched."
@@ -149,20 +146,6 @@ en:
         modal_delete_confirmation_content: "This will remove the file from the upload bundle. The file will remain on disk and in the remote repository if already uploaded."
       breadcrumbs_text: "Projects"
       page_title: "OnDemand Loop - Project detail"
-    download_files:
-      schedule_date: "Schedule date"
-      repository_files: "Repository Files"
-      completion_date: "Completion date"
-      download_start_date: "Download start date"
-      delete_file: "Delete file"
-    project:
-      download_files: "Download Files"
-    upload_bundle:
-      schedule_date: "Schedule date"
-      repository_files: "Repository Files"
-      completion_date: "Completion date"
-      upload_start_date: "Upload start date"
-      delete_file: "Delete file"
     index:
       actions:
         actions_bar_title: "Projects"
@@ -254,7 +237,6 @@ en:
       actions_bar_title_a11y_label: "Uploads actions bar"
       button_reload_title: "Reload"
     files:
-      badge_repo_tooltip: "External dataset"
       button_browse_file_a11y_text: "Browse file %{filename}"
       button_browse_file_title: "Browse file"
       button_cancel_upload_a11y_text: "Cancel upload of %{filename}"
