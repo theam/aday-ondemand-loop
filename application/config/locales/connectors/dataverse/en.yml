@@ -160,7 +160,7 @@ en:
     external_tool:
       dataset:
         invalid_request_error: "Invalid Dataverse request. Dataverse URL and Dataset id are required"
-    landing_page:
+    landing:
       installation_items:
         button_submit_text: "Search"
         field_search_placeholder: "Search installations"

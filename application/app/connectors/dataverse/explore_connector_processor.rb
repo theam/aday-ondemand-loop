@@ -26,11 +26,8 @@ module Dataverse
     end
 
     def landing(request_params)
-      ConnectorResult.new(
-        template: '/connectors/dataverse/explore_placeholder',
-        locals: { data: request_params },
-        success: true
-      )
+      explorer = Dataverse::Explorers::Landing.new
+      explorer.show(request_params)
     end
   end
 end

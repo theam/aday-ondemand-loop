@@ -21,7 +21,7 @@
           </a>
           <ul class="dropdown-menu">
             <li role="menuitem">
-              <a class="dropdown-item d-flex align-items-center gap-2" href="<%= view_dataverse_landing_path %>">
+              <a class="dropdown-item d-flex align-items-center gap-2" href="<%= link_to_landing(ConnectorType::DATAVERSE) %>">
                 <span class="icon-wrapper bg-white rounded d-inline-flex align-items-center justify-content-center p-1">
                   <%= connector_icon(ConnectorType::DATAVERSE) %>
                 </span>

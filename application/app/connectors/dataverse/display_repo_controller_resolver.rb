@@ -15,7 +15,7 @@ module Dataverse
       message = nil
 
       if dataverse_url.nil?
-        redirect_url = @url_helper.view_dataverse_landing_path
+        redirect_url = @url_helper.explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
       elsif dataverse_url.dataverse? || (dataverse_url.file? && dataverse_url.dataset_id.nil?)
         redirect_url = @url_helper.view_dataverse_path(dataverse_url.domain, ':root', dv_scheme: dataverse_url.scheme_override, dv_port: dataverse_url.port)
       elsif dataverse_url.collection?
@@ -29,7 +29,7 @@ module Dataverse
           version: dataverse_url.version
         )
       else
-        redirect_url = @url_helper.view_dataverse_landing_path
+        redirect_url = @url_helper.explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
         message = { alert: I18n.t('connectors.dataverse.display_repo_controller.message_url_not_supported', url: object_url) }
       end
 
