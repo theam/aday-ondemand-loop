@@ -17,7 +17,7 @@
   </div>
   <% if installations_page.page_items.any? %>
     <ul class="list-group">
-      <%= render partial: 'installation', collection: installations_page.page_items, as: :installation %>
+      <%= render partial: 'connectors/dataverse/landing/installation', collection: installations_page.page_items, as: :installation %>
     </ul>
     <div class="card-header d-flex justify-content-end">
       <nav aria-label="<%= t('dataverse.landing.installation_items.paginator_bar_a11y_label') %>" class="ms-auto">
