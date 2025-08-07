@@ -1,6 +1,11 @@
 require "test_helper"
 
 class ExploreControllerTest < ActionDispatch::IntegrationTest
+  def setup
+    @repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
+    RepoRegistry.repo_db = @repo_db
+  end
+
   def stub_processor(action, result: nil, exception: nil)
     processor = mock('ExploreProcessor')
     processor.stubs(:params_schema).returns(%i[connector_type server_domain object_type object_id query server_scheme server_port])
@@ -43,8 +48,16 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('explore.show.message_invalid_repo_url', repo_url: ''), flash[:alert]
   end
 
+  test 'redirects when connector type is invalid' do
+    get explore_landing_url(connector_type: 'bogus')
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('explore.message_invalid_connector_type', connector_type: 'bogus'), flash[:alert]
+  end
+
   test 'show action renders template when processor succeeds' do
     stub_processor(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
       connector_type: 'zenodo',
@@ -58,6 +71,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
   test 'show action redirects with message when processor fails' do
     stub_processor(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
       connector_type: 'zenodo',
@@ -72,6 +86,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
   test 'show action redirects with error message when processor raises' do
     stub_processor(:show, exception: StandardError.new('boom'))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
       connector_type: 'zenodo',
@@ -86,6 +101,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
   test 'create action redirects with message from processor' do
     stub_processor(:create, result: ConnectorResult.new(message: { notice: 'ok' }, success: true))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     post explore_url(
       connector_type: 'zenodo',
@@ -100,6 +116,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
   test 'create action redirects with error message when processor raises' do
     stub_processor(:create, exception: StandardError.new('boom'))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     post explore_url(
       connector_type: 'zenodo',
@@ -111,4 +128,29 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal I18n.t('explore.create.message_processor_error', connector_type: 'zenodo', object_type: 'records', object_id: '1'), flash[:alert]
   end
+
+  test 'show action redirects when repo url not in repo db' do
+    get explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'missing.org',
+      object_type: 'records',
+      object_id: '1',
+    )
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('explore.show.message_invalid_repo_url', repo_url: 'https://missing.org/'), flash[:alert]
+  end
+
+  test 'create action redirects when repo url not in repo db' do
+    post explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'missing.org',
+      object_type: 'records',
+      object_id: '1',
+    )
+
+    assert_redirected_to root_path
+    assert_equal I18n.t('explore.create.message_invalid_repo_url', repo_url: 'https://missing.org/'), flash[:alert]
+  end
 end
+
