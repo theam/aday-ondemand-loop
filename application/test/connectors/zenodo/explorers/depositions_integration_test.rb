@@ -11,14 +11,24 @@ class Zenodo::Explorers::DepositionsIntegrationTest < ActionDispatch::Integratio
   end
 
   test 'show deposition page through explore controller' do
-    deposition = OpenStruct.new(
+    deposition_json = {
       id: '10',
-      title: 'Deposition',
-      draft?: true,
-      description: 'Desc',
-      publication_date: '2023-01-01',
-      files: [OpenStruct.new(id: 'f1', filename: 'file1.txt', filesize: 1)]
-    )
+      submitted: false,
+      metadata: {
+        title: 'Deposition',
+        description: 'Desc',
+        publication_date: '2023-01-01'
+      },
+      files: [
+        {
+          id: 'f1',
+          filename: 'file1.txt',
+          filesize: 1,
+          links: { self: 'https://zenodo.org/api/files/abc/file1.txt' }
+        }
+      ]
+    }.to_json
+    deposition = Zenodo::DepositionResponse.new(deposition_json)
     service = mock('deposition_service')
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
