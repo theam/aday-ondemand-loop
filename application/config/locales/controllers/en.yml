@@ -61,11 +61,11 @@ en:
   explore:
     message_invalid_connector_type: "Invalid connector type: %{connector_type}"
     show:
-      message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
+      message_invalid_repo_url: "The repository URL %{repo_url} is not verified. For security reasons, only trusted repositories already registered in the system can be used"
       message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
       message_success: "Explore request processed successfully"
     create:
-      message_invalid_repo_url: "Invalid repository URL: %{repo_url}"
+      message_invalid_repo_url: "The repository URL %{repo_url} is not verified. For security reasons, only trusted repositories already registered in the system can be used"
       message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
     landing:
       message_processor_error: "Error processing request for repository: %{connector_type}"
