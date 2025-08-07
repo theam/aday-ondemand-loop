@@ -11,12 +11,7 @@ class Zenodo::Explorers::LandingIntegrationTest < ActionDispatch::IntegrationTes
   end
 
   test 'show landing page through explore controller' do
-    Results = Struct.new(:items, :page, :first_page?, :last_page?, :prev_page, :next_page) do
-      def to_s
-        'results'
-      end
-    end
-    results = Results.new([], 1, true, true, nil, nil)
+    results = Zenodo::SearchResponse.new('{}', 1, 10)
     service = mock('search_service')
     service.expects(:search).with('query', page: 1).returns(results)
     Zenodo::SearchService.expects(:new).with('https://zenodo.org').returns(service)

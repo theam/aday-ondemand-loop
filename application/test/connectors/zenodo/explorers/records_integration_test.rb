@@ -11,14 +11,25 @@ class Zenodo::Explorers::RecordsIntegrationTest < ActionDispatch::IntegrationTes
   end
 
   test 'show record page through explore controller' do
-    record = OpenStruct.new(
+    record_json = {
       id: '123',
-      title: 'Record',
-      draft?: false,
-      description: 'Desc',
-      publication_date: '2023-01-01',
-      files: [OpenStruct.new(id: 'f1', filename: 'file1.txt', filesize: 1)]
-    )
+      conceptrecid: '456',
+      metadata: {
+        title: 'Record',
+        description: 'Desc',
+        publication_date: '2023-01-01'
+      },
+      files: [
+        {
+          id: 'f1',
+          key: 'file1.txt',
+          size: 1,
+          checksum: 'md5:1',
+          links: { self: 'https://zenodo.org/api/files/abc/file1.txt' }
+        }
+      ]
+    }.to_json
+    record = Zenodo::RecordResponse.new(record_json)
     service = mock('record_service')
     service.expects(:find_record).with('123').returns(record)
     Zenodo::RecordService.expects(:new).with('https://zenodo.org').returns(service)

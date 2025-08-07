@@ -14,7 +14,7 @@ class Zenodo::Explorers::DepositionsIntegrationTest < ActionDispatch::Integratio
     deposition = OpenStruct.new(
       id: '10',
       title: 'Deposition',
-      draft?: false,
+      draft?: true,
       description: 'Desc',
       publication_date: '2023-01-01',
       files: [OpenStruct.new(id: 'f1', filename: 'file1.txt', filesize: 1)]
