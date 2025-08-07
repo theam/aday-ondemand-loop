@@ -66,18 +66,7 @@ class Repo::RepoUrlTest < ActiveSupport::TestCase
     assert_equal [], parser.path_segments
   end
 
-  test 'should handle URL with domain and no protocol' do
-    url = 'www.example.com'
-    parser = Repo::RepoUrl.parse(url)
 
-    assert parser
-    assert_equal 'https', parser.scheme
-    assert_equal 'www.example.com', parser.domain
-    assert_nil parser.port
-    assert_equal '/', parser.path
-    assert_equal({}, parser.params)
-    assert_equal [], parser.path_segments
-  end
 
   test 'path should default to /' do
     assert_equal '/', Repo::RepoUrl.parse('https://example.com').path
@@ -101,9 +90,20 @@ class Repo::RepoUrlTest < ActiveSupport::TestCase
     assert_nil Repo::RepoUrl.parse(nil)
   end
 
-  test 'should return nil for invalid URL' do
-    assert_nil Repo::RepoUrl.parse('not a url')
-    assert_nil Repo::RepoUrl.parse('123://bad')
+  test 'should return nil for invalid or unsupported URLs' do
+    invalid_urls = [
+      'not a url',
+      '123://bad',
+      'www.server.com',
+      'doi:10.1234/DVTest',
+      'ftp://server.com',
+      'hdl:11272.1/AB2/NXRVP9',
+      'localhost:8080'
+    ]
+
+    invalid_urls.each do |url|
+      assert_nil Repo::RepoUrl.parse(url), "Expected nil for #{url}"
+    end
   end
 
   test 'build should default to https scheme' do
