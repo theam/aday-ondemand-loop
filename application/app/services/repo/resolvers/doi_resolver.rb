@@ -17,6 +17,8 @@ module Repo
       end
 
       def resolve(context)
+        return if context.object_url
+
         if context.parsed_input.nil?
           doi_url = URI.parse(File.join(@api_url, context.input)).to_s
           object_url = check_url(context, doi_url)
