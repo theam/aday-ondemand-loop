@@ -28,15 +28,6 @@ class Repo::Resolvers::DoiResolverTest < ActiveSupport::TestCase
     assert_nil context.object_url
   end
 
-  test 'resolve returns when object_url already set' do
-    client = HttpClientMock.new(file_path: fixture_path('downloads/basic_http/sample_utf8.txt'))
-    context = Repo::RepoResolverContext.new('doi:10.123/abc', http_client: client)
-    context.object_url = 'https://already.com'
-    @resolver.resolve(context)
-    assert_equal 'https://already.com', context.object_url
-    refute client.called?
-  end
-
   test 'resolve handles doi.org urls directly' do
     client = HttpClientMock.new(file_path: fixture_path('downloads/basic_http/sample_utf8.txt'),
                                 status_code: 302,

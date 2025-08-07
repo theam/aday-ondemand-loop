@@ -19,19 +19,22 @@ module Repo
       def resolve(context)
         return unless context.parsed_input.nil?
 
-        parsed = RepoUrl.parse("https://#{context.input}")
-        host = parsed&.domain
+        input = context.input
+        parsed = RepoUrl.parse("https://#{input}")
+        domain = parsed&.domain
 
-        return unless resolvable_domain?(host)
+        log_info('Checking input', {input: input, domain: domain, candidate: parsed})
+        return unless resolvable_domain?(domain)
 
-        context.object_url = parsed.to_s
+        context.input = parsed.to_s
+        log_info('Input verified as domain', {input: input, domain: domain, candidate: parsed})
       end
 
       private
 
-      def resolvable_domain?(host)
-        return false if host.blank?
-        Resolv.getaddress(host)
+      def resolvable_domain?(domain)
+        return false if domain.blank?
+        Resolv.getaddress(domain)
         true
       rescue Resolv::ResolvError
         false

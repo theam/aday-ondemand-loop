@@ -12,6 +12,11 @@ module Repo
       @repo_db = repo_db
     end
 
+    def input=(value)
+      @input = value
+      @parsed_input = RepoUrl.parse(value)
+    end
+
     def result
       RepoResolverResponse.new(object_url, type)
     end
