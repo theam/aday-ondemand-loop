@@ -10,10 +10,9 @@ module Repo
       return nil if url.blank?
 
       uri = Addressable::URI.parse(url)
-      unless uri.scheme
-        uri = Addressable::URI.parse("https://#{url}")
-      end
+      scheme = uri.scheme&.downcase
 
+      return nil unless scheme && %w[http https].include?(scheme)
       return nil unless uri.host
 
       new(uri)
@@ -24,15 +23,13 @@ module Repo
     def self.build(domain, scheme: nil, port: nil)
       return nil if domain.blank?
 
-      scheme = 'https' if scheme.blank?
-
       uri = Addressable::URI.new(
-        scheme: scheme,
+        scheme: scheme.presence&.downcase || 'https',
         host: domain,
         port: port
       )
 
-      new(uri)
+      parse(uri.to_s)
     end
 
     private_class_method :new
