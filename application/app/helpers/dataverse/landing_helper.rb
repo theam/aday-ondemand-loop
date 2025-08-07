@@ -1,4 +1,4 @@
-module Dataverse::LandingPageHelper
+module Dataverse::LandingHelper
   def link_to_landing_prev_page(installations_page, html_options = {})
     unless installations_page.first_page?
       html_options['aria-label'] = I18n.t("acts_as_page.link_prev_page_a11y_label")
@@ -6,7 +6,7 @@ module Dataverse::LandingPageHelper
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
       url_opts = { page: installations_page.prev_page }
       url_opts[:query] = installations_page.query if installations_page.query.present?
-      link_to(view_dataverse_landing_path(url_opts), html_options) do
+      link_to(link_to_landing(ConnectorType::DATAVERSE, **url_opts), html_options) do
         raw('<i class="bi bi-chevron-left" aria-hidden="true"></i><span class="visually-hidden">' +
               I18n.t("acts_as_page.link_prev_page_a11y_label") + '</span>')
       end
@@ -20,7 +20,7 @@ module Dataverse::LandingPageHelper
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
       url_opts = { page: installations_page.next_page }
       url_opts[:query] = installations_page.query if installations_page.query.present?
-      link_to(view_dataverse_landing_path(url_opts), html_options) do
+      link_to(link_to_landing(ConnectorType::DATAVERSE, **url_opts), html_options) do
         raw('<i class="bi bi-chevron-right" aria-hidden="true"></i><span class="visually-hidden">' +
               I18n.t("acts_as_page.link_next_page_a11y_label") + '</span>')
       end

@@ -76,7 +76,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect back to internal referer when dataset is not found' do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
-    internal_referer = view_dataverse_landing_path.to_s
+    internal_referer = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s).to_s
     get view_dataverse_dataset_url(@new_id, 'random_id'), headers: { 'HTTP_REFERER' => internal_referer }
     assert_redirected_to internal_referer
     assert_equal I18n.t('dataverse.datasets.dataset_not_found',
@@ -88,7 +88,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect back to internal referer when dataset is not found with script name' do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).returns(nil)
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
-    internal_referer = '/pun/sys/loop' + view_dataverse_landing_path.to_s
+    internal_referer = '/pun/sys/loop' + explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s).to_s
     get view_dataverse_dataset_url(@new_id, 'random_id'), headers: { 'HTTP_REFERER' => internal_referer }, env: { 'SCRIPT_NAME' => '/pun/sys/loop' }
     assert_redirected_to internal_referer
     assert_equal I18n.t('dataverse.datasets.dataset_not_found',
@@ -123,7 +123,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to internal referrer after raising exception' do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises('error')
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
-    internal_referer = view_dataverse_landing_path.to_s
+    internal_referer = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s).to_s
     get view_dataverse_dataset_url(@new_id, 'random_id'), headers: { 'HTTP_REFERER' => internal_referer }
     assert_redirected_to internal_referer
     assert_equal I18n.t('dataverse.datasets.dataverse_service_error',
@@ -135,7 +135,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to internal referrer after raising exception with script name' do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises('error')
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).returns(nil)
-    internal_referer = '/pun/sys/loop' + view_dataverse_landing_path.to_s
+    internal_referer = '/pun/sys/loop' + explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s).to_s
     get view_dataverse_dataset_url(@new_id, 'random_id'), headers: { 'HTTP_REFERER' => internal_referer }, env: { 'SCRIPT_NAME' => '/pun/sys/loop' }
     assert_redirected_to internal_referer
     assert_equal I18n.t('dataverse.datasets.dataverse_service_error',
@@ -170,7 +170,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to internal referrer after raising Unauthorized exception' do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
-    internal_referer = view_dataverse_landing_path.to_s
+    internal_referer = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s).to_s
     get view_dataverse_dataset_url(@new_id, 'random_id'), headers: { 'HTTP_REFERER' => internal_referer }
     assert_redirected_to internal_referer
     assert_equal I18n.t('dataverse.datasets.dataset_requires_authorization',
@@ -182,7 +182,7 @@ class Dataverse::DatasetsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to internal referrer after raising Unauthorized exception with script name' do
     Dataverse::DatasetService.any_instance.stubs(:find_dataset_version_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
     Dataverse::DatasetService.any_instance.stubs(:search_dataset_files_by_persistent_id).raises(Dataverse::DatasetService::UnauthorizedException)
-    internal_referer = '/pun/sys/loop' + view_dataverse_landing_path.to_s
+    internal_referer = '/pun/sys/loop' + explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s).to_s
     get view_dataverse_dataset_url(@new_id, 'random_id'), headers: { 'HTTP_REFERER' => internal_referer }, env: { 'SCRIPT_NAME' => '/pun/sys/loop' }
     assert_redirected_to internal_referer
     assert_equal I18n.t('dataverse.datasets.dataset_requires_authorization',

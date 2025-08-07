@@ -7,7 +7,7 @@
     <li><%= link_to t('layouts.nav.navigation.link_uploads_text'), upload_status_path %></li>
     <li><%= t('layouts.nav.navigation.link_repositories_text') %></li>
     <ul>
-      <li><%= link_to t('layouts.nav.navigation.link_dataverse_text'), view_dataverse_landing_path %></li>
+      <li><%= link_to t('layouts.nav.navigation.link_dataverse_text'), link_to_landing(ConnectorType::DATAVERSE) %></li>
       <% if ::Configuration.zenodo_enabled %>
         <li><%= link_to t('layouts.nav.navigation.link_zenodo_text'), explore_path(connector_type: ConnectorType::ZENODO.to_s, server_domain: 'zenodo.org', object_type: 'actions', object_id: 'landing') %></li>
       <% end %>
@@ -18,3 +18,4 @@
     <li><%= link_to t('layouts.nav.navigation.link_restart_text'), restart_url %></li>
   </ul>
 </div>
+

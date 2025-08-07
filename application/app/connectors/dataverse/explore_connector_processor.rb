@@ -7,7 +7,10 @@ module Dataverse
     end
 
     def params_schema
-      %i[connector_type server_domain object_type object_id server_scheme server_port]
+      %i[
+        connector_type server_domain object_type object_id
+        server_scheme server_port page query
+      ]
     end
 
     def show(request_params)
@@ -26,11 +29,8 @@ module Dataverse
     end
 
     def landing(request_params)
-      ConnectorResult.new(
-        template: '/connectors/dataverse/explore_placeholder',
-        locals: { data: request_params },
-        success: true
-      )
+      explorer = Dataverse::Explorers::Landing.new
+      explorer.show(request_params)
     end
   end
 end

@@ -25,7 +25,7 @@ en:
       url_not_supported: "Dataverse URL not supported: %{dataverse_url}"
       dataverse_service_error_searching_files: "Dataverse service error while searching files. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version} page: %{page}"
 
-    landing_page:
+    landing:
       index:
         dataverse_installations_service_error: "Dataverse Installations service error."
   connectors:

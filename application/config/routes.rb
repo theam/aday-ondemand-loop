@@ -54,7 +54,6 @@ Rails.application.routes.draw do
   get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
 
   post "/view/dataverse/download/dataset" => "dataverse/datasets#download", as: :download_dataverse_dataset_files
-  get "/view/dataverse" => "dataverse/landing_page#index", as: :view_dataverse_landing
   get "/view/dataverse/*dv_hostname/datasets/*persistent_id/versions" => "dataverse/dataset_versions#versions", as: :view_dataverse_dataset_versions, format: false
   get "/view/dataverse/*dv_hostname/datasets/*persistent_id" => "dataverse/datasets#show", as: :view_dataverse_dataset, format: false
   get "/view/dataverse/*dv_hostname/dataverses/:id" => "dataverse/collections#show", as: :view_dataverse, format: false
