@@ -7,7 +7,10 @@ module Dataverse
     end
 
     def params_schema
-      %i[connector_type server_domain object_type object_id server_scheme server_port]
+      %i[
+        connector_type server_domain object_type object_id
+        server_scheme server_port page query
+      ]
     end
 
     def show(request_params)
