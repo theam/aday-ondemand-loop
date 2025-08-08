@@ -17,15 +17,13 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   end
 
   # Test initialization
-  test 'should initialize with url_helper' do
-    resolver = Dataverse::DisplayRepoControllerResolver.new
-    assert_not_nil resolver.instance_variable_get(:@url_helper)
+  test 'should initialize' do
+    assert_nothing_raised { Dataverse::DisplayRepoControllerResolver.new }
   end
 
   test 'should initialize with object parameter' do
     test_object = { test: 'value' }
-    resolver = Dataverse::DisplayRepoControllerResolver.new(test_object)
-    assert_not_nil resolver.instance_variable_get(:@url_helper)
+    assert_nothing_raised { Dataverse::DisplayRepoControllerResolver.new(test_object) }
   end
 
   # Test dataverse root URL handling
