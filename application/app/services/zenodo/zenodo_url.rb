@@ -3,7 +3,7 @@
 module Zenodo
   class ZenodoUrl
     DEFAULT_SERVER = 'zenodo.org'
-    TYPES = %w[zenodo record deposition file unknown].freeze
+    TYPES = %w[zenodo doi record deposition file unknown].freeze
 
     attr_reader :type, :record_id, :deposition_id, :file_name
     delegate :domain, :scheme, :scheme_override, :port, :port_override, to: :base
@@ -40,7 +40,9 @@ module Zenodo
     def parse_type_and_ids
       segments = @base.path_segments
 
-      if segments.length == 2 && segments[0] == 'records'
+      if segments.length > 1 && segments[0] == 'doi'
+        @type = 'doi'
+      elsif segments.length == 2 && segments[0] == 'records'
         @type = 'record'
         @record_id = segments[1]
       elsif segments.length >= 4 && segments[0] == 'records' && segments[2] == 'files'

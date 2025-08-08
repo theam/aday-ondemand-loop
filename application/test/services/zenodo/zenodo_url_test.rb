@@ -20,6 +20,14 @@ class Zenodo::ZenodoUrlTest < ActiveSupport::TestCase
     assert_equal 'https://zenodo.org', zurl.zenodo_url
   end
 
+  test 'parses zenodo DOI url' do
+    url = 'https://zenodo.org/doi/10.5281/zenodo.16764341'
+    zurl = Zenodo::ZenodoUrl.parse(url)
+
+    assert zurl.doi?
+    assert_equal 'https://zenodo.org', zurl.zenodo_url
+  end
+
   test 'parses record url' do
     url = 'https://zenodo.org/records/99'
     zurl = Zenodo::ZenodoUrl.parse(url)
