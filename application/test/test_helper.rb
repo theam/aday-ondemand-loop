@@ -15,6 +15,10 @@ end
 # TEST COVERAGE SETUP
 require 'simplecov'
 
+# Ensure each parallel test process uses a unique command name so that
+# SimpleCov can merge the results when the suite finishes.
+SimpleCov.command_name "test-#{ENV['TEST_ENV_NUMBER'] || '0'}"
+
 SimpleCov.coverage_dir('tmp/coverage')
 
 SimpleCov.start 'rails' do
@@ -24,6 +28,15 @@ SimpleCov.start 'rails' do
   SimpleCov.formatters = [
     SimpleCov::Formatter::HTMLFormatter,
   ]
+end
+
+# Only generate the coverage report once after all parallel workers have
+# finished. Each worker stores its own result, and the first worker (no
+# TEST_ENV_NUMBER or 1) also triggers the formatter to merge and output the
+# report.
+SimpleCov.at_exit do
+  result = SimpleCov.result
+  result.format! if ENV['TEST_ENV_NUMBER'].to_s.empty? || ENV['TEST_ENV_NUMBER'] == '1'
 end
 
 require_relative '../config/environment'
@@ -41,8 +54,7 @@ require 'mocha/minitest'
 
 module ActiveSupport
   class TestCase
-    # Run tests sequentially to preserve accurate coverage metrics
-    #parallelize(workers: :number_of_processors)
+    parallelize(workers: :number_of_processors)
 
     # Add more helper methods to be used by all tests here...
     include FileFixtureHelper
