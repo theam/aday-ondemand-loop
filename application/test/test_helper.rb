@@ -21,18 +21,12 @@ SimpleCov.start 'rails' do
   enable_coverage :branch
   add_filter '/test/'
 
+  # Ensure coverage is captured for tests executed in forked workers
+  enable_for_subprocesses true
+
   SimpleCov.formatters = [
     SimpleCov::Formatter::HTMLFormatter,
   ]
-end
-
-# Disable SimpleCov's default at_exit so we can safely handle coverage after
-# Minitest finishes in each parallel worker.
-SimpleCov.at_exit {}
-
-Minitest.after_run do
-  SimpleCov.command_name "test-#{Process.pid}"
-  SimpleCov.result.format!
 end
 
 require_relative '../config/environment'
@@ -51,6 +45,15 @@ require 'mocha/minitest'
 module ActiveSupport
   class TestCase
     parallelize(workers: :number_of_processors)
+
+    parallelize_setup do |worker|
+      SimpleCov.command_name "test-#{worker}"
+      SimpleCov.start
+    end
+
+    parallelize_teardown do |_worker|
+      SimpleCov.result.format!
+    end
 
     # Add more helper methods to be used by all tests here...
     include FileFixtureHelper
