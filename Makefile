@@ -56,7 +56,7 @@ release_notes:
 	./scripts/loop_release_notes.sh
 
 coverage:
-	./scripts/loop_coverage.sh
+	docker run --platform=linux/amd64 --rm -v $(WORKING_DIR)/application:/usr/local/app -v $(WORKING_DIR)/scripts:/usr/local/scripts -w /usr/local/app $(LOOP_BUILDER_IMAGE) /usr/local/scripts/loop_coverage.sh
 
 # Build the user guide using MkDocs
 guide:
