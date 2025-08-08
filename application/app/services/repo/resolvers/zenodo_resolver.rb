@@ -17,6 +17,7 @@ module Repo
 
       def resolve(context)
         return unless context.object_url
+        return if context.type
 
         repo_url = Zenodo::ZenodoUrl.parse(context.object_url)
 

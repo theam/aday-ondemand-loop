@@ -15,6 +15,7 @@ module Repo
 
       def resolve(context)
         return unless context.object_url
+        return if context.type
 
         repo_url = Dataverse::DataverseUrl.parse(context.object_url)
 

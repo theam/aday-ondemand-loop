@@ -8,7 +8,7 @@ module Repo
       end
 
       def priority
-        98_000
+        90_000
       end
 
       def resolve(context)

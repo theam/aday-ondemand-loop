@@ -11,7 +11,7 @@ module Repo
 
       # Run after ZenodoResolver
       def priority
-        8_500
+        8_000
       end
 
       def resolve(context)

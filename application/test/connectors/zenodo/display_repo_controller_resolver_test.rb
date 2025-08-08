@@ -22,6 +22,6 @@ class Zenodo::DisplayRepoControllerResolverTest < ActionDispatch::IntegrationTes
   test 'zenodo root url returns landing path' do
     url = 'https://zenodo.org'
     result = @resolver.get_controller_url(url)
-    assert_equal '/explore/zenodo/zenodo.org/actions/landing', result.redirect_url
+    assert_equal '/explore/zenodo/zenodo.org/explorers/landing', result.redirect_url
   end
 end
