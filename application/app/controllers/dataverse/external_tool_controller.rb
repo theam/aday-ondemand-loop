@@ -3,6 +3,7 @@
 module Dataverse
   class ExternalToolController < ApplicationController
     include LoggingCommon
+    include ExploreHelper
 
     PERMITTED_PARAMS = [:dataverse_url, :dataset_id, :version, :locale]
 
@@ -16,12 +17,9 @@ module Dataverse
         return
       end
 
-      dataverse_overrides = {}
-      dataverse_overrides[:dv_scheme] = dataverse_url.scheme_override
-      dataverse_overrides[:dv_port] = dataverse_url.port
-
       log_info('External tool request completed', { params: external_tool_data })
-      redirect_to view_dataverse_dataset_path(dataverse_url.domain, dataset_id, dataverse_overrides)
+      repo_url = Repo::RepoUrl.build(dataverse_url.domain, scheme: dataverse_url.scheme_override || 'https', port: dataverse_url.port)
+      redirect_to link_to_explore(ConnectorType::DATAVERSE, repo_url, type: 'datasets', id: dataset_id)
     end
 
     private

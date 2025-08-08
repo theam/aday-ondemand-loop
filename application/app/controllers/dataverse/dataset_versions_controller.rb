@@ -13,10 +13,10 @@ class Dataverse::DatasetVersionsController < ApplicationController
     @versions = versions_response&.versions || []
     log_info('Dataset versions', { dataverse_url: @dataset_url.dataverse_url, dataset_id: @dataset_url.dataset_id, versions: @versions.map(&:version) })
 
-    render partial: '/dataverse/datasets/versions', layout: false
+    render partial: '/connectors/dataverse/datasets/versions', layout: false
   rescue => e
     log_error('Unexpected error', { dataset_url: @dataset_url.dataset_url }, e)
-    render json: { error: t('dataverse.datasets.versions.dataverse_service_error', dataverse_url: @dataset_url.dataverse_url, persistent_id: @dataset_url.dataset_id, version: @dataset_url.version) }, status: :internal_server_error
+    render json: { error: t('connectors.dataverse.datasets.versions.dataverse_service_error', dataverse_url: @dataset_url.dataverse_url, persistent_id: @dataset_url.dataset_id, version: @dataset_url.version) }, status: :internal_server_error
   end
 
   private
@@ -28,7 +28,7 @@ class Dataverse::DatasetVersionsController < ApplicationController
     persistent_id = params[:persistent_id]
     @dataset_url = Dataverse::DataverseUrl.dataset_from_parts(domain, persistent_id, scheme: scheme, port: port)
     if @dataset_url.nil?
-      render json: { error: t('dataverse.datasets.versions.invalid_request') }, status: :bad_request
+      render json: { error: t('connectors.dataverse.datasets.versions.invalid_request') }, status: :bad_request
     end
   end
 
@@ -36,7 +36,7 @@ class Dataverse::DatasetVersionsController < ApplicationController
     resolver = Repo::RepoResolverService.new(RepoRegistry.resolvers)
     result = resolver.resolve(@dataset_url.dataverse_url)
     if result.type != ConnectorType::DATAVERSE
-      render json: { error: t('dataverse.datasets.versions.url_not_supported', dataverse_url: @dataset_url.dataverse_url) }, status: :bad_request
+      render json: { error: t('connectors.dataverse.datasets.versions.url_not_supported', dataverse_url: @dataset_url.dataverse_url) }, status: :bad_request
     end
   end
 end

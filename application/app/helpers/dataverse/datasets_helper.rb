@@ -16,39 +16,34 @@ module Dataverse::DatasetsHelper
     retrictions_service.validate_dataset_file(file)
   end
 
-  def dataverse_dataset_view_url(dataverse_url, persistent_id, version: nil, page: nil, query: nil)
-    uri = URI.parse(dataverse_url)
-    url_options = {}
-    url_options[:dv_port] = uri.port if uri.port != 443
-    url_options[:dv_scheme] = uri.scheme if uri.scheme != 'https'
-    url_options[:version] = version if version.present?
-    url_options[:page] = page if page.present?
-    url_options[:query] = query if query.present?
-    view_dataverse_dataset_path(uri.hostname, persistent_id, url_options)
-  end
-
-  def link_to_dataset_prev_page(dataverse_url, persistent_id, version, page, html_options = {})
+  def link_to_dataset_prev_page(repo_url, persistent_id, version, page, html_options = {})
     unless page.first_page?
-      dataset_url = dataverse_dataset_view_url(dataverse_url, persistent_id, version: version, page: page.prev_page, query: page.query)
-      html_options['aria-label'] = I18n.t("acts_as_page.link_prev_page_a11y_label")
-      html_options[:title] = I18n.t("acts_as_page.link_prev_page_title")
+      params = { version: version, page: page.prev_page }
+      params[:query] = page.query if page.query.present?
+      dataset_url = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                                    type: 'datasets', id: persistent_id, **params)
+      html_options['aria-label'] = I18n.t('acts_as_page.link_prev_page_a11y_label')
+      html_options[:title] = I18n.t('acts_as_page.link_prev_page_title')
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
       link_to(dataset_url, html_options) do
         raw('<i class="bi bi-chevron-left" aria-hidden="true"></i><span class="visually-hidden">' +
-              I18n.t("acts_as_page.link_prev_page_a11y_label") + '</span>')
+              I18n.t('acts_as_page.link_prev_page_a11y_label') + '</span>')
       end
     end
   end
 
-  def link_to_dataset_next_page(dataverse_url, persistent_id, version, page, html_options = {})
+  def link_to_dataset_next_page(repo_url, persistent_id, version, page, html_options = {})
     unless page.last_page?
-      dataset_url = dataverse_dataset_view_url(dataverse_url, persistent_id, version: version, page: page.next_page, query: page.query)
-      html_options['aria-label'] = I18n.t("acts_as_page.link_next_page_a11y_label")
-      html_options[:title] = I18n.t("acts_as_page.link_next_page_title")
+      params = { version: version, page: page.next_page }
+      params[:query] = page.query if page.query.present?
+      dataset_url = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                                    type: 'datasets', id: persistent_id, **params)
+      html_options['aria-label'] = I18n.t('acts_as_page.link_next_page_a11y_label')
+      html_options[:title] = I18n.t('acts_as_page.link_next_page_title')
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
       link_to(dataset_url, html_options) do
         raw('<i class="bi bi-chevron-right" aria-hidden="true"></i><span class="visually-hidden">' +
-              I18n.t("acts_as_page.link_next_page_a11y_label") + '</span>')
+              I18n.t('acts_as_page.link_next_page_a11y_label') + '</span>')
       end
     end
   end
@@ -57,13 +52,12 @@ module Dataverse::DatasetsHelper
     identifier.to_s.split(":", 3)[0..1].join(":") if identifier
   end
 
-  # TODO: TO BE REFACTORED INTO DataverseUrl to avoid using PARAMS
-  # SAME AS OTHER METHOD IN THIS CLASS
-  def dataset_versions_url(dataverse_url, persistent_id)
+  def dataset_versions_url(repo_url, persistent_id)
+      repo_url_obj = repo_url.is_a?(Repo::RepoUrl) ? repo_url : Repo::RepoUrl.parse(repo_url)
       url_options = {}
-      url_options[:dv_port] = params[:dv_port]
-      url_options[:dv_scheme] = params[:dv_scheme]
-      view_dataverse_dataset_versions_path(URI.parse(dataverse_url).hostname, persistent_id, url_options)
+      url_options[:dv_port] = repo_url_obj.port_override if repo_url_obj.port_override
+      url_options[:dv_scheme] = repo_url_obj.scheme_override if repo_url_obj.scheme_override
+      view_dataverse_dataset_versions_path(repo_url_obj.domain, persistent_id, url_options)
   end
 
   def external_dataset_url(dataverse_url, persistent_id, version = nil)

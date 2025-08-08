@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 require 'test_helper'
+require 'cgi'
 
 class DataverseDatasetsHelperTest < ActionView::TestCase
   include Dataverse::DatasetsHelper
+  include ExploreHelper
 
   test 'file_thumbnail uses dataverse preview for images' do
     json = load_dataverse_fixture('dataset_files_response', 'valid_response.json')
@@ -29,14 +31,17 @@ class DataverseDatasetsHelperTest < ActionView::TestCase
 
   test 'link_to_dataset_prev_page and next_page' do
     page = Page.new((1..30).to_a, 2, 10)
-    stubs(:view_dataverse_dataset_path).returns('/prev')
-    html = link_to_dataset_prev_page('https://dv.example', 'id', '1.0', page, {})
-    assert_includes html, '/prev'
+    repo_url = Repo::RepoUrl.parse('https://dv.example')
+    html = link_to_dataset_prev_page(repo_url, 'id', '1.0', page, {})
+    expected_prev = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                                    type: 'datasets', id: 'id', version: '1.0', page: 1)
+    assert_includes html, "href=\"#{CGI.escapeHTML(expected_prev)}\""
 
     page = Page.new((1..30).to_a, 2, 10)
-    stubs(:view_dataverse_dataset_path).returns('/next')
-    html = link_to_dataset_next_page('https://dv.example', 'id', '1.0', page, {})
-    assert_includes html, '/next'
+    html = link_to_dataset_next_page(repo_url, 'id', '1.0', page, {})
+    expected_next = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                                    type: 'datasets', id: 'id', version: '1.0', page: 3)
+    assert_includes html, "href=\"#{CGI.escapeHTML(expected_next)}\""
   end
 
   test 'storage_identifier parses identifier' do
@@ -44,16 +49,10 @@ class DataverseDatasetsHelperTest < ActionView::TestCase
     assert_nil storage_identifier(nil)
   end
 
-  test 'dataverse_dataset_view_url builds path with overrides' do
-    stubs(:view_dataverse_dataset_path).with('host', 'pid', { dv_port: 8080, dv_scheme: 'http', version: '1.0', page: 2, query: 'q' }).returns('/view')
-    url = dataverse_dataset_view_url('http://host:8080', 'pid', version: '1.0', page: 2, query: 'q')
-    assert_equal '/view', url
-  end
-
-  test 'dataset_versions_url uses params for overrides' do
-    stubs(:params).returns({ dv_port: '1234', dv_scheme: 'http' })
-    stubs(:view_dataverse_dataset_versions_path).with('host', 'pid', { dv_port: '1234', dv_scheme: 'http' }).returns('/versions')
-    url = dataset_versions_url('http://host', 'pid')
+  test 'dataset_versions_url builds path with overrides' do
+    repo_url = Repo::RepoUrl.parse('http://host:1234')
+    stubs(:view_dataverse_dataset_versions_path).with('host', 'pid', { dv_port: 1234, dv_scheme: 'http' }).returns('/versions')
+    url = dataset_versions_url(repo_url, 'pid')
     assert_equal '/versions', url
   end
 

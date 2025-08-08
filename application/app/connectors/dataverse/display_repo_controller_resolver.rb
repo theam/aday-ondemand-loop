@@ -24,13 +24,10 @@ module Dataverse
         redirect_url = link_to_explore(ConnectorType::DATAVERSE, dataverse_url,
                                        type: 'collections', id: dataverse_url.collection_id)
       elsif dataverse_url.dataset? || dataverse_url.file?
-        redirect_url = view_dataverse_dataset_path(
-          dv_hostname: dataverse_url.domain,
-          persistent_id: dataverse_url.dataset_id,
-          dv_scheme: dataverse_url.scheme_override,
-          dv_port: dataverse_url.port,
-          version: dataverse_url.version
-        )
+        params = {}
+        params[:version] = dataverse_url.version if dataverse_url.version
+        redirect_url = link_to_explore(ConnectorType::DATAVERSE, dataverse_url,
+                                       type: 'datasets', id: dataverse_url.dataset_id, **params)
       else
         redirect_url = link_to_landing(ConnectorType::DATAVERSE)
         message = { alert: I18n.t('connectors.dataverse.display_repo_controller.message_url_not_supported', url: object_url) }

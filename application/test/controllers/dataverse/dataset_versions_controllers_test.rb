@@ -61,7 +61,7 @@ class Dataverse::DatasetVersionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :bad_request
     json_response = JSON.parse(response.body)
-    assert_equal I18n.t('dataverse.datasets.versions.url_not_supported', dataverse_url: 'https://invalid.host'), json_response['error']
+    assert_equal I18n.t('connectors.dataverse.datasets.versions.url_not_supported', dataverse_url: 'https://invalid.host'), json_response['error']
   end
 
   test 'should handle custom scheme and port parameters' do
@@ -85,7 +85,7 @@ class Dataverse::DatasetVersionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :internal_server_error
     json_response = JSON.parse(response.body)
-    expected_error = I18n.t('dataverse.datasets.versions.dataverse_service_error',
+    expected_error = I18n.t('connectors.dataverse.datasets.versions.dataverse_service_error',
                             dataverse_url: "https://#{@domain}",
                             persistent_id: @persistent_id,
                             version: nil)
@@ -99,7 +99,7 @@ class Dataverse::DatasetVersionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :internal_server_error
     json_response = JSON.parse(response.body)
-    expected_error = I18n.t('dataverse.datasets.versions.dataverse_service_error',
+    expected_error = I18n.t('connectors.dataverse.datasets.versions.dataverse_service_error',
                             dataverse_url: "https://#{@domain}",
                             persistent_id: @persistent_id,
                             version: nil)

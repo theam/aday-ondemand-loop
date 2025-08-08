@@ -13,14 +13,11 @@
       <% end %>
     </li>
   <% end %>
+  <% repo_url = Repo::RepoUrl.build(@dataset_url.domain, scheme: @dataset_url.scheme_override || 'https', port: @dataset_url.port) %>
   <% @versions.each do |v| %>
-    <% version_path = view_dataverse_dataset_path(
-        dv_hostname: @dataset_url.domain,
-        persistent_id: @dataset_url.dataset_id,
-        dv_scheme: @dataset_url.scheme_override,
-        dv_port: @dataset_url.port,
-        version: v.version
-      ) %>
+    <% version_path = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                                      type: 'datasets', id: @dataset_url.dataset_id,
+                                      version: v.version) %>
     <li class="list-group-item list-group-item-action p-0">
       <%= link_to version_path, class: 'd-flex justify-content-between align-items-center gap-3 p-2 text-decoration-none' do %>
         <div class="flex-grow-1 d-flex align-items-center gap-3">
