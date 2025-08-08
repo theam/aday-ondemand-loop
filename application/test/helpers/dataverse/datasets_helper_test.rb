@@ -49,13 +49,6 @@ class DataverseDatasetsHelperTest < ActionView::TestCase
     assert_nil storage_identifier(nil)
   end
 
-  test 'dataset_versions_url builds path with overrides' do
-    repo_url = Repo::RepoUrl.parse('http://host:1234')
-    stubs(:view_dataverse_dataset_versions_path).with('host', 'pid', { dv_port: 1234, dv_scheme: 'http' }).returns('/versions')
-    url = dataset_versions_url(repo_url, 'pid')
-    assert_equal '/versions', url
-  end
-
   test 'external_dataset_url builds correct link' do
     url = external_dataset_url('http://dv.example', 'pid', '1.0')
     assert_equal 'http://dv.example/dataset.xhtml?persistentId=pid&version=1.0', url

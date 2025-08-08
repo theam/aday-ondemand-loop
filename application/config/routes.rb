@@ -53,7 +53,6 @@ Rails.application.routes.draw do
   # DATAVERSE ROUTES
   get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
 
-  get "/view/dataverse/*dv_hostname/datasets/*persistent_id/versions" => "dataverse/dataset_versions#versions", as: :view_dataverse_dataset_versions, format: false
 
   # EXPLORE ROUTE
   get "/explore/:connector_type/landing" => "explore#landing", as: :explore_landing

@@ -1,0 +1,34 @@
+require 'test_helper'
+
+class Dataverse::Explorers::DatasetVersionsTest < ActiveSupport::TestCase
+  def setup
+    @repo_url = Repo::RepoUrl.parse('https://dataverse.org')
+    repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'key'))
+    RepoRegistry.stubs(:repo_db).returns(mock('db', get: repo_info))
+    @explorer = Dataverse::Explorers::DatasetVersions.new('pid')
+  end
+
+  test 'show renders versions list' do
+    versions_response = OpenStruct.new(versions: [])
+    service = mock('service')
+    service.expects(:dataset_versions_by_persistent_id).with('pid').returns(versions_response)
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+
+    res = @explorer.show(repo_url: @repo_url)
+    assert res.success?
+    assert_equal [], res.locals[:versions]
+    assert_equal @repo_url, res.locals[:repo_url]
+    assert_equal 'pid', res.locals[:dataset_id]
+    assert_equal '/connectors/dataverse/dataset_versions/show', res.template
+  end
+
+  test 'show returns error on exception' do
+    service = mock('service')
+    service.expects(:dataset_versions_by_persistent_id).with('pid').raises(StandardError.new('boom'))
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+
+    res = @explorer.show(repo_url: @repo_url)
+    refute res.success?
+    assert_equal I18n.t('connectors.dataverse.dataset_versions.show.dataverse_service_error', dataverse_url: 'https://dataverse.org', persistent_id: 'pid', version: nil), res.message[:error]
+  end
+end
