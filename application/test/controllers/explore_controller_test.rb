@@ -23,6 +23,14 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'landing action renders partial when processor succeeds via ajax request' do
+    stub_processor(:landing, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
+
+    get explore_landing_url(connector_type: 'zenodo'), xhr: true
+
+    assert_response :success
+  end
+
   test 'landing action redirects with message when processor fails' do
     stub_processor(:landing, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
 
@@ -30,6 +38,15 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
     assert_equal 'error', flash[:alert]
+  end
+
+  test 'landing action renders flash messages when processor fails via ajax request' do
+    stub_processor(:landing, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
+
+    get explore_landing_url(connector_type: 'zenodo'), xhr: true
+
+    assert_response :internal_server_error
+    assert_includes @response.body, 'error'
   end
 
   test 'landing action redirects with error message when processor raises' do
@@ -69,6 +86,20 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'show action renders partial when processor succeeds via ajax request' do
+    stub_processor(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
+
+    get explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'example.org',
+      object_type: 'records',
+      object_id: '1',
+    ), xhr: true
+
+    assert_response :success
+  end
+
   test 'show action redirects with message when processor fails' do
     stub_processor(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
@@ -82,6 +113,21 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
     assert_equal 'error', flash[:alert]
+  end
+
+  test 'show action renders flash messages when processor fails via ajax request' do
+    stub_processor(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
+
+    get explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'example.org',
+      object_type: 'records',
+      object_id: '1',
+    ), xhr: true
+
+    assert_response :internal_server_error
+    assert_includes @response.body, 'error'
   end
 
   test 'show action redirects with error message when processor raises' do

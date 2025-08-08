@@ -52,14 +52,6 @@ module Dataverse::DatasetsHelper
     identifier.to_s.split(":", 3)[0..1].join(":") if identifier
   end
 
-  def dataset_versions_url(repo_url, persistent_id)
-      repo_url_obj = repo_url.is_a?(Repo::RepoUrl) ? repo_url : Repo::RepoUrl.parse(repo_url)
-      url_options = {}
-      url_options[:dv_port] = repo_url_obj.port_override if repo_url_obj.port_override
-      url_options[:dv_scheme] = repo_url_obj.scheme_override if repo_url_obj.scheme_override
-      view_dataverse_dataset_versions_path(repo_url_obj.domain, persistent_id, url_options)
-  end
-
   def external_dataset_url(dataverse_url, persistent_id, version = nil)
     url = FluentUrl.new(dataverse_url)
             .add_path('dataset.xhtml')

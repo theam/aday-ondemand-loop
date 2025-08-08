@@ -142,15 +142,6 @@ en:
           field_publication_date_text: "Publication date:"
           field_subjects_text: "Subjects:"
           header_dataset_text: "Dataset"
-        versions:
-          message_missing_api_key_text: "<strong>Draft versions are restricted.</strong> Add an API token in repository settings to access draft content when available."
-          field_version_label: "Dataset version: %{version}"
-          button_repository_settings_label: "Open repository settings"
-          button_browse_version_label: "Open dataset version %{version}"
-          field_creation_date_title: "Creation date"
-          url_not_supported: "Dataverse URL not supported: %{dataverse_url}"
-          invalid_request: "The request is invalid. Talk to the administrator"
-          dataverse_service_error: "Dataverse service error. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version}"
         dataset_actions:
           actions_bar_title_a11y_label: "Dataset actions bar"
           button_create_bundle_label: "Create Upload Bundle"
@@ -172,6 +163,14 @@ en:
           invalid_file_in_selection: "Invalid file in selection: %{filename} errors: %{errors}"
           error_generating_the_download_file: "Error generating the download file"
           files_added_to_project: "Files added to project: %{project_name}"
+      dataset_versions:
+        show:
+          message_missing_api_key_text: "<strong>Draft versions are restricted.</strong> Add an API token in repository settings to access draft content when available."
+          field_version_label: "Dataset version: %{version}"
+          button_repository_settings_label: "Open repository settings"
+          button_browse_version_label: "Open dataset version %{version}"
+          field_creation_date_title: "Creation date"
+
   dataverse:
     external_tool:
       dataset:
@@ -190,7 +189,6 @@ en:
         image_dataverse_icon_aria_label: "Visit the Dataverse project homepage"
         page_title: "OnDemand Loop - Dataverse Landing page"
         dataverse_installations_service_error: "Dataverse Installations service error."
-
     restrictions:
       dataset_file:
         unavailable_message: "Restricted or embargoed files cannot be downloaded"

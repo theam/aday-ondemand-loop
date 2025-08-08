@@ -13,7 +13,8 @@
                data-utils--icon-toggle-icon-off-value="bi-dash-square"
                data-action="click->utils--icon-toggle#toggle click->lazy-loader#toggle"
                data-lazy-loader-container-id-value="dataset-versions-content"
-               data-lazy-loader-url-value="<%= dataset_versions_url(repo_url, dataset.data.dataset_persistent_id) %>"
+               data-lazy-loader-url-value="<%= link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                                                              type: 'dataset_versions', id: dataset.data.dataset_persistent_id) %>"
                data-lazy-loader-reload-on-toggle-value="false"
                data-lazy-loader-display-errors-value="true"
                href="#"
