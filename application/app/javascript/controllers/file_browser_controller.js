@@ -39,7 +39,7 @@ export default class extends Controller {
         const newPath = this.pathInputTarget.value
         const url = `${this.urlValue}?path=${encodeURIComponent(newPath)}`
 
-        fetch(url, { headers: { Accept: "text/html" } })
+        fetch(url, { headers: { Accept: "text/html", 'X-Requested-With': 'XMLHttpRequest' }})
             .then(res => {
                 if (!res.ok) {
                     return res.json().then(data => { throw data; })

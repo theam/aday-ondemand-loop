@@ -20,7 +20,8 @@ export default class extends SpinnerToggleMixin(Controller) {
             headers: {
                 "X-CSRF-Token": csrfToken,
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json",
+                'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: "same-origin"
         }).then(response => {
