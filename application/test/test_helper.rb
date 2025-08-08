@@ -13,17 +13,19 @@ at_exit do
 end
 
 # TEST COVERAGE SETUP
-require 'simplecov'
+if ENV['COVERAGE']
+  require 'simplecov'
 
-SimpleCov.coverage_dir('tmp/coverage')
+  SimpleCov.coverage_dir('tmp/coverage')
 
-SimpleCov.start 'rails' do
-  enable_coverage :branch
-  add_filter '/test/'
+  SimpleCov.start 'rails' do
+    enable_coverage :branch
+    add_filter '/test/'
 
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-  ]
+    SimpleCov.formatters = [
+      SimpleCov::Formatter::HTMLFormatter,
+    ]
+  end
 end
 
 require_relative '../config/environment'
@@ -41,8 +43,7 @@ require 'mocha/minitest'
 
 module ActiveSupport
   class TestCase
-    # Run tests sequentially to preserve accurate coverage metrics
-    #parallelize(workers: :number_of_processors)
+    parallelize(workers: :number_of_processors) unless ENV['COVERAGE']
 
     # Add more helper methods to be used by all tests here...
     include FileFixtureHelper
