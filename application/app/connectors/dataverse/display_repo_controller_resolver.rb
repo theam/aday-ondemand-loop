@@ -17,9 +17,23 @@ module Dataverse
       if dataverse_url.nil?
         redirect_url = @url_helper.explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
       elsif dataverse_url.dataverse? || (dataverse_url.file? && dataverse_url.dataset_id.nil?)
-        redirect_url = @url_helper.view_dataverse_path(dataverse_url.domain, ':root', dv_scheme: dataverse_url.scheme_override, dv_port: dataverse_url.port)
+        redirect_url = @url_helper.explore_path(
+          connector_type: ConnectorType::DATAVERSE.to_s,
+          server_domain: dataverse_url.domain,
+          object_type: 'collections',
+          object_id: ':root',
+          server_scheme: dataverse_url.scheme_override,
+          server_port: dataverse_url.port
+        )
       elsif dataverse_url.collection?
-        redirect_url = @url_helper.view_dataverse_path(dataverse_url.domain, dataverse_url.collection_id, dv_scheme: dataverse_url.scheme_override, dv_port: dataverse_url.port)
+        redirect_url = @url_helper.explore_path(
+          connector_type: ConnectorType::DATAVERSE.to_s,
+          server_domain: dataverse_url.domain,
+          object_type: 'collections',
+          object_id: dataverse_url.collection_id,
+          server_scheme: dataverse_url.scheme_override,
+          server_port: dataverse_url.port
+        )
       elsif dataverse_url.dataset? || dataverse_url.file?
         redirect_url = @url_helper.view_dataverse_dataset_path(
           dv_hostname: dataverse_url.domain,

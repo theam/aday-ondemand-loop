@@ -6,17 +6,18 @@ class DataverseCollectionsHelperTest < ActionView::TestCase
 
   setup do
     @controller.params = { dv_port: 443, dv_scheme: 'https' }
+    @repo_url = Repo::RepoUrl.build('example.com')
   end
 
-  test 'link_to_dataverse_collection delegates to route helper' do
-    stubs(:view_dataverse_url).with('example.com', ':root', { dv_port: 443, dv_scheme: 'https' }).returns('/show')
-    html = link_to_dataverse_collection('Body', 'https://example.com', ':root')
+  test 'link_to_dataverse_collection delegates to explore helper' do
+    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'collections', id: ':root').returns('/show')
+    html = link_to_dataverse_collection('Body', @repo_url, ':root')
     assert_includes html, 'href="/show"'
   end
 
   test 'link_to_root_dataverse_collection uses :root identifier' do
-    stubs(:view_dataverse_url).returns('/root')
-    html = link_to_root_dataverse_collection('https://example.com')
+    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'collections', id: ':root').returns('/root')
+    html = link_to_root_dataverse_collection(@repo_url)
     assert_includes html, 'href="/root"'
   end
 
@@ -42,12 +43,12 @@ class DataverseCollectionsHelperTest < ActionView::TestCase
     data = Dataverse::SearchResponse::Data.new({ start: 10, total_count: 30, items: [], q: "term" }, 2, 10)
     result = OpenStruct.new(data: data)
     dataverse = OpenStruct.new(data: OpenStruct.new(alias: 'alias'))
-    expects(:view_dataverse_url).with('example.com', 'alias', { page: 1, query: 'term' }).returns('/prev')
-    html = link_to_search_results_prev_page('https://example.com', dataverse, result, {})
-    assert_includes html, 'href="/prev"'
+    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'collections', id: 'alias').returns('/base')
+    html = link_to_search_results_prev_page(@repo_url, dataverse, result, {})
+    assert_includes html, 'href="/base?page=1&amp;query=term"'
 
-    expects(:view_dataverse_url).with('example.com', 'alias', { page: 3, query: 'term' }).returns('/next')
-    html = link_to_search_results_next_page('https://example.com', dataverse, result, {})
-    assert_includes html, 'href="/next"'
+    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'collections', id: 'alias').returns('/base')
+    html = link_to_search_results_next_page(@repo_url, dataverse, result, {})
+    assert_includes html, 'href="/base?page=3&amp;query=term"'
   end
 end

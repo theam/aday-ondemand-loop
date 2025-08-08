@@ -6,14 +6,14 @@
     <% if Current.settings.user_settings.active_project.present? %>
       <%= button_to project_upload_bundles_path(Current.settings.user_settings.active_project),
                     method: :post,
-                    params: { remote_repo_url: external_collection_url(current_dataverse_url, collection.data.alias) },
+                    params: { remote_repo_url: external_collection_url(dataverse_url, collection.data.alias) },
                     class: 'btn btn-sm btn-outline-secondary',
                     title: t('.button_create_bundle_title') do %>
         <i class="bi bi-folder-plus" aria-hidden="true"></i>
         <span class="ps-1"><%= t('.button_create_bundle_label') %></span>
       <% end %>
     <% end %>
-    <%= link_to external_collection_url(current_dataverse_url, collection.data.alias),
+    <%= link_to external_collection_url(dataverse_url, collection.data.alias),
                 target: '_blank',
                 class: 'btn btn-sm btn-outline-secondary',
                 title: t('.link_open_collection_title') do %>

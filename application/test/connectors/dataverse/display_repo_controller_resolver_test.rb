@@ -3,6 +3,15 @@ require 'test_helper'
 class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   include Rails.application.routes.url_helpers
 
+  def view_dataverse_path(host, id, dv_scheme:, dv_port:)
+    explore_path(connector_type: ConnectorType::DATAVERSE.to_s,
+                 server_domain: host,
+                 object_type: 'collections',
+                 object_id: id,
+                 server_scheme: dv_scheme,
+                 server_port: dv_port)
+  end
+
   def setup
     @resolver = Dataverse::DisplayRepoControllerResolver.new
   end

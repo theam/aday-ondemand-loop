@@ -8,17 +8,14 @@ module Dataverse
 
     def params_schema
       %i[
-        connector_type server_domain object_type object_id
-        server_scheme server_port page query
+        connector_type object_type object_id
+        page query
       ]
     end
 
     def show(request_params)
-      ConnectorResult.new(
-        template: '/connectors/dataverse/explore_placeholder',
-        locals: { data: request_params },
-        success: true
-      )
+      explorer = ConnectorActionDispatcher.explorer(request_params[:connector_type], request_params[:object_type], request_params[:object_id])
+      explorer.show(request_params)
     end
 
     def create(_request_params)
