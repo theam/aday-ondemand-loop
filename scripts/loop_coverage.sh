@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Run tests with coverage first
+./scripts/loop_test.sh coverage
+
 # Configuration
 COVERAGE_FILE="application/tmp/coverage/.last_run.json"
 BADGE_DIR="docs/badges"

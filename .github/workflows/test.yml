@@ -8,28 +8,38 @@ on:
 
 jobs:
   build-and-test-ood-loop:
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout ${{ github.sha }}
         uses: actions/checkout@v4
 
-      - name: Run tests and generate coverage
+      - name: Run tests
         run: make test
 
-      - name: Generate coverage badges (only on main push)
+  coverage-and-badges:
+    name: Coverage & badges (main only)
+    needs: build-and-test-ood-loop
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout ${{ github.sha }}
+        uses: actions/checkout@v4
+
+      - name: Generate coverage & badges
         run: make coverage
 
       - name: Print coverage summary to GitHub Actions UI
         run: cat docs/badges/coverage-summary.txt
 
-      - name: Git setup (only on main push)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Git setup
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
 
-      - name: Commit and push badges (only on main push)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Commit and push badges
         run: |
           git add docs/badges
           git commit -m "Update coverage badges [skip ci]" || echo "No changes"
