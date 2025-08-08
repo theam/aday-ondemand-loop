@@ -15,10 +15,6 @@ end
 # TEST COVERAGE SETUP
 require 'simplecov'
 
-# Ensure each parallel test process uses a unique command name so that
-# SimpleCov can merge the results when the suite finishes.
-SimpleCov.command_name "test-#{ENV['TEST_ENV_NUMBER'] || '0'}"
-
 SimpleCov.coverage_dir('tmp/coverage')
 
 SimpleCov.start 'rails' do
@@ -30,13 +26,13 @@ SimpleCov.start 'rails' do
   ]
 end
 
-# Only generate the coverage report once after all parallel workers have
-# finished. Each worker stores its own result, and the first worker (no
-# TEST_ENV_NUMBER or 1) also triggers the formatter to merge and output the
-# report.
-SimpleCov.at_exit do
-  result = SimpleCov.result
-  result.format! if ENV['TEST_ENV_NUMBER'].to_s.empty? || ENV['TEST_ENV_NUMBER'] == '1'
+# Disable SimpleCov's default at_exit so we can safely handle coverage after
+# Minitest finishes in each parallel worker.
+SimpleCov.at_exit {}
+
+Minitest.after_run do
+  SimpleCov.command_name "test-#{Process.pid}"
+  SimpleCov.result.format!
 end
 
 require_relative '../config/environment'
