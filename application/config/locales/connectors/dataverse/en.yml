@@ -170,7 +170,6 @@ en:
           button_repository_settings_label: "Open repository settings"
           button_browse_version_label: "Open dataset version %{version}"
           field_creation_date_title: "Creation date"
-          dataverse_service_error: "Dataverse service error. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version}"
 
   dataverse:
     external_tool:

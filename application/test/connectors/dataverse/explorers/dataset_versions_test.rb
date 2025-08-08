@@ -22,13 +22,14 @@ class Dataverse::Explorers::DatasetVersionsTest < ActiveSupport::TestCase
     assert_equal '/connectors/dataverse/dataset_versions/show', res.template
   end
 
-  test 'show returns error on exception' do
+  test 'show propagates exceptions' do
     service = mock('service')
     service.expects(:dataset_versions_by_persistent_id).with('pid').raises(StandardError.new('boom'))
     Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
 
-    res = @explorer.show(repo_url: @repo_url)
-    refute res.success?
-    assert_equal I18n.t('connectors.dataverse.dataset_versions.show.dataverse_service_error', dataverse_url: 'https://dataverse.org', persistent_id: 'pid', version: nil), res.message[:error]
+    error = assert_raises(StandardError) do
+      @explorer.show(repo_url: @repo_url)
+    end
+    assert_equal 'boom', error.message
   end
 end

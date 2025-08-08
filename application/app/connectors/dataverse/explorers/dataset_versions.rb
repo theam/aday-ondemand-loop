@@ -14,23 +14,15 @@ module Dataverse::Explorers
       api_key = repo_info&.metadata&.auth_key
       service = Dataverse::DatasetService.new(dataverse_url, api_key: api_key)
 
-      begin
-        versions_response = service.dataset_versions_by_persistent_id(@persistent_id)
-        versions = versions_response&.versions || []
-        log_info('Dataset versions', { dataverse_url: dataverse_url, dataset_id: @persistent_id, versions: versions.map(&:version) })
+      versions_response = service.dataset_versions_by_persistent_id(@persistent_id)
+      versions = versions_response&.versions || []
+      log_info('Dataset versions', { dataverse_url: dataverse_url, dataset_id: @persistent_id, versions: versions.map(&:version) })
 
-        ConnectorResult.new(
-          template: '/connectors/dataverse/dataset_versions/show',
-          locals: { repo_url: repo_url, dataset_id: @persistent_id, versions: versions },
-          success: true
-        )
-      rescue => e
-        log_error('Unexpected error', { dataverse: dataverse_url, dataset_id: @persistent_id }, e)
-        ConnectorResult.new(
-          message: { error: I18n.t('connectors.dataverse.dataset_versions.show.dataverse_service_error', dataverse_url: dataverse_url, persistent_id: @persistent_id, version: nil) },
-          success: false
-        )
-      end
+      ConnectorResult.new(
+        template: '/connectors/dataverse/dataset_versions/show',
+        locals: { repo_url: repo_url, dataset_id: @persistent_id, versions: versions },
+        success: true
+      )
     end
   end
 end
