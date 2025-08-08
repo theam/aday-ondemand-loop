@@ -23,14 +23,13 @@ module Dataverse
       return nil unless dataset_id
 
       dataverse_uri = Dataverse::DataverseUrl.parse(dataverse_url)
-      scheme = dataverse_uri.scheme_override
-      hostname = dataverse_uri.domain
-      port = dataverse_uri.port
-      Rails.application.routes.url_helpers.view_dataverse_dataset_path(
-        dv_scheme: scheme,
-        dv_hostname: hostname,
-        dv_port: port,
-        persistent_id: dataset_id,
+      Rails.application.routes.url_helpers.explore_path(
+        connector_type: ConnectorType::DATAVERSE.to_s,
+        server_domain: dataverse_uri.domain,
+        server_scheme: dataverse_uri.scheme_override,
+        server_port: dataverse_uri.port,
+        object_type: 'datasets',
+        object_id: dataset_id,
         version: version
       )
     end

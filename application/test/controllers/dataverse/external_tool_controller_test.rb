@@ -24,7 +24,8 @@ class Dataverse::ExternalToolControllerTest < ActionDispatch::IntegrationTest
       locale: 'en'
     }
 
-    assert_redirected_to view_dataverse_dataset_path('demo.dataverse.org', 'abc-123')
+    expected = explore_path(connector_type: ConnectorType::DATAVERSE.to_s, server_domain: 'demo.dataverse.org', object_type: 'datasets', object_id: 'abc-123')
+    assert_redirected_to expected
   end
 
   test 'should redirect to dataset view with overrides' do
@@ -35,6 +36,7 @@ class Dataverse::ExternalToolControllerTest < ActionDispatch::IntegrationTest
       locale: 'en'
     }
 
-    assert_redirected_to view_dataverse_dataset_path('demo.dataverse.org', 'abc-123', dv_scheme: 'http', dv_port: '8080')
+    expected = explore_path(connector_type: ConnectorType::DATAVERSE.to_s, server_domain: 'demo.dataverse.org', server_scheme: 'http', server_port: '8080', object_type: 'datasets', object_id: 'abc-123')
+    assert_redirected_to expected
   end
 end

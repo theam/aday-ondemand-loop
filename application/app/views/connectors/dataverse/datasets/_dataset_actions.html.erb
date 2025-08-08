@@ -12,7 +12,7 @@
                     select_files_project_listener_enable_on_select_value: "true",
                   } do %>
 
-      <input type="hidden" name="remote_repo_url" id="remote_repo_url" autocomplete="off" value="<%= external_dataset_url(current_dataverse_url, dataset.data.dataset_persistent_id) %>">
+      <input type="hidden" name="remote_repo_url" id="remote_repo_url" autocomplete="off" value="<%= external_dataset_url(dataverse_url, dataset.data.dataset_persistent_id) %>">
       <input type="hidden" name="project_id" id="project_id" autocomplete="off" data-select-files-project-listener-target="field">
 
       <%= button_tag type: 'submit',
@@ -48,7 +48,7 @@
     <% end %>
 
     <!-- link to external repository dataset -->
-    <%= link_to external_dataset_url(current_dataverse_url, dataset.data.dataset_persistent_id),
+    <%= link_to external_dataset_url(dataverse_url, dataset.data.dataset_persistent_id),
                 target: '_blank',
                 class: 'btn btn-sm btn-outline-secondary',
                 title: t('.link_open_dataset_title') do %>

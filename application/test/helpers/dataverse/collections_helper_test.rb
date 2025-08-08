@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 require 'test_helper'
+require 'cgi'
 
 class DataverseCollectionsHelperTest < ActionView::TestCase
   include Dataverse::CollectionsHelper
+  include ExploreHelper
 
   setup do
     @controller.params = { dv_port: 443, dv_scheme: 'https' }
@@ -21,9 +23,9 @@ class DataverseCollectionsHelperTest < ActionView::TestCase
     assert_includes html, 'href="/root"'
   end
 
-  test 'link_to_dataset delegates to dataset route helper' do
-    stubs(:view_dataverse_dataset_url).with('example.com', 'id1', { dv_port: 443, dv_scheme: 'https' }).returns('/dataset')
-    html = link_to_dataset('Ds', 'https://example.com', 'id1')
+  test 'link_to_dataset delegates to explore helper' do
+    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'datasets', id: 'id1').returns('/dataset')
+    html = link_to_dataset('Ds', @repo_url, 'id1')
     assert_includes html, 'href="/dataset"'
   end
 
@@ -43,12 +45,14 @@ class DataverseCollectionsHelperTest < ActionView::TestCase
     data = Dataverse::SearchResponse::Data.new({ start: 10, total_count: 30, items: [], q: "term" }, 2, 10)
     result = OpenStruct.new(data: data)
     dataverse = OpenStruct.new(data: OpenStruct.new(alias: 'alias'))
-    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'collections', id: 'alias').returns('/base')
     html = link_to_search_results_prev_page(@repo_url, dataverse, result, {})
-    assert_includes html, 'href="/base?page=1&amp;query=term"'
+    expected_prev = link_to_explore(ConnectorType::DATAVERSE, @repo_url,
+                                    type: 'collections', id: 'alias', page: 1, query: 'term')
+    assert_includes html, "href=\"#{CGI.escapeHTML(expected_prev)}\""
 
-    expects(:link_to_explore).with(ConnectorType::DATAVERSE, @repo_url, type: 'collections', id: 'alias').returns('/base')
     html = link_to_search_results_next_page(@repo_url, dataverse, result, {})
-    assert_includes html, 'href="/base?page=3&amp;query=term"'
+    expected_next = link_to_explore(ConnectorType::DATAVERSE, @repo_url,
+                                    type: 'collections', id: 'alias', page: 3, query: 'term')
+    assert_includes html, "href=\"#{CGI.escapeHTML(expected_next)}\""
   end
 end

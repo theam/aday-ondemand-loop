@@ -12,6 +12,16 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
                  server_port: dv_port)
   end
 
+  def dataset_path(host, pid, dv_scheme: nil, dv_port: nil, version: nil)
+    explore_path(connector_type: ConnectorType::DATAVERSE.to_s,
+                 server_domain: host,
+                 object_type: 'datasets',
+                 object_id: pid,
+                 server_scheme: dv_scheme,
+                 server_port: dv_port,
+                 version: version)
+  end
+
   def setup
     @resolver = Dataverse::DisplayRepoControllerResolver.new
   end
@@ -79,13 +89,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   # Test dataset URL handling
   test 'should generate redirect URL for dataset with dataset.xhtml' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -93,13 +97,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should generate redirect URL for dataset with version' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US&version=2.0')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: '2.0'
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US', version: '2.0')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -107,13 +105,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle dataset with draft version' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US&version=draft')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: ':draft'
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US', version: ':draft')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -121,13 +113,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle dataset with latest version' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US&version=latest')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: ':latest'
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US', version: ':latest')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -135,13 +121,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle dataset with latest-published version' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US&version=latest-published')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: ':latest-published'
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US', version: ':latest-published')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -149,13 +129,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should generate redirect URL for citation' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/citation?persistentId=doi:10.5072/FK2/GCN7US')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -163,13 +137,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should generate redirect URL for citation.xhtml' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/citation.xhtml?persistentId=doi:10.5072/FK2/GCN7US')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -178,13 +146,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   # Test file URL handling
   test 'should generate redirect URL for file with dataset_id' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/file.xhtml?persistentId=doi:10.5072/FK2/GCN7US&fileId=123')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -192,13 +154,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should generate redirect URL for file with version' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/file.xhtml?persistentId=doi:10.5072/FK2/GCN7US&fileId=123&version=1.0')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: '1.0'
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US', version: '1.0')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -214,13 +170,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle file with persistent_id containing file path' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/file.xhtml?persistentId=doi:10.5072/FK2/GCN7US/file123')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US/file123',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US/file123')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -229,13 +179,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   # Test different persistent ID formats
   test 'should handle different DOI formats' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.7910/DVN/EXAMPLE')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.7910/DVN/EXAMPLE',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.7910/DVN/EXAMPLE')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -243,13 +187,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle handle format persistent IDs' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=hdl:1902.1/12345')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'hdl:1902.1/12345',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'hdl:1902.1/12345')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -283,13 +221,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   # Test edge cases
   test 'should handle URLs with fragments' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US#fragment')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -297,13 +229,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle URLs with extra parameters' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml?persistentId=doi:10.5072/FK2/GCN7US&extra=param&another=value')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'demo.dataverse.org',
-      persistent_id: 'doi:10.5072/FK2/GCN7US',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: nil
-    )
+    expected_url = dataset_path('demo.dataverse.org', 'doi:10.5072/FK2/GCN7US')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -405,13 +331,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   test 'should handle complex dataset URLs' do
     complex_url = 'https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/EXAMPLE&version=1.2&tab=files'
     result = @resolver.get_controller_url(complex_url)
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'dataverse.harvard.edu',
-      persistent_id: 'doi:10.7910/DVN/EXAMPLE',
-      dv_scheme: nil,
-      dv_port: nil,
-      version: '1.2'
-    )
+    expected_url = dataset_path('dataverse.harvard.edu', 'doi:10.7910/DVN/EXAMPLE', version: '1.2')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -427,13 +347,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should preserve scheme and port information correctly' do
     result = @resolver.get_controller_url('http://test.dataverse.org:9000/dataset.xhtml?persistentId=doi:test')
-    expected_url = view_dataverse_dataset_path(
-      dv_hostname: 'test.dataverse.org',
-      persistent_id: 'doi:test',
-      dv_scheme: 'http',
-      dv_port: 9000,
-      version: nil
-    )
+    expected_url = dataset_path('test.dataverse.org', 'doi:test', dv_scheme: 'http', dv_port: 9000)
 
     assert result.success?
     assert_equal expected_url, result.redirect_url

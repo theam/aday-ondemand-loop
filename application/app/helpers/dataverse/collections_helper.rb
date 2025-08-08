@@ -12,10 +12,9 @@ module Dataverse::CollectionsHelper
   end
 
   def link_to_dataset(body, dataverse_url, persistent_id, html_options = {})
-    url_options = {}
-    url_options[:dv_port] = params[:dv_port]
-    url_options[:dv_scheme] = params[:dv_scheme]
-    link_to(body, view_dataverse_dataset_url(URI.parse(dataverse_url).hostname, persistent_id, url_options), html_options)
+    repo_url = dataverse_url.is_a?(Repo::RepoUrl) ? dataverse_url : Repo::RepoUrl.parse(dataverse_url)
+    link = link_to_explore(ConnectorType::DATAVERSE, repo_url, type: 'datasets', id: persistent_id)
+    link_to(body, link, html_options)
   end
 
   def external_collection_url(dataverse_url, identifier)
@@ -33,8 +32,8 @@ module Dataverse::CollectionsHelper
     unless search_result.data.first_page?
       params = { page: search_result.data.prev_page }
       params[:query] = search_result.data.q if search_result.data.q.present? && search_result.data.q != '*'
-      url = link_to_explore(ConnectorType::DATAVERSE, repo_url, type: 'collections', id: dataverse.data.alias)
-      url = "#{url}?#{params.to_query}"
+      url = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                            type: 'collections', id: dataverse.data.alias, **params)
       html_options['aria-label'] = I18n.t('acts_as_page.link_prev_page_a11y_label')
       html_options[:title] = I18n.t('acts_as_page.link_prev_page_title')
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
@@ -49,8 +48,8 @@ module Dataverse::CollectionsHelper
     unless search_result.data.last_page?
       params = { page: search_result.data.next_page }
       params[:query] = search_result.data.q if search_result.data.q.present? && search_result.data.q != '*'
-      url = link_to_explore(ConnectorType::DATAVERSE, repo_url, type: 'collections', id: dataverse.data.alias)
-      url = "#{url}?#{params.to_query}"
+      url = link_to_explore(ConnectorType::DATAVERSE, repo_url,
+                            type: 'collections', id: dataverse.data.alias, **params)
       html_options['aria-label'] = I18n.t('acts_as_page.link_next_page_a11y_label')
       html_options[:title] = I18n.t('acts_as_page.link_next_page_title')
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')

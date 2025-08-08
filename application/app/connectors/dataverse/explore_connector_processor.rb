@@ -7,27 +7,32 @@ module Dataverse
     end
 
     def params_schema
-      %i[
-        connector_type object_type object_id
-        page query
+      [
+        :connector_type, :object_type, :object_id,
+        :page, :query, :version,
+        :project_id, { file_ids: [] }
       ]
     end
 
     def show(request_params)
-      explorer = ConnectorActionDispatcher.explorer(request_params[:connector_type], request_params[:object_type], request_params[:object_id])
+      explorer = load_explorer(request_params)
       explorer.show(request_params)
     end
 
-    def create(_request_params)
-      ConnectorResult.new(
-        message: { notice: I18n.t('explore.show.message_success') },
-        success: true
-      )
+    def create(request_params)
+      explorer = load_explorer(request_params)
+      explorer.create(request_params)
     end
 
     def landing(request_params)
       explorer = Dataverse::Explorers::Landing.new
       explorer.show(request_params)
+    end
+
+    private
+
+    def load_explorer(request_params)
+      ConnectorActionDispatcher.explorer(request_params[:connector_type], request_params[:object_type], request_params[:object_id])
     end
   end
 end

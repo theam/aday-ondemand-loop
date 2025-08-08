@@ -79,6 +79,8 @@ en:
         cancel: "Cancel"
       upload_connector_processor:
         upload_payload_description: "File uploaded from OnDemand Loop application"
+      display_repo_controller:
+        message_url_not_supported: "Dataverse URL not supported: %{url}"
       collections:
         breadcrumbs:
           breadcrumb_dataverse_title: "Dataverse landing page"
@@ -117,49 +119,60 @@ en:
           dataverse_not_found: "Dataverse not found. Dataverse: %{dataverse_url} Id: %{id}"
           dataverse_requires_authorization: "Dataverse requires authorization. Dataverse: %{dataverse_url} Id: %{id}"
           dataverse_service_error: "Dataverse service error. Dataverse: %{dataverse_url} Id: %{id}"
+      datasets:
+        breadcrumbs:
+          breadcrumb_dataverse_title: "Dataverse landing page"
+          breadcrumb_home_text: "Home"
+          breadcrumb_home_title: "Home"
+        dataset_files:
+          col_file_name_text: "File name"
+          col_published_text: "Published"
+          col_size_text: "Size"
+          col_storage_text: "Storage"
+          checkbox_select_all_label: "Select all files"
+          header_dataset_files_a11y_text: "Dataset files"
+          msg_empty_dataset_text: "The dataset does not contain files to download"
+          paginator_bar_a11y_label: "Search result pagination"
+          paginator_page_text: "page %{page}"
+          table_dataset_files_caption: "Dataset files"
+        dataset_info:
+          button_toggle_label: "Dataset details"
+          field_authors_text: "Authors:"
+          field_license_text: "License:"
+          field_publication_date_text: "Publication date:"
+          field_subjects_text: "Subjects:"
+          header_dataset_text: "Dataset"
+        versions:
+          message_missing_api_key_text: "<strong>Draft versions are restricted.</strong> Add an API token in repository settings to access draft content when available."
+          field_version_label: "Dataset version: %{version}"
+          button_repository_settings_label: "Open repository settings"
+          button_browse_version_label: "Open dataset version %{version}"
+          field_creation_date_title: "Creation date"
+          url_not_supported: "Dataverse URL not supported: %{dataverse_url}"
+          invalid_request: "The request is invalid. Talk to the administrator"
+          dataverse_service_error: "Dataverse service error. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version}"
+        dataset_actions:
+          actions_bar_title_a11y_label: "Dataset actions bar"
+          button_create_bundle_label: "Create Upload Bundle"
+          button_create_bundle_title: "Create Upload Bundle from this dataset on the selected project"
+          link_open_dataset_title: "Open dataset on Dataverse"
+          button_open_project_title: "Open selected project details page"
+          button_open_project_label: "Open selected project"
+        search_bar:
+          button_submit_text: "Search Files"
+          field_search_placeholder: "Search files within the dataset"
+        show:
+          page_title: "OnDemand Loop - Dataverse Dataset"
+          dataset_not_found: "Dataset not found. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version}"
+          dataset_requires_authorization: "Dataset requires authorization. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version}"
+          dataverse_service_error: "Dataverse service error. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version}"
+          dataset_files_not_found: "Dataset files not found. Dataverse: %{dataverse_url} persistentId: %{persistent_id} version: %{version} page: %{page}"
+        download:
+          error_generating_project: "Error generating project: %{errors}"
+          invalid_file_in_selection: "Invalid file in selection: %{filename} errors: %{errors}"
+          error_generating_the_download_file: "Error generating the download file"
+          files_added_to_project: "Files added to project: %{project_name}"
   dataverse:
-    datasets:
-      breadcrumbs:
-        breadcrumb_dataverse_title: "Dataverse landing page"
-        breadcrumb_home_text: "Home"
-        breadcrumb_home_title: "Home"
-      dataset_files:
-        col_file_name_text: "File name"
-        col_published_text: "Published"
-        col_size_text: "Size"
-        col_storage_text: "Storage"
-        checkbox_select_all_label: "Select all files"
-        header_dataset_files_a11y_text: "Dataset files"
-        msg_empty_dataset_text: "The dataset does not contain files to download"
-        paginator_bar_a11y_label: "Search result pagination"
-        paginator_page_text: "page %{page}"
-        table_dataset_files_caption: "Dataset files"
-      dataset_info:
-        button_toggle_label: "Dataset details"
-        field_authors_text: "Authors:"
-        field_license_text: "License:"
-        field_publication_date_text: "Publication date:"
-        field_subjects_text: "Subjects:"
-        header_dataset_text: "Dataset"
-      versions:
-        message_missing_api_key_text: "<strong>Draft versions are restricted.</strong> Add an API token in repository settings to access draft content when available."
-        field_version_label: "Dataset version: %{version}"
-        button_repository_settings_label: "Open repository settings"
-        button_browse_version_label: "Open dataset version %{version}"
-        field_creation_date_title: "Creation date"
-
-      dataset_actions:
-        actions_bar_title_a11y_label: "Dataset actions bar"
-        button_create_bundle_label: "Create Upload Bundle"
-        button_create_bundle_title: "Create Upload Bundle from this dataset on the selected project"
-        link_open_dataset_title: "Open dataset on Dataverse"
-        button_open_project_title: "Open selected project details page"
-        button_open_project_label: "Open selected project"
-      search_bar:
-        button_submit_text: "Search Files"
-        field_search_placeholder: "Search files within the dataset"
-      show:
-        page_title: "OnDemand Loop - Dataverse Dataset"
     external_tool:
       dataset:
         invalid_request_error: "Invalid Dataverse request. Dataverse URL and Dataset id are required"
@@ -176,6 +189,7 @@ en:
         image_dataverse_icon_alt: "Dataverse icon"
         image_dataverse_icon_aria_label: "Visit the Dataverse project homepage"
         page_title: "OnDemand Loop - Dataverse Landing page"
+        dataverse_installations_service_error: "Dataverse Installations service error."
 
     restrictions:
       dataset_file:
