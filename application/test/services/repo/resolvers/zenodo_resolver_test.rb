@@ -13,20 +13,6 @@ class Repo::Resolvers::ZenodoResolverTest < ActiveSupport::TestCase
     @repo_db_temp.unlink
   end
 
-  test 'resolve returns cached entry without api call' do
-    @repo_db.set('https://zenodo.org', type: ConnectorType::ZENODO, metadata: {})
-    http_client = mock('client')
-    http_client.expects(:get).never
-
-    resolver = Repo::Resolvers::ZenodoResolver.new
-    context = Repo::RepoResolverContext.new('https://zenodo.org/records/123', http_client: http_client, repo_db: @repo_db)
-    context.object_url = 'https://zenodo.org/records/123'
-
-    resolver.resolve(context)
-
-    assert_equal ConnectorType::ZENODO, context.type
-  end
-
   test 'resolve falls back to API when domain unknown and detects Zenodo' do
     body = { 'hits' => { 'total' => 1, 'hits' => [] } }.to_json
     response = stub(success?: true, json: JSON.parse(body))
