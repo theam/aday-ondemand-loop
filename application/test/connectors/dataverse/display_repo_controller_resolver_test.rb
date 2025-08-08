@@ -3,20 +3,27 @@ require 'test_helper'
 class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   include Rails.application.routes.url_helpers
 
+  def view_dataverse_path(host, id, dv_scheme:, dv_port:)
+    explore_path(connector_type: ConnectorType::DATAVERSE.to_s,
+                 server_domain: host,
+                 object_type: 'collections',
+                 object_id: id,
+                 server_scheme: dv_scheme,
+                 server_port: dv_port)
+  end
+
   def setup
     @resolver = Dataverse::DisplayRepoControllerResolver.new
   end
 
   # Test initialization
-  test 'should initialize with url_helper' do
-    resolver = Dataverse::DisplayRepoControllerResolver.new
-    assert_not_nil resolver.instance_variable_get(:@url_helper)
+  test 'should initialize' do
+    assert_nothing_raised { Dataverse::DisplayRepoControllerResolver.new }
   end
 
   test 'should initialize with object parameter' do
     test_object = { test: 'value' }
-    resolver = Dataverse::DisplayRepoControllerResolver.new(test_object)
-    assert_not_nil resolver.instance_variable_get(:@url_helper)
+    assert_nothing_raised { Dataverse::DisplayRepoControllerResolver.new(test_object) }
   end
 
   # Test dataverse root URL handling

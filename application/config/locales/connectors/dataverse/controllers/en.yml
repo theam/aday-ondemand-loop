@@ -1,12 +1,6 @@
 ---
 en:
   dataverse:
-    collections:
-      show:
-        dataverse_not_found: "Dataverse not found. Dataverse: %{dataverse_url} Id: %{id}"
-        dataverse_requires_authorization: "Dataverse requires authorization. Dataverse: %{dataverse_url} Id: %{id}"
-        dataverse_service_error: "Dataverse service error. Dataverse: %{dataverse_url} Id: %{id}"
-      url_not_supported: "Dataverse URL not supported: %{dataverse_url}"
     datasets:
       download:
         error_generating_project: "Error generating project: %{errors}"

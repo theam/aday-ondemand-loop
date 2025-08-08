@@ -7,15 +7,15 @@
       <%= link_to t('connectors.dataverse.title'), link_to_landing(ConnectorType::DATAVERSE), { 'title' => t(".breadcrumb_dataverse_title"), 'aria-label' => t(".breadcrumb_dataverse_title") } %>
     </li>
     <li class="breadcrumb-item">
-      <%= link_to_root_dataverse_collection(dataverse_url, {title: dataverse_url, 'aria-label' => dataverse_url }) %>
+      <%= link_to_root_dataverse_collection(repo_url, { title: dataverse_url, 'aria-label' => dataverse_url }) %>
     </li>
     <% collection.data.parents.each do |parent| %>
       <li class="breadcrumb-item">
-        <%= link_to_dataverse_collection(parent[:identifier], dataverse_url, parent[:identifier], { 'title' => parent[:name], 'aria-label' => parent[:name]}) %>
+        <%= link_to_dataverse_collection(parent[:identifier], repo_url, parent[:identifier], { 'title' => parent[:name], 'aria-label' => parent[:name] }) %>
       </li>
     <% end %>
     <li class="breadcrumb-item active" aria-current="page">
-      <%= link_to_dataverse_collection(collection.data.alias, dataverse_url, collection.data.alias, { 'title' => collection.data.name }) %>
+      <%= link_to_dataverse_collection(collection.data.alias, repo_url, collection.data.alias, { 'title' => collection.data.name }) %>
     </li>
   </ol>
 </nav>
