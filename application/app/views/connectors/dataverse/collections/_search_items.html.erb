@@ -12,7 +12,7 @@
   <% if search_result.data.items.any? %>
     <h2 id="search-results-heading" class="visually-hidden"><%= t('connectors.dataverse.collections.search_items.header_search_results_a11y_text') %></h2>
     <ul class="list-group">
-      <%= render partial: 'item', collection: search_result.data.items, as: :item, locals: { dataverse_url: dataverse_url, repo_url: repo_url } %>
+      <%= render partial: 'connectors/dataverse/collections/item', collection: search_result.data.items, as: :item, locals: { dataverse_url: dataverse_url, repo_url: repo_url } %>
     </ul>
     <div class="card-header d-flex justify-content-end">
       <nav aria-label="<%= t('.paginator_bar_a11y_label') %>" class="ms-auto">
