@@ -55,10 +55,13 @@ make test
 # Run specific test files (if needed)
 make test_bash
 bundle exec rake test TEST=test/path/to/specific_test.rb
+
+# Generate a coverage report
+bundle exec rake test:coverage
 ```
 
 **Understanding Coverage Reports:**
-The test suite generates detailed coverage reports using [SimpleCov](https://github.com/simplecov-ruby/simplecov):
+Running `bundle exec rake test:coverage` generates detailed coverage reports using [SimpleCov](https://github.com/simplecov-ruby/simplecov):
 
 - **HTML report:** `application/tmp/coverage/index.html` (open in browser for detailed view)
 - **Console output:** Shows line and branch coverage percentages

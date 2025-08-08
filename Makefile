@@ -56,7 +56,7 @@ release_notes:
 	./scripts/loop_release_notes.sh
 
 coverage:
-	./scripts/loop_coverage_badge.sh
+	./scripts/loop_coverage.sh
 
 # Build the user guide using MkDocs
 guide:
