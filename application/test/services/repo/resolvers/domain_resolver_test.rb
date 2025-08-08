@@ -43,4 +43,9 @@ class Repo::Resolvers::DomainResolverTest < ActiveSupport::TestCase
     @resolver.resolve(context)
     assert_equal 'notadomain.localxyz', context.input
   end
+
+  test 'resolvable_domain? returns false when DNS lookup fails' do
+    Resolv.expects(:getaddress).raises(Resolv::ResolvError)
+    refute @resolver.send(:resolvable_domain?, 'bad.example')
+  end
 end
