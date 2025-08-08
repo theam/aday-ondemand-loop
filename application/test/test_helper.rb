@@ -15,6 +15,10 @@ end
 # TEST COVERAGE SETUP
 require 'simplecov'
 
+class SimpleCov::Formatter::QuietFormatter
+  def format(_result); end
+end
+
 SimpleCov.coverage_dir('tmp/coverage')
 
 SimpleCov.start 'rails' do
@@ -24,9 +28,7 @@ SimpleCov.start 'rails' do
   # Ensure coverage is captured for tests executed in forked workers
   enable_for_subprocesses true
 
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-  ]
+  SimpleCov.formatter SimpleCov::Formatter::QuietFormatter
 end
 
 require_relative '../config/environment'
@@ -46,13 +48,21 @@ module ActiveSupport
   class TestCase
     parallelize(workers: :number_of_processors)
 
+    @@lock = Mutex.new
+    @@remaining_workers = 0
+
     parallelize_setup do |worker|
+      @@lock.synchronize { @@remaining_workers += 1 }
       SimpleCov.command_name "test-#{worker}"
       SimpleCov.start
     end
 
     parallelize_teardown do |_worker|
-      SimpleCov.result.format!
+      SimpleCov.result
+      @@lock.synchronize do
+        @@remaining_workers -= 1
+        SimpleCov::Formatter::HTMLFormatter.new.format(SimpleCov::ResultMerger.merged_result) if @@remaining_workers.zero?
+      end
     end
 
     # Add more helper methods to be used by all tests here...
