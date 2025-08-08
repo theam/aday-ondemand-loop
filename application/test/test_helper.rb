@@ -1,18 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 ENV['SECRET_KEY_BASE'] ||= 'test_secret_key_base_please_change'
 
-# THIS IS FOR DEBUGGING CI RANDOM ERRORS:
-# ArgumentError: `secret_key_base` for test environment must be a type of String`
-at_exit do
-  if $!
-    puts "\n=== Uncaught Exception at Exit ==="
-    puts $!.class
-    puts $!.message
-    puts $!.backtrace.join("\n")
-    puts "=== END Uncaught Exception ===\n\n"
-  end
-end
-
 # TEST COVERAGE SETUP
 if ENV['COVERAGE']
   require 'simplecov'
