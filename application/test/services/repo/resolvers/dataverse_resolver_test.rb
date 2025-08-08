@@ -42,4 +42,27 @@ class Repo::Resolvers::DataverseResolverTest < ActiveSupport::TestCase
 
     assert_nil context.type
   end
+
+  test 'resolve ignores API responses without version' do
+    response = stub(success?: true, json: {})
+    http_client = mock('client')
+    http_client.expects(:get).returns(response)
+    resolver = Repo::Resolvers::DataverseResolver.new
+    context = Repo::RepoResolverContext.new('https://noversion.org/dataverse', http_client: http_client, repo_db: @repo_db)
+    context.object_url = 'https://noversion.org/dataverse'
+    resolver.resolve(context)
+    assert_nil context.type
+    assert_nil @repo_db.get('https://noversion.org')
+  end
+
+  test 'resolve does not set type when API call unsuccessful' do
+    response = stub(success?: false, json: {}, status: 404)
+    http_client = mock('client')
+    http_client.expects(:get).returns(response)
+    resolver = Repo::Resolvers::DataverseResolver.new
+    context = Repo::RepoResolverContext.new('https://badstatus.org/dataverse', http_client: http_client, repo_db: @repo_db)
+    context.object_url = 'https://badstatus.org/dataverse'
+    resolver.resolve(context)
+    assert_nil context.type
+  end
 end

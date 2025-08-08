@@ -33,4 +33,20 @@ class Repo::Resolvers::CacheResolverTest < ActiveSupport::TestCase
 
     assert_nil context.type
   end
+
+  test 'resolve is no-op when object_url missing' do
+    resolver = Repo::Resolvers::CacheResolver.new
+    context = Repo::RepoResolverContext.new('https://zenodo.org/records/123', repo_db: @repo_db)
+    resolver.resolve(context)
+    assert_nil context.type
+  end
+
+  test 'resolve ignores invalid object_url' do
+    @repo_db.set('https://zenodo.org', type: ConnectorType::ZENODO, metadata: {})
+    resolver = Repo::Resolvers::CacheResolver.new
+    context = Repo::RepoResolverContext.new('bad', repo_db: @repo_db)
+    context.object_url = 'not a url'
+    resolver.resolve(context)
+    assert_nil context.type
+  end
 end

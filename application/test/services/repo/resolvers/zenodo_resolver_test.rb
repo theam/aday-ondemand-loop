@@ -81,4 +81,18 @@ class Repo::Resolvers::ZenodoResolverTest < ActiveSupport::TestCase
     assert_nil context.type
     assert_nil @repo_db.get('https://weird.org')
   end
+
+  test 'resolve does not set type when API returns non-success status' do
+    response = stub(success?: false, json: {}, status: 500)
+    http_client = mock('client')
+    http_client.expects(:get)
+               .with('https://baddomain.org/api/records?page=1&size=1')
+               .returns(response)
+    resolver = Repo::Resolvers::ZenodoResolver.new
+    context = Repo::RepoResolverContext.new('https://baddomain.org/records/123', http_client: http_client, repo_db: @repo_db)
+    context.object_url = 'https://baddomain.org/records/123'
+    resolver.resolve(context)
+    assert_nil context.type
+    assert_nil @repo_db.get('https://baddomain.org')
+  end
 end
