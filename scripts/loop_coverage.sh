@@ -1,12 +1,18 @@
 #!/bin/bash
 set -e
 
+# Directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$SCRIPT_DIR/.."
+
 # Run tests with coverage first
-./scripts/loop_test.sh coverage
+cd "$REPO_ROOT/application"
+"$SCRIPT_DIR/loop_test.sh" coverage
+cd "$REPO_ROOT"
 
 # Configuration
-COVERAGE_FILE="application/tmp/coverage/.last_run.json"
-BADGE_DIR="docs/badges"
+COVERAGE_FILE="$REPO_ROOT/application/tmp/coverage/.last_run.json"
+BADGE_DIR="$REPO_ROOT/docs/badges"
 LINE_BADGE="$BADGE_DIR/coverage-line.svg"
 BRANCH_BADGE="$BADGE_DIR/coverage-branch.svg"
 SUMMARY_FILE="$BADGE_DIR/coverage-summary.txt"
