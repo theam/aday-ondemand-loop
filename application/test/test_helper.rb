@@ -1,4 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
+ENV['SECRET_KEY_BASE'] ||= 'test_secret_key_base_please_change'
 
 # THIS IS FOR DEBUGGING CI RANDOM ERRORS:
 # ArgumentError: `secret_key_base` for test environment must be a type of String`
@@ -51,18 +52,5 @@ module ActiveSupport
     include ZenodoHelper
     include DataverseHelper
 
-    setup do
-      begin
-        Rails.application.secret_key_base ||= 'a_secure_dummy_key_for_tests'
-        # THIS IS FOR DEBUGGING CI RANDOM ERRORS:
-        # ArgumentError: `secret_key_base` for test environment must be a type of String`
-      rescue ArgumentError => e
-        puts "\n=== secret_key_base ArgumentError caught ==="
-        puts e.message
-        puts e.backtrace.join("\n")
-        puts "=== END secret_key_base trace ===\n\n"
-        raise e
-      end
-    end
   end
 end
