@@ -91,4 +91,36 @@ class DownloadFilesControllerTest < ActionDispatch::IntegrationTest
     assert_match 'deleted', flash[:notice]
     assert_match 'file.zip', flash[:notice]
   end
+
+  test 'retry should redirect with alert if file is nil' do
+    DownloadFile.stubs(:find).with(@project_id, @file_id).returns(nil)
+
+    post retry_project_download_file_url(project_id: @project_id, id: @file_id)
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_match 'not found for project', flash[:alert]
+  end
+
+  test 'retry should clone file and redirect with notice' do
+    original = DownloadFile.new
+    original.id = @file_id
+    original.project_id = @project_id
+    original.type = ConnectorType::DATAVERSE
+    original.filename = 'file.txt'
+    original.status = FileStatus::ERROR
+    original.size = 10
+    original.metadata = {}
+
+    new_file = original.dup
+    DownloadFile.stubs(:find).with(@project_id, @file_id).returns(original)
+    original.stubs(:dup).returns(new_file)
+    DownloadFile.stubs(:generate_id).returns('newid')
+    Common::FileUtils.any_instance.stubs(:make_download_file_unique).with(new_file).returns(new_file)
+    new_file.expects(:save)
+
+    post retry_project_download_file_url(project_id: @project_id, id: @file_id)
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_match 'retried', flash[:notice]
+  end
 end
