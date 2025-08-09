@@ -68,6 +68,8 @@ en:
       message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
 
   connect:
+    show:
+      message_processor_error: "Error processing request for repository: %{connector_type} action: %{action}"
     message_invalid_connector_type: "Invalid connector type: %{connector_type}"
     handle:
       message_processor_error: "Error processing request for repository: %{connector_type} action: %{action}"

@@ -6,8 +6,13 @@ module Dataverse
       # Needed to implement expected interface in ConnectorClassDispatcher
     end
 
-    def action(action_name)
-      ConnectorActionDispatcher.action(ConnectorType::DATAVERSE, action_name)
+    def params_schema
+      [ :connector_type, :object_type, :page, :query ]
+    end
+
+    def show(request_params)
+      action = ConnectorActionDispatcher.action(ConnectorType::DATAVERSE, request_params[:object_type])
+      action.show(request_params)
     end
   end
 end
