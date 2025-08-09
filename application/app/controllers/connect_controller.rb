@@ -5,26 +5,26 @@ class ConnectController < ApplicationController
   before_action :parse_connector_type
 
   def show
-    processor = ConnectorClassDispatcher.connect_connector_processor(@connector_type)
-    processor_params = params.permit(*processor.params_schema).to_h
-    result = processor.show(processor_params)
+    handler = ConnectorHandlerDispatcher.handler(@connector_type, object_type)
+    handler_params = params.permit(*handler.params_schema).to_h
+    result = handler.show(handler_params)
 
     unless result.success?
-      log_error('Connect.show action error', { connector_type: @connector_type, processor: processor.class.name, action: object_type }.merge(result.message))
+      log_error('Connect.show action error', { connector_type: @connector_type, handler: handler.class.name, action: object_type }.merge(result.message))
       return respond_error(result.message, root_path)
     end
 
-    log_info('Connect.show completed', { connector_type: @connector_type, processor: processor.class.name, action: object_type })
+    log_info('Connect.show completed', { connector_type: @connector_type, handler: handler.class.name, action: object_type })
     respond_success(result)
   rescue => e
-    log_error('Error processing Connect.show processor/action', { connector_type: @connector_type, action: object_type }, e)
+    log_error('Error processing Connect.show handler/action', { connector_type: @connector_type, action: object_type }, e)
     respond_error({ alert: I18n.t('connect.show.message_processor_error', connector_type: @connector_type, action: object_type) }, root_path)
   end
 
   def handle
-    processor = ConnectorClassDispatcher.connect_connector_processor(@connector_type)
-    processor_params = params.permit(*processor.params_schema).to_h
-    result = processor.handle(processor_params)
+    handler = ConnectorHandlerDispatcher.handler(@connector_type, object_type)
+    handler_params = params.permit(*handler.params_schema).to_h
+    result = handler.handle(handler_params)
 
     unless result.success?
       log_error('Connect.handle action error', { connector_type: @connector_type, action: object_type }.merge(result.message))
@@ -34,7 +34,7 @@ class ConnectController < ApplicationController
     log_info('Connect.handle completed', { connector_type: @connector_type, action: object_type })
     respond_success(result)
   rescue => e
-    log_error('Error processing Connect.handle processor/action', { connector_type: @connector_type, action: object_type }, e)
+    log_error('Error processing Connect.handle handler/action', { connector_type: @connector_type, action: object_type }, e)
     respond_error({ alert: I18n.t('connect.handle.message_processor_error', connector_type: @connector_type, action: object_type) }, root_path)
   end
 

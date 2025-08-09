@@ -6,31 +6,31 @@ class ExploreController < ApplicationController
   before_action :build_repo_url, only: %i[show create]
 
   def show
-    processor = ConnectorClassDispatcher.explore_connector_processor(@connector_type)
-    processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: @repo_url)
-    result = processor.show(processor_params)
+    handler = ConnectorHandlerDispatcher.handler(@connector_type, params[:object_type], params[:object_id])
+    handler_params = params.permit(*handler.params_schema).to_h.merge(repo_url: @repo_url)
+    result = handler.show(handler_params)
 
     unless result.success?
-      log_error('Explore.show action error', { repo_url: @repo_url, connector_type: @connector_type, processor: processor.class.name, object_type: params[:object_type], object_id: params[:object_id] }.merge(result.message))
+      log_error('Explore.show action error', { repo_url: @repo_url, connector_type: @connector_type, handler: handler.class.name, object_type: params[:object_type], object_id: params[:object_id] }.merge(result.message))
       return respond_error(result.message, root_path)
     end
 
     respond_success(result)
     log_info('Explore.show completed', { repo_url: @repo_url, connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] })
   rescue => e
-    log_error('Error processing Explore.show processor/action', { connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
+    log_error('Error processing Explore.show handler/action', { connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
     respond_error({ alert: I18n.t('explore.show.message_processor_error', connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id]) }, root_path)
   end
 
   def create
-    processor = ConnectorClassDispatcher.explore_connector_processor(@connector_type)
-    processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: @repo_url)
-    result = processor.create(processor_params)
+    handler = ConnectorHandlerDispatcher.handler(@connector_type, params[:object_type], params[:object_id])
+    handler_params = params.permit(*handler.params_schema).to_h.merge(repo_url: @repo_url)
+    result = handler.create(handler_params)
 
     redirect_back fallback_location: root_path, **result.message
     log_info('Explore.create completed', { success: result.success?, repo_url: @repo_url, connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] })
   rescue => e
-    log_error('Error processing Explore.create processor/action', { connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
+    log_error('Error processing Explore.create handler/action', { connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)
     return redirect_back fallback_location: root_path, alert: I18n.t('explore.create.message_processor_error', connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id])
   end
 
