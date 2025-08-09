@@ -4,23 +4,6 @@ class ExploreController < ApplicationController
   before_action :parse_connector_type
   before_action :build_repo_url, only: %i[show create]
 
-  def landing
-    processor = ConnectorClassDispatcher.explore_connector_processor(@connector_type)
-    processor_params = params.permit(*processor.params_schema).to_h
-    result = processor.landing(processor_params)
-
-    unless result.success?
-      log_error('Explore.landing action error', { connector_type: @connector_type, processor: processor.class.name }.merge(result.message))
-      return respond_error(result.message, root_path)
-    end
-
-    respond_success(result)
-    log_info('Explore.landing completed', { connector_type: @connector_type })
-  rescue => e
-    log_error('Error processing Explore.landing processor/action', { connector_type: @connector_type }, e)
-    respond_error({ alert: I18n.t('explore.landing.message_processor_error', connector_type: @connector_type) }, root_path)
-  end
-
   def show
     processor = ConnectorClassDispatcher.explore_connector_processor(@connector_type)
     processor_params = params.permit(*processor.params_schema).to_h.merge(repo_url: @repo_url)

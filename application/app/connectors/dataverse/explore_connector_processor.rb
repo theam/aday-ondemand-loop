@@ -24,11 +24,6 @@ module Dataverse
       explorer.create(request_params)
     end
 
-    def landing(request_params)
-      explorer = Dataverse::Explorers::Landing.new
-      explorer.show(request_params)
-    end
-
     private
 
     def load_explorer(request_params)

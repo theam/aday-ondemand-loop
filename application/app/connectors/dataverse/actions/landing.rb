@@ -1,4 +1,4 @@
-module Dataverse::Explorers
+module Dataverse::Actions
   class Landing
     include LoggingCommon
 
