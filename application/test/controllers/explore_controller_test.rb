@@ -6,13 +6,13 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     RepoRegistry.repo_db = @repo_db
   end
 
-  def stub_processor(action, result: nil, exception: nil)
-    processor = mock('ExploreProcessor')
-    processor.stubs(:params_schema).returns(%i[connector_type server_domain object_type object_id query server_scheme server_port])
-    expectation = processor.expects(action).with(kind_of(Hash))
+  def stub_handler(action, result: nil, exception: nil)
+    handler = mock('ExploreHandler')
+    handler.stubs(:params_schema).returns([])
+    expectation = handler.expects(action).with(kind_of(Hash))
     expectation.returns(result) if result
     expectation.raises(exception) if exception
-    ConnectorClassDispatcher.stubs(:explore_connector_processor).returns(processor)
+    ConnectorHandlerDispatcher.stubs(:handler).returns(handler)
   end
 
   test 'redirects when repo url is invalid' do
@@ -29,8 +29,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('explore.message_invalid_connector_type', connector_type: 'bogus'), flash[:alert]
   end
 
-  test 'show action renders template when processor succeeds' do
-    stub_processor(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
+  test 'show action renders template when handler succeeds' do
+    stub_handler(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
@@ -43,8 +43,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'show action renders partial when processor succeeds via ajax request' do
-    stub_processor(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
+  test 'show action renders partial when handler succeeds via ajax request' do
+    stub_handler(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
@@ -57,8 +57,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'show action redirects with message when processor fails' do
-    stub_processor(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
+  test 'show action redirects with message when handler fails' do
+    stub_handler(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
@@ -72,8 +72,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'error', flash[:alert]
   end
 
-  test 'show action renders flash messages when processor fails via ajax request' do
-    stub_processor(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
+  test 'show action renders flash messages when handler fails via ajax request' do
+    stub_handler(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
@@ -87,8 +87,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'error'
   end
 
-  test 'show action redirects with error message when processor raises' do
-    stub_processor(:show, exception: StandardError.new('boom'))
+  test 'show action redirects with error message when handler raises' do
+    stub_handler(:show, exception: StandardError.new('boom'))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     get explore_url(
@@ -102,8 +102,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t('explore.show.message_processor_error', connector_type: 'zenodo', object_type: 'records', object_id: '1'), flash[:alert]
   end
 
-  test 'create action redirects with message from processor' do
-    stub_processor(:create, result: ConnectorResult.new(message: { notice: 'ok' }, success: true))
+  test 'create action redirects with message from handler' do
+    stub_handler(:create, result: ConnectorResult.new(message: { notice: 'ok' }, success: true))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     post explore_url(
@@ -117,8 +117,8 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'ok', flash[:notice]
   end
 
-  test 'create action redirects with error message when processor raises' do
-    stub_processor(:create, exception: StandardError.new('boom'))
+  test 'create action redirects with error message when handler raises' do
+    stub_handler(:create, exception: StandardError.new('boom'))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
 
     post explore_url(
