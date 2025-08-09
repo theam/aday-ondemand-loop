@@ -8,6 +8,10 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     @action = Dataverse::Handlers::UploadBundleCreate.new
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @action.params_schema, :object_url
+  end
+
   test 'create handles Dataverse url' do
     Dataverse::CollectionService.stubs(:new).returns(stub(find_collection_by_id: OpenStruct.new(data: OpenStruct.new(name: 'root'))))
     result = @action.create(@project, object_url: 'http://dv.org')

@@ -6,6 +6,14 @@ module Dataverse::Handlers
       @collection_id = object_id
     end
 
+    def params_schema
+      [
+        :repo_url,
+        :page,
+        :query
+      ]
+    end
+
     def show(request_params)
       dataverse_url = request_params[:repo_url].server_url
       page = request_params[:page] ? request_params[:page].to_i : 1
@@ -47,3 +55,4 @@ module Dataverse::Handlers
     end
   end
 end
+

@@ -6,6 +6,13 @@ module Dataverse::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      [
+        :page,
+        :query
+      ]
+    end
+
     def show(request_params)
       begin
         hub_registry = DataverseHubRegistry.registry
@@ -28,3 +35,4 @@ module Dataverse::Handlers
     end
   end
 end
+

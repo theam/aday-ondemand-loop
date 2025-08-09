@@ -10,6 +10,10 @@ class Dataverse::Handlers::CollectionSelectTest < ActiveSupport::TestCase
     @action = Dataverse::Handlers::CollectionSelect.new
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @action.params_schema, :collection_id
+  end
+
   test 'edit returns form' do
     json = { success: true, data: { items: [], total_count: 0 } }.to_json
     response = Dataverse::MyDataverseCollectionsResponse.new(json)

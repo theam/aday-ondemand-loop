@@ -6,6 +6,16 @@ module Dataverse::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      [
+        :title,
+        :author,
+        :description,
+        :contact_email,
+        :subject
+      ]
+    end
+
     def edit(upload_bundle, request_params)
       raise NotImplementedError, 'Only update is supported for DatasetCreate'
     end

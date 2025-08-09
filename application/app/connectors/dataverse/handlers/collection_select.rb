@@ -6,6 +6,12 @@ module Dataverse::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      [
+        :collection_id
+      ]
+    end
+
     def edit(upload_bundle, request_params)
       user_collections_response = collections(upload_bundle)
       log_info('Collection select edit', { upload_bundle: upload_bundle.id, collections: user_collections_response.items.size })

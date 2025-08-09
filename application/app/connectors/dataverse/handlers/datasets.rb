@@ -6,6 +6,17 @@ module Dataverse::Handlers
       @persistent_id = object_id
     end
 
+    def params_schema
+      [
+        :repo_url,
+        :version,
+        :page,
+        :query,
+        :project_id,
+        { file_ids: [] }
+      ]
+    end
+
     def show(request_params)
       repo_url = request_params[:repo_url]
       dataverse_url = repo_url.server_url
@@ -116,3 +127,4 @@ module Dataverse::Handlers
     end
   end
 end
+

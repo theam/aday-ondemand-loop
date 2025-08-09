@@ -6,6 +6,14 @@ module Zenodo::Handlers
       @deposition_id = object_id
     end
 
+    def params_schema
+      [
+        :repo_url,
+        :project_id,
+        { file_ids: [] }
+      ]
+    end
+
     def show(request_params)
       repo_url = request_params[:repo_url]
       repo_info = RepoRegistry.repo_db.get(repo_url.server_url)
@@ -80,3 +88,4 @@ module Zenodo::Handlers
     end
   end
 end
+

@@ -6,6 +6,13 @@ module Dataverse::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      [
+        :api_key,
+        :key_scope
+      ]
+    end
+
     def edit(upload_bundle, request_params)
       ConnectorResult.new(
         template: '/connectors/dataverse/connector_edit_form',

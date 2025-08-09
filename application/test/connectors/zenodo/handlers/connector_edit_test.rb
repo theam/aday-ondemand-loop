@@ -9,6 +9,11 @@ class Zenodo::Handlers::ConnectorEditTest < ActiveSupport::TestCase
     @action = Zenodo::Handlers::ConnectorEdit.new
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @action.params_schema, :api_key
+    assert_includes @action.params_schema, :key_scope
+  end
+
   test 'edit returns connector form' do
     result = @action.edit(@bundle, {})
     assert_equal '/connectors/zenodo/connector_edit_form', result.template

@@ -6,6 +6,12 @@ class Zenodo::Handlers::LandingTest < ActiveSupport::TestCase
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @explorer.params_schema, :query
+    assert_includes @explorer.params_schema, :page
+    assert_includes @explorer.params_schema, :repo_url
+  end
+
   test 'show runs search when query present' do
     service = mock('search')
     results = OpenStruct.new(items: [])

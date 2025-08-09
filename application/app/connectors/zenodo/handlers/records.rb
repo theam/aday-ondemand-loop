@@ -6,6 +6,14 @@ module Zenodo::Handlers
       @record_id = object_id
     end
 
+    def params_schema
+      [
+        :repo_url,
+        :project_id,
+        { file_ids: [] }
+      ]
+    end
+
     def show(request_params)
       repo_url = request_params[:repo_url]
       log_info('Record show', { record_id: @record_id, repo_url: repo_url })
@@ -67,3 +75,4 @@ module Zenodo::Handlers
     end
   end
 end
+

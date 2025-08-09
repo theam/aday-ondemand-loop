@@ -5,6 +5,11 @@ class Dataverse::Handlers::LandingTest < ActiveSupport::TestCase
     @action = Dataverse::Handlers::Landing.new
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @action.params_schema, :page
+    assert_includes @action.params_schema, :query
+  end
+
   test 'show loads installations' do
     dvs = [
       { id: 'dv-test-01', name: 'DV Test 01', hostname: 'https://dv-01.org' },

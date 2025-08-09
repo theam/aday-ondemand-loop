@@ -10,6 +10,12 @@ class Dataverse::Handlers::DatasetCreateTest < ActiveSupport::TestCase
     @action = Dataverse::Handlers::DatasetCreate.new
   end
 
+  test 'params schema includes expected keys' do
+    [:title, :author, :description, :contact_email, :subject].each do |key|
+      assert_includes @action.params_schema, key
+    end
+  end
+
   test 'edit not implemented' do
     assert_raises(NotImplementedError) { @action.edit(@bundle, {}) }
   end

@@ -8,6 +8,10 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     @action = Zenodo::Handlers::UploadBundleCreate.new
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @action.params_schema, :object_url
+  end
+
   test 'url not deposition returns error' do
     result = @action.create(@project, object_url: 'http://example.com')
     refute result.success?

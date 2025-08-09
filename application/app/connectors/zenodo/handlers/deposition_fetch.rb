@@ -8,6 +8,10 @@ module Zenodo::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      []
+    end
+
     def edit(upload_bundle, request_params)
       raise NotImplementedError, 'Only update is supported for DepositionFetch'
     end
