@@ -1,6 +1,6 @@
 class ExploreController < ApplicationController
   include LoggingCommon
-  include ConnectorControllerCommon
+  include ConnectorResponse
 
   before_action :parse_connector_type
   before_action :build_repo_url, only: %i[show create]

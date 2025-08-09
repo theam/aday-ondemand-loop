@@ -60,9 +60,9 @@ class ConnectorClassDispatcherTest < ActiveSupport::TestCase
     assert_instance_of Dataverse::ExploreConnectorProcessor, result
   end
 
-  test 'portal_connector_processor should return Dataverse::PortalConnectorProcessor for dataverse type' do
-    result = ConnectorClassDispatcher.portal_connector_processor(ConnectorType::DATAVERSE)
-    assert_instance_of Dataverse::PortalConnectorProcessor, result
+  test 'connect_connector_processor should return Dataverse::ConnectConnectorProcessor for dataverse type' do
+    result = ConnectorClassDispatcher.connect_connector_processor(ConnectorType::DATAVERSE)
+    assert_instance_of Dataverse::ConnectConnectorProcessor, result
   end
 
   test 'raises ConnectorNotSupported for unknown connector type' do

@@ -1,4 +1,4 @@
-module ConnectorControllerCommon
+module ConnectorResponse
   extend ActiveSupport::Concern
 
   private

@@ -1,5 +1,5 @@
 module Zenodo
-  class PortalConnectorProcessor
+  class ConnectConnectorProcessor
     include LoggingCommon
 
     def initialize(object = nil)

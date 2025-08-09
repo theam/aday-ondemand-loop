@@ -67,7 +67,7 @@ en:
       message_invalid_repo_url: "The repository URL %{repo_url} is not verified. For security reasons, only trusted repositories already registered in the system can be used"
       message_processor_error: "Error processing request for repository: %{connector_type} type: %{object_type} with id: %{object_id}"
 
-  portal:
+  connect:
     message_invalid_connector_type: "Invalid connector type: %{connector_type}"
     handle:
       message_processor_error: "Error processing request for repository: %{connector_type} action: %{action}"

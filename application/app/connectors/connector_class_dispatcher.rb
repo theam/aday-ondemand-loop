@@ -24,8 +24,8 @@ class ConnectorClassDispatcher
     self.load(type, 'ExploreConnectorProcessor', nil)
   end
 
-  def self.portal_connector_processor(type)
-    self.load(type, 'PortalConnectorProcessor', nil)
+  def self.connect_connector_processor(type)
+    self.load(type, 'ConnectConnectorProcessor', nil)
   end
 
   def self.upload_bundle_connector_metadata(upload_bundle)
