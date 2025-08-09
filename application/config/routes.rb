@@ -53,9 +53,11 @@ Rails.application.routes.draw do
   # DATAVERSE ROUTES
   get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
 
+  # CONNECT ROUTES
+  get '/connect/:connector_type/:action', to: 'connect#handle', as: :connect_repo
+  post '/connect/:connector_type/:action', to: 'connect#handle'
 
   # EXPLORE ROUTE
-  get "/explore/:connector_type/landing" => "explore#landing", as: :explore_landing
   get "/explore/:connector_type/*server_domain/:object_type/*object_id" => "explore#show", as: :explore
   post "/explore/:connector_type/*server_domain/:object_type/*object_id" => "explore#create"
 

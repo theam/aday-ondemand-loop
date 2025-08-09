@@ -15,49 +15,6 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     ConnectorClassDispatcher.stubs(:explore_connector_processor).returns(processor)
   end
 
-  test 'landing action renders template when processor succeeds' do
-    stub_processor(:landing, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
-
-    get explore_landing_url(connector_type: 'zenodo')
-
-    assert_response :success
-  end
-
-  test 'landing action renders partial when processor succeeds via ajax request' do
-    stub_processor(:landing, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
-
-    get explore_landing_url(connector_type: 'zenodo'), xhr: true
-
-    assert_response :success
-  end
-
-  test 'landing action redirects with message when processor fails' do
-    stub_processor(:landing, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
-
-    get explore_landing_url(connector_type: 'zenodo')
-
-    assert_redirected_to root_path
-    assert_equal 'error', flash[:alert]
-  end
-
-  test 'landing action renders flash messages when processor fails via ajax request' do
-    stub_processor(:landing, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
-
-    get explore_landing_url(connector_type: 'zenodo'), xhr: true
-
-    assert_response :internal_server_error
-    assert_includes @response.body, 'error'
-  end
-
-  test 'landing action redirects with error message when processor raises' do
-    stub_processor(:landing, exception: StandardError.new('boom'))
-
-    get explore_landing_url(connector_type: 'zenodo')
-
-    assert_redirected_to root_path
-    assert_equal I18n.t('explore.landing.message_processor_error', connector_type: 'zenodo'), flash[:alert]
-  end
-
   test 'redirects when repo url is invalid' do
     get '/explore/zenodo/%20/records/1'
 
@@ -66,7 +23,7 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'redirects when connector type is invalid' do
-    get explore_landing_url(connector_type: 'bogus')
+    get '/explore/bogus/example.org/records/1'
 
     assert_redirected_to root_path
     assert_equal I18n.t('explore.message_invalid_connector_type', connector_type: 'bogus'), flash[:alert]

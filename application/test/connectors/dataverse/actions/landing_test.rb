@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Dataverse::Explorers::LandingTest < ActiveSupport::TestCase
+class Dataverse::Actions::LandingTest < ActiveSupport::TestCase
   def setup
-    @explorer = Dataverse::Explorers::Landing.new
+    @action = Dataverse::Actions::Landing.new
   end
 
   test 'show loads installations' do
@@ -12,7 +12,7 @@ class Dataverse::Explorers::LandingTest < ActiveSupport::TestCase
     ]
     registry = mock('reg'); registry.stubs(:installations).returns(dvs)
     DataverseHubRegistry.stubs(:registry).returns(registry)
-    res = @explorer.show({})
+    res = @action.show({})
     assert res.success?
     assert_equal 2, res.locals[:installations_page].page_items.size
   end
@@ -24,7 +24,7 @@ class Dataverse::Explorers::LandingTest < ActiveSupport::TestCase
     ]
     registry = mock('reg'); registry.stubs(:installations).returns(dvs)
     DataverseHubRegistry.stubs(:registry).returns(registry)
-    res = @explorer.show(query: 'Test 01')
+    res = @action.show(query: 'Test 01')
     assert res.success?
     items = res.locals[:installations_page].page_items
     assert_equal 1, items.size
@@ -33,7 +33,7 @@ class Dataverse::Explorers::LandingTest < ActiveSupport::TestCase
 
   test 'show returns error on service failure' do
     DataverseHubRegistry.stubs(:registry).raises(StandardError.new('boom'))
-    res = @explorer.show({})
+    res = @action.show({})
     assert_not res.success?
     assert_equal I18n.t('dataverse.landing.index.dataverse_installations_service_error'), res.message[:alert]
   end

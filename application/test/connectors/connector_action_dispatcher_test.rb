@@ -3,31 +3,13 @@ require 'test_helper'
 
 class ConnectorActionDispatcherTest < ActiveSupport::TestCase
   test 'loads connector action for zenodo connector_edit' do
-    action = ConnectorActionDispatcher.action(ConnectorType::ZENODO, :actions, :connector_edit)
+    action = ConnectorActionDispatcher.action(ConnectorType::ZENODO, :connector_edit)
     assert_instance_of Zenodo::Actions::ConnectorEdit, action
   end
 
   test 'loads connector explorer for zenodo landing' do
     explorer = ConnectorActionDispatcher.explorer(ConnectorType::ZENODO, :explorers, :landing)
     assert_instance_of Zenodo::Explorers::Landing, explorer
-  end
-
-  test 'passes object id to constructor for non-actions type' do
-    module Zenodo::Actions
-      class Dummy
-        attr_reader :id
-
-        def initialize(id)
-          @id = id
-        end
-      end
-    end
-
-    action = ConnectorActionDispatcher.action(ConnectorType::ZENODO, :dummy, 123)
-    assert_instance_of Zenodo::Actions::Dummy, action
-    assert_equal 123, action.id
-  ensure
-    Zenodo::Actions.send(:remove_const, :Dummy)
   end
 
   test 'passes object id to explorer constructor for non-explorers type' do
@@ -50,7 +32,7 @@ class ConnectorActionDispatcherTest < ActiveSupport::TestCase
 
   test 'raises error for unknown action or explorer' do
     assert_raises(ConnectorActionDispatcher::ConnectorNotSupported) do
-      ConnectorActionDispatcher.action(ConnectorType::ZENODO, :actions, :missing)
+      ConnectorActionDispatcher.action(ConnectorType::ZENODO, :missing)
     end
     assert_raises(ConnectorActionDispatcher::ConnectorNotSupported) do
       ConnectorActionDispatcher.explorer(ConnectorType::ZENODO, :explorers, :missing)

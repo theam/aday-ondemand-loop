@@ -24,6 +24,10 @@ class ConnectorClassDispatcher
     self.load(type, 'ExploreConnectorProcessor', nil)
   end
 
+  def self.connect_connector_processor(type)
+    self.load(type, 'ConnectConnectorProcessor', nil)
+  end
+
   def self.upload_bundle_connector_metadata(upload_bundle)
     self.load(upload_bundle.type, 'UploadBundleConnectorMetadata', upload_bundle)
   end

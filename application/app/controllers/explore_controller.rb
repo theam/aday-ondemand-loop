@@ -1,25 +1,9 @@
 class ExploreController < ApplicationController
   include LoggingCommon
+  include ConnectorResponse
 
   before_action :parse_connector_type
   before_action :build_repo_url, only: %i[show create]
-
-  def landing
-    processor = ConnectorClassDispatcher.explore_connector_processor(@connector_type)
-    processor_params = params.permit(*processor.params_schema).to_h
-    result = processor.landing(processor_params)
-
-    unless result.success?
-      log_error('Explore.landing action error', { connector_type: @connector_type, processor: processor.class.name }.merge(result.message))
-      return respond_error(result.message, root_path)
-    end
-
-    respond_success(result)
-    log_info('Explore.landing completed', { connector_type: @connector_type })
-  rescue => e
-    log_error('Error processing Explore.landing processor/action', { connector_type: @connector_type }, e)
-    respond_error({ alert: I18n.t('explore.landing.message_processor_error', connector_type: @connector_type) }, root_path)
-  end
 
   def show
     processor = ConnectorClassDispatcher.explore_connector_processor(@connector_type)
@@ -51,36 +35,6 @@ class ExploreController < ApplicationController
   end
 
   private
-
-  # --- Response helpers ---
-
-  def respond_success(result)
-    if ajax_request?
-      render partial: result.template, locals: result.locals, layout: false
-    else
-      render template: result.template, locals: result.locals
-    end
-  end
-
-  def respond_error(message_hash, redirect_path)
-    if ajax_request?
-      apply_flash_now(message_hash)
-      render partial: 'layouts/flash_messages', status: :internal_server_error, layout: false
-    else
-      redirect_to redirect_path, **message_hash
-    end
-  end
-
-  def apply_flash_now(message_hash)
-    (message_hash || {}).each { |k, v| flash.now[k] = v }
-  end
-
-  def parse_connector_type
-    @connector_type = ConnectorType.get(params[:connector_type])
-  rescue ArgumentError => e
-    log_error('Invalid connector type', { connector_type: params[:connector_type] }, e)
-    redirect_to root_path, alert: I18n.t('explore.message_invalid_connector_type', connector_type: params[:connector_type])
-  end
 
   def build_repo_url
     @repo_url = Repo::RepoUrl.build(
