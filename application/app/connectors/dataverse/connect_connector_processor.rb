@@ -11,8 +11,8 @@ module Dataverse
     end
 
     def show(request_params)
-      action = ConnectorActionDispatcher.action(ConnectorType::DATAVERSE, request_params[:object_type])
-      action.show(request_params)
+      handler = ConnectorHandlerDispatcher.handler(ConnectorType::DATAVERSE, request_params[:object_type])
+      handler.show(request_params)
     end
   end
 end

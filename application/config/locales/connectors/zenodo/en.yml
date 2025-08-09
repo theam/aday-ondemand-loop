@@ -5,9 +5,7 @@ en:
       title: "Zenodo"
       aria_label: "Visit the Zenodo project homepage"
 
-      actions:
-        landing:
-          message_action_not_supported: "Action not supported"
+      handlers:
         connector_edit:
           message_success: "Access token updated: %{name}"
         deposition_fetch:

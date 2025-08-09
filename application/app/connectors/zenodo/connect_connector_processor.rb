@@ -7,7 +7,7 @@ module Zenodo
     end
 
     def action(action_name)
-      ConnectorActionDispatcher.action(ConnectorType::ZENODO, action_name)
+      ConnectorHandlerDispatcher.handler(ConnectorType::ZENODO, action_name)
     end
   end
 end
