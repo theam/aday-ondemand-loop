@@ -8,6 +8,11 @@ class Dataverse::Handlers::ConnectorEditTest < ActiveSupport::TestCase
     @action = Dataverse::Handlers::ConnectorEdit.new
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @action.params_schema, :api_key
+    assert_includes @action.params_schema, :key_scope
+  end
+
   test 'edit returns connector edit form' do
     result = @action.edit(@bundle, {})
     assert_equal '/connectors/dataverse/connector_edit_form', result.template

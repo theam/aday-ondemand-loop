@@ -6,6 +6,14 @@ module Zenodo::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      [
+        :query,
+        :page,
+        :repo_url
+      ]
+    end
+
     def show(request_params)
       query = request_params[:query]
       page = request_params[:page]&.to_i || 1
@@ -26,3 +34,4 @@ module Zenodo::Handlers
     end
   end
 end
+

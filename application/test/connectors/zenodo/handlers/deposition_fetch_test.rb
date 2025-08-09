@@ -11,6 +11,10 @@ class Zenodo::Handlers::DepositionFetchTest < ActiveSupport::TestCase
     @action = Zenodo::Handlers::DepositionFetch.new
   end
 
+  test 'params schema is empty' do
+    assert_empty @action.params_schema
+  end
+
   test 'update fetches deposition and stores data' do
     dep = OpenStruct.new(title: 't', bucket_url: 'b', draft?: false)
     service = mock('service')

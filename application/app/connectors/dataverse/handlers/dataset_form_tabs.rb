@@ -6,6 +6,10 @@ module Dataverse::Handlers
       @object_id = object_id
     end
 
+    def params_schema
+      []
+    end
+
     def edit(upload_bundle, request_params)
       datasets = datasets(upload_bundle)
       subjects = subjects(upload_bundle)

@@ -6,6 +6,12 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
     @explorer = Zenodo::Handlers::Records.new('123')
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @explorer.params_schema, :repo_url
+    assert_includes @explorer.params_schema, :project_id
+    assert @explorer.params_schema.any? { |p| p.is_a?(Hash) && p.key?(:file_ids) }
+  end
+
   test 'show renders record when found' do
     service = mock('service')
     service.expects(:find_record).with('123').returns(:record)

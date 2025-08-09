@@ -4,8 +4,15 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
   def setup
     @repo_url = Repo::RepoUrl.parse('https://dataverse.org')
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'key'))
-    RepoRegistry.stubs(:repo_db).returns(mock('db', get: repo_info))
+    RepoRegistry.stubs(:repo_db).returns(stub(get: repo_info))
     @explorer = Dataverse::Handlers::Datasets.new('pid')
+  end
+
+  test 'params schema includes expected keys' do
+    [:repo_url, :version, :page, :query, :project_id].each do |key|
+      assert_includes @explorer.params_schema, key
+    end
+    assert @explorer.params_schema.any? { |p| p.is_a?(Hash) && p.key?(:file_ids) }
   end
 
   test 'show renders dataset when found' do

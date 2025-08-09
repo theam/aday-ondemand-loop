@@ -8,6 +8,10 @@ class Dataverse::Handlers::DatasetFormTabsTest < ActiveSupport::TestCase
     @action = Dataverse::Handlers::DatasetFormTabs.new
   end
 
+  test 'params schema is empty' do
+    assert_empty @action.params_schema
+  end
+
   test 'edit returns tabs form partial' do
     @action.stubs(:datasets).returns(OpenStruct.new(items: []))
     @action.stubs(:subjects).returns([])

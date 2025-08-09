@@ -6,6 +6,12 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @explorer.params_schema, :repo_url
+    assert_includes @explorer.params_schema, :project_id
+    assert @explorer.params_schema.any? { |p| p.is_a?(Hash) && p.key?(:file_ids) }
+  end
+
   test 'show loads deposition using repo db api key' do
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'KEY'))
     RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)

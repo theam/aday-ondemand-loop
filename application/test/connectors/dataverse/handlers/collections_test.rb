@@ -10,6 +10,12 @@ class Dataverse::Handlers::CollectionsTest < ActiveSupport::TestCase
     @search_response = Dataverse::SearchResponse.new(search_json, 1, 20)
   end
 
+  test 'params schema includes expected keys' do
+    assert_includes @explorer.params_schema, :repo_url
+    assert_includes @explorer.params_schema, :page
+    assert_includes @explorer.params_schema, :query
+  end
+
   test 'show returns collection and search results' do
     service = mock('service')
     Dataverse::CollectionService.expects(:new).with(@repo_url.server_url).returns(service)
