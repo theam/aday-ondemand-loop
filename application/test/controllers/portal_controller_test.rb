@@ -7,7 +7,9 @@ class PortalControllerTest < ActionDispatch::IntegrationTest
     expectation = action.expects(:show).with(kind_of(Hash))
     expectation.returns(result) if result
     expectation.raises(exception) if exception
-    ConnectorActionDispatcher.expects(:action).with(ConnectorType::DATAVERSE, 'landing').returns(action)
+    processor = mock('PortalProcessor')
+    processor.expects(:action).with('landing').returns(action)
+    ConnectorClassDispatcher.expects(:portal_connector_processor).with(ConnectorType::DATAVERSE).returns(processor)
   end
 
   test 'handle renders template when action succeeds' do

@@ -60,6 +60,11 @@ class ConnectorClassDispatcherTest < ActiveSupport::TestCase
     assert_instance_of Dataverse::ExploreConnectorProcessor, result
   end
 
+  test 'portal_connector_processor should return Dataverse::PortalConnectorProcessor for dataverse type' do
+    result = ConnectorClassDispatcher.portal_connector_processor(ConnectorType::DATAVERSE)
+    assert_instance_of Dataverse::PortalConnectorProcessor, result
+  end
+
   test 'raises ConnectorNotSupported for unknown connector type' do
     file = OpenStruct.new(type: :unknown)
     error = assert_raises(ConnectorClassDispatcher::ConnectorNotSupported) do
