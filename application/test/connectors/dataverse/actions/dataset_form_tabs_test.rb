@@ -49,6 +49,20 @@ class Dataverse::Actions::DatasetFormTabsTest < ActiveSupport::TestCase
     assert_includes result, 'Bio'
   end
 
+  test 'subjects uses cached subjects when present' do
+    meta = OpenStruct.new(dataverse_url: 'https://demo.dv', server_domain: 'demo.dv')
+    @bundle.stubs(:connector_metadata).returns(meta)
+
+    repo = mock('repo')
+    repo.stubs(:metadata).returns(OpenStruct.new(subjects: ['Chem']))
+    RepoRegistry.repo_db.stubs(:get).with('https://demo.dv').returns(repo)
+    RepoRegistry.repo_db.expects(:update).never
+    Dataverse::MetadataService.expects(:new).never
+
+    result = @action.send(:subjects, @bundle)
+    assert_equal ['Chem'], result
+  end
+
   test 'profile fetched via user service' do
     meta = OpenStruct.new(dataverse_url: 'https://demo.dv', api_key: OpenStruct.new(value: 'k'))
     @bundle.stubs(:connector_metadata).returns(meta)

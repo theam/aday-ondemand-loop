@@ -29,6 +29,25 @@ class Dataverse::Explorers::DatasetsTest < ActiveSupport::TestCase
     refute res.success?
   end
 
+  test 'show returns error when files not found' do
+    dataset = OpenStruct.new(version: '1', data: OpenStruct.new(dataset_persistent_id: 'pid'))
+    service = mock('service')
+    service.expects(:find_dataset_version_by_persistent_id).with('pid', version: nil).returns(dataset)
+    service.expects(:search_dataset_files_by_persistent_id).with('pid', version: '1', page: 1, query: nil).returns(nil)
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+    res = @explorer.show(repo_url: @repo_url)
+    refute res.success?
+  end
+
+  test 'show handles unauthorized exception' do
+    service = mock('service')
+    service.expects(:find_dataset_version_by_persistent_id).with('pid', version: nil)
+           .raises(Dataverse::DatasetService::UnauthorizedException.new)
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+    res = @explorer.show(repo_url: @repo_url)
+    refute res.success?
+  end
+
   test 'create initializes project and files' do
     dataset = OpenStruct.new(version: '1', data: OpenStruct.new(dataset_persistent_id: 'pid', parents: []))
     files_page = OpenStruct.new(total_count: 0, page: 1, query: nil, files: [])
@@ -59,6 +78,25 @@ class Dataverse::Explorers::DatasetsTest < ActiveSupport::TestCase
   test 'create returns error when dataset not found' do
     service = mock('service')
     service.expects(:find_dataset_version_by_persistent_id).with('pid', version: nil).returns(nil)
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+    res = @explorer.create(repo_url: @repo_url, file_ids: [], project_id: '1')
+    refute res.success?
+  end
+
+  test 'create returns error when files not found' do
+    dataset = OpenStruct.new(version: '1', data: OpenStruct.new(dataset_persistent_id: 'pid', parents: []))
+    service = mock('service')
+    service.expects(:find_dataset_version_by_persistent_id).with('pid', version: nil).returns(dataset)
+    service.expects(:search_dataset_files_by_persistent_id).with('pid', version: '1', page: 1, query: nil).returns(nil)
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+    res = @explorer.create(repo_url: @repo_url, file_ids: [], project_id: '1')
+    refute res.success?
+  end
+
+  test 'create handles unauthorized exception' do
+    service = mock('service')
+    service.expects(:find_dataset_version_by_persistent_id).with('pid', version: nil)
+           .raises(Dataverse::DatasetService::UnauthorizedException.new)
     Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
     res = @explorer.create(repo_url: @repo_url, file_ids: [], project_id: '1')
     refute res.success?
