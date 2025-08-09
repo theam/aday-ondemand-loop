@@ -15,19 +15,23 @@ module Dataverse
     end
 
     def show(request_params)
-      explorer = load_explorer(request_params)
-      explorer.show(request_params)
+      handler = load_handler(request_params)
+      handler.show(request_params)
     end
 
     def create(request_params)
-      explorer = load_explorer(request_params)
-      explorer.create(request_params)
+      handler = load_handler(request_params)
+      handler.create(request_params)
     end
 
     private
 
-    def load_explorer(request_params)
-      ConnectorActionDispatcher.explorer(request_params[:connector_type], request_params[:object_type], request_params[:object_id])
+    def load_handler(request_params)
+      ConnectorHandlerDispatcher.handler(
+        request_params[:connector_type],
+        request_params[:object_type],
+        request_params[:object_id]
+      )
     end
   end
 end

@@ -5,27 +5,27 @@ class Dataverse::ExploreConnectorProcessorTest < ActiveSupport::TestCase
     @processor = Dataverse::ExploreConnectorProcessor.new
   end
 
-  test 'show delegates to explorer with object id' do
+  test 'show delegates to handler with object id' do
     params = { connector_type: ConnectorType::DATAVERSE, object_type: :collections, object_id: ':root', repo_url: :url }
-    explorer = mock('explorer')
-    ConnectorActionDispatcher.expects(:explorer).with(ConnectorType::DATAVERSE, :collections, ':root').returns(explorer)
-    explorer.expects(:show).with(params).returns(:found)
+    handler = mock('handler')
+    ConnectorHandlerDispatcher.expects(:handler).with(ConnectorType::DATAVERSE, :collections, ':root').returns(handler)
+    handler.expects(:show).with(params).returns(:found)
     assert_equal :found, @processor.show(params)
   end
 
-  test 'show delegates to dataset_versions explorer' do
+  test 'show delegates to dataset_versions handler' do
     params = { connector_type: ConnectorType::DATAVERSE, object_type: :dataset_versions, object_id: 'pid', repo_url: :url }
-    explorer = mock('explorer')
-    ConnectorActionDispatcher.expects(:explorer).with(ConnectorType::DATAVERSE, :dataset_versions, 'pid').returns(explorer)
-    explorer.expects(:show).with(params).returns(:ok)
+    handler = mock('handler')
+    ConnectorHandlerDispatcher.expects(:handler).with(ConnectorType::DATAVERSE, :dataset_versions, 'pid').returns(handler)
+    handler.expects(:show).with(params).returns(:ok)
     assert_equal :ok, @processor.show(params)
   end
 
-  test 'create delegates to explorer with object id' do
+  test 'create delegates to handler with object id' do
     params = { connector_type: ConnectorType::DATAVERSE, object_type: :datasets, object_id: ':id', repo_url: :url }
-    explorer = mock('explorer')
-    ConnectorActionDispatcher.expects(:explorer).with(ConnectorType::DATAVERSE, :datasets, ':id').returns(explorer)
-    explorer.expects(:create).with(params).returns(:created)
+    handler = mock('handler')
+    ConnectorHandlerDispatcher.expects(:handler).with(ConnectorType::DATAVERSE, :datasets, ':id').returns(handler)
+    handler.expects(:create).with(params).returns(:created)
     assert_equal :created, @processor.create(params)
   end
 
