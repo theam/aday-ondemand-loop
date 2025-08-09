@@ -2,6 +2,10 @@ module Dataverse::Handlers
   class DatasetFormTabs
     include LoggingCommon
 
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
+
     def edit(upload_bundle, request_params)
       datasets = datasets(upload_bundle)
       subjects = subjects(upload_bundle)

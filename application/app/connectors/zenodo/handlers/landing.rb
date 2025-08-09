@@ -2,7 +2,9 @@ module Zenodo::Handlers
   class Landing
     include LoggingCommon
 
-    def initialize(_id = nil); end
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
 
     def show(request_params)
       query = request_params[:query]

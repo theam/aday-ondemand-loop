@@ -4,6 +4,10 @@ module Zenodo::Handlers
 
     include DateTimeCommon
 
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
+
     def create(project, request_params)
       remote_repo_url = request_params[:object_url]
       url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)

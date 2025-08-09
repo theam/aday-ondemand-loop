@@ -2,8 +2,8 @@ module Zenodo::Handlers
   class Records
     include LoggingCommon
 
-    def initialize(record_id)
-      @record_id = record_id
+    def initialize(object_id = nil)
+      @record_id = object_id
     end
 
     def show(request_params)

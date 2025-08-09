@@ -2,8 +2,8 @@ module Dataverse::Handlers
   class Datasets
     include LoggingCommon
 
-    def initialize(persistent_id)
-      @persistent_id = persistent_id
+    def initialize(object_id = nil)
+      @persistent_id = object_id
     end
 
     def show(request_params)

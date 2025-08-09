@@ -2,8 +2,8 @@ module Dataverse::Handlers
   class Collections
     include LoggingCommon
 
-    def initialize(collection_id)
-      @collection_id = collection_id
+    def initialize(object_id = nil)
+      @collection_id = object_id
     end
 
     def show(request_params)

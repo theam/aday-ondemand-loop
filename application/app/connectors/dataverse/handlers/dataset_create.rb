@@ -2,6 +2,10 @@ module Dataverse::Handlers
   class DatasetCreate
     include LoggingCommon
 
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
+
     def edit(upload_bundle, request_params)
       raise NotImplementedError, 'Only update is supported for DatasetCreate'
     end

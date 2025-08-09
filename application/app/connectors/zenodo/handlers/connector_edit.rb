@@ -2,6 +2,10 @@ module Zenodo::Handlers
   class ConnectorEdit
     include LoggingCommon
 
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
+
     def edit(upload_bundle, request_params)
       ConnectorResult.new(
         template: '/connectors/zenodo/connector_edit_form',

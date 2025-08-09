@@ -2,8 +2,8 @@ module Zenodo::Handlers
   class Depositions
     include LoggingCommon
 
-    def initialize(deposition_id)
-      @deposition_id = deposition_id
+    def initialize(object_id = nil)
+      @deposition_id = object_id
     end
 
     def show(request_params)

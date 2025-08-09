@@ -2,6 +2,10 @@ module Dataverse::Handlers
   class CollectionSelect
     include LoggingCommon
 
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
+
     def edit(upload_bundle, request_params)
       user_collections_response = collections(upload_bundle)
       log_info('Collection select edit', { upload_bundle: upload_bundle.id, collections: user_collections_response.items.size })

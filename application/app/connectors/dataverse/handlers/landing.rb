@@ -2,6 +2,10 @@ module Dataverse::Handlers
   class Landing
     include LoggingCommon
 
+    def initialize(object_id = nil)
+      @object_id = object_id
+    end
+
     def show(request_params)
       begin
         hub_registry = DataverseHubRegistry.registry
