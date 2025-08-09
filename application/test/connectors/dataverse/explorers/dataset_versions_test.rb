@@ -22,6 +22,16 @@ class Dataverse::Explorers::DatasetVersionsTest < ActiveSupport::TestCase
     assert_equal '/connectors/dataverse/dataset_versions/show', res.template
   end
 
+  test 'show handles missing versions response' do
+    service = mock('service')
+    service.expects(:dataset_versions_by_persistent_id).with('pid').returns(nil)
+    Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
+
+    res = @explorer.show(repo_url: @repo_url)
+    assert res.success?
+    assert_equal [], res.locals[:versions]
+  end
+
   test 'show propagates exceptions' do
     service = mock('service')
     service.expects(:dataset_versions_by_persistent_id).with('pid').raises(StandardError.new('boom'))
