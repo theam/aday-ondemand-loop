@@ -4,7 +4,11 @@ module ConnectorResponse
   private
 
   def respond_success(result)
-    if ajax_request?
+    if result.redirect?
+      redirect_to result.redirect_url, **result.message
+    elsif result.redirect_back?
+      redirect_back fallback_location: root_path, **result.message
+    elsif ajax_request?
       render partial: result.template, locals: result.locals, layout: false
     else
       render template: result.template, locals: result.locals
