@@ -8,8 +8,8 @@ module Zenodo
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
       link_to(explore_path(connector_type: ConnectorType::ZENODO.to_s,
                            server_domain: repo_url.domain,
-                           object_type: 'actions',
-                           object_id: 'landing',
+                           object_type: 'landing',
+                           object_id: ':root',
                            server_scheme: repo_url.scheme_override,
                            server_port: repo_url.port_override,
                            query: query,
@@ -26,8 +26,8 @@ module Zenodo
       html_options[:class] = [html_options[:class], 'btn btn-sm btn-outline-dark'].compact.join(' ')
       link_to(explore_path(connector_type: ConnectorType::ZENODO.to_s,
                            server_domain: repo_url.domain,
-                           object_type: 'actions',
-                           object_id: 'landing',
+                           object_type: 'landing',
+                           object_id: ':root',
                            server_scheme: repo_url.scheme_override,
                            server_port: repo_url.port_override,
                            query: query,

@@ -20,8 +20,8 @@ module Zenodo
         object_id = zenodo_url.deposition_id
       else
         server_domain =  Zenodo::ZenodoUrl::DEFAULT_SERVER
-        object_type = 'explorers'
-        object_id = 'landing'
+        object_type = 'landing'
+        object_id = ':root'
         if zenodo_url&.unknown?
           message = { alert: I18n.t('connectors.zenodo.display_repo_controller.message_url_not_supported', url: object_url) }
         end
