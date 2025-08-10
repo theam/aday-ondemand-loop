@@ -18,6 +18,7 @@ en:
         upload_bundle_create:
           message_collection_not_found: "Dataverse collection not found: %{url}. Only public and published collections are supported"
           message_dataset_not_found: "Dataverse dataset not found: %{url}.<br />Only public and published datasets are supported"
+          message_success: "Dataverse upload bundle created: %{name}"
 
       external_tool_dataset:
         show:
