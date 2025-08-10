@@ -9,11 +9,6 @@
       icon: "bi bi-plus-square-fill"
     } %>
 
-    <button type="button" class="btn btn-sm btn-outline-dark" title="Quick Create Project">
-  <i class="bi bi-lightning-fill me-1"></i>
-  <i class="bi bi-collection-fill"></i>
-</button>
-
     <%= link_to(files_app_url(Configuration.download_root), class: 'btn btn-outline-dark btn-sm', target: '_blank',
                 title: t(".button_downloads_root_directory_text")) do %>
       <i class="bi bi-folder-fill" aria-hidden="true"></i>
