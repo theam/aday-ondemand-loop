@@ -3,7 +3,7 @@
   <%= render partial: '/shared/breadcrumbs', locals: { links: [{text: t('shared.breadcrumbs.zenodo')}]} %>
 
   <div class="my-4 pb-1">
-    <%= link_to 'https://zenodo.org/', target: '_blank', rel: 'noopener', aria: { label: t('connectors.zenodo.aria_label') } do %>
+    <%= link_to Zenodo::ZenodoUrl::DEFAULT_URL, target: '_blank', rel: 'noopener', aria: { label: t('connectors.zenodo.aria_label') } do %>
       <%= image_tag 'zenodo_project.svg', alt: t('connectors.zenodo.title'), width: 280 %>
     <% end %>
   </div>
