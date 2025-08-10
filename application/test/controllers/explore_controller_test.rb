@@ -57,6 +57,36 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'show action redirects to provided redirect_url when handler specifies' do
+    stub_handler(:show, result: ConnectorResult.new(redirect_url: '/next', message: { notice: 'ok' }, success: true))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
+
+    get explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'example.org',
+      object_type: 'records',
+      object_id: '1',
+    )
+
+    assert_redirected_to '/next'
+    assert_equal 'ok', flash[:notice]
+  end
+
+  test 'show action redirects back when handler requests redirect_back' do
+    stub_handler(:show, result: ConnectorResult.new(redirect_back: true, message: { notice: 'ok' }, success: true))
+    @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
+
+    get explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'example.org',
+      object_type: 'records',
+      object_id: '1',
+    ), headers: { 'HTTP_REFERER' => '/previous' }
+
+    assert_redirected_to '/previous'
+    assert_equal 'ok', flash[:notice]
+  end
+
   test 'show action redirects with message when handler fails' do
     stub_handler(:show, result: ConnectorResult.new(message: { alert: 'error' }, success: false))
     @repo_db.set('https://example.org', type: ConnectorType.get('zenodo'))
