@@ -50,9 +50,6 @@ Rails.application.routes.draw do
   # SITEMAP
   get '/sitemap' => 'sitemap#index', as: :sitemap
 
-  # DATAVERSE ROUTES
-  get "integrations/dataverse/external_tool/dataset" => "dataverse/external_tool#dataset"
-
   # EXPLORE ROUTE
   get "/explore/:connector_type/*server_domain/:object_type/*object_id" => "explore#show", as: :explore
   post "/explore/:connector_type/*server_domain/:object_type/*object_id" => "explore#create"

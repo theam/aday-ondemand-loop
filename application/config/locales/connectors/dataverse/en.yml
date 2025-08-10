@@ -18,7 +18,10 @@ en:
         upload_bundle_create:
           message_collection_not_found: "Dataverse collection not found: %{url}. Only public and published collections are supported"
           message_dataset_not_found: "Dataverse dataset not found: %{url}.<br />Only public and published datasets are supported"
-          message_success: "Dataverse upload bundle created: %{name}"
+
+      external_tool_dataset:
+        show:
+          invalid_request_error: "Invalid Dataverse request. Dataverse URL and Dataset id are required"
 
       upload_bundle_info_bar:
         link_dataverse_title: "Open Dataverse: %{name}"
@@ -172,9 +175,6 @@ en:
           field_creation_date_title: "Creation date"
 
   dataverse:
-    external_tool:
-      dataset:
-        invalid_request_error: "Invalid Dataverse request. Dataverse URL and Dataset id are required"
     landing:
       installation_items:
         button_submit_text: "Search"

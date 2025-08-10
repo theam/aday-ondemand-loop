@@ -20,7 +20,7 @@ curl --location 'http://localhost:8080/api/admin/externalTools' \
   "toolName": "ondemand_loop_dataset_tool",
   "scope": "dataset",
   "types": ["explore"],
-  "toolUrl": "https://localhost:33000/pun/sys/loop/integrations/dataverse/external_tool/dataset",
+  "toolUrl": "https://localhost:33000/pun/sys/loop/connect/dataverse/external_tool_dataset",
   "httpMethod": "GET",
   "toolParameters": {
     "queryParameters": [
