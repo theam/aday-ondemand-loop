@@ -4,7 +4,7 @@ en:
     dataverse:
       title: "Dataverse"
 
-      actions:
+      handlers:
         collection_select:
           message_success: "Collection selected: %{title}"
         connector_edit:

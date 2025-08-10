@@ -14,6 +14,6 @@ module ExploreHelper
 
   def link_to_landing(connector, **params)
     raise ArgumentError, "Invalid connector: #{connector}" unless connector.is_a?(ConnectorType)
-    explore_landing_path({ connector_type: connector.to_s }.merge(params))
+    connect_repo_path({ connector_type: connector.to_s, object_type: 'landing' }.merge(params))
   end
 end

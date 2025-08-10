@@ -3,6 +3,7 @@
 module Zenodo
   class ZenodoUrl
     DEFAULT_SERVER = 'zenodo.org'
+    DEFAULT_URL = 'https://zenodo.org'
     TYPES = %w[zenodo doi record deposition file unknown].freeze
 
     attr_reader :type, :record_id, :deposition_id, :file_name

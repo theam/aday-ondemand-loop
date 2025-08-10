@@ -196,7 +196,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   # Test unknown URL patterns
   test 'should return landing path for unknown URL patterns' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/unknown/path')
-    expected_url = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+    expected_url = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -204,7 +204,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should return landing path for api endpoints' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/api/datasets/123')
-    expected_url = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+    expected_url = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -212,7 +212,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should return landing path for other paths' do
     result = @resolver.get_controller_url('https://demo.dataverse.org/admin/settings')
-    expected_url = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+    expected_url = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
 
     assert result.success?
     assert_equal expected_url, result.redirect_url
@@ -239,7 +239,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
     result = @resolver.get_controller_url('https://demo.dataverse.org/dataset.xhtml')
 
     assert result.success?
-    assert_equal explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s), result.redirect_url
+    assert_equal connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing'), result.redirect_url
   end
 
   # Test different domain formats
@@ -309,7 +309,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle empty string URL' do
     result = @resolver.get_controller_url('')
-    expected_url = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+    expected_url = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
 
     assert_nothing_raised do
       assert result.success?
@@ -319,7 +319,7 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
 
   test 'should handle nil URL' do
     result = @resolver.get_controller_url(nil)
-    expected_url = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+    expected_url = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
 
     assert_nothing_raised do
       assert result.success?
@@ -354,15 +354,15 @@ class Dataverse::DisplayRepoControllerResolverTest < ActiveSupport::TestCase
   end
 
   # Test URL helper integration
-  test 'should be able to use explore_landing_path helper' do
-    landing_path = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+  test 'should be able to use connect_repo_path helper' do
+    landing_path = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
     assert_not_nil landing_path
     assert_kind_of String, landing_path
   end
 
   test 'should generate URLs that could redirect back to landing page' do
     result = @resolver.get_controller_url('https://demo.dataverse.org')
-    landing_path = explore_landing_path(connector_type: ConnectorType::DATAVERSE.to_s)
+    landing_path = connect_repo_path(connector_type: ConnectorType::DATAVERSE.to_s, object_type: 'landing')
 
     assert result.success?
     assert_not_nil result.redirect_url
