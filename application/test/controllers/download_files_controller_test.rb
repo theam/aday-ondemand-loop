@@ -91,4 +91,21 @@ class DownloadFilesControllerTest < ActionDispatch::IntegrationTest
     assert_match 'deleted', flash[:notice]
     assert_match 'file.zip', flash[:notice]
   end
+
+  test 'update should redirect with alert if file is nil' do
+    DownloadFile.stubs(:find).with(@project_id, @file_id).returns(nil)
+
+    patch project_download_file_url(project_id: @project_id, id: @file_id), params: { state: 'pending' }
+    assert_redirected_to root_path
+    follow_redirect!
+    assert_match 'not found for project', flash[:alert]
+  end
+
+  test 'update should change status and redirect' do
+    @file.expects(:update).with(status: FileStatus::PENDING)
+    DownloadFile.stubs(:find).with(@project_id, @file_id).returns(@file)
+
+    patch project_download_file_url(project_id: @project_id, id: @file_id), params: { state: 'pending' }
+    assert_redirected_to root_path
+  end
 end

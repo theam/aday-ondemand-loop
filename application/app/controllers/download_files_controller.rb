@@ -24,6 +24,22 @@ class DownloadFilesController < ApplicationController
     head :no_content
   end
 
+  def update
+    project_id = params[:project_id]
+    file_id = params[:id]
+    state = params[:state]
+    file = DownloadFile.find(project_id, file_id)
+
+    if file.nil?
+      redirect_back fallback_location: root_path, alert: t('download_files.file_not_found_for_project', file_id: file_id, project_id: project_id)
+      return
+    end
+
+    file.update(status: FileStatus.get(state))
+
+    redirect_back fallback_location: root_path
+  end
+
   def destroy
     project_id = params[:project_id]
     file_id = params[:id]

@@ -14,6 +14,8 @@ en:
       button_browse_file_title: "Browse file"
       button_cancel_download_a11y_text: "Cancel download of %{filename}"
       button_cancel_download_title: "Cancel download"
+      button_retry_download_a11y_text: "Retry download of %{filename}"
+      button_retry_download_title: "Retry download"
       field_creation_date_title: "Creation date"
       field_project_title: "Project: %{name}"
       field_file_title: "Download file: %{filename}"
