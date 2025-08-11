@@ -120,16 +120,16 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     file = create_download_file(@project)
     file.id = 'file-x'
     file.filename = 'data2.csv'
-        file.metadata = {
-          id: '789',
-          md5: Digest::MD5.hexdigest('content'),
-          dataverse_url: 'http://example.com',
-          download_url: nil,
-          temp_location: nil,
-          restart_possible: nil,
-        }
-        file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
-      processor = Dataverse::DownloadConnectorProcessor.new(file)
+    file.metadata = {
+      id: '789',
+      md5: Digest::MD5.hexdigest('content'),
+      dataverse_url: 'http://example.com',
+      download_url: nil,
+      temp_location: nil,
+      partial_downloads: nil,
+    }
+    file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
+    processor = Dataverse::DownloadConnectorProcessor.new(file)
 
       download_location = file.download_location
       temp_location = file.download_tmp_location
@@ -144,7 +144,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     result = processor.download
     assert_equal FileStatus::ERROR, result.status
     assert File.exist?(temp_location)
-      assert processor.connector_metadata.restart_possible
+    assert processor.connector_metadata.partial_downloads
   end
 
   test 'removes temp file when download fails without range support' do
@@ -152,16 +152,16 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
     file.id = 'file-y'
     file.filename = 'data3.csv'
-        file.metadata = {
-          id: '790',
-          md5: Digest::MD5.hexdigest('content'),
-          dataverse_url: 'http://example.com',
-          download_url: nil,
-          temp_location: nil,
-          restart_possible: nil,
-        }
-        file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
-      processor = Dataverse::DownloadConnectorProcessor.new(file)
+    file.metadata = {
+      id: '790',
+      md5: Digest::MD5.hexdigest('content'),
+      dataverse_url: 'http://example.com',
+      download_url: nil,
+      temp_location: nil,
+      partial_downloads: nil,
+    }
+    file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
+    processor = Dataverse::DownloadConnectorProcessor.new(file)
 
       download_location = file.download_location
       temp_location = file.download_tmp_location
@@ -176,7 +176,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     result = processor.download
     assert_equal FileStatus::ERROR, result.status
     refute File.exist?(temp_location)
-      refute processor.connector_metadata.restart_possible
+    refute processor.connector_metadata.partial_downloads
   end
 
   test 'includes api key header when available' do

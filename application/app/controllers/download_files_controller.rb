@@ -37,7 +37,7 @@ class DownloadFilesController < ApplicationController
 
     file.update(status: FileStatus.get(state))
 
-    redirect_back fallback_location: root_path
+    redirect_back fallback_location: root_path, notice: t('download_files.download_file_status_updated', filename: file.filename)
   end
 
   def destroy

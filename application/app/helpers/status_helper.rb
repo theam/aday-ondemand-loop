@@ -5,6 +5,6 @@ module StatusHelper
   end
 
   def retry_button_visible?(file)
-    FileStatus.retryable_statuses.include?(file.status) && file.connector_metadata.restart_possible
+    file.restart_possible?
   end
 end

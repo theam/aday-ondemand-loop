@@ -4,6 +4,7 @@ en:
     file_not_found_for_project: "File: %{file_id} not found for project: %{project_id}"
     file_in_progress: "File: %{filename} cannot be deleted while is being downloaded"
     download_file_deleted_successfully: "Download file deleted: %{filename}"
+    download_file_status_updated: "Download file status updated: %{filename}"
   file_browser:
     directory_forbidden: "You do not have permission to access this directory."
   projects:

@@ -63,7 +63,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
       zenodo_url: 'https://zenodo.org',
       download_url: 'https://zenodo.org/file.txt',
       temp_location: nil,
-      restart_possible: nil,
+      partial_downloads: nil,
     }
     file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
     processor = Zenodo::DownloadConnectorProcessor.new(file)
@@ -81,7 +81,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     result = processor.download
     assert_equal FileStatus::ERROR, result.status
     assert File.exist?(temp_location)
-    assert processor.connector_metadata.restart_possible
+    assert processor.connector_metadata.partial_downloads
   end
 
   test 'removes temp file when download fails without range support' do
@@ -91,7 +91,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
       zenodo_url: 'https://zenodo.org',
       download_url: 'https://zenodo.org/file.txt',
       temp_location: nil,
-      restart_possible: nil,
+      partial_downloads: nil,
     }
     file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
     processor = Zenodo::DownloadConnectorProcessor.new(file)
@@ -109,7 +109,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     result = processor.download
     assert_equal FileStatus::ERROR, result.status
     refute File.exist?(temp_location)
-    refute processor.connector_metadata.restart_possible
+    refute processor.connector_metadata.partial_downloads
   end
 end
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'test_helper'
-require 'ostruct'
 
 class StatusHelperTest < ActionView::TestCase
   include StatusHelper
@@ -17,18 +16,27 @@ class StatusHelperTest < ActionView::TestCase
     end
   end
 
-  test 'retry_button_visible? is true when status allows retry and restart is possible' do
-    [FileStatus::CANCELLED, FileStatus::ERROR].each do |status|
-      file = OpenStruct.new(status: status, connector_metadata: OpenStruct.new(restart_possible: true))
-      assert retry_button_visible?(file)
-    end
+  test 'retry_button_visible? is true when restart is possible' do
+    project = create_project
+    file = create_download_file(project)
+    file.status = FileStatus::CANCELLED
+    file.metadata = { partial_downloads: true }
+    assert retry_button_visible?(file)
+
+    file.status = FileStatus::ERROR
+    file.metadata = { partial_downloads: nil }
+    assert retry_button_visible?(file)
   end
 
-  test 'retry_button_visible? is false when status does not allow retry or restart not possible' do
-    file = OpenStruct.new(status: FileStatus::SUCCESS, connector_metadata: OpenStruct.new(restart_possible: true))
+  test 'retry_button_visible? is false when status does not allow retry or partial downloads disabled' do
+    project = create_project
+    file = create_download_file(project)
+    file.status = FileStatus::SUCCESS
+    file.metadata = { partial_downloads: true }
     refute retry_button_visible?(file)
 
-    file = OpenStruct.new(status: FileStatus::CANCELLED, connector_metadata: OpenStruct.new(restart_possible: false))
+    file.status = FileStatus::CANCELLED
+    file.metadata = { partial_downloads: false }
     refute retry_button_visible?(file)
   end
 end
