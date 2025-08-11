@@ -2,17 +2,12 @@
 
 module Dataverse
   class DownloadConnectorMetadata
-    def initialize(download_file)
-      @metadata = download_file.metadata.to_h.deep_symbolize_keys
-      @metadata.each_key do |key|
-        define_singleton_method("#{key.to_s}="){ |value| @metadata[key] = value }
-        define_singleton_method(key){ @metadata[key] }
-      end
-    end
+    attr_reader :metadata
+    delegate_missing_to :metadata
 
-    # To avoid errors when expected fields are removed from the list of configured attributes
-    def method_missing(method_name, *arguments, &block)
-      nil
+    def initialize(download_file)
+      @metadata = ActiveSupport::OrderedOptions.new
+      @metadata.merge!(download_file.metadata.to_h.deep_symbolize_keys)
     end
 
     def repo_name
@@ -35,7 +30,7 @@ module Dataverse
     end
 
     def to_h
-      @metadata.deep_stringify_keys
+      @metadata.to_h.deep_stringify_keys
     end
   end
 end

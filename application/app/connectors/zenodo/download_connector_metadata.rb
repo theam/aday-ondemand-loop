@@ -2,16 +2,12 @@
 
 module Zenodo
   class DownloadConnectorMetadata
-    def initialize(download_file)
-      @metadata = download_file.metadata.to_h.deep_symbolize_keys
-      @metadata.each_key do |key|
-        define_singleton_method("#{key}=") { |value| @metadata[key] = value }
-        define_singleton_method(key) { @metadata[key] }
-      end
-    end
+    attr_reader :metadata
+    delegate_missing_to :metadata
 
-    def method_missing(method_name, *args, &block)
-      nil
+    def initialize(download_file)
+      @metadata = ActiveSupport::OrderedOptions.new
+      @metadata.merge!(download_file.metadata.to_h.deep_symbolize_keys)
     end
 
     def repo_name
@@ -31,7 +27,7 @@ module Zenodo
     end
 
     def to_h
-      @metadata.deep_stringify_keys
+      @metadata.to_h.deep_stringify_keys
     end
   end
 end
