@@ -1,6 +1,7 @@
 class ConnectController < ApplicationController
   include LoggingCommon
   include ConnectorResponse
+  include ConnectorResolver
 
   before_action :parse_connector_type
 
