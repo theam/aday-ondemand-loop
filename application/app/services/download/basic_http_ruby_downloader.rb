@@ -46,6 +46,8 @@ module Download
           @partial_downloads = supports_range?(response) if @partial_downloads.nil?
           total_downloaded = 0 if total_downloaded.positive? && !@partial_downloads
 
+          log_info("Restarting Download from: #{download_file}") if total_downloaded.positive?
+
           mode = total_downloaded.positive? ? "ab" : "wb"
           File.open(file_path, mode) do |file|
             response.read_body do |chunk|
