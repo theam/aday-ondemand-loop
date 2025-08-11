@@ -27,11 +27,4 @@ module ConnectorResponse
   def apply_flash_now(message_hash)
     (message_hash || {}).each { |k, v| flash.now[k] = v }
   end
-
-  def parse_connector_type
-    @connector_type = ConnectorType.get(params[:connector_type])
-  rescue ArgumentError => e
-    log_error('Invalid connector type', { connector_type: params[:connector_type] }, e)
-    redirect_to root_path, alert: I18n.t("#{controller_name}.message_invalid_connector_type", connector_type: params[:connector_type])
-  end
 end
