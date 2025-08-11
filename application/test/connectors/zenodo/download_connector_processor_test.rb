@@ -50,6 +50,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
       .with('https://zenodo.org/file.txt', download_location, temp_location,
             headers: { Zenodo::ApiService::AUTH_HEADER => 'Bearer KEY' })
       .returns(mock_downloader)
+    mock_downloader.stubs(:partial_downloads).returns(false)
     mock_downloader.stubs(:download).yields(nil)
 
     @processor.download
@@ -58,11 +59,19 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
   test 'keeps temp file and flags restart when download fails with range support' do
     RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
     file = create_download_file(@project)
-    file.metadata = { zenodo_url: 'https://zenodo.org', download_url: 'https://zenodo.org/file.txt' }
+    file.metadata = {
+      zenodo_url: 'https://zenodo.org',
+      download_url: 'https://zenodo.org/file.txt',
+      temp_location: nil,
+      restart_possible: nil,
+    }
+    file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
     processor = Zenodo::DownloadConnectorProcessor.new(file)
 
     download_location = file.download_location
     temp_location = "#{download_location}.part"
+    FileUtils.mkdir_p(File.dirname(temp_location))
+    File.write(temp_location, 'partial')
 
     mock_downloader = mock('downloader')
     mock_downloader.stubs(:partial_downloads).returns(true)
@@ -72,17 +81,25 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     result = processor.download
     assert_equal FileStatus::ERROR, result.status
     assert File.exist?(temp_location)
-    assert file.connector_metadata.restart_possible
+    assert processor.connector_metadata.restart_possible
   end
 
   test 'removes temp file when download fails without range support' do
     RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
     file = create_download_file(@project)
-    file.metadata = { zenodo_url: 'https://zenodo.org', download_url: 'https://zenodo.org/file.txt' }
+    file.metadata = {
+      zenodo_url: 'https://zenodo.org',
+      download_url: 'https://zenodo.org/file.txt',
+      temp_location: nil,
+      restart_possible: nil,
+    }
+    file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
     processor = Zenodo::DownloadConnectorProcessor.new(file)
 
     download_location = file.download_location
     temp_location = "#{download_location}.part"
+    FileUtils.mkdir_p(File.dirname(temp_location))
+    File.write(temp_location, 'partial')
 
     mock_downloader = mock('downloader')
     mock_downloader.stubs(:partial_downloads).returns(false)
@@ -92,7 +109,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     result = processor.download
     assert_equal FileStatus::ERROR, result.status
     refute File.exist?(temp_location)
-    refute file.connector_metadata.restart_possible
+    refute processor.connector_metadata.restart_possible
   end
 end
 
