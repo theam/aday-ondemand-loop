@@ -41,6 +41,13 @@ class DownloadFile < ApplicationDiskRecord
     File.join(@project.download_dir, filename)
   end
 
+  def download_tmp_location
+    location = download_location
+    return nil unless location
+
+    "#{location}.part"
+  end
+
   def save
     return false unless valid?
 

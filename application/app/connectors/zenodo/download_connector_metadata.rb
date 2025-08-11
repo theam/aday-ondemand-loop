@@ -2,7 +2,6 @@
 
 module Zenodo
   class DownloadConnectorMetadata
-    attr_reader :metadata
     delegate_missing_to :metadata
 
     def initialize(download_file)
@@ -27,7 +26,11 @@ module Zenodo
     end
 
     def to_h
-      @metadata.to_h.deep_stringify_keys
+      metadata.to_h.deep_stringify_keys
     end
+
+    private
+
+    attr_reader :metadata
   end
 end

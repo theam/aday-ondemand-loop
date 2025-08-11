@@ -16,7 +16,7 @@ module Zenodo
     def download
       download_url = connector_metadata.download_url
       download_location = file.download_location
-      temp_location = "#{download_location}.part"
+      temp_location = file.download_tmp_location
       FileUtils.mkdir_p(File.dirname(download_location))
 
       connector_metadata.temp_location = temp_location

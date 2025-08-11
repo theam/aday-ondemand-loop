@@ -22,8 +22,8 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
       temp_location: nil,
     }
 
-    @download_path = File.join(@project.download_dir, 'data.csv')
-    @temp_path = "#{@download_path}.part"
+    @download_path = @file.download_location
+    @temp_path = @file.download_tmp_location
 
     File.write(@download_path, 'test content') # for MD5 match
 
@@ -104,8 +104,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     mock_downloader.stubs(:download).yields(nil)
 
     expected_url = 'http://example.com/api/access/datafile/456?format=original'
-    download_location = File.join(@project.download_dir, 'data.csv')
-    expected_temp = "#{download_location}.part"
+    expected_temp = @file.download_tmp_location
 
     @file.expects(:update).twice.with do |arg|
       metadata = arg[:metadata]
@@ -132,8 +131,8 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
         file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
       processor = Dataverse::DownloadConnectorProcessor.new(file)
 
-      download_location = File.join(@project.download_dir, 'data2.csv')
-      temp_location = "#{download_location}.part"
+      download_location = file.download_location
+      temp_location = file.download_tmp_location
       FileUtils.mkdir_p(File.dirname(temp_location))
       File.write(temp_location, 'partial')
 
@@ -164,8 +163,8 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
         file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
       processor = Dataverse::DownloadConnectorProcessor.new(file)
 
-      download_location = File.join(@project.download_dir, 'data3.csv')
-      temp_location = "#{download_location}.part"
+      download_location = file.download_location
+      temp_location = file.download_tmp_location
       FileUtils.mkdir_p(File.dirname(temp_location))
       File.write(temp_location, 'partial')
 

@@ -21,7 +21,7 @@ module Dataverse
                              .add_param(:format, 'original')
                              .to_s
       download_location = file.download_location
-      temp_location ="#{download_location}.part"
+      temp_location = file.download_tmp_location
       FileUtils.mkdir_p(File.dirname(download_location))
 
       connector_metadata.download_url = download_url

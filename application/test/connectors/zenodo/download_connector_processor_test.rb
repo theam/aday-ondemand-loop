@@ -43,7 +43,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     FileUtils.stubs(:mkdir_p)
 
     download_location = @file.download_location
-    temp_location = "#{download_location}.part"
+    temp_location = @file.download_tmp_location
     mock_downloader = mock('downloader')
     Download::BasicHttpRubyDownloader
       .expects(:new)
@@ -69,7 +69,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     processor = Zenodo::DownloadConnectorProcessor.new(file)
 
     download_location = file.download_location
-    temp_location = "#{download_location}.part"
+    temp_location = file.download_tmp_location
     FileUtils.mkdir_p(File.dirname(temp_location))
     File.write(temp_location, 'partial')
 
@@ -97,7 +97,7 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     processor = Zenodo::DownloadConnectorProcessor.new(file)
 
     download_location = file.download_location
-    temp_location = "#{download_location}.part"
+    temp_location = file.download_tmp_location
     FileUtils.mkdir_p(File.dirname(temp_location))
     File.write(temp_location, 'partial')
 
