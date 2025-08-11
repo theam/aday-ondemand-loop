@@ -39,15 +39,27 @@ module Dataverse
         temp_location,
         headers: headers
       )
-      download_processor.download do |context|
-        cancelled
+      begin
+        download_processor.download do |_context|
+          cancelled
+        end
+      rescue StandardError => e
+        connector_metadata.restart_possible = download_processor.partial_downloads
+        file.update({ metadata: connector_metadata.to_h })
+        FileUtils.rm_f(temp_location) unless download_processor.partial_downloads
+        log_error('Download failed', { id: file.id, url: download_url }, e)
+        return response(FileStatus::ERROR, 'file download failed')
       end
 
+      connector_metadata.restart_possible = download_processor.partial_downloads
+      file.update({ metadata: connector_metadata.to_h })
+
       if cancelled
+        FileUtils.rm_f(temp_location) unless download_processor.partial_downloads
         return response(FileStatus::CANCELLED, 'file download cancelled')
       end
 
-      md5_result = verify(download_location,  connector_metadata.md5)
+      md5_result = verify(download_location, connector_metadata.md5)
       log_info('Download completed', {id: file.id, location: download_location, md5_valid: md5_result})
       if md5_result
         response(FileStatus::SUCCESS, 'file download completed')

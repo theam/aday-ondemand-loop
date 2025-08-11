@@ -90,7 +90,8 @@ class Download::BasicHttpRubyDownloadTest < ActiveSupport::TestCase
       target.download do |_|
         true
       end
-      assert File.exist?(dl)
+      refute File.exist?(dl)
+      assert File.exist?(tmp)
     end
   end
 

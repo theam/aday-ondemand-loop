@@ -21,10 +21,8 @@ module Download
       resume_from = File.exist?(temp_file) ? File.size(temp_file) : 0
       request_headers = headers.dup
       request_headers['Range'] = "bytes=#{resume_from}-" if resume_from.positive?
-      download_follow_redirects(download_url, temp_file, request_headers, 3, resume_from, &)
-      FileUtils.mv(temp_file, download_file)
-    ensure
-      File.delete(temp_file) if File.exist?(temp_file)
+      cancelled = download_follow_redirects(download_url, temp_file, request_headers, 3, resume_from, &)
+      FileUtils.mv(temp_file, download_file) unless cancelled
     end
 
     private
@@ -58,7 +56,7 @@ module Download
                 cancel = yield create_context(url, file_path, total_downloaded)
                 if cancel
                   log_info('Download canceled.', {url: url, file: download_file, temp: temp_file})
-                  return
+                  return true
                 end
               end
             end
@@ -66,6 +64,7 @@ module Download
         end
       end
 
+      false
     end
 
     def redirect?(response)

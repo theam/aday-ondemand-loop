@@ -33,11 +33,25 @@ module Zenodo
         temp_location,
         headers: headers,
       )
-      download_processor.download do |_context|
-        cancelled
+      begin
+        download_processor.download do |_context|
+          cancelled
+        end
+      rescue StandardError => e
+        connector_metadata.restart_possible = download_processor.partial_downloads
+        file.update({ metadata: connector_metadata.to_h })
+        FileUtils.rm_f(temp_location) unless download_processor.partial_downloads
+        log_error('Download failed', { id: file.id, url: download_url }, e)
+        return response(FileStatus::ERROR, 'file download failed')
       end
 
-      return response(FileStatus::CANCELLED, 'file download cancelled') if cancelled
+      connector_metadata.restart_possible = download_processor.partial_downloads
+      file.update({ metadata: connector_metadata.to_h })
+
+      if cancelled
+        FileUtils.rm_f(temp_location) unless download_processor.partial_downloads
+        return response(FileStatus::CANCELLED, 'file download cancelled')
+      end
 
       response(FileStatus::SUCCESS, 'file download completed')
     end
@@ -57,3 +71,4 @@ module Zenodo
     end
   end
 end
+

@@ -54,4 +54,45 @@ class Zenodo::DownloadConnectorProcessorTest < ActiveSupport::TestCase
 
     @processor.download
   end
+
+  test 'keeps temp file and flags restart when download fails with range support' do
+    RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
+    file = create_download_file(@project)
+    file.metadata = { zenodo_url: 'https://zenodo.org', download_url: 'https://zenodo.org/file.txt' }
+    processor = Zenodo::DownloadConnectorProcessor.new(file)
+
+    download_location = file.download_location
+    temp_location = "#{download_location}.part"
+
+    mock_downloader = mock('downloader')
+    mock_downloader.stubs(:partial_downloads).returns(true)
+    Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.expects(:download).raises(StandardError.new('boom'))
+
+    result = processor.download
+    assert_equal FileStatus::ERROR, result.status
+    assert File.exist?(temp_location)
+    assert file.connector_metadata.restart_possible
+  end
+
+  test 'removes temp file when download fails without range support' do
+    RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
+    file = create_download_file(@project)
+    file.metadata = { zenodo_url: 'https://zenodo.org', download_url: 'https://zenodo.org/file.txt' }
+    processor = Zenodo::DownloadConnectorProcessor.new(file)
+
+    download_location = file.download_location
+    temp_location = "#{download_location}.part"
+
+    mock_downloader = mock('downloader')
+    mock_downloader.stubs(:partial_downloads).returns(false)
+    Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.expects(:download).raises(StandardError.new('boom'))
+
+    result = processor.download
+    assert_equal FileStatus::ERROR, result.status
+    refute File.exist?(temp_location)
+    refute file.connector_metadata.restart_possible
+  end
 end
+
