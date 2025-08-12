@@ -27,9 +27,6 @@ en:
     cancelled: "cancelled"
   js:
     generic_server_error: "There was an error processing your request."
-    download:
-      cancel:
-        error: "Could not cancel download."
     drop:
       path:
         save_error: "Error saving path: "
@@ -44,6 +41,3 @@ en:
     project_name:
       save:
         error: "Could not update project name."
-    upload:
-      cancel:
-        error: "Could not cancel upload."

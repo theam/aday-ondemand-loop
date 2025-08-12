@@ -41,6 +41,13 @@ class DownloadFile < ApplicationDiskRecord
     File.join(@project.download_dir, filename)
   end
 
+  def download_tmp_location
+    location = download_location
+    return nil unless location
+
+    "#{location}.part"
+  end
+
   def save
     return false unless valid?
 
@@ -58,6 +65,10 @@ class DownloadFile < ApplicationDiskRecord
 
   def connector_metadata
     ConnectorClassDispatcher.download_connector_metadata(self)
+  end
+
+  def restart_possible?
+    FileStatus.retryable_statuses.include?(status) && connector_metadata.partial_downloads != false
   end
 
   def max_file_size

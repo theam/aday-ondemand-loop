@@ -22,8 +22,8 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
       temp_location: nil,
     }
 
-    @download_path = File.join(@project.download_dir, 'data.csv')
-    @temp_path = "#{@download_path}.part"
+    @download_path = @file.download_location
+    @temp_path = @file.download_tmp_location
 
     File.write(@download_path, 'test content') # for MD5 match
 
@@ -44,6 +44,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
                           headers: {})
       .returns(mock_downloader)
 
+    mock_downloader.stubs(:partial_downloads).returns(false)
     mock_downloader.expects(:download).yields(nil)
 
     response = @processor.download
@@ -55,6 +56,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
   test 'should return cancelled response if download is cancelled' do
     mock_downloader = mock('downloader')
     Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.stubs(:partial_downloads).returns(false)
     mock_downloader.expects(:download).yields(nil)
 
     @processor.instance_variable_set(:@cancelled, true)
@@ -69,6 +71,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
 
     mock_downloader = mock('downloader')
     Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.stubs(:partial_downloads).returns(false)
     mock_downloader.expects(:download).yields(nil)
 
     response = @processor.download
@@ -97,13 +100,13 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
   test 'should update file metadata with download url and temp location' do
     mock_downloader = mock('downloader')
     Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.stubs(:partial_downloads).returns(false)
     mock_downloader.stubs(:download).yields(nil)
 
     expected_url = 'http://example.com/api/access/datafile/456?format=original'
-    download_location = File.join(@project.download_dir, 'data.csv')
-    expected_temp = "#{download_location}.part"
+    expected_temp = @file.download_tmp_location
 
-    @file.expects(:update).with do |arg|
+    @file.expects(:update).twice.with do |arg|
       metadata = arg[:metadata]
       metadata['download_url'] == expected_url &&
         metadata['temp_location'] == expected_temp
@@ -112,19 +115,85 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     @processor.download
   end
 
+  test 'keeps temp file and flags restart when download fails with range support' do
+    RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
+    file = create_download_file(@project)
+    file.id = 'file-x'
+    file.filename = 'data2.csv'
+    file.metadata = {
+      id: '789',
+      md5: Digest::MD5.hexdigest('content'),
+      dataverse_url: 'http://example.com',
+      download_url: nil,
+      temp_location: nil,
+      partial_downloads: nil,
+    }
+    file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
+    processor = Dataverse::DownloadConnectorProcessor.new(file)
+
+      download_location = file.download_location
+      temp_location = file.download_tmp_location
+      FileUtils.mkdir_p(File.dirname(temp_location))
+      File.write(temp_location, 'partial')
+
+    mock_downloader = mock('downloader')
+    mock_downloader.stubs(:partial_downloads).returns(true)
+    Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.expects(:download).raises(StandardError.new('boom'))
+
+    result = processor.download
+    assert_equal FileStatus::ERROR, result.status
+    assert File.exist?(temp_location)
+    assert processor.connector_metadata.partial_downloads
+  end
+
+  test 'removes temp file when download fails without range support' do
+    file = create_download_file(@project)
+    RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
+    file.id = 'file-y'
+    file.filename = 'data3.csv'
+    file.metadata = {
+      id: '790',
+      md5: Digest::MD5.hexdigest('content'),
+      dataverse_url: 'http://example.com',
+      download_url: nil,
+      temp_location: nil,
+      partial_downloads: nil,
+    }
+    file.stubs(:update) { |**args| file.metadata = args[:metadata]; true }
+    processor = Dataverse::DownloadConnectorProcessor.new(file)
+
+      download_location = file.download_location
+      temp_location = file.download_tmp_location
+      FileUtils.mkdir_p(File.dirname(temp_location))
+      File.write(temp_location, 'partial')
+
+    mock_downloader = mock('downloader')
+    mock_downloader.stubs(:partial_downloads).returns(false)
+    Download::BasicHttpRubyDownloader.stubs(:new).returns(mock_downloader)
+    mock_downloader.expects(:download).raises(StandardError.new('boom'))
+
+    result = processor.download
+    assert_equal FileStatus::ERROR, result.status
+    refute File.exist?(temp_location)
+    refute processor.connector_metadata.partial_downloads
+  end
+
   test 'includes api key header when available' do
     RepoRegistry.repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
     RepoRegistry.repo_db.set('http://example.com', type: ConnectorType::DATAVERSE, metadata: {auth_key: 'KEY'})
 
-    mock_downloader = mock('downloader')
-    Download::BasicHttpRubyDownloader
-      .expects(:new).with('http://example.com/api/access/datafile/456?format=original',
-                          @download_path,
-                          @temp_path,
-                          headers: { Dataverse::ApiService::AUTH_HEADER => 'KEY' })
-      .returns(mock_downloader)
-    mock_downloader.stubs(:download).yields(nil)
+      mock_downloader = mock('downloader')
+      Download::BasicHttpRubyDownloader
+        .expects(:new).with('http://example.com/api/access/datafile/456?format=original',
+                            @download_path,
+                            @temp_path,
+                            headers: { Dataverse::ApiService::AUTH_HEADER => 'KEY' })
+        .returns(mock_downloader)
+      mock_downloader.stubs(:partial_downloads).returns(false)
+      mock_downloader.stubs(:download).yields(nil)
 
     @processor.download
   end
 end
+

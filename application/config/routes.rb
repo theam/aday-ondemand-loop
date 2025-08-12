@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
     # delete /projects/:project_id/downloads/files/:id => delete download file
     # post /projects/:project_id/downloads/files/:id/cancel => cancel download file
-    resources :download_files, path: 'downloads/files', only: [ :destroy ] do
+    resources :download_files, path: 'downloads/files', only: [:destroy, :update] do
       post :cancel, on: :member
     end
 

@@ -52,4 +52,8 @@ class FileStatus
     [FileStatus::SUCCESS, FileStatus::ERROR, FileStatus::CANCELLED]
   end
 
+  def self.retryable_statuses
+    [FileStatus::ERROR, FileStatus::CANCELLED]
+  end
+
 end
