@@ -38,15 +38,19 @@ module Zenodo
       @base
     end
 
+    def record_segment?(seg)
+      seg == 'record' || seg == 'records'
+    end
+
     def parse_type_and_ids
       segments = @base.path_segments
 
       if segments.length > 1 && segments[0] == 'doi'
         @type = 'doi'
-      elsif segments.length == 2 && segments[0] == 'records'
+      elsif segments.length == 2 && record_segment?(segments[0])
         @type = 'record'
         @record_id = segments[1]
-      elsif segments.length >= 4 && segments[0] == 'records' && segments[2] == 'files'
+      elsif segments.length >= 4 && record_segment?(segments[0]) && segments[2] == 'files'
         @type = 'file'
         @record_id = segments[1]
         @file_name = segments[3..].join('/')
