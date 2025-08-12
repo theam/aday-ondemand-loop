@@ -16,6 +16,7 @@
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <%= hidden_field_tag :_method, 'put' %>
           <div class="mb-3">
+            <small class="text-muted"><%= t('.field_path_label') %></small>
             <input type="text" readonly name="download_dir" class="form-control bg-light text-muted" value="<%= project.download_dir %>" data-project-download-dir-target="path" aria-label="<%= t('.field_path_label') %>">
           </div>
           <%= render partial: '/file_browser/file_browser', locals: { id: file_browser_id, class: 'mb-3 d-none' } %>
