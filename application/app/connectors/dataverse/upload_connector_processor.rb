@@ -48,8 +48,8 @@ module Dataverse
       success = true
       if response_body
         upload_response = Dataverse::UploadFileResponse.new(response_body)
-        if upload_response.data.files.size > 1
-          log_info('File extracted on server. Skipping MD5 check', {filename: file.filename, extracted_files: upload_response.data.files.size})
+        if Common::FileUtils.new.zip_file?(source_location)
+          log_info('Zip file detected. Skipping MD5 check', {filename: file.filename})
         else
           server_md5 = upload_response.data.files.first&.data_file&.md5
           success = verify(source_location, server_md5)

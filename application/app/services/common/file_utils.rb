@@ -4,6 +4,16 @@ module Common
   class FileUtils
     include LoggingCommon
 
+    def zip_file?(file_path)
+      return false unless File.file?(file_path)
+
+      File.open(file_path, 'rb') do |file|
+        # Read the first 4 bytes (magic number)
+        signature = file.read(4)
+        signature == "\x50\x4B\x03\x04"
+      end
+    end
+
     def normalize_name(name)
       name.to_s.parameterize(separator: '_')
     end
