@@ -8,10 +8,9 @@ updates:
     open-pull-requests-limit: 5
     security-updates-only: true
     commit-message:
-      prefix: deps
+      prefix: deps_bundler
     labels:
-      - dependencies
-      - ruby
+      - epic.dependencies
 
   # JavaScript dependencies using npm
   - package-ecosystem: npm
@@ -21,10 +20,9 @@ updates:
     open-pull-requests-limit: 5
     security-updates-only: true
     commit-message:
-      prefix: deps
+      prefix: deps_npm
     labels:
-      - dependencies
-      - javascript
+      - epic.dependencies
 
   # GitHub Actions
   - package-ecosystem: github-actions
@@ -32,7 +30,6 @@ updates:
     schedule:
       interval: weekly
     commit-message:
-      prefix: deps
+      prefix: deps_actions
     labels:
-      - dependencies
-      - github-actions
+      - epic.dependencies
