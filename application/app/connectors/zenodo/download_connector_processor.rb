@@ -40,8 +40,8 @@ module Zenodo
       rescue StandardError => e
         connector_metadata.partial_downloads = download_processor.partial_downloads
         file.update({ metadata: connector_metadata.to_h })
-        FileUtils.rm_f(temp_location) unless download_processor.partial_downloads
-        log_error('Download failed', { id: file.id, url: download_url }, e)
+        FileUtils.rm_f(temp_location) if download_processor.partial_downloads == false
+        log_error('Download failed', { id: file.id, url: download_url, partial_downloads: download_processor.partial_downloads }, e)
         return response(FileStatus::ERROR, 'file download failed')
       end
 
@@ -49,7 +49,7 @@ module Zenodo
       file.update({ metadata: connector_metadata.to_h })
 
       if cancelled
-        FileUtils.rm_f(temp_location) unless download_processor.partial_downloads
+        FileUtils.rm_f(temp_location) if download_processor.partial_downloads == false
         return response(FileStatus::CANCELLED, 'file download cancelled')
       end
 
