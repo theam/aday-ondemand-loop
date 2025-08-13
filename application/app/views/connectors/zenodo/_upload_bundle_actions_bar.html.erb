@@ -23,6 +23,18 @@
       <span>
         <small class="text-muted me-2"><%= upload_bundle.remote_repo_url %></small>
         <% if upload_bundle.connector_metadata.create_draft? %>
+          <%= render layout: "shared/button_to", locals: {
+            url:  project_upload_bundle_path(upload_bundle.project_id, upload_bundle.id),
+            method: 'PUT',
+            label: t('connectors.zenodo.upload_bundle_actions_bar.button_create_draft_title'),
+            title: t('connectors.zenodo.upload_bundle_actions_bar.button_create_draft_title'),
+            class: 'btn btn-outline-primary btn-badge position-relative me-1',
+            icon: "bi bi-database-add",
+          } do %>
+            <%= hidden_field_tag :anchor, tab_anchor_for(upload_bundle) %>
+            <%= hidden_field_tag :form, 'deposition_fetch' %>
+          <% end %>
+        <% elsif upload_bundle.connector_metadata.create_deposition? %>
           <button type="button"
                   class="btn btn-outline-primary btn-badge position-relative me-1"
                   title="<%= t('connectors.zenodo.upload_bundle_actions_bar.button_create_draft_title') %>"
