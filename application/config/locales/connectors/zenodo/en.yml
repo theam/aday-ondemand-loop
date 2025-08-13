@@ -36,8 +36,8 @@ en:
       upload_bundle_actions_bar:
         button_deposition_fetch_label: "Fetch Deposition"
         button_deposition_fetch_title: "Fetch Zenodo deposition metadata"
-        button_create_draft_title: "Create Dataset"
-        modal_create_draft_title: "Create Zenodo Dataset"
+        button_create_draft_title: "Select/Create Dataset"
+        modal_create_draft_title: "Select/Create Zenodo Dataset"
         button_edit_key_title: "Add/Edit Access Token"
         modal_edit_key_title: "Add/Edit Zenodo Personal Access Token"
         missing_key_disabled_features_text: "Add access token to enable deposition features"

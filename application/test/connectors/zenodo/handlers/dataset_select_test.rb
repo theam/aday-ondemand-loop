@@ -25,7 +25,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
     result = @action.update(@bundle, {deposition_id: '10'})
     assert result.success?
-    assert_equal '10', @bundle.reload.metadata[:deposition_id]
+    assert_equal '10', @bundle.metadata[:deposition_id]
     assert_equal 'Test', @bundle.metadata[:title]
   end
 end
