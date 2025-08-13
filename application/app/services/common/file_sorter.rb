@@ -6,11 +6,16 @@ module Common
 
     def most_relevant(files)
       files.sort_by do |file|
-        [ status_priority(file.status), -to_time(file.creation_date).to_i ]
+        [ status_priority(file.status), -sort_date(file) ]
       end
     end
 
     private
+
+    def sort_date(file)
+      date = file.end_date || file.start_date || file.creation_date
+      to_time(date)&.to_i || 0
+    end
 
     def status_priority(status)
       case
