@@ -6,12 +6,13 @@ module Zenodo
   class Deposition
     FileItem = Struct.new(:id, :filename, :filesize, :checksum, :download_link, :download_url, keyword_init: true)
 
-    attr_reader :id, :title, :description, :publication_date,
+    attr_reader :id, :record_id, :title, :description, :publication_date,
                 :files, :file_count, :bucket_url, :submitted, :raw
 
     def initialize(raw)
       @raw = raw || {}
       @id = raw['id'].to_s
+      @record_id = raw['record_id']&.to_s
       @submitted = raw['submitted']
       @bucket_url = raw.dig('links', 'bucket')
       @title = raw.dig('metadata', 'title') || raw['title'] || 'Untitled'

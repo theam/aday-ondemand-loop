@@ -4,7 +4,7 @@ module Zenodo
   class DepositionResponse
     attr_reader :deposition
 
-    delegate :id, :title, :description, :publication_date,
+    delegate :id, :record_id, :title, :description, :publication_date,
              :files, :file_count, :bucket_url, :submitted,
              :raw, :draft?, :to_s, to: :deposition
 

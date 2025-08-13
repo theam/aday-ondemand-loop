@@ -25,13 +25,19 @@ module Zenodo::Handlers
       return error(I18n.t('connectors.zenodo.handlers.deposition_fetch.message_deposition_not_found', url: upload_bundle.repo_url)) unless deposition
 
       metadata = upload_bundle.metadata
-      metadata[:deposition_id] = deposition.id
+      if deposition.draft?
+        metadata[:deposition_id] = deposition.id
+        metadata.delete(:record_id)
+      else
+        metadata[:record_id] = deposition.record_id
+        metadata.delete(:deposition_id)
+      end
       metadata[:title] = deposition.title
       metadata[:bucket_url] = deposition.bucket_url
       metadata[:draft] = deposition.draft?
       upload_bundle.update({ metadata: metadata })
 
-      log_info('Dataset selected', { upload_bundle: upload_bundle.id, deposition_id: deposition.id })
+      log_info('Dataset selected', { upload_bundle: upload_bundle.id, deposition_id: deposition.id, record_id: deposition.record_id })
 
       ConnectorResult.new(
         message: { notice: I18n.t('connectors.zenodo.handlers.dataset_select.message_success', title: deposition.title) },
