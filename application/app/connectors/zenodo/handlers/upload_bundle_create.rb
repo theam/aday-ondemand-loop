@@ -19,9 +19,11 @@ module Zenodo::Handlers
       url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)
       log_info('Creating upload bundle', { project_id: project.id, remote_repo_url: remote_repo_url })
 
-      unless url_data.deposition? || url_data.record?
+      unless url_data && url_data.domain&.include?('zenodo')
         return error(I18n.t('connectors.zenodo.handlers.upload_bundle_create.message_url_not_supported', url: remote_repo_url))
       end
+
+      title = concept_id = bucket_url = draft = nil
 
       if url_data.record?
         records_service = Zenodo::RecordService.new(url_data.zenodo_url)
