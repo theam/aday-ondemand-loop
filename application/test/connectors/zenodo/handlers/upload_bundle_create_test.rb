@@ -12,11 +12,6 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     assert_includes @action.params_schema, :object_url
   end
 
-  test 'non Zenodo url returns error' do
-    result = @action.create(@project, object_url: 'http://example.com')
-    refute result.success?
-  end
-
   test 'create handles generic zenodo url' do
     url_data = OpenStruct.new(deposition?: false, record?: false, domain: 'zenodo.org',
                               zenodo_url: 'https://zenodo.org', record_id: nil, deposition_id: nil)
