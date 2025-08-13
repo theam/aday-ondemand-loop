@@ -13,7 +13,7 @@ module Zenodo::Handlers
     def edit(upload_bundle, request_params)
       ConnectorResult.new(
         template: '/connectors/zenodo/deposition_create_form',
-        locals: { upload_bundle: upload_bundle, upload_types: upload_types }
+        locals: { upload_bundle: upload_bundle }
       )
     end
 
@@ -61,13 +61,5 @@ module Zenodo::Handlers
       value.split(';').map { |name| { name: name.strip } }
     end
 
-    def upload_types
-      [
-        [I18n.t('connectors.zenodo.deposition_create_form.upload_type_dataset'), 'dataset'],
-        [I18n.t('connectors.zenodo.deposition_create_form.upload_type_software'), 'software'],
-        [I18n.t('connectors.zenodo.deposition_create_form.upload_type_publication'), 'publication'],
-        [I18n.t('connectors.zenodo.deposition_create_form.upload_type_other'), 'other']
-      ]
-    end
   end
 end

@@ -1,6 +1,7 @@
 <%= form_with url: project_upload_bundle_path(upload_bundle.project_id, upload_bundle.id), method: :put, data: { action: "submit->modal#showSpinner" }, local: true do |f| %>
   <%= hidden_field_tag :form, 'deposition_create' %>
   <%= hidden_field_tag :anchor, tab_anchor_for(upload_bundle) %>
+  <%= f.hidden_field :upload_type, value: 'dataset' %>
 
   <div class="mb-3">
     <%= f.label :title, t('connectors.zenodo.deposition_create_form.field_title_label'), class: 'form-label fw-bold' %>
@@ -12,12 +13,6 @@
     <%= f.label :description, t('connectors.zenodo.deposition_create_form.field_description_label'), class: 'form-label fw-bold' %>
     <%= f.text_area :description, class: 'form-control', placeholder: t('connectors.zenodo.deposition_create_form.field_description_placeholder'), required: true %>
     <div class="form-text"><%= t('connectors.zenodo.deposition_create_form.field_description_help') %></div>
-  </div>
-
-  <div class="mb-3">
-    <%= f.label :upload_type, t('connectors.zenodo.deposition_create_form.field_upload_type_label'), class: 'form-label fw-bold' %>
-    <%= f.select :upload_type, upload_types, { prompt: t('connectors.zenodo.deposition_create_form.field_upload_type_prompt') }, class: 'form-select', required: true %>
-    <div class="form-text"><%= t('connectors.zenodo.deposition_create_form.field_upload_type_help') %></div>
   </div>
 
   <div class="mb-3">

@@ -20,7 +20,6 @@ class Zenodo::Handlers::DepositionCreateTest < ActiveSupport::TestCase
     result = @action.edit(@bundle, {})
     assert_equal '/connectors/zenodo/deposition_create_form', result.template
     assert_equal @bundle, result.locals[:upload_bundle]
-    assert_not_empty result.locals[:upload_types]
   end
 
   test 'update stores deposition metadata' do
