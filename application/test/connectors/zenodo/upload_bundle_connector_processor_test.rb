@@ -26,11 +26,11 @@ class Zenodo::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
     assert_equal({upload_bundle: @bundle}, result.locals)
   end
 
-  test 'edit uses deposition_create form' do
+  test 'edit uses dataset_form_tabs form' do
     action = mock('action')
-    Zenodo::Handlers::DepositionCreate.expects(:new).returns(action)
-    action.expects(:edit).with(@bundle, {form: 'deposition_create'}).returns(:ok)
-    assert_equal :ok, @processor.edit(@bundle, {form: 'deposition_create'})
+    Zenodo::Handlers::DatasetFormTabs.expects(:new).returns(action)
+    action.expects(:edit).with(@bundle, {form: 'dataset_form_tabs'}).returns(:ok)
+    assert_equal :ok, @processor.edit(@bundle, {form: 'dataset_form_tabs'})
   end
 
   test 'update uses deposition_fetch form' do
@@ -45,6 +45,13 @@ class Zenodo::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
     Zenodo::Handlers::DepositionCreate.expects(:new).returns(action)
     action.expects(:update).with(@bundle, {form: 'deposition_create'}).returns(:ok)
     assert_equal :ok, @processor.update(@bundle, {form: 'deposition_create'})
+  end
+
+  test 'update uses dataset_select form' do
+    action = mock('action')
+    Zenodo::Handlers::DatasetSelect.expects(:new).returns(action)
+    action.expects(:update).with(@bundle, {form: 'dataset_select'}).returns(:ok)
+    assert_equal :ok, @processor.update(@bundle, {form: 'dataset_select'})
   end
 
   test 'update default routes to connector edit' do
