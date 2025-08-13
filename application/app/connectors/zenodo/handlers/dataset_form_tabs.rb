@@ -12,7 +12,7 @@ module Zenodo::Handlers
 
     def edit(upload_bundle, request_params)
       depositions = depositions(upload_bundle)
-      log_info('Dataset form tabs', { upload_bundle: upload_bundle.id, depositions: depositions.length })
+      log_info('Dataset form tabs', { upload_bundle: upload_bundle.id, depositions: depositions.total_count })
 
       ConnectorResult.new(
         template: '/connectors/zenodo/dataset_form_tabs',

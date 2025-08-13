@@ -13,7 +13,8 @@ class Zenodo::Handlers::DatasetFormTabsTest < ActiveSupport::TestCase
   end
 
   test 'edit returns tabs form partial' do
-    @action.stubs(:depositions).returns([])
+    empty_resp = Zenodo::DepositionsResponse.new('[]', page: 1, per_page: 20, total_count: 0)
+    @action.stubs(:depositions).returns(empty_resp)
     result = @action.edit(@bundle, {})
     assert_equal '/connectors/zenodo/dataset_form_tabs', result.template
   end
@@ -26,8 +27,9 @@ class Zenodo::Handlers::DatasetFormTabsTest < ActiveSupport::TestCase
     meta = OpenStruct.new(zenodo_url: 'http://zen', api_key: OpenStruct.new(value: 'KEY'))
     @bundle.stubs(:connector_metadata).returns(meta)
     service = mock('service')
-    service.expects(:list_depositions).returns([1,2])
+    resp = Zenodo::DepositionsResponse.new('[{"id":1},{"id":2}]', page: 1, per_page: 20, total_count: 2)
+    service.expects(:list_depositions).returns(resp)
     Zenodo::UserService.expects(:new).with('http://zen', api_key: 'KEY').returns(service)
-    assert_equal [1,2], @action.send(:depositions, @bundle)
+    assert_equal resp, @action.send(:depositions, @bundle)
   end
 end
