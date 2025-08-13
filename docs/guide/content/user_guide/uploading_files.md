@@ -65,8 +65,17 @@ Each bundle targets **one dataset** and requires:
 
 **Zenodo** accepts:
 
-- **Deposition URL**  
-  Must be a draft deposition. Files are uploaded directly to the specified record.
+- **Zenodo URL**
+  Stores only the base address of the repository. Use this when you plan to link a
+  draft deposition later.
+
+- **Deposition URL**
+  Must be an existing draft deposition. Files are uploaded directly to this dataset.
+
+!!! note
+
+    OnDemand Loop cannot create Zenodo datasets through the interface. Create the
+    draft deposition on Zenodo and supply its URL here.
 
 !!! warning
 
