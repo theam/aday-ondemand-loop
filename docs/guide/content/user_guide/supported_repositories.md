@@ -112,8 +112,7 @@ We began testing and supporting Zenodo in OnDemand Loop as of **June 2025** and 
 **Upload**
 
 - Requires a personal access token.
-- Uploads target an existing *draft deposition* in Zenodo.
-- Creating new Zenodo datasets from the OnDemand Loop interface is not supported.
+- Create new Zenodo datasets or upload to an existing *draft deposition* in Zenodo.
 - Files are streamed directly to the deposition's bucket via HTTP PUT.
 
 ### Repository Settings
