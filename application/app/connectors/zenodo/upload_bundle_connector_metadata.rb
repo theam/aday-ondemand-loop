@@ -44,6 +44,10 @@ module Zenodo
       api_key? && draft.nil? && deposition_id.nil? && record_id.present?
     end
 
+    def create_deposition?
+      api_key? && draft.nil? && deposition_id.nil? && record_id.nil?
+    end
+
     def draft?
       draft.present? && draft
     end

@@ -65,8 +65,15 @@ Each bundle targets **one dataset** and requires:
 
 **Zenodo** accepts:
 
+- **Zenodo URL**  
+  Stores only the base address of the repository. Use this as a starting point for
+  creating or linking a draft deposition.
+
+- **Record URL**  
+  Use a published record URL as the starting point. From the record's details, the system will let you create a new draft version to upload files to—uploads go into the draft, not the already-published version.
+
 - **Deposition URL**  
-  Must be a draft deposition. Files are uploaded directly to the specified record.
+  Must be an existing draft deposition. Files are uploaded directly to this dataset.
 
 !!! warning
 
