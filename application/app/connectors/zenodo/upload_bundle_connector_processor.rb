@@ -13,10 +13,11 @@ module Zenodo
     end
 
     def edit(upload_bundle, request_params)
-      if request_params[:form].to_s == 'deposition_create'
+      case request_params[:form].to_s
+      when 'deposition_create'
         Zenodo::Handlers::DepositionCreate.new.edit(upload_bundle, request_params)
       else
-        ConnectorResult.new(template: '/connectors/zenodo/connector_edit_form', locals: { upload_bundle: upload_bundle })
+        Zenodo::Handlers::ConnectorEdit.new.edit(upload_bundle, request_params)
       end
     end
 
