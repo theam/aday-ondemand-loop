@@ -57,14 +57,6 @@ module DataverseForOndemand
         if locale_path.exist?
           config.i18n.load_path += Dir[locale_path.join('**', '*.{rb,yml,yaml}')]
         end
-
-        if Rails.env.test?
-          test_path = connector_path.join('test')
-          if test_path.exist?
-            config.paths.add 'test', with: [] unless config.paths['test']
-            config.paths['test'] << test_path.to_s
-          end
-        end
       end
     end
     # Configuration for the application, engines, and railties goes here.
