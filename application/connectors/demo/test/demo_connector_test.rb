@@ -9,4 +9,10 @@ class DemoConnectorTest < ActiveSupport::TestCase
     html = ApplicationController.render(template: 'demo/index')
     assert_includes html, 'helper works'
   end
+
+  test 'model attr_accessor works' do
+    model = Demo::ExampleModel.new
+    model.name = 'Alice'
+    assert_equal 'Alice', model.name
+  end
 end
