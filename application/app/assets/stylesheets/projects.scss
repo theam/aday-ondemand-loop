@@ -7,6 +7,14 @@
     min-width: 400px;
   }
 
+  [data-upload-bundle-name-target="form"] {
+    min-height: 3rem;
+  }
+
+  [data-upload-bundle-name-target="form"] input {
+    min-width: 400px;
+  }
+
   .card {
     overflow: hidden;
   }

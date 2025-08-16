@@ -135,6 +135,10 @@ en:
         button_add_files_title: "Add Files"
         button_delete_title: "Delete Bundle"
         field_creation_date_title: "Creation date"
+        button_edit_bundle_name_title: "Edit Upload Bundle name"
+        button_save_bundle_name_title: "Save bundle name"
+        button_cancel_bundle_name_title: "Cancel"
+        section_rename_bundle_label: "Rename upload bundle section"
         modal_delete_confirmation_title: "Delete Upload Bundle"
         modal_delete_confirmation_content: "This will remove the upload bundle from the app. Files on disk and any already uploaded files will remain unchanged. To upload again, you’ll need to create a new bundle."
       upload_files:
