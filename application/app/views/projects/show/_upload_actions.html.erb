@@ -4,19 +4,20 @@
          data-upload-bundle-name-initial-name-value="<%= bundle.name %>"
          data-upload-bundle-name-url-value="<%= project_upload_bundle_path(project_id: bundle.project_id, id: bundle.id) %>">
       <div class="d-flex justify-content-between align-items-center p-2">
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3 me-2">
           <%= render partial: '/shared/file_row_date', locals: { date: bundle.creation_date, title: t('.field_creation_date_title') } if bundle.creation_date %>
 
-          <div class="d-flex flex-column" data-upload-bundle-name-target="display">
-            <h3 class="mb-0 h5" data-upload-bundle-name-target="name"><%= bundle.name %></h3>
-          </div>
+          <h3 class="mb-0 h5" data-upload-bundle-name-target="name display"><%= bundle.name %></h3>
+        </div>
 
+        <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end flex-grow-1">
           <div data-upload-bundle-name-target="form"
                class="d-flex align-items-center gap-2 d-none"
+               style="flex-grow: 1000;"
                role="group"
                aria-label="<%= t('.section_rename_bundle_label') %>">
             <input type="text"
-                   class="form-control form-control-sm"
+                   class="form-control form-control-sm flex-grow-1"
                    data-upload-bundle-name-target="input"
                    value="<%= bundle.name %>">
 
@@ -35,9 +36,7 @@
               <span class="visually-hidden"><%= t('.button_cancel_bundle_name_title') %></span>
             </button>
           </div>
-        </div>
 
-        <div class="d-flex align-items-center gap-2">
           <button class="btn btn-sm btn-outline-secondary"
                   data-action="click->upload-bundle-name#edit"
                   title="<%= t('.button_edit_bundle_name_title') %>">
