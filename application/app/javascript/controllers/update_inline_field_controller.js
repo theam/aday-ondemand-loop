@@ -8,7 +8,8 @@ export default class extends Controller {
     initialValue: String,
     url: String,
     errorMessage: String,
-    type: String
+    type: String,
+    method: String
   }
 
   connect() {
@@ -35,17 +36,18 @@ export default class extends Controller {
 
     const path = this.urlValue
     const requestType = this.hasTypeValue ? this.typeValue : "json"
+    const method = this.hasMethodValue ? this.methodValue.toUpperCase() : "POST"
     if (requestType === "form") {
-      this.submitForm(path, newValue)
+      this.submitForm(path, newValue, method)
     } else {
-      this.submitJson(path, newValue)
+      this.submitJson(path, newValue, method)
     }
   }
 
-  submitJson(path, newValue) {
+  submitJson(path, newValue, method) {
     const csrfToken = window.loop_app_config.csrf_token
     fetch(path, {
-      method: "PUT",
+      method: method,
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -71,7 +73,7 @@ export default class extends Controller {
       })
   }
 
-  submitForm(path, newValue) {
+  submitForm(path, newValue, method) {
     const form = document.createElement("form")
     form.method = "POST"
     form.action = path
@@ -82,11 +84,13 @@ export default class extends Controller {
     csrfInput.value = window.loop_app_config.csrf_token
     form.appendChild(csrfInput)
 
-    const methodInput = document.createElement("input")
-    methodInput.type = "hidden"
-    methodInput.name = "_method"
-    methodInput.value = "PUT"
-    form.appendChild(methodInput)
+    if (method !== "POST") {
+      const methodInput = document.createElement("input")
+      methodInput.type = "hidden"
+      methodInput.name = "_method"
+      methodInput.value = method
+      form.appendChild(methodInput)
+    }
 
     const fieldInput = document.createElement("input")
     fieldInput.type = "hidden"

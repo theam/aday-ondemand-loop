@@ -2,8 +2,9 @@
      data-controller="update-inline-field"
      data-update-inline-field-initial-value-value="<%= project.name %>"
      data-update-inline-field-url-value="<%= project_path(id: project.id) %>"
-     data-update-inline-field-error-message-value="<%= t('js.project_name.save.error') %>"
-     data-update-inline-field-field-name-value="name">
+      data-update-inline-field-error-message-value="<%= t('js.project_name.save.error') %>"
+      data-update-inline-field-field-name-value="name"
+      data-update-inline-field-method-value="PUT">
   <div class="d-flex align-items-center gap-3 flex-grow-1">
     <a href="<%= files_app_url(project.download_dir) %>"
        target="_blank"

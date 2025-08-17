@@ -12,7 +12,8 @@ class UploadActionsViewTest < ActionView::TestCase
     html = render partial: 'projects/show/upload_actions', locals: { project: project, bundle: bundle, file_browser_id: 'fb', file_target_id: 'ft' }
 
     assert_includes html, t('projects.show.upload_actions.button_edit_bundle_name_title')
-    assert_includes html, 'data-controller="update-inline-field"'
-    assert_includes html, 'data-update-inline-field-field-name-value="name"'
+      assert_includes html, 'data-controller="update-inline-field"'
+      assert_includes html, 'data-update-inline-field-field-name-value="name"'
+      assert_includes html, 'data-update-inline-field-method-value="PUT"'
+    end
   end
-end
