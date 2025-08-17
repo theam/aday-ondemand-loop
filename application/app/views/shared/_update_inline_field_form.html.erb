@@ -4,6 +4,7 @@
   cancel_title = local_assigns.fetch(:cancel_title, '')
   input_value = local_assigns.fetch(:input_value, '')
   field_name = local_assigns.fetch(:field_name)
+  placeholder = local_assigns.fetch(:placeholder, nil)
 %>
 <div data-update-inline-field-target="form"
      class="d-flex align-items-center gap-2 d-none position-relative"
@@ -14,7 +15,8 @@
          name="<%= field_name %>"
          class="form-control form-control-sm flex-grow-1"
          data-update-inline-field-target="input label"
-         value="<%= input_value %>">
+         value="<%= input_value %>"
+         <%= "placeholder=\"#{placeholder}\" aria-label=\"#{placeholder}\"" if placeholder.present? %>>
 
   <button class="btn btn-sm btn-outline-primary"
           data-action="click->update-inline-field#save"
