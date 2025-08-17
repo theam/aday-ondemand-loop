@@ -9,7 +9,8 @@ export default class extends Controller {
     url: String,
     errorMessage: String,
     type: String,
-    method: String
+    method: String,
+    payload: Object
   }
 
   connect() {
@@ -37,14 +38,16 @@ export default class extends Controller {
     const path = this.urlValue
     const requestType = this.hasTypeValue ? this.typeValue : "json"
     const method = this.hasMethodValue ? this.methodValue.toUpperCase() : "POST"
+    const payload = this.hasPayloadValue ? { ...this.payloadValue } : {}
+    payload[this.fieldNameValue] = newValue
     if (requestType === "form") {
-      this.submitForm(path, newValue, method)
+      this.submitForm(path, payload, method)
     } else {
-      this.submitJson(path, newValue, method)
+      this.submitJson(path, payload, method)
     }
   }
 
-  submitJson(path, newValue, method) {
+  submitJson(path, payload, method) {
     const csrfToken = window.loop_app_config.csrf_token
     fetch(path, {
       method: method,
@@ -55,15 +58,16 @@ export default class extends Controller {
         "X-Requested-With": "XMLHttpRequest"
       },
       credentials: "same-origin",
-      body: JSON.stringify({ [this.fieldNameValue]: newValue })
+      body: JSON.stringify(payload)
     })
       .then(response => {
         if (!response.ok) throw new Error("Failed to update")
         return response.json()
       })
       .then(data => {
-        this.nameTarget.textContent = newValue
-        this.initialValueValue = newValue
+        const updatedValue = payload[this.fieldNameValue]
+        this.nameTarget.textContent = updatedValue
+        this.initialValueValue = updatedValue
         this.cancel()
       })
       .catch(error => {
@@ -73,7 +77,7 @@ export default class extends Controller {
       })
   }
 
-  submitForm(path, newValue, method) {
+  submitForm(path, payload, method) {
     const form = document.createElement("form")
     form.method = "POST"
     form.action = path
@@ -92,11 +96,13 @@ export default class extends Controller {
       form.appendChild(methodInput)
     }
 
-    const fieldInput = document.createElement("input")
-    fieldInput.type = "hidden"
-    fieldInput.name = this.fieldNameValue
-    fieldInput.value = newValue
-    form.appendChild(fieldInput)
+    Object.entries(payload).forEach(([key, value]) => {
+      const input = document.createElement("input")
+      input.type = "hidden"
+      input.name = key
+      input.value = value
+      form.appendChild(input)
+    })
 
     document.body.appendChild(form)
     form.submit()
