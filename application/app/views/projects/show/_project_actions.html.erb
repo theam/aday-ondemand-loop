@@ -76,16 +76,26 @@
 
 <!-- Create Upload Bundle inline form -->
 <div class="d-flex justify-content-end gap-2 mt-2 mb-2">
-    <%= render partial: 'shared/inline_field_submit', locals: {
-      url: connector_project_upload_bundles_path(project_id: project.id),
-      type: 'form',
-      field_name: 'remote_repo_url',
-      label: t('.button_create_upload_bundle_label'),
-      title: t('.button_create_upload_bundle_title'),
-      class: 'btn-sm btn-outline-secondary',
-      icon: 'bi bi-folder-plus',
-      placeholder: t('.button_create_upload_bundle_placeholder'),
-    } %>
+  <div data-controller="update-inline-field"
+       data-update-inline-field-url-value="<%= connector_project_upload_bundles_path(project_id: project.id) %>"
+       data-update-inline-field-field-name-value="remote_repo_url"
+       data-update-inline-field-type-value="form"
+       class="flex-grow-1 d-inline-flex justify-content-end align-items-center gap-2">
+    <div data-update-inline-field-target="display">
+      <%= link_to '#', class: 'btn btn-sm btn-outline-secondary', title: t('.button_create_upload_bundle_title'), role: 'button', data: { action: 'click->update-inline-field#edit' } do %>
+        <i class="bi bi-folder-plus" aria-hidden="true"></i>
+        <span class="ps-1"><%= t('.button_create_upload_bundle_label') %></span>
+      <% end %>
+    </div>
+    <%= render partial: 'shared/update_inline_field_form', locals: {
+          aria_label: t('.button_create_upload_bundle_placeholder'),
+          save_title: t('shared.inline_field_submit.button_submit_title'),
+          cancel_title: t('shared.inline_field_submit.button_cancel_title'),
+          input_value: '',
+          field_name: 'remote_repo_url',
+          placeholder: t('.button_create_upload_bundle_placeholder')
+        } %>
+  </div>
 
   <!-- Open metadata link -->
   <a href="<%= files_app_url(Project.project_metadata_dir(project.id)) %>"

@@ -4,17 +4,19 @@
   cancel_title = local_assigns.fetch(:cancel_title, '')
   input_value = local_assigns.fetch(:input_value, '')
   field_name = local_assigns.fetch(:field_name)
+  placeholder = local_assigns.fetch(:placeholder, nil)
 %>
 <div data-update-inline-field-target="form"
      class="d-flex align-items-center gap-2 d-none position-relative"
      style="flex-grow: 1000;"
      role="group"
      aria-label="<%= aria_label %>">
-  <input type="text"
-         name="<%= field_name %>"
-         class="form-control form-control-sm flex-grow-1"
-         data-update-inline-field-target="input label"
-         value="<%= input_value %>">
+
+  <%= text_field_tag field_name, input_value,
+                     class: 'form-control form-control-sm flex-grow-1',
+                     data: { update_inline_field_target: 'input label' },
+                     placeholder: placeholder.presence,
+                     'aria-label': placeholder.presence %>
 
   <button class="btn btn-sm btn-outline-primary"
           data-action="click->update-inline-field#save"
