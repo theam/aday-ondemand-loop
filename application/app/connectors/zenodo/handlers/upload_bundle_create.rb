@@ -44,7 +44,7 @@ module Zenodo::Handlers
       file_utils = Common::FileUtils.new
       upload_bundle = UploadBundle.new.tap do |bundle|
         bundle.id = file_utils.normalize_name(File.join(url_data.domain, UploadBundle.generate_code))
-        bundle.name = bundle.id
+        bundle.name = url_data.domain
         bundle.project_id = project.id
         bundle.remote_repo_url = remote_repo_url
         bundle.type = ConnectorType::ZENODO
