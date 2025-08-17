@@ -34,29 +34,26 @@ export default class extends Controller {
     }
 
     const path = this.urlValue
-    const csrfToken = window.loop_app_config.csrf_token
-
     const requestType = this.hasTypeValue ? this.typeValue : "json"
-    const headers = {
-      "X-CSRF-Token": csrfToken,
-      "Accept": "application/json",
-      "X-Requested-With": "XMLHttpRequest"
-    }
-
-    let body
     if (requestType === "form") {
-      headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
-      body = new URLSearchParams({ [this.fieldNameValue]: newValue }).toString()
+      this.submitForm(path, newValue)
     } else {
-      headers["Content-Type"] = "application/json"
-      body = JSON.stringify({ [this.fieldNameValue]: newValue })
+      this.submitJson(path, newValue)
     }
+  }
 
+  submitJson(path, newValue) {
+    const csrfToken = window.loop_app_config.csrf_token
     fetch(path, {
       method: "PUT",
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": csrfToken,
+        "X-Requested-With": "XMLHttpRequest"
+      },
       credentials: "same-origin",
-      body: body
+      body: JSON.stringify({ [this.fieldNameValue]: newValue })
     })
       .then(response => {
         if (!response.ok) throw new Error("Failed to update")
@@ -72,6 +69,33 @@ export default class extends Controller {
         const message = this.hasErrorMessageValue ? this.errorMessageValue : 'Could not update field.'
         showFlash("error", message)
       })
+  }
+
+  submitForm(path, newValue) {
+    const form = document.createElement("form")
+    form.method = "POST"
+    form.action = path
+
+    const csrfInput = document.createElement("input")
+    csrfInput.type = "hidden"
+    csrfInput.name = "authenticity_token"
+    csrfInput.value = window.loop_app_config.csrf_token
+    form.appendChild(csrfInput)
+
+    const methodInput = document.createElement("input")
+    methodInput.type = "hidden"
+    methodInput.name = "_method"
+    methodInput.value = "PUT"
+    form.appendChild(methodInput)
+
+    const fieldInput = document.createElement("input")
+    fieldInput.type = "hidden"
+    fieldInput.name = this.fieldNameValue
+    fieldInput.value = newValue
+    form.appendChild(fieldInput)
+
+    document.body.appendChild(form)
+    form.submit()
   }
 
   cancel() {
