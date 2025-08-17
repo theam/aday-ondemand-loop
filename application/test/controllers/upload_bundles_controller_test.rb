@@ -8,7 +8,7 @@ class UploadBundlesControllerTest < ActionDispatch::IntegrationTest
     bundle = create_upload_bundle(project)
     bundle.name = 'old'
     UploadBundle.stubs(:find).with(project.id, bundle.id).returns(bundle)
-    bundle.expects(:update).with('name' => 'new').returns(true)
+    bundle.expects(:update).with({'name' => 'new'}).returns(true)
 
     patch project_upload_bundle_url(project.id, bundle.id), params: { name: 'new', ignored: 'x' }
     assert_redirected_to root_path
