@@ -41,3 +41,6 @@ en:
     project_name:
       save:
         error: "Could not update project name."
+    upload_bundle_name:
+      save:
+        error: "Could not update upload bundle name."
