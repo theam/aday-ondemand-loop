@@ -11,12 +11,12 @@
      style="flex-grow: 1000;"
      role="group"
      aria-label="<%= aria_label %>">
-  <input type="text"
-         name="<%= field_name %>"
-         class="form-control form-control-sm flex-grow-1"
-         data-update-inline-field-target="input label"
-         value="<%= input_value %>"
-         <%= "placeholder=\"#{placeholder}\" aria-label=\"#{placeholder}\"" if placeholder.present? %>>
+
+  <%= text_field_tag field_name, input_value,
+                     class: 'form-control form-control-sm flex-grow-1',
+                     data: { update_inline_field_target: 'input label' },
+                     placeholder: placeholder.presence,
+                     'aria-label': placeholder.presence %>
 
   <button class="btn btn-sm btn-outline-primary"
           data-action="click->update-inline-field#save"
