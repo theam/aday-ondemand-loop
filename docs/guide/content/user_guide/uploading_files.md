@@ -88,7 +88,7 @@ Each **upload bundle** tab provides controls for managing uploads, reviewing rep
 
 #### Upload Bundle Tab Header
 - **Creation Date** – The data when the bundle was created.
-- **Bundle Name** – The name of the bundle based on the repository domain.
+- **Bundle Name** – The name of the bundle based on the repository domain. Use the **Edit Name** button (pencil icon) to rename the bundle if needed.
 - **File Summary Widget** – Displays counts for pending, completed, or failed files. The large circular indicator highlights the percentage of completed downloads.
 - **Add Files** – Opens the [upload file selector](./upload_file_selector.md) to choose files from your HPC filesystem.
 - **Delete Bundle** – Removes the bundle and its associated uploads from the interface.
