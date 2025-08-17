@@ -14,8 +14,10 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
 
   test 'create handles Dataverse url' do
     Dataverse::CollectionService.stubs(:new).returns(stub(find_collection_by_id: OpenStruct.new(data: OpenStruct.new(name: 'root'))))
+    UploadBundle.any_instance.stubs(:save)
     result = @action.create(@project, object_url: 'http://dv.org')
     assert result.success?
+    assert_equal 'dv.org', result.resource.name
   end
 
   test 'create handles collection url' do

@@ -22,6 +22,7 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
 
     result = @action.create(@project, object_url: 'https://zenodo.org/about')
     assert result.success?
+    assert_equal 'zenodo.org', result.resource.name
     assert_equal 'https://zenodo.org', result.resource.metadata[:zenodo_url]
     assert_nil result.resource.metadata[:record_id]
     assert_nil result.resource.metadata[:deposition_id]
