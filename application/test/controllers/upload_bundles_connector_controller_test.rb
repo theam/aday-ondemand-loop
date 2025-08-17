@@ -73,7 +73,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     processor.stubs(:edit).returns(ConnectorResult.new(partial: '/p', locals: {}))
     ConnectorClassDispatcher.stubs(:upload_bundle_connector_processor).returns(processor)
     UploadBundlesConnectorController.any_instance.stubs(:render).returns(true)
-    get edit_project_upload_bundle_connector_url('p', bundle.id, format: :html)
+    get edit_project_upload_bundle_connector_url(project_id: 'p', upload_bundle_id: bundle.id, format: :html)
     assert_response :not_acceptable
   end
 
@@ -84,7 +84,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     processor.stubs(:params_schema).returns([])
     processor.stubs(:update).returns(ConnectorResult.new(message: {notice: 'ok'}))
     ConnectorClassDispatcher.stubs(:upload_bundle_connector_processor).returns(processor)
-    patch project_upload_bundle_connector_url('p', bundle.id)
+    patch project_upload_bundle_connector_url(project_id: 'p', upload_bundle_id: bundle.id)
     assert_redirected_to root_path
   end
 
@@ -104,7 +104,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     processor.stubs(:edit).returns(result)
     ConnectorClassDispatcher.stubs(:upload_bundle_connector_processor).with(ConnectorType::DATAVERSE).returns(processor)
 
-    get edit_project_upload_bundle_connector_url(project.id, bundle.id, form: 'dataset_create')
+    get edit_project_upload_bundle_connector_url(project_id: project.id, upload_bundle_id: bundle.id, form: 'dataset_create')
 
     assert_response :success
     assert_select 'form'
@@ -123,7 +123,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     processor.stubs(:edit).returns(result)
     ConnectorClassDispatcher.stubs(:upload_bundle_connector_processor).with(ConnectorType::DATAVERSE).returns(processor)
 
-    get edit_project_upload_bundle_connector_url(project.id, bundle.id, form: 'dataset_select')
+    get edit_project_upload_bundle_connector_url(project_id: project.id, upload_bundle_id: bundle.id, form: 'dataset_select')
 
     assert_response :success
     assert_select 'input[type=radio][name=dataset_id]'
@@ -143,7 +143,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     processor.stubs(:edit).returns(result)
     ConnectorClassDispatcher.stubs(:upload_bundle_connector_processor).with(ConnectorType::DATAVERSE).returns(processor)
 
-    get edit_project_upload_bundle_connector_url(project.id, bundle.id, form: 'collection_select')
+    get edit_project_upload_bundle_connector_url(project_id: project.id, upload_bundle_id: bundle.id, form: 'collection_select')
 
     assert_response :success
     assert_select 'input[type=radio][name=collection_id]'
@@ -162,7 +162,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     processor.stubs(:edit).returns(result)
     ConnectorClassDispatcher.stubs(:upload_bundle_connector_processor).with(ConnectorType::ZENODO).returns(processor)
 
-    get edit_project_upload_bundle_connector_url(project.id, bundle.id)
+    get edit_project_upload_bundle_connector_url(project_id: project.id, upload_bundle_id: bundle.id)
 
     assert_response :success
     assert_select 'input[name="api_key"]'

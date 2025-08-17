@@ -35,7 +35,7 @@ class UploadBundlesConnectorController < ApplicationController
 
   def edit
     project_id = project_id_param
-    upload_bundle_id = params[:id]
+    upload_bundle_id = params[:upload_bundle_id]
     upload_bundle = UploadBundle.find(project_id, upload_bundle_id)
     if upload_bundle.nil?
       log_error('Invalid parameters for edit', { project_id: project_id, upload_bundle_id: upload_bundle_id })
@@ -53,7 +53,7 @@ class UploadBundlesConnectorController < ApplicationController
 
   def update
     project_id = project_id_param
-    upload_bundle_id = params[:id]
+    upload_bundle_id = params[:upload_bundle_id]
     upload_bundle = UploadBundle.find(project_id, upload_bundle_id)
 
     if upload_bundle.nil?
