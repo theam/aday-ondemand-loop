@@ -5,11 +5,14 @@ class Project < ApplicationDiskRecord
   include FileStatusSummary
   include LoggingCommon
 
-  ATTRIBUTES = %w[id name download_dir creation_date].freeze
+  MAX_REPO_URLS = 20
 
-  attr_accessor *ATTRIBUTES
+  REQUIRED_ATTRIBUTES = %w[id name download_dir creation_date].freeze
+  ATTRIBUTES = (REQUIRED_ATTRIBUTES + %w[repo_urls]).freeze
 
-  validates_presence_of *ATTRIBUTES
+  attr_accessor(*ATTRIBUTES)
+
+  validates_presence_of(*REQUIRED_ATTRIBUTES)
 
   def self.all
     Dir.glob(File.join(metadata_directory, '*'))
@@ -28,11 +31,24 @@ class Project < ApplicationDiskRecord
     load_from_file(filename)
   end
 
-  def initialize(id: nil, name: nil, download_dir: nil)
+  def initialize(id: nil, name: nil, download_dir: nil, repo_urls: nil)
     self.id = id || Project.generate_id
     self.name = name || self.id
     self.download_dir = download_dir || File.join(Configuration.download_root, self.id.to_s)
     self.creation_date = DateTimeCommon.now
+    self.repo_urls = repo_urls || []
+  end
+
+  def repo_urls=(urls)
+    @repo_urls = Array(urls)
+  end
+
+  def add_repo(url)
+    return if url.blank?
+
+    repo_urls.delete(url)
+    repo_urls.unshift(url)
+    self.repo_urls = repo_urls.take(MAX_REPO_URLS)
   end
 
   def download_files

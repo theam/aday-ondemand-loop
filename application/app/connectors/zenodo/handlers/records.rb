@@ -71,6 +71,9 @@ module Zenodo::Handlers
         return ConnectorResult.new(message: { alert: I18n.t('zenodo.records.message_save_file_error', project_name: project.name) }, success: false)
       end
       log_info('Download files created', { project_id: project.id, files: download_files.size })
+      record_url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url(repo_url.server_url, @record_id)
+      project.add_repo(record_url)
+      project.save
       ConnectorResult.new(message: { notice: I18n.t('zenodo.records.message_success', files: save_results.size, project_name: project.name) }, success: true)
     end
   end
