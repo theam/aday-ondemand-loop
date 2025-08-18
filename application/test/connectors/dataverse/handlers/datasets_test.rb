@@ -56,7 +56,7 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
   end
 
   test 'create initializes project and files' do
-    dataset = OpenStruct.new(version: '1', data: OpenStruct.new(dataset_persistent_id: 'pid', parents: []))
+    dataset = OpenStruct.new(version: '1', data: OpenStruct.new(dataset_persistent_id: 'different', parents: []))
     files_page = OpenStruct.new(total_count: 0, page: 1, query: nil, files: [])
     service = mock('service')
     service.expects(:find_dataset_version_by_persistent_id).with('pid', version: nil).returns(dataset)
@@ -65,7 +65,9 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
 
     Project.stubs(:find).with('1').returns(nil)
     project = mock('project')
-    project.stubs(:save).returns(true)
+    project.expects(:save).twice.returns(true)
+    dataset_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url(@repo_url.to_s, 'pid', version: '1')
+    project.expects(:add_repo).with(dataset_url)
     project.stubs(:name).returns('Proj')
     project.stubs(:id).returns('1')
 

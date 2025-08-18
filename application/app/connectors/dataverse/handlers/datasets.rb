@@ -123,6 +123,10 @@ module Dataverse::Handlers
         return ConnectorResult.new(message: { alert: I18n.t('connectors.dataverse.datasets.download.error_generating_the_download_file') }, success: false)
       end
 
+      dataset_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url(repo_url.to_s, @persistent_id, version: version)
+      project.add_repo(dataset_url)
+      project.save
+
       ConnectorResult.new(message: { notice: I18n.t('connectors.dataverse.datasets.download.files_added_to_project', project_name: project.name) }, success: true)
     end
   end
