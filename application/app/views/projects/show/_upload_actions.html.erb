@@ -1,5 +1,5 @@
 <section class="card mb-3 shadow-sm rounded overflow-hidden">
-  <div class="card-header bg-light-darker">
+  <div class="card-header bg-light-darker py-1">
     <div data-controller="update-inline-field"
          data-update-inline-field-initial-value-value="<%= bundle.name %>"
          data-update-inline-field-url-value="<%= project_upload_bundle_path(project_id: bundle.project_id, id: bundle.id) %>"
@@ -74,3 +74,4 @@
   <%= render partial: upload_bundle_connector_actions_bar(bundle), locals: { upload_bundle: bundle } %>
 
 </section>
+
