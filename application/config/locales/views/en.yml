@@ -90,8 +90,10 @@ en:
       download_actions:
         button_open_downloads_folder_title: "Open Project workspace folder"
         header_download_files_text: "Downloads"
-        button_add_files_text: "Add Files"
-        button_add_files_title: "Add dataset to browse and select files"
+        button_add_files_text: "Select More Files"
+        button_add_files_title: "Select more files from the last repository dataset"
+        button_browse_dataset_text: "Add From URL"
+        button_browse_dataset_title: "Use a repository URL to to browse and select files from"
         button_edit_download_dir_title: "Update project workspace folder"
         button_edit_download_dir_label: "Update workspace folder"
       download_files:
@@ -219,6 +221,9 @@ en:
       button_submit_title: "Submit"
       button_cancel_title: "Cancel"
       spinner_loading_label: "Loading..."
+    metadata_folder_link:
+      button_open_folder_text: "Open metadata folder"
+      button_open_folder_title: "Open metadata folder in Open OnDemand"
     ood_folder_button:
       button_open_in_ondemand_title: "Open in OnDemand"
       image_ood_icon_alt: "Open OnDemand Icon"

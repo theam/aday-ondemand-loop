@@ -32,6 +32,12 @@ module ProjectsHelper
     current + active + others
   end
 
+  def most_recent_explore_url(project)
+    files = project.download_files
+    most_recent = Common::FileSorter.new.most_recent(files).first
+    most_recent.connector_metadata.files_url if most_recent
+  end
+
   def project_header_class(active)
     active ? 'bg-primary-subtle' : 'bg-body-secondary'
   end
