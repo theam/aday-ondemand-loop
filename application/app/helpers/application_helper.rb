@@ -52,7 +52,7 @@ module ApplicationHelper
   end
 
   def flash_messages(messages = flash)
-    messages.to_hash.slice(*ALERT_TYPES.keys)
+    messages.to_hash.symbolize_keys.slice(*ALERT_TYPES.keys)
   end
 
   def status_badge(status, title: nil, filename: nil)
