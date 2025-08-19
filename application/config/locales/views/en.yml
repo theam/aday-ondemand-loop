@@ -79,7 +79,6 @@ en:
       button_active_project_title: "Active Project"
       field_creation_date_title: "Creation date"
       link_open_downloads_title: "Open Project workspace folder"
-      link_open_metadata_title: "Open Project metadata folder"
     repo_resolver_bar:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
@@ -121,7 +120,6 @@ en:
         button_delete_project_title: "Delete Project"
         button_open_project_folder_label: "Open Project workspace folder"
         button_open_project_folder_title: "Open Project workspace folder"
-        button_open_project_metadata_title: "Open Project metadata folder"
         field_creation_date_title: "Creation date"
         modal_delete_confirmation_title: "Delete Project"
         modal_delete_confirmation_content: "This will remove the project from the app. Files on disk and in remote repositories will remain untouched."
@@ -173,7 +171,6 @@ en:
         section_project_actions_label: "Project actions section"
         section_rename_project_label: "Rename project section"
       project_summary:
-        button_metadata_folder_title: "Open project metadata folder"
         button_toggle_label: "Project Summary"
         tab_download_label: "Download Files"
       project_summary_downloads:
