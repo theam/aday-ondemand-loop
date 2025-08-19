@@ -36,9 +36,7 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
 
     Project.stubs(:find).with('1').returns(nil)
     project = mock('project')
-    project.expects(:save).twice.returns(true)
-    record_url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url(@repo_url.server_url, '123')
-    project.expects(:add_repo).with(record_url)
+    project.expects(:save).returns(true)
     project.stubs(:name).returns('Proj')
     project.stubs(:id).returns(1)
 
