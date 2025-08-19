@@ -65,9 +65,7 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
 
     Project.stubs(:find).with('1').returns(nil)
     project = mock('project')
-    project.expects(:save).twice.returns(true)
-    dataset_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url(@repo_url.to_s, 'pid', version: '1')
-    project.expects(:add_repo).with(dataset_url)
+    project.expects(:save).returns(true)
     project.stubs(:name).returns('Proj')
     project.stubs(:id).returns('1')
 
