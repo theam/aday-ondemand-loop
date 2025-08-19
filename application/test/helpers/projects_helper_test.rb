@@ -6,10 +6,12 @@ class ProjectsHelperTest < ActionView::TestCase
 
   setup do
     @original_settings = Current.settings
+    @original_selected_project = Current.selected_project
   end
 
   teardown do
     Current.settings = @original_settings
+    Current.selected_project = @original_selected_project
   end
 
   test 'header and border classes respond to active' do
@@ -55,6 +57,35 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal 'Project B (Active)', result.first.name
   end
 
+  test 'select_project_list prioritizes current project over active project' do
+    project1 = OpenStruct.new(id: 1, name: 'Project A')
+    project2 = OpenStruct.new(id: 2, name: 'Project B')
+    project3 = OpenStruct.new(id: 3, name: 'Project C')
+    Project.stubs(:all).returns([project1, project2, project3])
+    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
+    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
+
+    Current.selected_project = '3'
+    result = select_project_list
+
+    assert_equal [project3, project2, project1], result
+    assert_equal 'Project B (Active)', result[1].name
+  end
+
+  test 'select_project_list labels active project when it matches current project' do
+    project1 = OpenStruct.new(id: 1, name: 'Project A')
+    project2 = OpenStruct.new(id: 2, name: 'Project B')
+    Project.stubs(:all).returns([project1, project2])
+    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
+    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
+
+    Current.selected_project = '2'
+    result = select_project_list
+
+    assert_equal [project2, project1], result
+    assert_equal 'Project B (Active)', result.first.name
+  end
+
   test 'select_project_list returns original order if no active match' do
     project1 = OpenStruct.new(id: 1, name: 'Project A')
     project2 = OpenStruct.new(id: 2, name: 'Project B')
@@ -71,3 +102,4 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal 'download-dir-browser-42', project_download_dir_browser_id(project)
   end
 end
+

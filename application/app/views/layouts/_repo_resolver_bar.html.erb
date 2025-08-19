@@ -4,6 +4,7 @@
   color = local_assigns.fetch(:color, 'bg-primary-subtle')
   collapse = local_assigns.fetch(:collapse, false)
   show_images = local_assigns.fetch(:show_images, true)
+  url = local_assigns.fetch(:url, repo_resolver_path)
 %>
 <div id="<%= id %>" class="shadow-sm <%= color %> <%= 'collapse' if collapse %>" style="transition: none;"
      data-controller="focus-on-event"
@@ -24,7 +25,7 @@
 
     <!-- Resolver Form (right aligned) -->
     <%= render layout: "shared/button_to", locals: {
-      url: repo_resolver_path,
+      url: url,
       form_class: 'flex-grow-1 d-flex align-items-center gap-2',
       class: 'btn-primary-dark',
       icon_html: image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class d-block', style: 'height: 1rem; width: auto; object-fit: contain;' ),

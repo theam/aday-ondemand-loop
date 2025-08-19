@@ -7,6 +7,7 @@ module Zenodo
     def initialize(download_file)
       @metadata = ActiveSupport::OrderedOptions.new
       @metadata.merge!(download_file.metadata.to_h.deep_symbolize_keys)
+      @project_id = download_file.project_id
     end
 
     def repo_name
@@ -21,7 +22,8 @@ module Zenodo
         object_type: type,
         object_id: type_id,
         server_scheme: repo_url.scheme_override,
-        server_port: repo_url.port_override
+        server_port: repo_url.port_override,
+        selected_project: project_id
       )
     end
 
@@ -31,6 +33,6 @@ module Zenodo
 
     private
 
-    attr_reader :metadata
+    attr_reader :metadata, :project_id
   end
 end

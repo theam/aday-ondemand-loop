@@ -5,15 +5,27 @@ module ProjectsHelper
   end
 
   def select_project_list
-    [].tap do |list|
-      Project.all.each do |project|
-        if active_project?(project.id.to_s)
-          project.name = "#{project.name} (#{t('helpers.projects.active_project_text')})"
-          list.unshift(project)
-        else
-          list << project
-        end
+    current = nil
+    active = nil
+    others = []
+
+    Project.all.each do |project|
+      is_active = active_project?(project.id.to_s)
+      is_current = Current.selected_project.present? && project.id.to_s == Current.selected_project.to_s
+
+      if is_active
+        project.name = "#{project.name} (#{t('helpers.projects.active_project_text')})"
+        active = project
       end
+      current = project if is_current
+
+      others << project unless is_active || is_current
+    end
+
+    [].tap do |list|
+      list << current if current
+      list << active if active && active != current
+      list.concat(others)
     end
   end
 
