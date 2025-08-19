@@ -23,7 +23,7 @@ module Zenodo
         object_id: type_id,
         server_scheme: repo_url.scheme_override,
         server_port: repo_url.port_override,
-        selected_project: project_id
+        from_project: project_id
       )
     end
 

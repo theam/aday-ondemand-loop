@@ -96,6 +96,6 @@ class Dataverse::ConnectorMetadataTest < ActiveSupport::TestCase
     assert_includes target.files_url, 'server_scheme=http'
     assert_includes target.files_url, 'server_port=8080'
     assert_includes target.files_url, 'version=2.0'
-    assert_includes target.files_url, 'selected_project=123'
+    assert_includes target.files_url, 'from_project=123'
   end
 end

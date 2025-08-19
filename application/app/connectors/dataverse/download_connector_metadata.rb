@@ -26,7 +26,7 @@ module Dataverse
         object_type: 'datasets',
         object_id: dataset_id,
         version: version,
-        selected_project: project_id
+        from_project: project_id
       )
     end
 

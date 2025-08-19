@@ -6,12 +6,12 @@ class ProjectsHelperTest < ActionView::TestCase
 
   setup do
     @original_settings = Current.settings
-    @original_selected_project = Current.selected_project
+    @original_from_project = Current.from_project
   end
 
   teardown do
     Current.settings = @original_settings
-    Current.selected_project = @original_selected_project
+    Current.from_project = @original_from_project
   end
 
   test 'header and border classes respond to active' do
@@ -65,7 +65,7 @@ class ProjectsHelperTest < ActionView::TestCase
     Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
     self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
 
-    Current.selected_project = '3'
+    Current.from_project = '3'
     result = select_project_list
 
     assert_equal [project3, project2, project1], result
@@ -79,7 +79,7 @@ class ProjectsHelperTest < ActionView::TestCase
     Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
     self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
 
-    Current.selected_project = '2'
+    Current.from_project = '2'
     result = select_project_list
 
     assert_equal [project2, project1], result

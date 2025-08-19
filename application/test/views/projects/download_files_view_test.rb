@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class DownloadFilesViewTest < ActionView::TestCase
-  test 'passes selected project to repo resolver bar' do
+  test 'passes from project to repo resolver bar' do
     project = Project.new(name: 'test_project')
     project.stubs(:download_files).returns([])
 
@@ -21,7 +21,7 @@ class DownloadFilesViewTest < ActionView::TestCase
 
     html = render partial: 'projects/show/download_files', locals: { project: project }
 
-    expected_url = repo_resolver_path(selected_project: project.id)
+    expected_url = repo_resolver_path(from_project: project.id)
     assert_includes html, "action=\"#{expected_url}\""
   end
 end

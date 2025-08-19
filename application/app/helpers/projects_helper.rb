@@ -11,7 +11,7 @@ module ProjectsHelper
 
     Project.all.each do |project|
       is_active = active_project?(project.id.to_s)
-      is_current = Current.selected_project.present? && project.id.to_s == Current.selected_project.to_s
+      is_current = Current.from_project.present? && project.id.to_s == Current.from_project.to_s
 
       if is_active
         project.name = "#{project.name} (#{t('helpers.projects.active_project_text')})"
