@@ -44,6 +44,21 @@ class ProjectsHelperTest < ActionView::TestCase
     refute active_project?('456')
   end
 
+  test 'select_project_list_name appends active text for active project' do
+    project = OpenStruct.new(id: 1, name: 'Project A')
+    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '1'))
+    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
+
+    assert_equal 'Project A (Active)', select_project_list_name(project)
+  end
+
+  test 'select_project_list_name returns name for inactive project' do
+    project = OpenStruct.new(id: 1, name: 'Project A')
+    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
+
+    assert_equal 'Project A', select_project_list_name(project)
+  end
+
   test 'select_project_list moves active project to top' do
     project1 = OpenStruct.new(id: 1, name: 'Project A')
     project2 = OpenStruct.new(id: 2, name: 'Project B')
@@ -79,6 +94,21 @@ class ProjectsHelperTest < ActionView::TestCase
     result = select_project_list
 
     assert_equal [project1, project2], result
+  end
+
+  test 'most_recent_explore_url returns nil when no files exist' do
+    project = OpenStruct.new(download_files: [])
+    assert_nil most_recent_explore_url(project)
+  end
+
+  test 'most_recent_explore_url returns url of most recent file' do
+    file_old = OpenStruct.new(end_date: '2023-01-01T00:00:00', start_date: nil, creation_date: nil,
+                              connector_metadata: OpenStruct.new(files_url: '/old'))
+    file_new = OpenStruct.new(end_date: '2023-01-02T00:00:00', start_date: nil, creation_date: nil,
+                              connector_metadata: OpenStruct.new(files_url: '/new'))
+    project = OpenStruct.new(download_files: [file_old, file_new])
+
+    assert_equal '/new', most_recent_explore_url(project)
   end
 
   test 'project_download_dir_browser_id returns id string' do
