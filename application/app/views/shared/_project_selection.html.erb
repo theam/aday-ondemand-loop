@@ -10,7 +10,7 @@
               data-action="change->select-files-project#updateState">
         <% select_project_list.each do |project| %>
           <option value="<%= project.id %>" data-project-path="<%= project_path(project.id) %>">
-            <%= project.name %>
+            <%= select_project_list_name(project) %>
           </option>
         <% end %>
         <option value=""><%= t('.option_create_project_text') %></option>

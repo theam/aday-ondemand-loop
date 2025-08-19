@@ -44,7 +44,7 @@ class ProjectsHelperTest < ActionView::TestCase
     refute active_project?('456')
   end
 
-  test 'select_project_list moves active project to top and labels it' do
+  test 'select_project_list moves active project to top' do
     project1 = OpenStruct.new(id: 1, name: 'Project A')
     project2 = OpenStruct.new(id: 2, name: 'Project B')
     Project.stubs(:all).returns([project1, project2])
@@ -54,7 +54,6 @@ class ProjectsHelperTest < ActionView::TestCase
     result = select_project_list
 
     assert_equal [project2, project1], result
-    assert_equal 'Project B (Active)', result.first.name
   end
 
   test 'select_project_list prioritizes current project over active project' do
@@ -69,21 +68,6 @@ class ProjectsHelperTest < ActionView::TestCase
     result = select_project_list
 
     assert_equal [project3, project2, project1], result
-    assert_equal 'Project B (Active)', result[1].name
-  end
-
-  test 'select_project_list labels active project when it matches current project' do
-    project1 = OpenStruct.new(id: 1, name: 'Project A')
-    project2 = OpenStruct.new(id: 2, name: 'Project B')
-    Project.stubs(:all).returns([project1, project2])
-    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
-    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
-
-    Current.from_project = '2'
-    result = select_project_list
-
-    assert_equal [project2, project1], result
-    assert_equal 'Project B (Active)', result.first.name
   end
 
   test 'select_project_list returns original order if no active match' do

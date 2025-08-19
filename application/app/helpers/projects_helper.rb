@@ -4,29 +4,32 @@ module ProjectsHelper
     Current.settings.user_settings.active_project.to_s == project_id
   end
 
+  def select_project_list_name(project)
+    return project.name unless active_project?(project.id.to_s)
+    "#{project.name} (#{t('helpers.projects.active_project_text')})"
+  end
+
+  # frozen_string_literal: true
+
   def select_project_list
-    current = nil
-    active = nil
-    others = []
+    current_id = Current.from_project.to_s
+    active_id =  Current.settings.user_settings.active_project.to_s
+    current = []
+    active  = []
+    others  = []
 
     Project.all.each do |project|
-      is_active = active_project?(project.id.to_s)
-      is_current = Current.from_project.present? && project.id.to_s == Current.from_project.to_s
-
-      if is_active
-        project.name = "#{project.name} (#{t('helpers.projects.active_project_text')})"
-        active = project
+      pid = project.id.to_s
+      if pid == current_id
+        current << project
+      elsif pid == active_id
+        active << project
+      else
+        others << project
       end
-      current = project if is_current
-
-      others << project unless is_active || is_current
     end
 
-    [].tap do |list|
-      list << current if current
-      list << active if active && active != current
-      list.concat(others)
-    end
+    current + active + others
   end
 
   def project_header_class(active)
