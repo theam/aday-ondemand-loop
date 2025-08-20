@@ -38,12 +38,30 @@
   <div class="d-flex align-items-center justify-content-between py-1 px-5" data-controller="select-files-project">
     <div class="d-flex align-items-center gap-2 flex-grow-1">
       <label for="repo_resolver_project_select" class="form-label mb-0"><%= t('project_selection.project_select_label') %></label>
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                type="button"
+                id="repo_resolver_project_dropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                data-select-files-project-target="displayButton">
+          <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="repo_resolver_project_dropdown">
+          <% select_project_list.each do |project| %>
+            <li>
+              <a href="#" class="dropdown-item" data-action="select-files-project#chooseProject" data-project-id="<%= project.id %>">
+                <%= select_project_list_name(project) %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
       <select name="project_id"
               id="repo_resolver_project_select"
-              class="form-select form-select-sm w-auto"
+              class="d-none"
               autocomplete="off"
-              data-select-files-project-target="project"
-              data-action="change->select-files-project#updateState">
+              data-select-files-project-target="project">
         <% select_project_list.each do |project| %>
           <option value="<%= project.id %>" data-project-path="<%= project_path(project.id) %>">
             <%= select_project_list_name(project) %>
