@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["item", "selectAll", "project", "submitButton", "displayButton"]
+    static targets = ["item", "selectAll", "project", "submitButton", "displayLabel"]
 
     connect() {
         // DELAY UPDATE TO ALLOW OTHER CONTROLLERS TO CONNECT AND ADD LISTENERS
@@ -26,8 +26,8 @@ export default class extends Controller {
         const option = Array.from(this.projectTarget.options).find(o => o.value === projectId)
         if (option) {
             this.projectTarget.value = projectId
-            if (this.hasDisplayButtonTarget) {
-                this.displayButtonTarget.textContent = option.textContent.trim()
+            if (this.hasDisplayLabelTarget) {
+                this.displayLabelTarget.textContent = option.textContent.trim()
             }
         }
         this.updateState()

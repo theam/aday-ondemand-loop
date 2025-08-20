@@ -38,16 +38,17 @@
   <div class="d-flex align-items-center justify-content-between py-2 px-5" data-controller="select-files-project">
     <div class="d-flex flex-column gap-1 flex-grow-1">
       <label for="repo_resolver_project_select" class="form-label mb-0 small text-body-secondary"><%= t('project_selection.selected_project_label') %></label>
-      <div class="dropdown">
-        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+      <div class="dropdown" style="width: 16rem;">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center text-start w-100"
                 type="button"
                 id="repo_resolver_project_dropdown"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
-                data-select-files-project-target="displayButton">
-          <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
+                aria-expanded="false">
+          <span class="flex-grow-1 text-truncate" data-select-files-project-target="displayLabel">
+            <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
+          </span>
         </button>
-        <ul class="dropdown-menu" aria-labelledby="repo_resolver_project_dropdown">
+        <ul class="dropdown-menu w-100" aria-labelledby="repo_resolver_project_dropdown">
           <% select_project_list.each do |project| %>
             <li>
               <a href="#" class="dropdown-item" data-action="select-files-project#chooseProject" data-project-id="<%= project.id %>">
