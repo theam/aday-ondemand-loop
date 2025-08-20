@@ -8,7 +8,7 @@
       <% files.each_with_index do |data, index| %>
         <div class="row py-2 align-items-center <%= 'custom-stripe' if index.even? %>" role="row">
           <!-- info for medium and large screens -->
-          <div class="col-md-8" role="cell">
+          <div class="col-md-9" role="cell">
             <div class="d-flex align-items-center">
               <%= link_to(files_app_url(data.project.download_dir), class: 'btn btn-sm btn-outline-secondary me-2',
                           title: t('.button_browse_file_title'), target: '_blank') do %>
@@ -17,7 +17,7 @@
               <% end %>
               <%= render partial: '/shared/file_row_date', locals: { date: data.file.creation_date, title: t('.field_creation_date_title'), classes: "mx-2" } %>
               <span class="me-2"><%= connector_icon(data.upload_bundle.type) %></span>
-              <span class="text-truncate cursor-default" style="max-width: 600px;">
+                <span class="text-truncate cursor-default" style="max-width: 660px;">
                 <%= link_to project_path(id: data.project.id, anchor: tab_anchor_for(data.upload_bundle)), class: "position-relative project-name-link text-reset text-decoration-none rounded-end" do %>
                   <span class="" title="<%= t('.field_project_title', name: data.project.name) %>"><%= data.project.name %></span>
                   <span class="text-muted">&raquo;</span>
@@ -31,7 +31,7 @@
           </div>
           <!-- end info for medium and large screens -->
 
-          <div class="col-md-2" role="cell">
+          <div class="col-md-1" role="cell">
             <% if data.file.status.uploading? %>
               <%= render partial: '/shared/progress_bar', locals: { progress: data.file.connector_status.upload_progress, file: data.file } %>
             <% end %>
