@@ -1,31 +1,22 @@
 <%
-  id = local_assigns.fetch(:id, 'repo-resolver-bar')
+  id = 'repo-resolver-bar'
   input_id = "#{id}_input"
-  color = local_assigns.fetch(:color, 'bg-primary-subtle')
-  collapse = local_assigns.fetch(:collapse, false)
-  show_images = local_assigns.fetch(:show_images, true)
-  url = local_assigns.fetch(:url, repo_resolver_path)
 %>
-<div id="<%= id %>" class="shadow-sm <%= color %> <%= 'collapse' if collapse %>" style="transition: none;"
-     data-controller="focus-on-event"
-     data-focus-on-event-event-value="shown.bs.collapse"
-     data-focus-on-event-element-id-value="<%= input_id %>">
+<div id="<%= id %>" class="shadow-sm sticky-top bg-primary-subtle" style="z-index: 500;">
   <div class="d-flex align-items-center justify-content-between py-3 px-5 border-bottom">
 
-    <% if show_images %>
-      <!-- Repo Logos (left aligned) -->
-      <div class="d-flex align-items-center gap-3 me-5">
-        <%= image_tag "dataverse_project.svg", alt: t('connectors.dataverse.title'), height: 35 %>
-        <% if ::Configuration.zenodo_enabled %>
-          <%= image_tag "zenodo_project.svg", alt: t('connectors.zenodo.title'), height: 30, style: 'margin-top: -5px;' %>
+    <!-- Repo Logos (left aligned) -->
+    <div class="d-flex align-items-center gap-3 me-5">
+      <%= image_tag "dataverse_project.svg", alt: t('connectors.dataverse.title'), height: 35 %>
+      <% if ::Configuration.zenodo_enabled %>
+        <%= image_tag "zenodo_project.svg", alt: t('connectors.zenodo.title'), height: 30, style: 'margin-top: -5px;' %>
       <% end %>
-        <%= image_tag "doi_logo.svg", alt: "DOI Fundation", height: 32 %>
-      </div>
-    <% end %>
+      <%= image_tag "doi_logo.svg", alt: "DOI Fundation", height: 32 %>
+    </div>
 
     <!-- Resolver Form (right aligned) -->
     <%= render layout: "shared/button_to", locals: {
-      url: url,
+      url: repo_resolver_path,
       form_class: 'flex-grow-1 d-flex align-items-center gap-2',
       class: 'btn-primary-dark',
       icon_html: image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class d-block', style: 'height: 1rem; width: auto; object-fit: contain;' ),
