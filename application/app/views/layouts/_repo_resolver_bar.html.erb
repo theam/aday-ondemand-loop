@@ -4,65 +4,74 @@
   url ||= repo_resolver_path
 %>
 <div id="<%= id %>" class="shadow-sm sticky-top bg-primary-subtle" style="z-index: 500;">
-  <div class="d-flex align-items-center justify-content-between py-2 px-5" data-controller="select-files-project">
-    <div class="d-flex align-items-center gap-3 flex-grow-1">
-      <div class="d-flex flex-column gap-1" style="width: 16rem;">
-        <label for="repo_resolver_project_select" class="form-label mb-0 small text-body-secondary"><%= t('project_selection.selected_project_label') %></label>
-        <div class="dropdown" style="width: 16rem;">
-          <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex justify-content-between align-items-center text-start w-100"
-                  type="button"
-                  id="repo_resolver_project_dropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false">
-            <span class="flex-grow-1 text-truncate" data-select-files-project-target="displayLabel">
-              <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
-            </span>
-          </button>
-          <ul class="dropdown-menu" style="width: 16rem;" aria-labelledby="repo_resolver_project_dropdown">
-            <% select_project_list.each do |project| %>
-              <li>
-                <a href="#" class="dropdown-item text-truncate" title="<%= select_project_list_name(project) %>" data-action="select-files-project#chooseProject" data-project-id="<%= project.id %>">
-                  <%= select_project_list_name(project) %>
-                </a>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-        <select name="project_id"
-                id="repo_resolver_project_select"
-                class="d-none"
-                autocomplete="off"
-                data-select-files-project-target="project">
-          <% select_project_list.each do |project| %>
-            <option value="<%= project.id %>" data-project-path="<%= project_path(project.id) %>">
-              <%= select_project_list_name(project) %>
-            </option>
+  <div class="d-flex align-items-center justify-content-between py-2 px-5 gap-5">
+    <div class="d-flex align-items-center gap-3">
+      <div class="d-flex flex-column gap-1">
+        <label for="repo_resolver_project_select" class="form-label mb-0 small">
+          <%= t('project_selection.selected_project_label') %>
+        </label>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="dropdown flex-grow-1" data-controller="select-project">
+            <button class="btn btn-sm btn-outline-dark dropdown-toggle d-flex justify-content-between align-items-center text-start w-100"
+                    type="button"
+                    id="repo_resolver_project_dropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              <span class="flex-grow-1 text-truncate" data-select-project-target="displayLabel">
+                <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
+              </span>
+            </button>
+            <ul class="dropdown-menu w-100" aria-labelledby="repo_resolver_project_dropdown">
+              <% select_project_list.each do |project| %>
+                <li>
+                  <a href="#"
+                     class="dropdown-item text-truncate"
+                     title="<%= select_project_list_name(project) %>"
+                     data-action="select-project#chooseProject"
+                     data-project-id="<%= project.id %>"
+                     data-project-name="<%= project.name %>"
+                     data-project-path="<%= project_path(project.id) %>">
+                    <%= select_project_list_name(project) %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <%= link_to projects_path,
+                      class: 'btn btn-sm btn-outline-dark flex-shrink-0',
+                      title: t('project_selection.button_open_project_title'),
+                      data: { controller: 'select-project-listener', select_project_listener_target: 'link' } do %>
+            <i class="bi bi-display" aria-hidden="true"></i>
+            <span class="visually-hidden"><%= t('project_selection.button_open_project_label') %></span>
           <% end %>
-        </select>
+        </div>
       </div>
-      <%= link_to projects_path,
-                  class: 'btn btn-sm btn-outline-secondary disabled',
-                  title: t('project_selection.button_open_project_title'),
-                  data: { controller: 'select-files-project-listener', select_files_project_listener_target: 'link' },
-                  aria: { disabled: true } do %>
-        <i class="bi bi-display" aria-hidden="true"></i>
-        <span class="visually-hidden"><%= t('project_selection.button_open_project_label') %></span>
-      <% end %>
+
     </div>
 
     <%= render layout: "shared/button_to", locals: {
       url: url,
-      form_class: 'd-flex align-items-center gap-2',
+      form_class: 'd-flex align-items-center gap-2 flex-grow-1',
       class: 'btn-primary-dark',
+      icon_html: image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class d-block', style: 'height: 1rem; width: auto; object-fit: contain;' ),
       label: t('.button_submit_text')
     } do %>
 
-      <input type="text"
-             name="repo_url"
-             id="<%= input_id %>"
-             placeholder="<%= t('layouts.repo_resolver_bar.input_repo_url_placeholder') %>"
-             aria-label="<%= t('layouts.repo_resolver_bar.input_repo_url_label') %>"
-             class="d-inline form-control">
+      <div class="input-group">
+  <span class="input-group-text bg-white">
+    <%=  image_tag('doi.svg', alt: 'DOI', class: 'me-1', height: '20') %>
+    <%=  image_tag('dataverse.svg', alt: 'Dataverse', class: 'me-1', height: '16') %>
+    <%=  image_tag('zenodo.svg', alt: 'Zenodo', class: 'me-1', height: '16') %>
+  </span>
+        <input type="text"
+               name="repo_url"
+               id="<%= input_id %>"
+               class="form-control"
+               placeholder="<%= t('layouts.repo_resolver_bar.input_repo_url_placeholder') %>"
+               aria-label="<%= t('layouts.repo_resolver_bar.input_repo_url_label') %>">
+      </div>
 
     <% end %>
 
