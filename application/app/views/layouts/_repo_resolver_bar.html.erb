@@ -1,6 +1,7 @@
 <%
   id = 'repo-resolver-bar'
   input_id = "#{id}_input"
+  url ||= repo_resolver_path
 %>
 <div id="<%= id %>" class="shadow-sm sticky-top bg-primary-subtle" style="z-index: 500;">
   <div class="d-flex align-items-center justify-content-between py-3 px-5 border-bottom">
@@ -16,7 +17,7 @@
 
     <!-- Resolver Form (right aligned) -->
     <%= render layout: "shared/button_to", locals: {
-      url: repo_resolver_path,
+      url: url,
       form_class: 'flex-grow-1 d-flex align-items-center gap-2',
       class: 'btn-primary-dark',
       icon_html: image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class d-block', style: 'height: 1rem; width: auto; object-fit: contain;' ),
@@ -32,5 +33,31 @@
 
     <% end %>
 
+  </div>
+  <hr class="m-0">
+  <div class="d-flex align-items-center justify-content-between py-2 px-5" data-controller="select-files-project">
+    <div class="d-flex align-items-center gap-2 flex-grow-1">
+      <label for="repo_resolver_project_select" class="form-label mb-0"><%= t('project_selection.project_select_label') %></label>
+      <select name="project_id"
+              id="repo_resolver_project_select"
+              class="form-select w-auto"
+              autocomplete="off"
+              data-select-files-project-target="project"
+              data-action="change->select-files-project#updateState">
+        <% select_project_list.each do |project| %>
+          <option value="<%= project.id %>" data-project-path="<%= project_path(project.id) %>">
+            <%= select_project_list_name(project) %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+    <%= link_to projects_path,
+                class: 'btn btn-sm btn-outline-secondary disabled',
+                title: t('project_selection.button_open_project_title'),
+                data: { controller: 'select-files-project-listener', select_files_project_listener_target: 'link' },
+                aria: { disabled: true } do %>
+      <i class="bi bi-display" aria-hidden="true"></i>
+      <span class="visually-hidden"><%= t('project_selection.button_open_project_label') %></span>
+    <% end %>
   </div>
 </div>
