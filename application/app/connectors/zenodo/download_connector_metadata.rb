@@ -23,7 +23,7 @@ module Zenodo
         object_id: type_id,
         server_scheme: repo_url.scheme_override,
         server_port: repo_url.port_override,
-        from_project: project_id
+        from_project: @project_id
       )
     end
 
@@ -33,6 +33,6 @@ module Zenodo
 
     private
 
-    attr_reader :metadata, :project_id
+    attr_reader :metadata
   end
 end
