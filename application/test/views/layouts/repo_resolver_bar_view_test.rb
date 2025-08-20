@@ -6,6 +6,7 @@ class RepoResolverBarViewTest < ActionView::TestCase
   setup do
     I18n.backend.store_translations(:en, project_selection: {
       project_select_label: 'Choose an existing project',
+      selected_project_label: 'Selected project',
       button_open_project_title: 'Open selected project details page',
       button_open_project_label: 'Open selected project'
     })
@@ -33,7 +34,8 @@ class RepoResolverBarViewTest < ActionView::TestCase
     assert_includes html, '<hr'
     assert_includes html, "<option value=\"#{project.id}\""
     assert_includes html, 'btn btn-sm btn-outline-secondary dropdown-toggle'
-    assert_includes html, 'py-1 px-5'
+    assert_includes html, 'py-2 px-5'
     assert_includes html, 'dropdown-menu'
+    assert_includes html, 'Selected project'
   end
 end
