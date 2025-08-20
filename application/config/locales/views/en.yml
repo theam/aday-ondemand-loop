@@ -79,7 +79,6 @@ en:
       button_active_project_title: "Active Project"
       field_creation_date_title: "Creation date"
       link_open_downloads_title: "Open Project workspace folder"
-      link_open_metadata_title: "Open Project metadata folder"
     repo_resolver_bar:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
@@ -90,8 +89,10 @@ en:
       download_actions:
         button_open_downloads_folder_title: "Open Project workspace folder"
         header_download_files_text: "Downloads"
-        button_add_files_text: "Add Files"
-        button_add_files_title: "Add dataset to browse and select files"
+        button_add_files_text: "Select More Files"
+        button_add_files_title: "Select more files from the last repository dataset"
+        button_browse_dataset_text: "Add From URL"
+        button_browse_dataset_title: "Use a repository URL to to browse and select files from"
         button_edit_download_dir_title: "Update project workspace folder"
         button_edit_download_dir_label: "Update workspace folder"
       download_files:
@@ -119,7 +120,6 @@ en:
         button_delete_project_title: "Delete Project"
         button_open_project_folder_label: "Open Project workspace folder"
         button_open_project_folder_title: "Open Project workspace folder"
-        button_open_project_metadata_title: "Open Project metadata folder"
         field_creation_date_title: "Creation date"
         modal_delete_confirmation_title: "Delete Project"
         modal_delete_confirmation_content: "This will remove the project from the app. Files on disk and in remote repositories will remain untouched."
@@ -171,7 +171,6 @@ en:
         section_project_actions_label: "Project actions section"
         section_rename_project_label: "Rename project section"
       project_summary:
-        button_metadata_folder_title: "Open project metadata folder"
         button_toggle_label: "Project Summary"
         tab_download_label: "Download Files"
       project_summary_downloads:
@@ -219,6 +218,9 @@ en:
       button_submit_title: "Submit"
       button_cancel_title: "Cancel"
       spinner_loading_label: "Loading..."
+    metadata_folder_link:
+      button_open_folder_text: "Open metadata folder"
+      button_open_folder_title: "Open metadata folder in Open OnDemand"
     ood_folder_button:
       button_open_in_ondemand_title: "Open in OnDemand"
       image_ood_icon_alt: "Open OnDemand Icon"

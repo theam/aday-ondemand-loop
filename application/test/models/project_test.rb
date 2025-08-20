@@ -8,12 +8,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'test_project', target.name
     assert_equal '/tmp/test_project', target.download_dir
     assert_not_nil target.creation_date
-    assert_equal [], target.repo_urls
-  end
-
-  test "initializer stores empty repo_urls when nil provided" do
-    target = create_valid_project(repo_urls: nil)
-    assert_equal [], target.repo_urls
   end
 
   test "should be valid when all fields are populated" do
@@ -115,7 +109,6 @@ class ProjectTest < ActiveSupport::TestCase
       assert_equal 'ab12345', saved_project.id
       assert_equal 'test_project', saved_project.name
       assert_equal '/tmp/test_project', saved_project.download_dir
-      assert_equal [], saved_project.repo_urls
     end
   end
 
@@ -135,7 +128,6 @@ class ProjectTest < ActiveSupport::TestCase
       assert_equal target2.id, saved_project.id
       assert_equal target2.name, saved_project.name
       assert_equal target2.download_dir, saved_project.download_dir
-      assert_equal [], saved_project.repo_urls
     end
   end
 
@@ -155,7 +147,6 @@ class ProjectTest < ActiveSupport::TestCase
       assert_equal 'ab12345', saved_project.id
       assert_equal 'test_project', saved_project.name
       assert_equal '/tmp/test_project', saved_project.download_dir
-      assert_equal [], saved_project.repo_urls
     end
   end
 
@@ -272,46 +263,14 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
-  test "repo_urls default to empty and add_repo handles MRU" do
-    target = create_valid_project
-    assert_equal [], target.repo_urls
-
-    target.add_repo('http://example.com/one')
-    target.add_repo('http://example.com/two')
-    target.add_repo('http://example.com/one')
-
-    assert_equal ['http://example.com/one', 'http://example.com/two'], target.repo_urls
-  end
-
-  test "add_repo enforces max of 20 repo_urls" do
-    target = create_valid_project
-    urls = (1..21).map { |i| "http://example.com/repo#{i}" }
-    urls.each { |u| target.add_repo(u) }
-
-    assert_equal 20, target.repo_urls.size
-    assert_equal urls.last(20).reverse, target.repo_urls
-  end
-
-  test "repo_urls persist when saved" do
-    in_temp_directory do
-      target = create_valid_project
-      target.add_repo('http://example.com/a')
-      target.add_repo('http://example.com/b')
-      assert target.save
-
-      saved = Project.find(target.id)
-      assert_equal ['http://example.com/b', 'http://example.com/a'], saved.repo_urls
-    end
-  end
-
   private
 
-  def create_valid_project(id: 'ab12345', name: 'test_project', download_dir: '/tmp/test_project', repo_urls: [])
-    Project.new(id: id, name: name, download_dir: download_dir, repo_urls: repo_urls)
+  def create_valid_project(id: 'ab12345', name: 'test_project', download_dir: '/tmp/test_project')
+    Project.new(id: id, name: name, download_dir: download_dir)
   end
 
   def project_hash(project)
-    {id: project.id, name: project.name, download_dir: project.download_dir, creation_date: project.creation_date, repo_urls: project.repo_urls}.stringify_keys
+    {id: project.id, name: project.name, download_dir: project.download_dir, creation_date: project.creation_date}.stringify_keys
   end
 
   def in_temp_directory
@@ -324,3 +283,4 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
 end
+

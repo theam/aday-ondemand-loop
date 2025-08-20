@@ -4,17 +4,38 @@ module ProjectsHelper
     Current.settings.user_settings.active_project.to_s == project_id
   end
 
+  def select_project_list_name(project)
+    return project.name unless active_project?(project.id.to_s)
+    "#{project.name} (#{t('helpers.projects.active_project_text')})"
+  end
+
+  # frozen_string_literal: true
+
   def select_project_list
-    [].tap do |list|
-      Project.all.each do |project|
-        if active_project?(project.id.to_s)
-          project.name = "#{project.name} (#{t('helpers.projects.active_project_text')})"
-          list.unshift(project)
-        else
-          list << project
-        end
+    current_id = Current.from_project.to_s
+    active_id =  Current.settings.user_settings.active_project.to_s
+    current = []
+    active  = []
+    others  = []
+
+    Project.all.each do |project|
+      pid = project.id.to_s
+      if pid == current_id
+        current << project
+      elsif pid == active_id
+        active << project
+      else
+        others << project
       end
     end
+
+    current + active + others
+  end
+
+  def most_recent_explore_url(project)
+    files = project.download_files
+    most_recent = Common::FileSorter.new.most_recent(files).first
+    most_recent.connector_metadata.files_url if most_recent
   end
 
   def project_header_class(active)
