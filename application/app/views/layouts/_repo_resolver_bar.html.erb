@@ -48,10 +48,10 @@
             <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
           </span>
         </button>
-        <ul class="dropdown-menu w-100" aria-labelledby="repo_resolver_project_dropdown">
+        <ul class="dropdown-menu" style="width: 16rem;" aria-labelledby="repo_resolver_project_dropdown">
           <% select_project_list.each do |project| %>
             <li>
-              <a href="#" class="dropdown-item" data-action="select-files-project#chooseProject" data-project-id="<%= project.id %>">
+              <a href="#" class="dropdown-item text-truncate" title="<%= select_project_list_name(project) %>" data-action="select-files-project#chooseProject" data-project-id="<%= project.id %>">
                 <%= select_project_list_name(project) %>
               </a>
             </li>

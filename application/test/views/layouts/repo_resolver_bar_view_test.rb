@@ -36,6 +36,7 @@ class RepoResolverBarViewTest < ActionView::TestCase
     assert_includes html, 'btn btn-sm btn-outline-secondary dropdown-toggle'
     assert_includes html, 'py-2 px-5'
     assert_includes html, 'dropdown-menu'
+    assert_includes html, 'dropdown-item text-truncate'
     assert_includes html, 'Selected project'
   end
 end
