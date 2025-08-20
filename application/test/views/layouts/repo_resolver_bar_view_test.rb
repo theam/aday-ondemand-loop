@@ -33,5 +33,7 @@ class RepoResolverBarViewTest < ActionView::TestCase
     assert_includes html, '<hr'
     assert_includes html, "<option value=\"#{project.id}\""
     assert_includes html, 'btn btn-sm btn-outline-secondary'
+    assert_includes html, 'py-1 px-5'
+    assert_includes html, 'form-select-sm'
   end
 end
