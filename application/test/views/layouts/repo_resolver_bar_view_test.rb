@@ -24,14 +24,14 @@ class RepoResolverBarViewTest < ActionView::TestCase
     assert_includes html, "action=\"#{custom_url}\""
   end
 
-  test 'renders project selector row' do
+  test 'renders project selector and resolver form in a single row' do
     project = Project.new(id: '1', name: 'Project One')
     view.stubs(:select_project_list).returns([project])
     view.stubs(:select_project_list_name).returns(project.name)
 
     html = render partial: 'layouts/repo_resolver_bar', locals: { show_images: false }
 
-    assert_includes html, '<hr'
+    refute_includes html, '<hr'
     assert_includes html, "<option value=\"#{project.id}\""
     assert_includes html, 'btn btn-sm btn-outline-secondary dropdown-toggle'
     assert_includes html, 'py-2 px-5'
