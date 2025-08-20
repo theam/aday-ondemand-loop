@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["item", "selectAll", "project", "submitButton"]
+    static targets = ["item", "selectAll", "project", "submitButton", "displayLabel"]
 
     connect() {
         // DELAY UPDATE TO ALLOW OTHER CONTROLLERS TO CONNECT AND ADD LISTENERS
@@ -15,6 +15,21 @@ export default class extends Controller {
         this.itemTargets.forEach(checkbox => {
             checkbox.checked = isChecked
         })
+        this.updateState()
+    }
+
+    chooseProject(event) {
+        event.preventDefault()
+        const projectId = event.currentTarget.dataset.projectId
+        if (!projectId) return
+
+        const option = Array.from(this.projectTarget.options).find(o => o.value === projectId)
+        if (option) {
+            this.projectTarget.value = projectId
+            if (this.hasDisplayLabelTarget) {
+                this.displayLabelTarget.textContent = option.textContent.trim()
+            }
+        }
         this.updateState()
     }
 

@@ -83,7 +83,6 @@ en:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
       button_submit_text: "Explore"
-      button_submit_icon_alt: "OnDemand Loop Application Icon"
   projects:
     show:
       download_actions:
@@ -95,6 +94,8 @@ en:
         button_browse_dataset_title: "Use a repository URL to to browse and select files from"
         button_edit_download_dir_title: "Update project workspace folder"
         button_edit_download_dir_label: "Update workspace folder"
+        button_submit_icon_alt: "OnDemand Loop Application Icon"
+        button_submit_text: "Explore"
       download_files:
         badge_repository_files_tooltip: "Repository Files"
         button_retry_download_title: "Retry download"
@@ -234,6 +235,11 @@ en:
     tabs_scrollable:
       button_tabs_scroll_left_label: "Scroll tabs left"
       button_tabs_scroll_right_label: "Scroll tabs right"
+  project_selection:
+    project_select_label: "Choose an existing project"
+    selected_project_label: "Selected project"
+    button_open_project_title: "Open selected project details page"
+    button_open_project_label: "Open selected project"
   sitemap:
     index:
       breadcrumbs_text: "Sitemap"
