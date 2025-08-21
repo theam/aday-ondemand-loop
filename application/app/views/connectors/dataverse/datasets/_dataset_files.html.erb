@@ -40,18 +40,18 @@
         </table>
       </div>
       <div class="text-center">
-        <div class="mb-3">
-          <p class="mb-0"><%= t('project_selection.selected_project_label') %>:</p>
-          <p><%= Current.settings.user_settings.active_project.to_s %></p>
+        <div class="d-inline-flex align-items-center">
+          <span class="small me-1 text-start"><%= t('project_selection.selected_project_label') %>:</span>
+          <span class="me-3 text-start"><%= Current.settings.user_settings.active_project.to_s %></span>
+          <button
+            id="files_submit"
+            type="submit"
+            class="btn btn-primary me-2"
+            aria-label="<%= t('shared.project_selection.button_submit_aria_label') %>">
+            <i class="bi bi-download me-1" aria-hidden="true"></i>
+            <%= t('shared.project_selection.button_submit_text') %>
+          </button>
         </div>
-        <button
-          id="files_submit"
-          type="submit"
-          class="btn btn-primary me-2"
-          aria-label="<%= t('shared.project_selection.button_submit_aria_label') %>">
-          <i class="bi bi-download me-1" aria-hidden="true"></i>
-          <%= t('shared.project_selection.button_submit_text') %>
-        </button>
       </div>
     <% end %>
   <% else %>
