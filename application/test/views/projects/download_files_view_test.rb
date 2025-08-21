@@ -13,7 +13,8 @@ class DownloadFilesViewTest < ActionView::TestCase
     original_render = view.method(:render)
     view.define_singleton_method(:render) do |*args, &block|
       if args.first.is_a?(Hash) && args.first[:partial] == '/projects/show/download_actions'
-        ''
+        project_local = args.first[:locals][:project]
+        "<form action=\"#{repo_resolver_path(from_project: project_local.id)}\"></form>".html_safe
       else
         original_render.call(*args, &block)
       end
@@ -25,4 +26,3 @@ class DownloadFilesViewTest < ActionView::TestCase
     assert_includes html, "action=\"#{expected_url}\""
   end
 end
-
