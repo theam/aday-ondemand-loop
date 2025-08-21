@@ -237,10 +237,11 @@ en:
       button_tabs_scroll_left_label: "Scroll tabs left"
       button_tabs_scroll_right_label: "Scroll tabs right"
   project_selection:
-    project_select_label: "Choose an existing project"
+    button_empty_list_text: "Create a project using the plus button ➔"
     selected_project_label: "Selected project"
     button_open_project_title: "Open selected project details page"
     button_open_project_label: "Open selected project"
+    button_create_project_title: "Create new project"
   sitemap:
     index:
       breadcrumbs_text: "Sitemap"

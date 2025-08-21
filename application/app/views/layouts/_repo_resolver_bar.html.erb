@@ -20,7 +20,7 @@
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
               <span class="flex-grow-1 text-truncate" data-select-project-target="displayLabel">
-                <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
+                <%= select_project_list.any? ? select_project_list.first.name : t('project_selection.button_empty_list_text') %>
               </span>
               <span class="spinner-border spinner-border-sm ms-2 d-none" data-select-project-target="spinner" role="status" aria-hidden="true"></span>
             </button>
@@ -52,6 +52,7 @@
           <%= render layout: "shared/button_to", locals: {
             url: projects_path,
             class: 'btn btn-sm btn-outline-dark',
+            title: t('project_selection.button_create_project_title'),
             icon: "bi bi-plus-square-fill"
           } do %>
           <% end %>
