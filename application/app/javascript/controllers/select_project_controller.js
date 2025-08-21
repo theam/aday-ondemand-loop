@@ -1,16 +1,20 @@
-// app/javascript/controllers/select_files_project_controller.js
+// app/javascript/controllers/select_project_controller.js
 import { Controller } from '@hotwired/stimulus'
+import { showFlash } from 'utils/flash_message'
 
 export default class extends Controller {
     static targets = ['displayLabel']
 
     connect() {
+        this.container = this.element
+        this.button = this.element.querySelector('button')
         // DELAY UPDATE TO ALLOW OTHER CONTROLLERS TO CONNECT AND ADD LISTENERS
         requestAnimationFrame(() => {
             // On connect, try to find the first item in the dropdown list
             const firstLink = this.element.querySelector('[data-project-id]')
             if (firstLink) {
                 this.updateDisplay(firstLink)
+                this.selectedProjectId = firstLink.dataset.projectId
                 this.dispatchSelectedProject(firstLink.dataset.projectId, firstLink.dataset.projectName, firstLink.dataset.projectPath)
             }
         })
@@ -24,7 +28,39 @@ export default class extends Controller {
         const projectPath = link.dataset.projectPath
 
         this.updateDisplay(link)
+        if (projectId !== this.selectedProjectId) {
+            this.setActiveProject(link, projectPath)
+            this.selectedProjectId = projectId
+        }
         this.dispatchSelectedProject(projectId, projectName, projectPath)
+    }
+
+    setActiveProject(link, projectPath) {
+        const csrfToken = window.loop_app_config.csrf_token
+        if (this.button) this.button.disabled = true
+        link.classList.add('disabled')
+        link.setAttribute('aria-disabled', 'true')
+        fetch(`${projectPath}/set_active`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-Token': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        })
+            .then(response => {
+                if (!response.ok) return response.json().then(data => Promise.reject(data))
+            })
+            .catch(error => {
+                const message = error.error ?? window.loop_app_config.i18n.generic_server_error
+                showFlash('error', message, this.container)
+            })
+            .finally(() => {
+                if (this.button) this.button.disabled = false
+                link.classList.remove('disabled')
+                link.removeAttribute('aria-disabled')
+            })
     }
 
     updateDisplay(link) {
