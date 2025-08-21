@@ -83,6 +83,7 @@ en:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
       button_submit_text: "Explore"
+      button_submit_icon_alt: "OnDemand Loop Application Icon"
   projects:
     show:
       download_actions:

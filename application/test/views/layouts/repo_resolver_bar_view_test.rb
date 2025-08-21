@@ -26,14 +26,14 @@ class RepoResolverBarViewTest < ActionView::TestCase
 
   test 'renders project selector and resolver form in a single row' do
     project = Project.new(id: '1', name: 'Project One')
-    view.stubs(:select_project_list).returns([project])
+    view.stubs(:select_project_list).returns([ project ])
     view.stubs(:select_project_list_name).returns(project.name)
 
     html = render partial: 'layouts/repo_resolver_bar', locals: { show_images: false }
 
     refute_includes html, '<hr'
-    assert_includes html, "<option value=\"#{project.id}\""
-    assert_includes html, 'btn btn-sm btn-outline-secondary dropdown-toggle'
+    assert_includes html, "data-project-id=\"#{project.id}\""
+    assert_includes html, 'btn btn-sm btn-outline-dark dropdown-toggle'
     assert_includes html, 'py-2 px-5'
     assert_includes html, 'dropdown-menu'
     assert_includes html, 'dropdown-item text-truncate'
