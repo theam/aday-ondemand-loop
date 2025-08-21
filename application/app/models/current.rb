@@ -1,4 +1,4 @@
 class Current < ActiveSupport::CurrentAttributes
-  PERSISTED_ATTRIBUTES = %i[from_project].freeze
-  attribute :settings, *PERSISTED_ATTRIBUTES
+  DYNAMIC_ATTRIBUTES = %i[active_project].freeze
+  attribute :settings, *DYNAMIC_ATTRIBUTES
 end

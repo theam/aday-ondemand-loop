@@ -92,7 +92,7 @@
 
     <!-- Resolver Form (right aligned) -->
     <%= render layout: "shared/button_to", locals: {
-      url: repo_resolver_path(from_project: project.id),
+      url: repo_resolver_path(active_project: project.id),
       form_class: 'flex-grow-1 d-flex align-items-center gap-2',
       class: 'btn-primary-dark',
       icon_html: image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class d-block', style: 'height: 1rem; width: auto; object-fit: contain;' ),

@@ -2,6 +2,7 @@
   id = 'repo-resolver-bar'
   input_id = "#{id}_input"
   url ||= repo_resolver_path
+  type = on_project_index? ? 'form' : 'json'
 %>
 <div id="<%= id %>" class="shadow-sm sticky-top bg-primary-subtle" style="z-index: 500;">
   <div class="d-flex align-items-center justify-content-between py-2 px-5 gap-5">
@@ -12,7 +13,7 @@
         </label>
 
         <div class="d-flex align-items-center gap-2">
-          <div class="dropdown flex-grow-1" data-controller="select-project">
+          <div class="dropdown flex-grow-1" data-controller="select-project" data-select-project-type-value="<%= type %>" style="width: 20rem;">
             <button class="btn btn-sm btn-outline-dark dropdown-toggle d-flex justify-content-between align-items-center text-start w-100"
                     type="button"
                     id="repo_resolver_project_dropdown"
@@ -33,7 +34,7 @@
                      data-project-id="<%= project.id %>"
                      data-project-name="<%= project.name %>"
                      data-project-path="<%= project_path(project.id) %>">
-                    <%= select_project_list_name(project) %>
+                    <%= project.name %>
                   </a>
                 </li>
               <% end %>

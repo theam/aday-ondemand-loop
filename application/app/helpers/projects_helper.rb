@@ -12,7 +12,6 @@ module ProjectsHelper
   # frozen_string_literal: true
 
   def select_project_list
-    current_id = Current.from_project.to_s
     active_id =  Current.settings.user_settings.active_project.to_s
     current = []
     active  = []
@@ -20,9 +19,7 @@ module ProjectsHelper
 
     Project.all.each do |project|
       pid = project.id.to_s
-      if pid == current_id
-        current << project
-      elsif pid == active_id
+      if pid == active_id
         active << project
       else
         others << project

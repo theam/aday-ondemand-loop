@@ -13,7 +13,7 @@ class Zenodo::DownloadConnectorMetadataTest < ActiveSupport::TestCase
   end
 
   test 'files_url uses type and id' do
-    assert_equal '/explore/zenodo/zenodo_server.com/records/1?from_project=123', @meta.files_url
+    assert_equal '/explore/zenodo/zenodo_server.com/records/1?active_project=123', @meta.files_url
   end
 
   test 'to_h and missing methods' do
