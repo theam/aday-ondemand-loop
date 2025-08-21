@@ -6,8 +6,6 @@ export default class extends Controller {
     static targets = ['displayLabel']
 
     connect() {
-        this.container = this.element
-        this.button = this.element.querySelector('button')
         // DELAY UPDATE TO ALLOW OTHER CONTROLLERS TO CONNECT AND ADD LISTENERS
         requestAnimationFrame(() => {
             // On connect, try to find the first item in the dropdown list
@@ -37,7 +35,6 @@ export default class extends Controller {
 
     setActiveProject(projectPath) {
         const csrfToken = window.loop_app_config.csrf_token
-        if (this.button) this.button.disabled = true
         fetch(`${projectPath}/set_active`, {
             method: 'POST',
             headers: {
@@ -52,10 +49,7 @@ export default class extends Controller {
             })
             .catch(error => {
                 const message = error.error ?? window.loop_app_config.i18n.generic_server_error
-                showFlash('error', message, this.container)
-            })
-            .finally(() => {
-                if (this.button) this.button.disabled = false
+                showFlash('error', message)
             })
     }
 
