@@ -61,11 +61,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_match "#{@project.name} is now the active project.", flash[:notice]
   end
 
+  test "should set active project via JSON" do
+    @user_settings_mock.expects(:update_user_settings).with({active_project: @project.id.to_s})
+    post set_active_project_url(id: @project.id), headers: { "Accept" => "application/json" }
+    assert_response :success
+    json = JSON.parse(@response.body)
+    assert_equal @project.id, json["id"]
+  end
+
   test "should not set active project if not found" do
     post set_active_project_url(id: "missing-id")
     assert_redirected_to projects_url
     follow_redirect!
     assert_match "Project missing-id not found", flash[:alert]
+  end
+
+  test "should not set active project via JSON if not found" do
+    post set_active_project_url(id: "missing-id"), headers: { "Accept" => "application/json" }
+    assert_response :not_found
+    json = JSON.parse(@response.body)
+    assert_match "missing-id", json["error"]
   end
 
   test "should destroy project" do
