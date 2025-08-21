@@ -1,17 +1,30 @@
 require "test_helper"
 
 class ApplicationControllerTest < ActionController::TestCase
+  class SettingsStub
+    attr_reader :user_settings
+
+    def initialize
+      @user_settings = OpenStruct.new
+    end
+
+    def update_user_settings(new_values)
+      @user_settings = OpenStruct.new(@user_settings.to_h.merge(new_values))
+    end
+  end
+
   class DummyController < ApplicationController
-    skip_before_action :load_user_settings
-
-    def redirect_action
-      redirect_to "/redirected"
+    def show
+      render plain: Current.settings.user_settings.active_project
     end
 
-    def success_action
-      render plain: Current.from_project
+    def ajax_action
+      render plain: ajax_request?.to_s
     end
 
+    def settings_action
+      render plain: Current.settings.class.name
+    end
   end
 
   tests DummyController
@@ -19,33 +32,37 @@ class ApplicationControllerTest < ActionController::TestCase
   def setup
     @routes = ActionDispatch::Routing::RouteSet.new
     @routes.draw do
-      get "redirect_action" => "application_controller_test/dummy#redirect_action"
-      get "success_action" => "application_controller_test/dummy#success_action"
+      get "show" => "application_controller_test/dummy#show"
+      get "ajax_action" => "application_controller_test/dummy#ajax_action"
+      get "settings_action" => "application_controller_test/dummy#settings_action"
     end
-
     @request.env["action_dispatch.routes"] = @routes
-    Current.from_project = nil
+    @settings_stub = SettingsStub.new
+    UserSettings.stubs(:new).returns(@settings_stub)
+  end
+
+  def teardown
     Current.settings = nil
   end
 
-  test "sets flash redirect_params on redirect" do
-    get :redirect_action, params: { from_project: "42", unsafe: "nope" }
-    assert_equal({ "from_project" => "42" }, flash[:redirect_params])
+  test "load_user_settings sets Current.settings" do
+    get :settings_action
+    assert_equal SettingsStub.name, @response.body
   end
 
-  test "does not set flash redirect_params without redirect" do
-    get :success_action, params: { from_project: "42" }
-    assert_nil flash[:redirect_params]
+  test "set_dynamic_user_settings updates active_project" do
+    get :show, params: { active_project: "99" }
+    assert_equal "99", @settings_stub.user_settings.active_project
   end
 
-  test "sets Current attributes before action" do
-    get :success_action, params: { from_project: "99" }
-    assert_equal "99", @response.body
+  test "ajax_request? returns true when header present" do
+    @request.headers["X-Requested-With"] = "XMLHttpRequest"
+    get :ajax_action
+    assert_equal "true", @response.body
   end
 
-  test "uses flash redirect_params when params missing" do
-    get :success_action, flash: { redirect_params: { "from_project" => "55" } }
-    assert_equal "55", @response.body
+  test "ajax_request? returns false when no header" do
+    get :ajax_action
+    assert_equal "false", @response.body
   end
-
 end
