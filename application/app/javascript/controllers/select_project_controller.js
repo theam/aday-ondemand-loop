@@ -29,17 +29,15 @@ export default class extends Controller {
 
         this.updateDisplay(link)
         if (projectId !== this.selectedProjectId) {
-            this.setActiveProject(link, projectPath)
+            this.setActiveProject(projectPath)
             this.selectedProjectId = projectId
         }
         this.dispatchSelectedProject(projectId, projectName, projectPath)
     }
 
-    setActiveProject(link, projectPath) {
+    setActiveProject(projectPath) {
         const csrfToken = window.loop_app_config.csrf_token
         if (this.button) this.button.disabled = true
-        link.classList.add('disabled')
-        link.setAttribute('aria-disabled', 'true')
         fetch(`${projectPath}/set_active`, {
             method: 'POST',
             headers: {
@@ -58,8 +56,6 @@ export default class extends Controller {
             })
             .finally(() => {
                 if (this.button) this.button.disabled = false
-                link.classList.remove('disabled')
-                link.removeAttribute('aria-disabled')
             })
     }
 
