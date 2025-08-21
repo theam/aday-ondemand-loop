@@ -38,5 +38,7 @@ class RepoResolverBarViewTest < ActionView::TestCase
     assert_includes html, 'dropdown-menu'
     assert_includes html, 'dropdown-item text-truncate'
     assert_includes html, 'Selected project'
+    assert_includes html, 'data-select-project-target="spinner"'
+    assert_includes html, 'spinner-border spinner-border-sm'
   end
 end

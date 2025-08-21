@@ -3,7 +3,7 @@ import { Controller } from '@hotwired/stimulus'
 import { showFlash } from 'utils/flash_message'
 
 export default class extends Controller {
-    static targets = ['displayLabel']
+    static targets = ['displayLabel', 'spinner']
 
     connect() {
         // DELAY UPDATE TO ALLOW OTHER CONTROLLERS TO CONNECT AND ADD LISTENERS
@@ -25,17 +25,30 @@ export default class extends Controller {
         const projectName = link.dataset.projectName
         const projectPath = link.dataset.projectPath
 
-        this.updateDisplay(link)
         if (projectId !== this.selectedProjectId) {
+            this.showSpinner()
             this.setActiveProject(projectPath)
-            this.selectedProjectId = projectId
+                .then(() => {
+                    this.selectedProjectId = projectId
+                    this.updateDisplay(link)
+                    this.dispatchSelectedProject(projectId, projectName, projectPath)
+                })
+                .catch(error => {
+                    const message = error?.error ?? window.loop_app_config.i18n.generic_server_error
+                    showFlash('error', message)
+                })
+                .finally(() => {
+                    this.hideSpinner()
+                })
+        } else {
+            this.updateDisplay(link)
+            this.dispatchSelectedProject(projectId, projectName, projectPath)
         }
-        this.dispatchSelectedProject(projectId, projectName, projectPath)
     }
 
     setActiveProject(projectPath) {
         const csrfToken = window.loop_app_config.csrf_token
-        fetch(`${projectPath}/set_active`, {
+        return fetch(`${projectPath}/set_active`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -43,14 +56,9 @@ export default class extends Controller {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'same-origin'
+        }).then(response => {
+            if (!response.ok) return response.json().then(data => Promise.reject(data))
         })
-            .then(response => {
-                if (!response.ok) return response.json().then(data => Promise.reject(data))
-            })
-            .catch(error => {
-                const message = error.error ?? window.loop_app_config.i18n.generic_server_error
-                showFlash('error', message)
-            })
     }
 
     updateDisplay(link) {
@@ -66,5 +74,17 @@ export default class extends Controller {
             bubbles: true
         })
         this.element.dispatchEvent(customEvent)
+    }
+
+    showSpinner() {
+        if (this.hasSpinnerTarget) {
+            this.spinnerTarget.classList.remove('d-none')
+        }
+    }
+
+    hideSpinner() {
+        if (this.hasSpinnerTarget) {
+            this.spinnerTarget.classList.add('d-none')
+        }
     }
 }

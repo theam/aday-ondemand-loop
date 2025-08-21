@@ -21,6 +21,7 @@
               <span class="flex-grow-1 text-truncate" data-select-project-target="displayLabel">
                 <%= select_project_list.any? ? select_project_list_name(select_project_list.first) : t('project_selection.project_select_label') %>
               </span>
+              <span class="spinner-border spinner-border-sm ms-2 d-none" data-select-project-target="spinner" role="status" aria-hidden="true"></span>
             </button>
             <ul class="dropdown-menu w-100" aria-labelledby="repo_resolver_project_dropdown">
               <% select_project_list.each do |project| %>
