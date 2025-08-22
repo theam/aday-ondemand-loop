@@ -43,4 +43,14 @@ class Repo::RepoHistoryTest < ActiveSupport::TestCase
     assert_equal 'v', entry.metadata[:key]
     assert_equal 1, entry.count
   end
+
+  test 'entries are immutable and sorted by last_added' do
+    first = @history.add_repo('https://one.org', @type, {})
+    assert_raises(FrozenError) { first.count = 5 }
+
+    sleep 1 # ensure timestamp ordering
+    @history.add_repo('https://two.org', @type, {})
+
+    assert_equal ['https://two.org', 'https://one.org'], @history.all.keys
+  end
 end

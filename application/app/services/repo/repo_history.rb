@@ -9,6 +9,15 @@ module Repo
     include LoggingCommon
 
     Entry = Struct.new(:repo_url, :type, :metadata, :count, :last_added, keyword_init: true) do
+      def initialize(**kwargs)
+        super
+        freeze
+      end
+
+      def with(**attrs)
+        self.class.new(to_h.merge(attrs).merge(repo_url: repo_url))
+      end
+
       def type
         ConnectorType.get(self[:type]) if self[:type]
       end
@@ -41,17 +50,17 @@ module Repo
     def add_repo(url, type, metadata = {})
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
+      now_time = now
       entry = @data[url]
       if entry
-        entry.count = entry.count.to_i + 1
-        entry.type = type.to_s
-        entry.metadata = metadata || {}
-        entry.last_added = now
+        entry = entry.with(type: type.to_s, metadata: metadata || {}, count: entry.count.to_i + 1,
+                           last_added: now_time)
       else
-        entry = Entry.new(repo_url: url, type: type.to_s, metadata: metadata || {}, count: 1, last_added: now)
-        @data[url] = entry
-        prune!
+        entry = Entry.new(repo_url: url, type: type.to_s, metadata: metadata || {}, count: 1, last_added: now_time)
       end
+      @data[url] = entry
+      @data = @data.sort_by { |_, e| e.last_added }.reverse.to_h
+      prune!
       persist!
       log_info('Repo added', { repo_url: url, type: type })
       entry
@@ -75,9 +84,9 @@ module Repo
       return {} unless File.exist?(db_path)
 
       raw = YAML.load_file(db_path) || {}
-      raw.each_with_object({}) do |(url, v), data|
+      data = raw.each_with_object({}) do |(url, v), memo|
         v = v.symbolize_keys
-        data[url] = Entry.new(
+        memo[url] = Entry.new(
           repo_url: url,
           type: v[:type],
           metadata: v[:metadata] || {},
@@ -85,6 +94,7 @@ module Repo
           last_added: v[:last_added]
         )
       end
+      data.sort_by { |_, e| e.last_added }.reverse.to_h
     end
 
     def persist!
