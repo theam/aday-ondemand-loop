@@ -31,8 +31,8 @@ module Zenodo::Handlers
       ConnectorResult.new(
         template: '/connectors/zenodo/records/show',
         locals: {
-          record: record,
-          record_id: @record_id,
+          dataset: record,
+          dataset_id: @record_id,
           repo_url: repo_url,
           dataset_title: record.title,
           external_zenodo_url: Zenodo::Concerns::ZenodoUrlBuilder.build_record_url(repo_url.server_url, @record_id)
