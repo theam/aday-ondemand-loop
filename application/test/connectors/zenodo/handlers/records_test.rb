@@ -14,11 +14,14 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
 
   test 'show renders record when found' do
     service = mock('service')
-    service.expects(:find_record).with('123').returns(:record)
+    record = OpenStruct.new(title: 'Record Title')
+    service.expects(:find_record).with('123').returns(record)
     Zenodo::RecordService.expects(:new).with('https://zenodo.org').returns(service)
     res = @explorer.show(repo_url: @repo_url)
     assert res.success?
-    assert_equal :record, res.locals[:record]
+    assert_equal record, res.locals[:record]
+    assert_equal 'Record Title', res.locals[:dataset_title]
+    assert_equal Zenodo::Concerns::ZenodoUrlBuilder.build_record_url('https://zenodo.org', '123'), res.locals[:external_zenodo_url]
   end
 
   test 'show returns error when record missing' do
