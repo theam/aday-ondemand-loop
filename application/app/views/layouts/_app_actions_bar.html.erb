@@ -1,5 +1,5 @@
 <%
-  id = 'repo-resolver-bar'
+  id = 'app-actions-bar'
   input_id = "#{id}_input"
   url ||= repo_resolver_path
   type = on_project_index? ? 'form' : 'json'
@@ -80,8 +80,8 @@
                name="repo_url"
                id="<%= input_id %>"
                class="form-control"
-               placeholder="<%= t('layouts.repo_resolver_bar.input_repo_url_placeholder') %>"
-               aria-label="<%= t('layouts.repo_resolver_bar.input_repo_url_label') %>">
+               placeholder="<%= t('layouts.app_actions_bar.input_repo_url_placeholder') %>"
+               aria-label="<%= t('layouts.app_actions_bar.input_repo_url_label') %>">
       </div>
 
     <% end %>
