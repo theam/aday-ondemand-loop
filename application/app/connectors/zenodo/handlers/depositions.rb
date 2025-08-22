@@ -38,8 +38,8 @@ module Zenodo::Handlers
       ConnectorResult.new(
         template: '/connectors/zenodo/depositions/show',
         locals: {
-          record: deposition,
-          record_id: @deposition_id,
+          dataset: deposition,
+          dataset_id: @deposition_id,
           repo_url: repo_url,
           dataset_title: deposition.title,
           external_zenodo_url: Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url(repo_url.server_url, @deposition_id)
@@ -63,7 +63,7 @@ module Zenodo::Handlers
 
       service = Zenodo::DepositionService.new(repo_url.server_url, api_key: api_key)
       deposition = service.find_deposition(@deposition_id)
-      return ConnectorResult.new(message: { alert: I18n.t('zenodo.depositions.message_deposition_not_found', record_id: @deposition_id) }, success: false) unless deposition
+      return ConnectorResult.new(message: { alert: I18n.t('zenodo.depositions.message_deposition_not_found', deposition_id: @deposition_id) }, success: false) unless deposition
 
       project = Project.find(project_id)
       project_service = Zenodo::ProjectService.new(repo_url.server_url)

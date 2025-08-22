@@ -1,15 +1,15 @@
 <% post_url = local_assigns.fetch(:post_url) %>
 <div class="card">
   <div class="card-header d-flex align-items-center">
-    <%= t('zenodo.records.show.caption_files_text', count: record.files.size) %>
+    <%= t('zenodo.records.show.caption_files_text', count: dataset.files.size) %>
   </div>
-  <% if record.files.any? %>
-    <%= form_with url: post_url, id: 'record-download-files-form', method: :post, local: true, class: "p-3 rounded bg-light", data: {controller: "select-files"} do %>
-      <%= hidden_field_tag :id, record_id %>
+  <% if dataset.files.any? %>
+    <%= form_with url: post_url, id: 'dataset-download-files-form', method: :post, local: true, class: "p-3 rounded bg-light", data: {controller: "select-files"} do %>
+      <%= hidden_field_tag :id, dataset_id %>
       <div class="row">
-        <h2 id="record-files-heading" class="visually-hidden"><%= t('.header_record_files_a11y_text') %></h2>
+        <h2 id="dataset-files-heading" class="visually-hidden"><%= t('.header_dataset_files_a11y_text') %></h2>
         <table class="table table-bordered table-hover align-middle">
-          <caption class="visually-hidden"><%= t('.table_record_files_caption') %></caption>
+          <caption class="visually-hidden"><%= t('.table_dataset_files_caption') %></caption>
           <thead class="table-light">
           <tr>
             <th scope="col" class="text-nowrap p-0 align-middle" style="width: 1%;">
@@ -25,7 +25,7 @@
           </tr>
           </thead>
           <tbody>
-            <% record.files.each do |file| %>
+            <% dataset.files.each do |file| %>
               <tr>
                 <td class="text-center">
                   <input type="checkbox" id="file_checkbox_<%= file.id %>" name="file_ids[]" class="form-check-input" value="<%= file.id %>" data-select-files-target="item" data-action="select-files#updateState">
@@ -71,7 +71,7 @@
   <% else %>
     <div class="list-group list-group-flush">
       <span class="list-group-item list-group-item-action" role="status">
-        <%= t('.msg_empty_record_text') %>
+        <%= t('.msg_empty_dataset_text') %>
       </span>
     </div>
   <% end %>
