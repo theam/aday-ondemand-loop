@@ -78,8 +78,6 @@ en:
           link_open_record_title: "Open record on Zenodo"
           button_create_bundle_label: "Create Upload Bundle"
           button_create_bundle_title: "Create Upload Bundle from this record on the selected project"
-          button_open_project_title: "Open selected project details page"
-          button_open_project_label: "Open selected project"
         zenodo_record_info:
           header_record_text: "Record"
           badge_draft_text: "Draft"
@@ -94,6 +92,11 @@ en:
           header_record_files_a11y_text: "Record files"
           msg_empty_record_text: "The record does not contain files to download"
           table_record_files_caption: "Record files"
+          label_selected_project_text: "Selected project:"
+          input_selected_project_default_value: "➕ A new project will be automatically created"
+          button_open_project_title: "Open selected project details page"
+          button_open_project_label: "Open selected project"
+          button_submit_form_text: "Add Files to Project"
 
   zenodo:
     depositions:
