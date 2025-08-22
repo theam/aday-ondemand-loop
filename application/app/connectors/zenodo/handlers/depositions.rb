@@ -40,7 +40,9 @@ module Zenodo::Handlers
         locals: {
           record: deposition,
           record_id: @deposition_id,
-          repo_url: repo_url
+          repo_url: repo_url,
+          dataset_title: deposition.title,
+          external_zenodo_url: Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url(repo_url.server_url, @deposition_id)
         },
         success: true
       )
