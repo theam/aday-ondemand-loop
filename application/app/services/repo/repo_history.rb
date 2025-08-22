@@ -9,33 +9,26 @@ module Repo
     include LoggingCommon
 
     class Entry
-      attr_accessor :repo_url, :metadata, :count, :last_added
+      attr_reader :repo_url, :type, :title, :version, :last_added
+      attr_accessor :count
 
-      def initialize(repo_url:, type:, metadata:, count:, last_added:)
+      def initialize(repo_url:, type:, title:, version:, count:, last_added:)
+        raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
+
         @repo_url = repo_url
         @type = type
-        @metadata = metadata || {}
+        @title = title
+        @version = version
         @count = count
         @last_added = last_added
-      end
-
-      def type
-        ConnectorType.get(@type) if @type
-      end
-
-      def type=(val)
-        @type = val
-      end
-
-      def metadata=(val)
-        @metadata = val || {}
       end
 
       def to_h
         {
           repo_url: @repo_url,
-          type: @type,
-          metadata: @metadata,
+          type: @type.to_s,
+          title: @title,
+          version: @version,
           count: @count,
           last_added: @last_added
         }
@@ -50,14 +43,14 @@ module Repo
     def initialize(db_path:, max_entries: DEFAULT_MAX_ENTRIES)
       @db_path = db_path
       @max_entries = max_entries
-      @data = load_data
+      @data = load_data.freeze
     end
 
-    def add_repo(url, type, metadata = {})
+    def add_repo(url, type, title: nil, version: nil)
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
       now_time = now
-      new_entry = Entry.new(repo_url: url, type: type.to_s, metadata: metadata || {}, count: 1, last_added: now_time)
+      new_entry = Entry.new(repo_url: url, type: type, title: title, version: version, count: 1, last_added: now_time)
       new_data = [new_entry]
 
       @data.each do |e|
@@ -70,14 +63,10 @@ module Repo
         break if new_data.length >= max_entries
       end
 
-      @data = new_data
+      @data = new_data.freeze
       persist!
       log_info('Repo added', { repo_url: url, type: type })
       new_entry
-    end
-
-    def get(url)
-      @data.find { |e| e.repo_url == url }
     end
 
     def all
@@ -98,8 +87,9 @@ module Repo
         v = v.symbolize_keys
         Entry.new(
           repo_url: v[:repo_url],
-          type: v[:type],
-          metadata: v[:metadata] || {},
+          type: ConnectorType.get(v[:type]),
+          title: v[:title],
+          version: v[:version],
           count: v[:count] || 0,
           last_added: v[:last_added]
         )
