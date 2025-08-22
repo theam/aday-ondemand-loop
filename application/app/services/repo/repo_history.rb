@@ -57,30 +57,23 @@ module Repo
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
       now_time = now
-      added = nil
-      new_data = []
+      new_entry = Entry.new(repo_url: url, type: type.to_s, metadata: metadata || {}, count: 1, last_added: now_time)
+      new_data = [new_entry]
 
       @data.each do |e|
         if e.repo_url == url
-          added ||= e
-          added.count += e.count
+          new_entry.count = e.count + 1
           next
         end
 
         new_data << e
-        break if new_data.size >= max_entries - 1
+        break if new_data.length >= max_entries
       end
 
-      added ||= Entry.new(repo_url: url, type: type.to_s, metadata: {}, count: 0, last_added: now_time)
-      added.type = type.to_s
-      added.metadata = metadata || {}
-      added.count += 1
-      added.last_added = now_time
-
-      @data = [added] + new_data
+      @data = new_data
       persist!
       log_info('Repo added', { repo_url: url, type: type })
-      added
+      new_entry
     end
 
     def get(url)
