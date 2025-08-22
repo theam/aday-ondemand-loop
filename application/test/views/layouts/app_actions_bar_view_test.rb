@@ -5,7 +5,6 @@ require 'test_helper'
 class AppActionsBarViewTest < ActionView::TestCase
   setup do
     I18n.backend.store_translations(:en, project_selection: {
-      project_select_label: 'Choose an existing project',
       selected_project_label: 'Selected project',
       button_open_project_title: 'Open selected project details page',
       button_open_project_label: 'Open selected project'
