@@ -79,7 +79,7 @@ en:
       button_active_project_title: "Active Project"
       field_creation_date_title: "Creation date"
       link_open_downloads_title: "Open Project workspace folder"
-    repo_resolver_bar:
+    app_actions_bar:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
       button_submit_text: "Explore"

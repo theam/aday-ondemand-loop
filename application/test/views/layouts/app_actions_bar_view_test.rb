@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class RepoResolverBarViewTest < ActionView::TestCase
+class AppActionsBarViewTest < ActionView::TestCase
   setup do
     I18n.backend.store_translations(:en, project_selection: {
       project_select_label: 'Choose an existing project',
@@ -14,13 +14,13 @@ class RepoResolverBarViewTest < ActionView::TestCase
     view.stubs(:select_project_list_name).returns('')
   end
   test 'defaults url to repo_resolver_path' do
-    html = render partial: 'layouts/repo_resolver_bar', locals: { show_images: false }
+    html = render partial: 'layouts/app_actions_bar', locals: { show_images: false }
     assert_includes html, "action=\"#{repo_resolver_path}\""
   end
 
   test 'allows overriding url' do
     custom_url = '/custom/path'
-    html = render partial: 'layouts/repo_resolver_bar', locals: { url: custom_url, show_images: false }
+    html = render partial: 'layouts/app_actions_bar', locals: { url: custom_url, show_images: false }
     assert_includes html, "action=\"#{custom_url}\""
   end
 
@@ -29,7 +29,7 @@ class RepoResolverBarViewTest < ActionView::TestCase
     view.stubs(:select_project_list).returns([ project ])
     view.stubs(:select_project_list_name).returns(project.name)
 
-    html = render partial: 'layouts/repo_resolver_bar', locals: { show_images: false }
+    html = render partial: 'layouts/app_actions_bar', locals: { show_images: false }
 
     refute_includes html, '<hr'
     assert_includes html, "data-project-id=\"#{project.id}\""
