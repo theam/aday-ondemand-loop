@@ -62,7 +62,6 @@ class ProjectsHelperTest < ActionView::TestCase
     project2 = OpenStruct.new(id: 2, name: 'Project B')
     Project.stubs(:all).returns([project1, project2])
     Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
-    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
 
     result = select_project_list
 
@@ -74,6 +73,17 @@ class ProjectsHelperTest < ActionView::TestCase
     project2 = OpenStruct.new(id: 2, name: 'Project B')
     Project.stubs(:all).returns([project1, project2])
     Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '999'))
+
+    result = select_project_list
+
+    assert_equal [project1, project2], result
+  end
+
+  test 'select_project_list returns original order if no active project set' do
+    project1 = OpenStruct.new(id: 1, name: 'Project A')
+    project2 = OpenStruct.new(id: 2, name: 'Project B')
+    Project.stubs(:all).returns([project1, project2])
+    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: nil))
 
     result = select_project_list
 
