@@ -5,7 +5,7 @@
   data ||= OpenStruct.new(
     recent: Array.new(10) do |i|
       OpenStruct.new(
-        date: Time.zone.today - i.days,
+        date: DateTimeCommon.to_string(Time.zone.today - i.days),
         title: "Recent Item #{i + 1}",
         url: "https://example.com/recent/#{i + 1}",
         version: "v1.0.#{i + 1}",
@@ -14,7 +14,7 @@
     end,
     popular: Array.new(10) do |i|
       OpenStruct.new(
-        date: Time.zone.today - i.days,
+        date: DateTimeCommon.to_string(Time.zone.today - i.days),
         title: "Popular Item #{i + 1}",
         url: "https://example.com/popular/#{i + 1}",
         version: "v1.0.#{i + 1}",
