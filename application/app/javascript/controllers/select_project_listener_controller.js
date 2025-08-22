@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ['button', 'field', 'link']
+    static targets = ['button', 'inputProjectName', 'inputProjectId', 'link']
     // enableOnSelect default is false
 
     connect() {
@@ -19,8 +19,12 @@ export default class extends Controller {
             this.buttonTarget.disabled = !enabled
         }
 
-        if (this.hasFieldTarget) {
-            this.fieldTarget.value = projectName || ''
+        if (this.hasInputProjectNameTarget) {
+            this.inputProjectNameTarget.value = projectName || ''
+        }
+
+        if (this.hasInputProjectIdTarget) {
+            this.inputProjectIdTarget.value = projectId || ''
         }
 
         if (this.hasLinkTarget) {
