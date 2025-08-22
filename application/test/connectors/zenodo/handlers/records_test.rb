@@ -4,6 +4,8 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
   def setup
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
     @explorer = Zenodo::Handlers::Records.new('123')
+    @repo_history = Repo::RepoHistory.new(db_path: Tempfile.new('history').path)
+    RepoRegistry.repo_history = @repo_history
   end
 
   test 'params schema includes expected keys' do
@@ -21,7 +23,14 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
     assert res.success?
     assert_equal dataset, res.locals[:dataset]
     assert_equal 'Record Title', res.locals[:dataset_title]
-    assert_equal Zenodo::Concerns::ZenodoUrlBuilder.build_record_url('https://zenodo.org', '123'), res.locals[:external_zenodo_url]
+    url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url('https://zenodo.org', '123')
+    assert_equal url, res.locals[:external_zenodo_url]
+
+    entry = @repo_history.all.first
+    assert_equal url, entry.repo_url
+    assert_equal ConnectorType::ZENODO, entry.type
+    assert_equal 'Record Title', entry.title
+    assert_equal 'published', entry.version
   end
 
   test 'show returns error when dataset missing' do

@@ -4,6 +4,8 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
   def setup
     @explorer = Zenodo::Handlers::Depositions.new('10')
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
+    @repo_history = Repo::RepoHistory.new(db_path: Tempfile.new('history').path)
+    RepoRegistry.repo_history = @repo_history
   end
 
   test 'params schema includes expected keys' do
@@ -25,7 +27,14 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     assert result.success?
     assert_equal dataset, result.locals[:dataset]
     assert_equal 'Deposition Title', result.locals[:dataset_title]
-    assert_equal Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url('https://zenodo.org', '10'), result.locals[:external_zenodo_url]
+    url = Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url('https://zenodo.org', '10')
+    assert_equal url, result.locals[:external_zenodo_url]
+
+    entry = @repo_history.all.first
+    assert_equal url, entry.repo_url
+    assert_equal ConnectorType::ZENODO, entry.type
+    assert_equal 'Deposition Title', entry.title
+    assert_equal 'draft', entry.version
   end
 
   test 'show returns error when api key missing' do

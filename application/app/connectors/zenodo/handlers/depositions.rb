@@ -35,6 +35,14 @@ module Zenodo::Handlers
         )
       end
 
+      external_url = Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url(repo_url.server_url, @deposition_id)
+      RepoRegistry.repo_history.add_repo(
+        external_url,
+        ConnectorType::ZENODO,
+        title: deposition.title,
+        version: 'draft'
+      )
+
       ConnectorResult.new(
         template: '/connectors/zenodo/depositions/show',
         locals: {
@@ -42,7 +50,7 @@ module Zenodo::Handlers
           dataset_id: @deposition_id,
           repo_url: repo_url,
           dataset_title: deposition.title,
-          external_zenodo_url: Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url(repo_url.server_url, @deposition_id)
+          external_zenodo_url: external_url
         },
         success: true
       )
