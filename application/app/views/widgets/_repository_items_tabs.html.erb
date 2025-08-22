@@ -1,0 +1,94 @@
+<%# Renders tabs for recent and most popular items in a modal %>
+<%
+  require 'ostruct'
+
+  data ||= OpenStruct.new(
+    recent: Array.new(10) do |i|
+      OpenStruct.new(
+        date: Time.zone.today - i.days,
+        title: "Recent Item #{i + 1}",
+        url: "https://example.com/recent/#{i + 1}",
+        version: "v1.0.#{i + 1}",
+        explore_url: "https://example.com/explore/recent/#{i + 1}"
+      )
+    end,
+    popular: Array.new(10) do |i|
+      OpenStruct.new(
+        date: Time.zone.today - i.days,
+        title: "Popular Item #{i + 1}",
+        url: "https://example.com/popular/#{i + 1}",
+        version: "v1.0.#{i + 1}",
+        explore_url: "https://example.com/explore/popular/#{i + 1}"
+      )
+    end
+  )
+%>
+<div id="repository-items-tabs">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link text-secondary active" id="repository-items-recent-tab" data-bs-toggle="tab" data-bs-target="#repository-items-recent" type="button" role="tab" aria-controls="repository-items-recent" aria-selected="true"><%= t('.tab_recent_label') %></button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link text-secondary" id="repository-items-popular-tab" data-bs-toggle="tab" data-bs-target="#repository-items-popular" type="button" role="tab" aria-controls="repository-items-popular" aria-selected="false"><%= t('.tab_popular_label') %></button>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3">
+    <div id="repository-items-recent" class="tab-pane fade show active" role="tabpanel" aria-labelledby="repository-items-recent-tab">
+      <ul class="list-unstyled m-0">
+        <% data.recent.each do |item| %>
+          <li class="card mb-2 shadow-sm rounded">
+            <header class="card-header d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3 flex-grow-1">
+                <%= render partial: '/shared/file_row_date', locals: { date: item.date, title: t('.field_creation_date_title') } if item.date %>
+                <div class="d-flex flex-column flex-grow-1">
+                  <h2 class="mb-0 h6"><%= item.title %></h2>
+                  <small class="text-muted"><%= item.url %></small>
+                </div>
+                <span class="badge bg-secondary flex-shrink-0"><%= item.version %></span>
+              </div>
+              <div class="d-flex align-items-center gap-2" role="group" aria-label="<%= t('.section_item_actions_label') %>">
+                <%= link_to item.explore_url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_explore_item_title') do %>
+                  <i class="bi bi-folder2-open" aria-hidden="true"></i>
+                  <span class="visually-hidden"><%= t('.button_explore_item_title') %></span>
+                <% end %>
+                <%= link_to item.url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_open_repository_title') do %>
+                  <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                  <span class="visually-hidden"><%= t('.button_open_repository_title') %></span>
+                <% end %>
+              </div>
+            </header>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div id="repository-items-popular" class="tab-pane fade" role="tabpanel" aria-labelledby="repository-items-popular-tab">
+      <ul class="list-unstyled m-0">
+        <% data.popular.each do |item| %>
+          <li class="card mb-2 shadow-sm rounded">
+            <header class="card-header d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3 flex-grow-1">
+                <%= render partial: '/shared/file_row_date', locals: { date: item.date, title: t('.field_creation_date_title') } if item.date %>
+                <div class="d-flex flex-column flex-grow-1">
+                  <h2 class="mb-0 h6"><%= item.title %></h2>
+                  <small class="text-muted"><%= item.url %></small>
+                </div>
+                <span class="badge bg-secondary flex-shrink-0"><%= item.version %></span>
+              </div>
+              <div class="d-flex align-items-center gap-2" role="group" aria-label="<%= t('.section_item_actions_label') %>">
+                <%= link_to item.explore_url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_explore_item_title') do %>
+                  <i class="bi bi-folder2-open" aria-hidden="true"></i>
+                  <span class="visually-hidden"><%= t('.button_explore_item_title') %></span>
+                <% end %>
+                <%= link_to item.url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_open_repository_title') do %>
+                  <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                  <span class="visually-hidden"><%= t('.button_open_repository_title') %></span>
+                <% end %>
+              </div>
+            </header>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
