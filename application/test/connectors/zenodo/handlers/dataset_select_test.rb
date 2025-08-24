@@ -1,7 +1,26 @@
 require 'test_helper'
+require 'tempfile'
 
 class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
   include ModelHelper
+
+  class FakeUploadBundle
+    attr_reader :id
+    attr_accessor :metadata
+
+    def initialize(id:, metadata: {})
+      @id = id
+      @metadata = metadata
+    end
+
+    def connector_metadata
+      Zenodo::UploadBundleConnectorMetadata.new(self)
+    end
+
+    def update(attrs)
+      @metadata.merge!(attrs[:metadata])
+    end
+  end
 
   def setup
     @bundle = create_upload_bundle(create_project)
@@ -39,5 +58,43 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
     assert result.success?
     assert_equal '99', @bundle.metadata[:record_id]
     assert_nil @bundle.metadata[:deposition_id]
+  end
+
+  test 'update logs title_url into repo history for draft deposition' do
+    history = Repo::RepoHistory.new(db_path: Tempfile.new('history').path)
+    RepoRegistry.repo_history = history
+    bundle = FakeUploadBundle.new(id: '1', metadata: { zenodo_url: 'http://zenodo.org', auth_key: 'KEY' })
+    service = mock('service')
+    deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Draft', bucket_url: 'b', draft?: true)
+    service.expects(:find_deposition).with('10').returns(deposition)
+    Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
+
+    action = Zenodo::Handlers::DatasetSelect.new
+    action.update(bundle, { deposition_id: '10' })
+
+    url = Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url('http://zenodo.org', '10')
+    entry = history.all.first
+    assert_equal url, entry.repo_url
+    assert_equal 'Draft', entry.title
+    assert_equal 'draft', entry.version
+  end
+
+  test 'update logs title_url into repo history for published deposition' do
+    history = Repo::RepoHistory.new(db_path: Tempfile.new('history').path)
+    RepoRegistry.repo_history = history
+    bundle = FakeUploadBundle.new(id: '1', metadata: { zenodo_url: 'http://zenodo.org', auth_key: 'KEY' })
+    service = mock('service')
+    deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Pub', bucket_url: 'b', draft?: false)
+    service.expects(:find_deposition).with('10').returns(deposition)
+    Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
+
+    action = Zenodo::Handlers::DatasetSelect.new
+    action.update(bundle, { deposition_id: '10' })
+
+    url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url('http://zenodo.org', '20')
+    entry = history.all.first
+    assert_equal url, entry.repo_url
+    assert_equal 'Pub', entry.title
+    assert_equal 'published', entry.version
   end
 end

@@ -94,7 +94,7 @@ module Repo
           last_added: v[:last_added]
         )
       end
-      entries.sort_by(&:last_added).reverse
+      entries
     end
 
     def persist!
