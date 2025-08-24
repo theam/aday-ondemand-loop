@@ -56,4 +56,13 @@ class ConnectControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert_equal I18n.t('connect.handle.message_processor_error', connector_type: 'zenodo', action: 'landing'), flash[:alert]
   end
+
+  test 'handle action redirects to resource url when handler returns resource' do
+    resource = OpenStruct.new(id: 'r1', project_id: 'p1')
+    stub_handler(:handle, result: ConnectorResult.new(resource: resource, message: { notice: 'ok' }, success: true))
+
+    post connect_repo_url(connector_type: 'zenodo', object_type: 'landing')
+    assert_redirected_to project_path(id: 'p1', anchor: 'tab-link-r1')
+    assert_equal 'ok', flash[:notice]
+  end
 end
