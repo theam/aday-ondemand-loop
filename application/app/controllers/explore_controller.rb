@@ -18,6 +18,11 @@ class ExploreController < ApplicationController
     end
 
     respond_success(result)
+    if result.resource && result.resource_url
+      title = result.resource.respond_to?(:title) ? result.resource.title : nil
+      version = result.resource.respond_to?(:version) ? result.resource.version : nil
+      RepoRegistry.repo_history.add_repo(result.resource_url, @connector_type, title: title, version: version)
+    end
     log_info('Explore.show completed', { repo_url: @repo_url, connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] })
   rescue => e
     log_error('Error processing Explore.show handler/action', { connector_type: @connector_type, object_type: params[:object_type], object_id: params[:object_id] }, e)

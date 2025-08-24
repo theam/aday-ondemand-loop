@@ -44,6 +44,36 @@ class ExploreControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'show action adds repo to history when resource is provided' do
+    resource = OpenStruct.new(title: 'title', version: 'v1')
+    stub_handler(
+      :show,
+      result: ConnectorResult.new(
+        template: '/sitemap/index',
+        resource: resource,
+        resource_url: 'https://example.org/resource',
+        success: true
+      )
+    )
+    stub_repo_resolver(type: ConnectorType.get('zenodo'), object_url: 'https://example.org/')
+
+    RepoRegistry.repo_history.expects(:add_repo).with(
+      'https://example.org/resource',
+      ConnectorType.get('zenodo'),
+      title: 'title',
+      version: 'v1'
+    )
+
+    get explore_url(
+      connector_type: 'zenodo',
+      server_domain: 'example.org',
+      object_type: 'records',
+      object_id: '1',
+    )
+
+    assert_response :success
+  end
+
   test 'show action renders partial when handler succeeds via ajax request' do
     stub_handler(:show, result: ConnectorResult.new(template: '/sitemap/index', locals: {}, success: true))
     stub_repo_resolver(type: ConnectorType.get('zenodo'), object_url: 'https://example.org/')
