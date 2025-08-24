@@ -8,8 +8,6 @@ module ConnectorResponse
       redirect_to result.redirect_url, **result.message
     elsif result.redirect_back?
       redirect_back fallback_location: root_path, **result.message
-    elsif result.resource
-      redirect_to resource_url(result.resource), **result.message
     elsif ajax_request?
       render partial: result.template, locals: result.locals, layout: false
     else
@@ -30,13 +28,4 @@ module ConnectorResponse
     (message_hash || {}).each { |k, v| flash.now[k] = v }
   end
 
-  def resource_url(resource)
-    return nil unless resource
-
-    if resource.respond_to?(:project_id) && resource.respond_to?(:id)
-      project_path(id: resource.project_id, anchor: "tab-link-#{resource.id}")
-    else
-      url_for(resource)
-    end
-  end
 end
