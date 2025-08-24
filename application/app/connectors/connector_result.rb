@@ -20,14 +20,7 @@ class ConnectorResult
   end
 
   def resource_url
-    return unless resource
-
-    helpers = Rails.application.routes.url_helpers
-    if resource.respond_to?(:project_id) && resource.respond_to?(:id)
-      helpers.project_path(resource.project_id, anchor: "tab-link-#{resource.id}")
-    else
-      helpers.url_for(resource)
-    end
+    data[:resource_url]
   end
 
   def redirect_url

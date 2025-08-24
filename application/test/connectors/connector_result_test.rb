@@ -21,14 +21,13 @@ class ConnectorResultTest < ActiveSupport::TestCase
     refute result.redirect?
   end
 
-  test 'resource_url builds project path when resource exposes project and id' do
-    resource = OpenStruct.new(project_id: 1, id: 2)
-    result = ConnectorResult.new(resource: resource)
-    assert_equal '/projects/1#tab-link-2', result.resource_url
+  test 'resource_url returns stored URL' do
+    result = ConnectorResult.new(resource_url: '/some/path')
+    assert_equal '/some/path', result.resource_url
   end
 
-  test 'resource_url falls back to url_for' do
-    result = ConnectorResult.new(resource: '/other')
-    assert_equal '/other', result.resource_url
+  test 'resource_url is nil when missing' do
+    result = ConnectorResult.new
+    assert_nil result.resource_url
   end
 end
