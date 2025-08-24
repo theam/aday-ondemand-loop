@@ -27,5 +27,4 @@ module ConnectorResponse
   def apply_flash_now(message_hash)
     (message_hash || {}).each { |k, v| flash.now[k] = v }
   end
-
 end
