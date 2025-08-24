@@ -5,8 +5,6 @@ class Zenodo::Handlers::RecordsIntegrationTest < ActionDispatch::IntegrationTest
     @repo_db = Repo::RepoDb.new(db_path: Tempfile.new('repo').path)
     RepoRegistry.repo_db = @repo_db
     @repo_db.set('https://zenodo.org', type: ConnectorType.get('zenodo'))
-    @repo_history = Repo::RepoHistory.new(db_path: Tempfile.new('history').path)
-    RepoRegistry.repo_history = @repo_history
     Project.stubs(:all).returns([])
     FileUtils.mkdir_p(Rails.root.join('app/assets/builds'))
     FileUtils.touch(Rails.root.join('app/assets/builds/application.css'))
@@ -44,9 +42,5 @@ class Zenodo::Handlers::RecordsIntegrationTest < ActionDispatch::IntegrationTest
     )
 
     assert_response :success
-    url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url('https://zenodo.org', '123')
-    entry = @repo_history.all.first
-    assert_equal url, entry.repo_url
-    assert_equal 'published', entry.version
   end
 end
