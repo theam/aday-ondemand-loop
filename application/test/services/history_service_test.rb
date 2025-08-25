@@ -30,7 +30,7 @@ class HistoryServiceTest < ActiveSupport::TestCase
 
       first = result.first
       assert_equal '2024-01-03T00:00:00', first.date
-      assert_equal 'published', first.version
+      assert_equal 'published', first.note
       assert_equal '/file2', first.title
       assert_equal @file2.type, first.type
     end
@@ -43,7 +43,7 @@ class HistoryServiceTest < ActiveSupport::TestCase
       result = HistoryService.new.global
       assert_equal ['https://one', 'https://two'], result.map(&:url)
       assert_equal 'One', result.first.title
-      assert_equal 'v1', result.first.version
+      assert_equal 'v1', result.first.note
       assert_equal entry1.type, result.first.type
     end
   end

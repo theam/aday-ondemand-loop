@@ -27,7 +27,7 @@
                   <h2 class="mb-0 h6"><%= item.title %></h2>
                   <small class="text-muted"><%= item.url %></small>
                 </div>
-                <span class="badge bg-secondary flex-shrink-0"><%= item.version %></span>
+                <span class="badge bg-secondary flex-shrink-0"><%= item.note %></span>
               </div>
               <div class="d-flex align-items-center gap-2" role="group" aria-label="<%= t('.section_item_actions_label') %>">
                 <%= render layout: "shared/button_to", locals: {
@@ -60,7 +60,7 @@
                   <h2 class="mb-0 h6"><%= item.title %></h2>
                   <small class="text-muted"><%= item.url %></small>
                 </div>
-                <span class="badge bg-secondary flex-shrink-0"><%= item.version %></span>
+                <span class="badge bg-secondary flex-shrink-0"><%= item.note %></span>
               </div>
               <div class="d-flex align-items-center gap-2" role="group" aria-label="<%= t('.section_item_actions_label') %>">
                 <%= render layout: "shared/button_to", locals: {

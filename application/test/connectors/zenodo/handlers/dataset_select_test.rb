@@ -66,7 +66,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
   test 'update adds repo history for draft deposition' do
     bundle = FakeUploadBundle.new(id: '1', metadata: { zenodo_url: 'http://zenodo.org', auth_key: 'KEY' })
     service = mock('service')
-    deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Draft', bucket_url: 'b', draft?: true)
+    deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Draft', bucket_url: 'b', draft?: true, version: 'draft')
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
 
@@ -87,7 +87,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
   test 'update adds repo history for published deposition' do
     bundle = FakeUploadBundle.new(id: '1', metadata: { zenodo_url: 'http://zenodo.org', auth_key: 'KEY' })
     service = mock('service')
-    deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Pub', bucket_url: 'b', draft?: false)
+    deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Pub', bucket_url: 'b', draft?: false, version: 'published')
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
 
