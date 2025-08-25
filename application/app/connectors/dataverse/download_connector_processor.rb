@@ -47,7 +47,7 @@ module Dataverse
         file.update({ metadata: connector_metadata.to_h })
         FileUtils.rm_f(temp_location) if download_processor.partial_downloads == false
         log_error('Download failed', { id: file.id, url: download_url, partial_downloads: download_processor.partial_downloads }, e)
-        return response(FileStatus::ERROR, 'file download failed')
+        return response(FileStatus::ERROR, e.message)
       end
 
       connector_metadata.partial_downloads = download_processor.partial_downloads

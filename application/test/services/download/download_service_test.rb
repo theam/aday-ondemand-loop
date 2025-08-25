@@ -48,8 +48,8 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
 
       now_time = file_now
       file = mock("download_file")
-      file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
-      file.expects(:update).with(end_date: now_time, status: FileStatus::SUCCESS).once
+      file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING, error_message: nil).once
+      file.expects(:update).with(end_date: now_time, status: FileStatus::SUCCESS, error_message: nil).once
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
@@ -67,8 +67,8 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
 
       now_time = file_now
       file = mock("download_file")
-      file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
-      file.expects(:update).with(end_date: now_time, status: FileStatus::ERROR).once
+      file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING, error_message: nil).once
+      file.expects(:update).with(end_date: now_time, status: FileStatus::ERROR, error_message: 'An error occurred').once
       # FOR LOGGING
       file.expects(:id).once
       files_provider = DownloadFilesProviderMock.new([file])

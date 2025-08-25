@@ -13,7 +13,8 @@ class UploadFileTest < ActiveSupport::TestCase
       'status' => FileStatus::PENDING, 'size' => 1024,
       'creation_date' => nil,
       'start_date' => nil,
-      'end_date' => nil
+      'end_date' => nil,
+      'error_message' => nil
     }
     @bundle_attributes = {
       'id' => '111-222', 'project_id' => '456-789', 'type' => ConnectorType::DATAVERSE,

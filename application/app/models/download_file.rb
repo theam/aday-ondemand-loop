@@ -3,7 +3,7 @@
 class DownloadFile < ApplicationDiskRecord
   include ActiveModel::Model
 
-  ATTRIBUTES = %w[id project_id type filename status size creation_date start_date end_date metadata].freeze
+  ATTRIBUTES = %w[id project_id type filename status size creation_date start_date end_date metadata error_message].freeze
 
   attr_accessor *ATTRIBUTES
 

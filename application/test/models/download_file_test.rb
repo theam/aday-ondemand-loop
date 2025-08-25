@@ -17,7 +17,8 @@ class DownloadFileTest < ActiveSupport::TestCase
         'filename' => '',
         'size' => '',
         'content_type' => '',
-      }
+      },
+      'error_message' => nil
     }
     @download_file = DownloadFile.new(@valid_attributes)
     @expected_filename = File.join(Project.download_files_directory('456-789'), '123-321.yml')
