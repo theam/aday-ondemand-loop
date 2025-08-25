@@ -32,7 +32,9 @@
             <% if data.file.status.downloading? %>
               <%= render partial: '/shared/progress_bar', locals: { progress: data.file.connector_status.download_progress, file: data.file } %>
             <% else %>
-              <%= status_badge(data.file.status, filename: data.file.filename) %>
+              <%= status_badge(data.file.status,
+                               filename: data.file.filename,
+                               title: (data.file.error_message if data.file.status.error?)) %>
             <% end %>
             &nbsp;
             <% if retry_button_visible?(data.file) %>

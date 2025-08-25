@@ -28,13 +28,13 @@ module Download
         download_threads = batch.map do |file|
           download_processor = ConnectorClassDispatcher.download_processor(file)
           Thread.new do
-            file.update(start_date: now, end_date: nil, status: FileStatus::DOWNLOADING)
+            file.update(start_date: now, end_date: nil, status: FileStatus::DOWNLOADING, error_message: nil)
             stats[:progress] += 1
             result = download_processor.download
-            file.update(end_date: now, status: result.status)
+            file.update(end_date: now, status: result.status, error_message: result.status.error? ? result.message : nil)
           rescue => e
             log_error('Error while processing file', {file_id: file.id}, e)
-            file.update(end_date: now, status: FileStatus::ERROR)
+            file.update(end_date: now, status: FileStatus::ERROR, error_message: e.message)
           ensure
             stats[:completed] += 1
             stats[:progress] -= 1
