@@ -55,6 +55,7 @@
             title: t('project_selection.button_create_project_title'),
             icon: "bi bi-plus-square-fill"
           } do %>
+            <%= hidden_field_tag :redirect_back, true if on_explore? %>
           <% end %>
 
         </div>

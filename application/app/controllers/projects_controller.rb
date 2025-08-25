@@ -17,11 +17,10 @@ class ProjectsController < ApplicationController
     if project.save
       Current.settings.update_user_settings({ active_project: project.id.to_s })
       notice = t(".project_created", project_name: project_name)
-      show = !params.key?(:show) || ActiveModel::Type::Boolean.new.cast(params[:show])
-      if show
-        redirect_to project_path(id: project.id), notice: notice
-      else
+      if params.key?(:redirect_back)
         redirect_back fallback_location: projects_path, notice: notice
+      else
+        redirect_to project_path(id: project.id), notice: notice
       end
     else
       redirect_back fallback_location: projects_path, alert: t(".project_create_error", errors: project.errors.full_messages)
