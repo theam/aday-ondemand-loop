@@ -1,22 +1,23 @@
-<%# Renders tabs for recent and most popular items in a modal %>
+<%# Renders tabs for global and project-specific recent items in a modal %>
 <%
-  require 'ostruct'
-  data ||= OpenStruct.new(recent: [], popular: [])
+  service = HistoryService.new
+  global = service.global
+  project = service.project(Current.active_project)
 %>
 <div id="repository-items-tabs">
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link text-secondary active" id="repository-items-recent-tab" data-bs-toggle="tab" data-bs-target="#repository-items-recent" type="button" role="tab" aria-controls="repository-items-recent" aria-selected="true"><%= t('.tab_recent_label') %></button>
+      <button class="nav-link text-secondary active" id="repository-items-global-tab" data-bs-toggle="tab" data-bs-target="#repository-items-global" type="button" role="tab" aria-controls="repository-items-global" aria-selected="true"><%= t('.tab_global_label') %></button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link text-secondary" id="repository-items-popular-tab" data-bs-toggle="tab" data-bs-target="#repository-items-popular" type="button" role="tab" aria-controls="repository-items-popular" aria-selected="false"><%= t('.tab_popular_label') %></button>
+      <button class="nav-link text-secondary" id="repository-items-project-tab" data-bs-toggle="tab" data-bs-target="#repository-items-project" type="button" role="tab" aria-controls="repository-items-project" aria-selected="false"><%= t('.tab_project_label') %></button>
     </li>
   </ul>
 
   <div class="tab-content mt-3">
-    <div id="repository-items-recent" class="tab-pane fade show active" role="tabpanel" aria-labelledby="repository-items-recent-tab">
+    <div id="repository-items-global" class="tab-pane fade show active" role="tabpanel" aria-labelledby="repository-items-global-tab">
       <ul class="list-unstyled m-0">
-        <% data.recent.each do |item| %>
+        <% global.each do |item| %>
           <li class="card mb-2 shadow-sm rounded">
             <header class="card-header d-flex justify-content-between align-items-center gap-3">
               <div class="d-flex align-items-center gap-3 flex-grow-1">
@@ -42,9 +43,9 @@
         <% end %>
       </ul>
     </div>
-    <div id="repository-items-popular" class="tab-pane fade" role="tabpanel" aria-labelledby="repository-items-popular-tab">
+    <div id="repository-items-project" class="tab-pane fade" role="tabpanel" aria-labelledby="repository-items-project-tab">
       <ul class="list-unstyled m-0">
-        <% data.popular.each do |item| %>
+        <% project.each do |item| %>
           <li class="card mb-2 shadow-sm rounded">
             <header class="card-header d-flex justify-content-between align-items-center gap-3">
               <div class="d-flex align-items-center gap-3 flex-grow-1">

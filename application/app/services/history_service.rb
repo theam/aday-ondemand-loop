@@ -5,13 +5,13 @@ require 'ostruct'
 class HistoryService
   include DateTimeCommon
 
-  def summary(project_id)
-    project = Project.find(project_id)
-    return OpenStruct.new(recent: [], popular: []) unless project
+  # Returns repository items for the given project ordered by recency
+  def project(project)
+    return [] unless project
 
     files = Common::FileSorter.new.most_recent(project.download_files)
 
-    items = files.map do |file|
+    files.map do |file|
       url = file.connector_metadata&.files_url
       next if url.nil? || url.empty?
 
@@ -22,9 +22,19 @@ class HistoryService
         explore_url: url,
         version: 'published'
       )
-    end.compact
+    end.compact.uniq { |item| item.url }
+  end
 
-    items = items.uniq { |item| item.url }
-    OpenStruct.new(recent: items, popular: items)
+  # Returns global repository items from the RepoHistory store
+  def global
+    RepoRegistry.repo_history.all.map do |entry|
+      OpenStruct.new(
+        date: entry.last_added,
+        title: entry.title || entry.repo_url,
+        url: entry.repo_url,
+        explore_url: entry.repo_url,
+        version: entry.version
+      )
+    end
   end
 end

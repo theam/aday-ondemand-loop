@@ -21,19 +21,28 @@ class HistoryServiceTest < ActiveSupport::TestCase
     @file3.stubs(:connector_metadata).returns(OpenStruct.new(files_url: '/file2'))
 
     @project.stubs(:download_files).returns([@file1, @file2, @file3])
-    Project.stubs(:find).with(@project.id).returns(@project)
   end
 
-  test 'summary returns unique items ordered by recency' do
-    result = HistoryService.new.summary(@project.id)
+  test 'project returns unique items ordered by recency' do
+    result = HistoryService.new.project(@project)
 
-    assert_equal ['/file2', '/file1'], result.recent.map(&:url)
-    assert_equal result.recent, result.popular
+    assert_equal ['/file2', '/file1'], result.map(&:url)
 
-    first = result.recent.first
+    first = result.first
     assert_equal '2024-01-03T00:00:00', first.date
     assert_equal 'published', first.version
     assert_equal '/file2', first.title
     assert_equal '/file2', first.explore_url
+  end
+
+  test 'global returns entries from repo history' do
+    entry1 = Repo::RepoHistory::Entry.new(repo_url: 'https://one', type: ConnectorType.get(:dataverse), title: 'One', version: 'v1', count: 1, last_added: '2024-01-02T00:00:00')
+    entry2 = Repo::RepoHistory::Entry.new(repo_url: 'https://two', type: ConnectorType.get(:zenodo), title: 'Two', version: 'v2', count: 1, last_added: '2024-01-01T00:00:00')
+    RepoRegistry.stubs(:repo_history).returns(stub(all: [entry1, entry2]))
+
+    result = HistoryService.new.global
+    assert_equal ['https://one', 'https://two'], result.map(&:url)
+    assert_equal 'One', result.first.title
+    assert_equal 'v1', result.first.version
   end
 end
