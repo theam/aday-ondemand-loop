@@ -41,7 +41,7 @@ module Zenodo::Handlers
         external_url,
         ConnectorType::ZENODO,
         title: deposition.title,
-        version: deposition.version
+        note: deposition.version
       )
 
       ConnectorResult.new(

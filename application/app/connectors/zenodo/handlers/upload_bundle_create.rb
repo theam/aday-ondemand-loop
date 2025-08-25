@@ -27,7 +27,7 @@ module Zenodo::Handlers
 
         title = record.title
         concept_id = record.concept_id
-        version = record.version
+          version = record.version
       elsif url_data.deposition?
         repo_info = RepoRegistry.repo_db.get(url_data.zenodo_url)
         if repo_info.metadata.auth_key.present?
@@ -47,7 +47,7 @@ module Zenodo::Handlers
         remote_repo_url,
         ConnectorType::ZENODO,
         title: title,
-        version: version
+        note: version
       )
 
       file_utils = Common::FileUtils.new

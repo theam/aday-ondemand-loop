@@ -20,7 +20,7 @@ class HistoryService
         date: file.creation_date,
         title: url,
         url: url,
-        version: 'published'
+        note: 'published'
       )
     end.compact.uniq { |item| item.url }
   end
@@ -33,7 +33,7 @@ class HistoryService
         date: entry.last_added,
         title: entry.title || entry.repo_url,
         url: entry.repo_url,
-        version: entry.version
+        note: entry.note
       )
     end
   end

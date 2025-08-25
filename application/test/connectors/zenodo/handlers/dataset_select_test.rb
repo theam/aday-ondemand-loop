@@ -74,7 +74,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
       regexp_matches(%r{zenodo\.org}),
       ConnectorType::ZENODO,
       title: 'Draft',
-      version: 'draft'
+      note: 'draft'
     )
 
     action = Zenodo::Handlers::DatasetSelect.new
@@ -95,7 +95,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
       regexp_matches(%r{zenodo\.org}),
       ConnectorType::ZENODO,
       title: 'Pub',
-      version: 'published'
+      note: 'published'
     )
 
     action = Zenodo::Handlers::DatasetSelect.new

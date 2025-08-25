@@ -9,16 +9,16 @@ module Repo
     include LoggingCommon
 
     class Entry
-      attr_reader :repo_url, :type, :title, :version, :last_added
+      attr_reader :repo_url, :type, :title, :note, :last_added
       attr_accessor :count
 
-      def initialize(repo_url:, type:, title:, version:, count:, last_added:)
+      def initialize(repo_url:, type:, title:, note:, count:, last_added:)
         raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
         @repo_url = repo_url
         @type = type
         @title = title
-        @version = version
+        @note = note
         @count = count
         @last_added = last_added
       end
@@ -28,7 +28,7 @@ module Repo
           repo_url: @repo_url,
           type: @type.to_s,
           title: @title,
-          version: @version,
+          note: @note,
           count: @count,
           last_added: @last_added
         }
@@ -46,11 +46,11 @@ module Repo
       @data = load_data.freeze
     end
 
-    def add_repo(url, type, title: nil, version: nil)
+    def add_repo(url, type, title: nil, note: nil)
       raise ArgumentError, "Invalid type: #{type}" unless type.is_a?(ConnectorType)
 
       now_time = now
-      new_entry = Entry.new(repo_url: url, type: type, title: title, version: version, count: 1, last_added: now_time)
+      new_entry = Entry.new(repo_url: url, type: type, title: title, note: note, count: 1, last_added: now_time)
       new_data = [new_entry]
 
       @data.each do |e|
@@ -89,7 +89,7 @@ module Repo
           repo_url: v[:repo_url],
           type: ConnectorType.get(v[:type]),
           title: v[:title],
-          version: v[:version],
+          note: v[:note],
           count: v[:count] || 0,
           last_added: v[:last_added]
         )

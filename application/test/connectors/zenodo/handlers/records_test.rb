@@ -22,7 +22,7 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
       url,
       ConnectorType::ZENODO,
       title: 'Record Title',
-      version: 'published'
+      note: 'published'
     )
     res = @explorer.show(repo_url: @repo_url)
     assert res.success?

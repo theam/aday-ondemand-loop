@@ -19,7 +19,7 @@ module Dataverse::Handlers
       url_data = Dataverse::DataverseUrl.parse(remote_repo_url)
       log_info('Creating upload bundle', { project_id: project.id, remote_repo_url: remote_repo_url })
 
-      version = nil
+      repo_history_note = nil
 
       if url_data.collection?
         collection_service = Dataverse::CollectionService.new(url_data.dataverse_url)
@@ -30,7 +30,7 @@ module Dataverse::Handlers
         root_title = root_dv[:name]
         collection_title = collection.data.name
         collection_id = collection.data.alias
-        version = 'collection'
+        repo_history_note = 'collection'
       elsif url_data.dataset?
         dataset_service = Dataverse::DatasetService.new(url_data.dataverse_url)
         dataset = dataset_service.find_dataset_version_by_persistent_id(url_data.dataset_id)
@@ -51,19 +51,19 @@ module Dataverse::Handlers
         end
 
         dataset_title = dataset.metadata_field('title').to_s
-        version = dataset.version
+        repo_history_note = dataset.version
       else
         collection_service = Dataverse::CollectionService.new(url_data.dataverse_url)
         collection = collection_service.find_collection_by_id(':root')
         root_title = collection.data.name
-        version = 'dataverse'
+        repo_history_note = 'dataverse'
       end
 
       RepoRegistry.repo_history.add_repo(
         remote_repo_url,
         ConnectorType::DATAVERSE,
         title: dataset_title || collection_title || root_title,
-        version: version
+        note: repo_history_note
       )
 
       file_utils = Common::FileUtils.new

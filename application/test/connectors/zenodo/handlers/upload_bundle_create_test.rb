@@ -103,7 +103,7 @@ test 'create adds repo history' do
   Common::FileUtils.any_instance.stubs(:normalize_name).returns('bundle')
   UploadBundle.any_instance.stubs(:save)
 
-  RepoRegistry.repo_history.expects(:add_repo).with('https://zenodo.org/deposit/10', ConnectorType::ZENODO, title: 'Depo', version: 'draft')
+  RepoRegistry.repo_history.expects(:add_repo).with('https://zenodo.org/deposit/10', ConnectorType::ZENODO, title: 'Depo', note: 'draft')
 
   @action.create(@project, object_url: 'https://zenodo.org/deposit/10')
 end

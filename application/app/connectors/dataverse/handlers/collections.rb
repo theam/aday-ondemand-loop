@@ -34,7 +34,7 @@ module Dataverse::Handlers
           collection_url,
           ConnectorType::DATAVERSE,
           title: collection.data.name,
-          version: 'collection'
+          note: 'collection'
         )
         ConnectorResult.new(
           template: '/connectors/dataverse/collections/show',
