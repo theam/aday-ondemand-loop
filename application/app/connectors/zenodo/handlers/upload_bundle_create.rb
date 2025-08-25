@@ -18,7 +18,7 @@ module Zenodo::Handlers
       remote_repo_url = request_params[:object_url]
       url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)
       log_info('Creating upload bundle', { project_id: project.id, remote_repo_url: remote_repo_url })
-      title = concept_id = bucket_url = draft = nil
+      title = concept_id = bucket_url = draft = version = nil
 
       if url_data.record?
         records_service = Zenodo::RecordService.new(url_data.zenodo_url)
@@ -27,6 +27,7 @@ module Zenodo::Handlers
 
         title = record.title
         concept_id = record.concept_id
+        version = record.version
       elsif url_data.deposition?
         repo_info = RepoRegistry.repo_db.get(url_data.zenodo_url)
         if repo_info.metadata.auth_key.present?
@@ -37,6 +38,7 @@ module Zenodo::Handlers
           title = deposition.title
           bucket_url = deposition.bucket_url
           draft = deposition.draft?
+          version = deposition.version
         end
 
       end
@@ -45,7 +47,7 @@ module Zenodo::Handlers
         remote_repo_url,
         ConnectorType::ZENODO,
         title: title,
-        note: draft ? 'draft' : 'published'
+        version: version
       )
 
       file_utils = Common::FileUtils.new

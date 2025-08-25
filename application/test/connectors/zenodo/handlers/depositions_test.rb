@@ -26,7 +26,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
       url,
       ConnectorType::ZENODO,
       title: 'Deposition Title',
-      note: 'draft'
+      version: 'draft'
     )
     result = @explorer.show(repo_url: @repo_url)
     assert result.success?

@@ -27,7 +27,7 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
       expected_url,
       ConnectorType::DATAVERSE,
       title: 'Title',
-      note: '1'
+      version: '1'
     )
 
     res = @explorer.show(repo_url: @repo_url)

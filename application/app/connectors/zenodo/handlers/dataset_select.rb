@@ -42,7 +42,7 @@ module Zenodo::Handlers
         upload_bundle.connector_metadata.title_url,
         ConnectorType::ZENODO,
         title: deposition.title,
-        note: deposition.version
+        version: deposition.version
       )
 
       ConnectorResult.new(

@@ -40,6 +40,7 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     ds = mock('ds')
     ds.stubs(:data).returns(OpenStruct.new(parents: [{name: 'root'}, {name: 'col', identifier: 'c1'}]))
     ds.stubs(:metadata_field).with('title').returns('Dataset Title')
+    ds.stubs(:version).returns('v1')
     service.expects(:find_dataset_version_by_persistent_id).with('DS1').returns(ds)
     Dataverse::DatasetService.stubs(:new).returns(service)
 
@@ -55,6 +56,7 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     dataset = mock('dataset')
     dataset.stubs(:data).returns(OpenStruct.new(parents: []))
     dataset.stubs(:metadata_field).with('title').returns('Lonely Dataset')
+    dataset.stubs(:version).returns('v1')
     dataset_service.expects(:find_dataset_version_by_persistent_id).with('DS_NO_PARENTS').returns(dataset)
     Dataverse::DatasetService.stubs(:new).returns(dataset_service)
 
@@ -77,7 +79,7 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     Dataverse::CollectionService.stubs(:new).returns(stub(find_collection_by_id: OpenStruct.new(data: OpenStruct.new(name: 'root'))))
     UploadBundle.any_instance.stubs(:save)
 
-    RepoRegistry.repo_history.expects(:add_repo).with('http://dv.org', ConnectorType::DATAVERSE, title: 'root')
+    RepoRegistry.repo_history.expects(:add_repo).with('http://dv.org', ConnectorType::DATAVERSE, title: 'root', version: 'dataverse')
 
     @action.create(@project, object_url: 'http://dv.org')
   end

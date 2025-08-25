@@ -30,20 +30,20 @@ class HistoryServiceTest < ActiveSupport::TestCase
 
       first = result.first
       assert_equal '2024-01-03T00:00:00', first.date
-      assert_equal 'published', first.note
+      assert_equal 'published', first.version
       assert_equal '/file2', first.title
       assert_equal @file2.type, first.type
     end
 
   test 'global returns entries from repo history' do
-    entry1 = Repo::RepoHistory::Entry.new(repo_url: 'https://one', type: ConnectorType.get(:dataverse), title: 'One', note: 'v1', count: 1, last_added: '2024-01-02T00:00:00')
-    entry2 = Repo::RepoHistory::Entry.new(repo_url: 'https://two', type: ConnectorType.get(:zenodo), title: 'Two', note: 'v2', count: 1, last_added: '2024-01-01T00:00:00')
+    entry1 = Repo::RepoHistory::Entry.new(repo_url: 'https://one', type: ConnectorType.get(:dataverse), title: 'One', version: 'v1', count: 1, last_added: '2024-01-02T00:00:00')
+    entry2 = Repo::RepoHistory::Entry.new(repo_url: 'https://two', type: ConnectorType.get(:zenodo), title: 'Two', version: 'v2', count: 1, last_added: '2024-01-01T00:00:00')
     RepoRegistry.stubs(:repo_history).returns(stub(all: [entry1, entry2]))
 
       result = HistoryService.new.global
       assert_equal ['https://one', 'https://two'], result.map(&:url)
       assert_equal 'One', result.first.title
-      assert_equal 'v1', result.first.note
+      assert_equal 'v1', result.first.version
       assert_equal entry1.type, result.first.type
     end
   end

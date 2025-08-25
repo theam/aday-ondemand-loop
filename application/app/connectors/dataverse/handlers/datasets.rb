@@ -69,7 +69,7 @@ module Dataverse::Handlers
         dataset_url,
         ConnectorType::DATAVERSE,
         title: dataset.title,
-        note: dataset.version
+        version: dataset.version
       )
 
       ConnectorResult.new(

@@ -26,7 +26,7 @@ class Dataverse::Handlers::CollectionsTest < ActiveSupport::TestCase
       expected_url,
       ConnectorType::DATAVERSE,
       title: @collection.data.name,
-      note: 'collection'
+      version: 'collection'
     )
     res = @explorer.show(repo_url: @repo_url, page: 1)
     assert res.success?
