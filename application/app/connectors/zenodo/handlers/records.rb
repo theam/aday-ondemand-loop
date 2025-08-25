@@ -46,8 +46,8 @@ module Zenodo::Handlers
           dataset_title: record.title,
           external_zenodo_url: external_url
         },
-        success: true,
-        resource: record
+        resource: record,
+        success: true
       )
     end
 

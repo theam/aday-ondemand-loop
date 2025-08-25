@@ -47,8 +47,8 @@ module Zenodo::Handlers
 
       ConnectorResult.new(
         message: { notice: I18n.t('connectors.zenodo.handlers.dataset_select.message_success', title: deposition.title) },
-        success: true,
-        resource: deposition
+        resource: deposition,
+        success: true
       )
     rescue Zenodo::ApiService::UnauthorizedException => e
       log_error('Auth error selecting deposition', { upload_bundle: upload_bundle.id, deposition_id: deposition_id }, e)

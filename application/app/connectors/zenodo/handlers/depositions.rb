@@ -53,8 +53,8 @@ module Zenodo::Handlers
           dataset_title: deposition.title,
           external_zenodo_url: external_url
         },
-        success: true,
-        resource: deposition
+        resource: deposition,
+        success: true
       )
     rescue Zenodo::ApiService::ApiKeyRequiredException
       ConnectorResult.new(
