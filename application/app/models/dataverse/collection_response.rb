@@ -8,6 +8,10 @@ module Dataverse
       @data = Data.new(parsed[:data])
     end
 
+    def title
+      data.name
+    end
+
     class Data
       attr_reader :id, :alias, :name, :description, :is_facet_root, :parents
 

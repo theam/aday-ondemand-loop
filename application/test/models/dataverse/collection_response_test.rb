@@ -21,6 +21,10 @@ class Dataverse::CollectionResponseTest < ActiveSupport::TestCase
     assert_instance_of Dataverse::CollectionResponse::Data, @response.data
   end
 
+  test "title returns collection name" do
+    assert_equal "Sample Dataverse", @response.title
+  end
+
   test "valid json parses :root dataverse response data" do
     data = @response.data
     assert_equal 1234, data.id
@@ -45,11 +49,13 @@ class Dataverse::CollectionResponseTest < ActiveSupport::TestCase
     assert_equal "Parent Dataverse", data.parents.last[:name]
     assert_equal "grandparent", data.parents.first[:identifier]
     assert_equal "Grandparent Dataverse", data.parents.first[:name]
+    assert_equal "Sample child Dataverse", @child_response.title
   end
 
   test "dataverse response on empty json does not throw exception" do
     @invalid_response = Dataverse::CollectionResponse.new(empty_json)
     assert_instance_of Dataverse::CollectionResponse, @invalid_response
+    assert_nil @invalid_response.title
   end
 
   test "dataverse response with empty string raises JSON::ParserError" do
