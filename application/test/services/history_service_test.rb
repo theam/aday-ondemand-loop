@@ -32,7 +32,6 @@ class HistoryServiceTest < ActiveSupport::TestCase
     assert_equal '2024-01-03T00:00:00', first.date
     assert_equal 'published', first.version
     assert_equal '/file2', first.title
-    assert_equal '/file2', first.explore_url
   end
 
   test 'global returns entries from repo history' do
