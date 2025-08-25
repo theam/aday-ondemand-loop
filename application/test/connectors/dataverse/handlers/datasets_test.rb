@@ -6,6 +6,9 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'key'))
     RepoRegistry.stubs(:repo_db).returns(stub(get: repo_info))
     @explorer = Dataverse::Handlers::Datasets.new('pid')
+    @settings = mock('settings')
+    @settings.stubs(:update_user_settings)
+    Current.stubs(:settings).returns(@settings)
   end
 
   test 'params schema includes expected keys' do
@@ -78,6 +81,7 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
     proj_service.expects(:initialize_download_files).with(project, 'pid', dataset, files_page, ['f1']).returns([file])
     Dataverse::ProjectService.expects(:new).with('https://dataverse.org').returns(proj_service)
 
+    @settings.expects(:update_user_settings).with({ active_project: '1' })
     res = @explorer.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
     assert res.success?
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProjectsHelper
 
   def active_project?(project_id)
@@ -9,27 +11,11 @@ module ProjectsHelper
     "#{project.name} (#{t('helpers.projects.active_project_text')})"
   end
 
-  # frozen_string_literal: true
-
+  # Returns all projects ordered with the active project first (if present).
   def select_project_list
-    current_id = Current.from_project.to_s
-    active_id =  Current.settings.user_settings.active_project.to_s
-    current = []
-    active  = []
-    others  = []
-
-    Project.all.each do |project|
-      pid = project.id.to_s
-      if pid == current_id
-        current << project
-      elsif pid == active_id
-        active << project
-      else
-        others << project
-      end
-    end
-
-    current + active + others
+    active_id = Current.settings.user_settings.active_project.to_s
+    # partition returns [active, others]; flatten keeps active project first
+    Project.all.partition { |project| project.id.to_s == active_id }.flatten
   end
 
   def most_recent_explore_url(project)

@@ -6,12 +6,10 @@ class ProjectsHelperTest < ActionView::TestCase
 
   setup do
     @original_settings = Current.settings
-    @original_from_project = Current.from_project
   end
 
   teardown do
     Current.settings = @original_settings
-    Current.from_project = @original_from_project
   end
 
   test 'header and border classes respond to active' do
@@ -64,25 +62,10 @@ class ProjectsHelperTest < ActionView::TestCase
     project2 = OpenStruct.new(id: 2, name: 'Project B')
     Project.stubs(:all).returns([project1, project2])
     Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
-    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
 
     result = select_project_list
 
     assert_equal [project2, project1], result
-  end
-
-  test 'select_project_list prioritizes current project over active project' do
-    project1 = OpenStruct.new(id: 1, name: 'Project A')
-    project2 = OpenStruct.new(id: 2, name: 'Project B')
-    project3 = OpenStruct.new(id: 3, name: 'Project C')
-    Project.stubs(:all).returns([project1, project2, project3])
-    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '2'))
-    self.stubs(:t).with('helpers.projects.active_project_text').returns('Active')
-
-    Current.from_project = '3'
-    result = select_project_list
-
-    assert_equal [project3, project2, project1], result
   end
 
   test 'select_project_list returns original order if no active match' do
@@ -90,6 +73,17 @@ class ProjectsHelperTest < ActionView::TestCase
     project2 = OpenStruct.new(id: 2, name: 'Project B')
     Project.stubs(:all).returns([project1, project2])
     Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: '999'))
+
+    result = select_project_list
+
+    assert_equal [project1, project2], result
+  end
+
+  test 'select_project_list returns original order if no active project set' do
+    project1 = OpenStruct.new(id: 1, name: 'Project A')
+    project2 = OpenStruct.new(id: 2, name: 'Project B')
+    Project.stubs(:all).returns([project1, project2])
+    Current.settings = OpenStruct.new(user_settings: OpenStruct.new(active_project: nil))
 
     result = select_project_list
 

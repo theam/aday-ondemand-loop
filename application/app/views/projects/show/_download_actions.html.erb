@@ -84,3 +84,30 @@
   </div>
 </div>
 
+<div id="download-repo-resolver" class="shadow-sm collapse bg-light-darker" style="transition: none;"
+     data-controller="focus-on-event"
+     data-focus-on-event-event-value="shown.bs.collapse"
+     data-focus-on-event-element-id-value="download-repo-resolver_input">
+  <div class="d-flex align-items-center justify-content-between py-3 px-5 border-bottom">
+
+    <!-- Resolver Form (right aligned) -->
+    <%= render layout: "shared/button_to", locals: {
+      url: repo_resolver_path(active_project: project.id),
+      form_class: 'flex-grow-1 d-flex align-items-center gap-2',
+      class: 'btn-primary-dark',
+      icon_html: image_tag('icon.png', alt: t('.button_submit_icon_alt'), class: 'icon-class d-block', style: 'height: 1rem; width: auto; object-fit: contain;' ),
+      label: t('.button_submit_text')
+    } do %>
+
+      <input type="text"
+             name="repo_url"
+             id="download-repo-resolver_input"
+             placeholder="<%= t('layouts.app_actions_bar.input_repo_url_placeholder') %>"
+             aria-label="<%= t('layouts.app_actions_bar.input_repo_url_label') %>"
+             class="d-inline form-control me-3">
+
+    <% end %>
+
+  </div>
+</div>
+

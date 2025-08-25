@@ -4,6 +4,9 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
   def setup
     @explorer = Zenodo::Handlers::Depositions.new('10')
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
+    @settings = mock('settings')
+    @settings.stubs(:update_user_settings)
+    Current.stubs(:settings).returns(@settings)
   end
 
   test 'params schema includes expected keys' do
@@ -17,11 +20,15 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
     service = mock('service')
-    service.expects(:find_deposition).with('10').returns(:deposition)
+    dataset = OpenStruct.new(title: 'Deposition Title')
+    service.expects(:find_deposition).with('10').returns(dataset)
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
 
     result = @explorer.show(repo_url: @repo_url)
     assert result.success?
+    assert_equal dataset, result.locals[:dataset]
+    assert_equal 'Deposition Title', result.locals[:dataset_title]
+    assert_equal Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url('https://zenodo.org', '10'), result.locals[:external_zenodo_url]
   end
 
   test 'show returns error when api key missing' do
@@ -48,13 +55,14 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
     service = mock('service')
-    service.expects(:find_deposition).with('10').returns(:deposition)
+    service.expects(:find_deposition).with('10').returns(:dataset)
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
 
     Project.stubs(:find).with('1').returns(nil)
     project = mock('project')
     project.stubs(:save).returns(true)
     project.stubs(:name).returns('Proj')
+    project.stubs(:id).returns('1')
 
     file = mock('file')
     file.stubs(:valid?).returns(true)
@@ -62,9 +70,10 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
 
     proj_service = mock('proj_service')
     proj_service.expects(:initialize_project).returns(project)
-    proj_service.expects(:create_files_from_deposition).with(project, :deposition, ['f1']).returns([file])
+    proj_service.expects(:create_files_from_deposition).with(project, :dataset, ['f1']).returns([file])
     Zenodo::ProjectService.expects(:new).with('https://zenodo.org').returns(proj_service)
 
+    @settings.expects(:update_user_settings).with({ active_project: project.id.to_s })
     result = @explorer.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
     assert result.success?
   end

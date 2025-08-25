@@ -79,7 +79,7 @@ en:
       button_active_project_title: "Active Project"
       field_creation_date_title: "Creation date"
       link_open_downloads_title: "Open Project workspace folder"
-    repo_resolver_bar:
+    app_actions_bar:
       input_repo_url_placeholder: "Paste Repository URL"
       input_repo_url_label: "Repository URL"
       button_submit_text: "Explore"
@@ -95,6 +95,8 @@ en:
         button_browse_dataset_title: "Use a repository URL to to browse and select files from"
         button_edit_download_dir_title: "Update project workspace folder"
         button_edit_download_dir_label: "Update workspace folder"
+        button_submit_icon_alt: "OnDemand Loop Application Icon"
+        button_submit_text: "Explore"
       download_files:
         badge_repository_files_tooltip: "Repository Files"
         button_retry_download_title: "Retry download"
@@ -224,16 +226,15 @@ en:
     ood_folder_button:
       button_open_in_ondemand_title: "Open in OnDemand"
       image_ood_icon_alt: "Open OnDemand Icon"
-    project_selection:
-      project_select_label: "Choose an existing project"
-      option_create_project_text: "➕ Create new project"
-      button_submit_aria_label: "Add selected files to project"
-      button_submit_text: "Add Files to Project"
-      button_open_project_title: "Open selected project details page"
-      button_open_project_label: "Open selected project"
     tabs_scrollable:
       button_tabs_scroll_left_label: "Scroll tabs left"
       button_tabs_scroll_right_label: "Scroll tabs right"
+  project_selection:
+    button_empty_list_text: "Create a project using the plus button ➔"
+    selected_project_label: "Selected project:"
+    button_open_project_title: "Open selected project details page"
+    button_open_project_label: "Open selected project"
+    button_create_project_title: "Create new project"
   sitemap:
     index:
       breadcrumbs_text: "Sitemap"
