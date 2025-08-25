@@ -9,4 +9,8 @@ module LayoutHelper
   def on_project_index?
     on_page?(controller: 'projects', action: 'index')
   end
+
+  def on_explore?
+    on_page?(controller: 'explore')
+  end
 end

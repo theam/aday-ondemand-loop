@@ -15,7 +15,13 @@ class ProjectsController < ApplicationController
     project_name = params[:project_name] || ProjectNameGenerator.generate
     project = Project.new(id: project_name, name: project_name)
     if project.save
-      redirect_to  project_path(id: project.id), notice: t(".project_created", project_name: project_name)
+      Current.settings.update_user_settings({ active_project: project.id.to_s })
+      notice = t(".project_created", project_name: project_name)
+      if params.key?(:redirect_back)
+        redirect_back fallback_location: projects_path, notice: notice
+      else
+        redirect_to project_path(id: project.id), notice: notice
+      end
     else
       redirect_back fallback_location: projects_path, alert: t(".project_create_error", errors: project.errors.full_messages)
     end
