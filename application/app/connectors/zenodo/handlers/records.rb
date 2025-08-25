@@ -59,6 +59,7 @@ module Zenodo::Handlers
           errors = project.errors.full_messages.join(', ')
           return ConnectorResult.new(message: { alert: I18n.t('zenodo.records.message_project_error', errors: errors) }, success: false)
         end
+        Current.settings.update_user_settings({ active_project: project.id.to_s })
       end
 
       download_files = project_service.create_files_from_record(project, record, file_ids)

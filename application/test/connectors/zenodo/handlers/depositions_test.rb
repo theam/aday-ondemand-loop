@@ -4,6 +4,9 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
   def setup
     @explorer = Zenodo::Handlers::Depositions.new('10')
     @repo_url = OpenStruct.new(server_url: 'https://zenodo.org')
+    @settings = mock('settings')
+    @settings.stubs(:update_user_settings)
+    Current.stubs(:settings).returns(@settings)
   end
 
   test 'params schema includes expected keys' do
@@ -59,6 +62,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     project = mock('project')
     project.stubs(:save).returns(true)
     project.stubs(:name).returns('Proj')
+    project.stubs(:id).returns('1')
 
     file = mock('file')
     file.stubs(:valid?).returns(true)
@@ -69,6 +73,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     proj_service.expects(:create_files_from_deposition).with(project, :dataset, ['f1']).returns([file])
     Zenodo::ProjectService.expects(:new).with('https://zenodo.org').returns(proj_service)
 
+    @settings.expects(:update_user_settings).with({ active_project: project.id.to_s })
     result = @explorer.create(repo_url: @repo_url, file_ids: ['f1'], project_id: '1')
     assert result.success?
   end
