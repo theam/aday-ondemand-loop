@@ -30,6 +30,13 @@ module Zenodo::Handlers
 
       external_url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url(repo_url.server_url, @record_id)
 
+      RepoRegistry.repo_history.add_repo(
+        external_url,
+        ConnectorType::ZENODO,
+        title: record.title,
+        version: record.version
+      )
+
       ConnectorResult.new(
         template: '/connectors/zenodo/records/show',
         locals: {
@@ -40,8 +47,7 @@ module Zenodo::Handlers
           external_zenodo_url: external_url
         },
         success: true,
-        resource: record,
-        resource_url: external_url
+        resource: record
       )
     end
 

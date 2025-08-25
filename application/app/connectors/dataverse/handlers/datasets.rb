@@ -65,6 +65,13 @@ module Dataverse::Handlers
         version: dataset.version
       )
 
+      RepoRegistry.repo_history.add_repo(
+        dataset_url,
+        ConnectorType::DATAVERSE,
+        title: dataset.title,
+        version: dataset.version
+      )
+
       ConnectorResult.new(
         template: '/connectors/dataverse/datasets/show',
         locals: {
@@ -75,7 +82,6 @@ module Dataverse::Handlers
           persistent_id: @persistent_id
         },
         resource: dataset,
-        resource_url: dataset_url,
         success: true
       )
     end

@@ -21,13 +21,4 @@ class ConnectorResultTest < ActiveSupport::TestCase
     refute result.redirect?
   end
 
-  test 'resource_url returns stored URL' do
-    result = ConnectorResult.new(resource_url: '/some/path')
-    assert_equal '/some/path', result.resource_url
-  end
-
-  test 'resource_url is nil when missing' do
-    result = ConnectorResult.new
-    assert_nil result.resource_url
-  end
 end

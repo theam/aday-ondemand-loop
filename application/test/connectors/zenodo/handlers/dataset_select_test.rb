@@ -63,31 +63,45 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
     assert_equal '99', @bundle.metadata[:record_id]
     assert_nil @bundle.metadata[:deposition_id]
   end
-  test 'result includes resource and resource_url for draft deposition' do
+  test 'update adds repo history for draft deposition' do
     bundle = FakeUploadBundle.new(id: '1', metadata: { zenodo_url: 'http://zenodo.org', auth_key: 'KEY' })
     service = mock('service')
     deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Draft', bucket_url: 'b', draft?: true)
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
 
+    RepoRegistry.repo_history.expects(:add_repo).with(
+      regexp_matches(%r{zenodo\.org}),
+      ConnectorType::ZENODO,
+      title: 'Draft',
+      version: 'draft'
+    )
+
     action = Zenodo::Handlers::DatasetSelect.new
     result = action.update(bundle, { deposition_id: '10' })
 
+    assert result.success?
     assert_equal deposition, result.resource
-    assert_equal bundle.connector_metadata.title_url, result.resource_url
   end
 
-  test 'result includes resource and resource_url for published deposition' do
+  test 'update adds repo history for published deposition' do
     bundle = FakeUploadBundle.new(id: '1', metadata: { zenodo_url: 'http://zenodo.org', auth_key: 'KEY' })
     service = mock('service')
     deposition = OpenStruct.new(id: '10', record_id: '20', title: 'Pub', bucket_url: 'b', draft?: false)
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
 
+    RepoRegistry.repo_history.expects(:add_repo).with(
+      regexp_matches(%r{zenodo\.org}),
+      ConnectorType::ZENODO,
+      title: 'Pub',
+      version: 'published'
+    )
+
     action = Zenodo::Handlers::DatasetSelect.new
     result = action.update(bundle, { deposition_id: '10' })
 
+    assert result.success?
     assert_equal deposition, result.resource
-    assert_equal bundle.connector_metadata.title_url, result.resource_url
   end
 end

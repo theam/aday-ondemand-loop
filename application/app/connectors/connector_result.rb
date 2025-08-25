@@ -19,10 +19,6 @@ class ConnectorResult
     data[:resource]
   end
 
-  def resource_url
-    data[:resource_url]
-  end
-
   def redirect_url
     data[:redirect_url]
   end

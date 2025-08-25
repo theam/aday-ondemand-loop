@@ -37,6 +37,13 @@ module Zenodo::Handlers
 
       external_url = Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url(repo_url.server_url, @deposition_id)
 
+      RepoRegistry.repo_history.add_repo(
+        external_url,
+        ConnectorType::ZENODO,
+        title: deposition.title,
+        version: deposition.version
+      )
+
       ConnectorResult.new(
         template: '/connectors/zenodo/depositions/show',
         locals: {
@@ -47,8 +54,7 @@ module Zenodo::Handlers
           external_zenodo_url: external_url
         },
         success: true,
-        resource: deposition,
-        resource_url: external_url
+        resource: deposition
       )
     rescue Zenodo::ApiService::ApiKeyRequiredException
       ConnectorResult.new(
