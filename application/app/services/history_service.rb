@@ -16,6 +16,7 @@ class HistoryService
       next if url.nil? || url.empty?
 
       OpenStruct.new(
+        type: file.type,
         date: file.creation_date,
         title: url,
         url: url,
@@ -28,6 +29,7 @@ class HistoryService
   def global
     RepoRegistry.repo_history.all.map do |entry|
       OpenStruct.new(
+        type: entry.type,
         date: entry.last_added,
         title: entry.title || entry.repo_url,
         url: entry.repo_url,
