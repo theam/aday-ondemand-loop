@@ -2,7 +2,7 @@
 <%
   service = HistoryService.new
   global = service.global
-  project = service.project(Current.active_project)
+  project = service.project(Current.settings.user_settings.active_project.to_s)
 %>
 <div id="repository-items-tabs">
   <ul class="nav nav-tabs" role="tablist">
