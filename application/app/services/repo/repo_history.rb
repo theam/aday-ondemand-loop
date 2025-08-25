@@ -83,8 +83,8 @@ module Repo
       return [] unless File.exist?(db_path)
 
       raw = YAML.load_file(db_path) || []
-      entries = raw.map do |v|
-        v = v.symbolize_keys
+      raw.map do |v|
+        v = v.transform_keys(&:to_sym)
         Entry.new(
           repo_url: v[:repo_url],
           type: ConnectorType.get(v[:type]),
@@ -94,12 +94,12 @@ module Repo
           last_added: v[:last_added]
         )
       end
-      entries
     end
 
     def persist!
       FileUtils.mkdir_p(File.dirname(db_path))
-      File.write(db_path, YAML.dump(@data.map(&:to_h)))
+      payload = @data.map { |e| e.to_h.transform_keys(&:to_s) }
+      File.write(db_path, YAML.dump(payload))
     end
   end
 end
