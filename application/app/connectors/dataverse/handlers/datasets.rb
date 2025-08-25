@@ -59,6 +59,12 @@ module Dataverse::Handlers
         )
       end
 
+      dataset_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url(
+        dataverse_url,
+        @persistent_id,
+        version: dataset.version
+      )
+
       ConnectorResult.new(
         template: '/connectors/dataverse/datasets/show',
         locals: {
@@ -68,6 +74,8 @@ module Dataverse::Handlers
           repo_url: repo_url,
           persistent_id: @persistent_id
         },
+        resource: dataset,
+        resource_url: dataset_url,
         success: true
       )
     end

@@ -26,6 +26,9 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
     assert res.success?
     assert_equal dataset, res.locals[:dataset]
     assert_equal files_page, res.locals[:files_page]
+    expected_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url('https://dataverse.org', 'pid', version: '1')
+    assert_equal dataset, res.resource
+    assert_equal expected_url, res.resource_url
   end
 
   test 'show returns error when dataset missing' do
