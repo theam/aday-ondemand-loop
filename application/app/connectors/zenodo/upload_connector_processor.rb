@@ -27,9 +27,14 @@ module Zenodo
 
       headers = { Zenodo::ApiService::AUTH_HEADER => "Bearer #{connector_metadata.api_key.value}" }
       upload_processor = Zenodo::ZenodoBucketHttpUploader.new(upload_url, source_location, headers)
-      upload_processor.upload do |context|
-        @status_context = context
-        cancelled
+      begin
+        upload_processor.upload do |context|
+          @status_context = context
+          cancelled
+        end
+      rescue StandardError => e
+        log_error('Upload failed', {id: file.id, url: upload_url}, e)
+        return response(FileStatus::ERROR, e.message)
       end
 
       return response(FileStatus::CANCELLED, 'file upload cancelled') if cancelled

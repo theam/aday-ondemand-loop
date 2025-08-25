@@ -34,9 +34,14 @@ module Dataverse
       file.upload_bundle.update({ metadata: connector_metadata.to_h})
 
       upload_processor = Upload::MultipartHttpRubyUploader.new(upload_url, source_location, payload, headers)
-      response_body = upload_processor.upload do |context|
-        @status_context = context
-        cancelled
+      begin
+        response_body = upload_processor.upload do |context|
+          @status_context = context
+          cancelled
+        end
+      rescue StandardError => e
+        log_error('Upload failed', {id: file.id, url: upload_url}, e)
+        return response(FileStatus::ERROR, e.message)
       end
 
       if cancelled

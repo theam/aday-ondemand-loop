@@ -52,6 +52,7 @@ module ModelHelper
       file.size = 200
       file.creation_date = file_now
       file.stubs(:upload_bundle).returns(upload_bundle)
+      file.error_message = nil
     end
   end
   def random_id

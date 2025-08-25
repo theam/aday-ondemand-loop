@@ -3,7 +3,7 @@
 class UploadFile < ApplicationDiskRecord
   include ActiveModel::Model
 
-  ATTRIBUTES = %w[id project_id upload_bundle_id file_location filename status size creation_date start_date end_date].freeze
+  ATTRIBUTES = %w[id project_id upload_bundle_id file_location filename status size creation_date start_date end_date error_message].freeze
 
   attr_accessor *ATTRIBUTES
 
