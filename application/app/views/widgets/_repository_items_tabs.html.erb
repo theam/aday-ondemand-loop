@@ -2,7 +2,7 @@
 <%
   service = HistoryService.new
   global = service.global
-  project = service.project(Current.settings.user_settings.active_project.to_s)
+  project = service.project(@active_project)
 %>
 <div id="repository-items-tabs">
   <ul class="nav nav-tabs" role="tablist">
@@ -29,9 +29,13 @@
                 <span class="badge bg-secondary flex-shrink-0"><%= item.version %></span>
               </div>
               <div class="d-flex align-items-center gap-2" role="group" aria-label="<%= t('.section_item_actions_label') %>">
-                <%= link_to item.explore_url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_explore_item_title') do %>
-                  <i class="bi bi-folder2-open" aria-hidden="true"></i>
-                  <span class="visually-hidden"><%= t('.button_explore_item_title') %></span>
+                <%= render layout: "shared/button_to", locals: {
+                  url: repo_resolver_path,
+                  title: t('.button_explore_item_title'),
+                  class: 'btn-sm btn-outline-dark',
+                  icon: 'bi bi-folder2-open'
+                } do %>
+                  <input type="hidden" name="repo_url" value="<%= item.url %>">
                 <% end %>
                 <%= link_to item.url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_open_repository_title') do %>
                   <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
@@ -57,9 +61,13 @@
                 <span class="badge bg-secondary flex-shrink-0"><%= item.version %></span>
               </div>
               <div class="d-flex align-items-center gap-2" role="group" aria-label="<%= t('.section_item_actions_label') %>">
-                <%= link_to item.explore_url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_explore_item_title') do %>
-                  <i class="bi bi-folder2-open" aria-hidden="true"></i>
-                  <span class="visually-hidden"><%= t('.button_explore_item_title') %></span>
+                <%= render layout: "shared/button_to", locals: {
+                  url: repo_resolver_path,
+                  title: t('.button_explore_item_title'),
+                  class: 'btn-sm btn-outline-dark',
+                  icon: 'bi bi-folder2-open'
+                } do %>
+                  <input type="hidden" name="repo_url" value="<%= item.url %>">
                 <% end %>
                 <%= link_to item.url, target: '_blank', class: 'btn btn-sm btn-outline-dark', title: t('.button_open_repository_title') do %>
                   <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
