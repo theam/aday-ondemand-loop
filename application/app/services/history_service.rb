@@ -33,7 +33,7 @@ class HistoryService
         date: entry.last_added,
         title: entry.title || entry.repo_url,
         url: entry.repo_url,
-        version: entry.version
+        version: entry.note
       )
     end
   end

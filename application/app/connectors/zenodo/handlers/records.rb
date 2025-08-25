@@ -34,7 +34,7 @@ module Zenodo::Handlers
         external_url,
         ConnectorType::ZENODO,
         title: record.title,
-        version: record.version
+        note: record.version
       )
 
       ConnectorResult.new(
