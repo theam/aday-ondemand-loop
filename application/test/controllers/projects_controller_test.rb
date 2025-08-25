@@ -40,6 +40,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create project with generated name" do
     ProjectNameGenerator.stubs(:generate).returns("generated_project")
+    @user_settings_mock.expects(:update_user_settings).with({active_project: 'generated_project'})
     post projects_url
     assert_redirected_to project_url(id: 'generated_project')
     follow_redirect!
@@ -47,6 +48,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create project with provided name" do
+    @user_settings_mock.expects(:update_user_settings).with({active_project: 'manual_project'})
     post projects_url, params: { project_name: "manual_project" }
     assert_redirected_to project_url(id: 'manual_project')
     follow_redirect!
@@ -54,6 +56,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create project without showing when show is false" do
+    @user_settings_mock.expects(:update_user_settings).with({active_project: 'hidden_project'})
     post projects_url,
          params: { project_name: "hidden_project", show: false },
          headers: { "HTTP_REFERER": root_url }

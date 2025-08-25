@@ -15,6 +15,7 @@ class ProjectsController < ApplicationController
     project_name = params[:project_name] || ProjectNameGenerator.generate
     project = Project.new(id: project_name, name: project_name)
     if project.save
+      Current.settings.update_user_settings({ active_project: project.id.to_s })
       notice = t(".project_created", project_name: project_name)
       show = !params.key?(:show) || ActiveModel::Type::Boolean.new.cast(params[:show])
       if show
