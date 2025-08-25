@@ -109,6 +109,7 @@ module Dataverse::Handlers
           errors = project.errors.full_messages.join(', ')
           return ConnectorResult.new(message: { alert: I18n.t('connectors.dataverse.datasets.download.error_generating_project', errors: errors) }, success: false)
         end
+        Current.settings.update_user_settings({ active_project: project.id.to_s })
       end
 
       download_files = project_service.initialize_download_files(project, @persistent_id, dataset, files_page, file_ids)
