@@ -53,6 +53,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_match "Project manual_project created", flash[:notice]
   end
 
+  test "should create project without showing when show is false" do
+    post projects_url,
+         params: { project_name: "hidden_project", show: false },
+         headers: { "HTTP_REFERER": root_url }
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_match "Project hidden_project created", flash[:notice]
+  end
+
   test "should set active project" do
     @user_settings_mock.expects(:update_user_settings).with({active_project: @project.id.to_s})
     post set_active_project_url(id: @project.id)
