@@ -54,6 +54,12 @@ module Dataverse::Handlers
         root_title = collection.data.name
       end
 
+      RepoRegistry.repo_history.add_repo(
+        remote_repo_url,
+        ConnectorType::DATAVERSE,
+        title: dataset_title || collection_title || root_title
+      )
+
       file_utils = Common::FileUtils.new
       upload_bundle = UploadBundle.new.tap do |bundle|
         bundle.id = file_utils.normalize_name(File.join(url_data.domain, UploadBundle.generate_code))

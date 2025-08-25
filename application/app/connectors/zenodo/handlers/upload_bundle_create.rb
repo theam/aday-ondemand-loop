@@ -41,6 +41,13 @@ module Zenodo::Handlers
 
       end
 
+      RepoRegistry.repo_history.add_repo(
+        remote_repo_url,
+        ConnectorType::ZENODO,
+        title: title,
+        note: draft ? 'draft' : 'published'
+      )
+
       file_utils = Common::FileUtils.new
       upload_bundle = UploadBundle.new.tap do |bundle|
         bundle.id = file_utils.normalize_name(File.join(url_data.domain, UploadBundle.generate_code))

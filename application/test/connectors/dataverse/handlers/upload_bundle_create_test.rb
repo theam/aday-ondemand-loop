@@ -6,6 +6,7 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
   def setup
     @project = create_project
     @action = Dataverse::Handlers::UploadBundleCreate.new
+    RepoRegistry.repo_history.stubs(:add_repo)
   end
 
   test 'params schema includes expected keys' do
@@ -70,5 +71,14 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     assert_equal 'Lonely Dataset', result.resource.metadata[:dataset_title]
     assert_equal 'Root Dataverse', result.resource.metadata[:dataverse_title]
     assert_equal 'root', result.resource.metadata[:collection_id]
+  end
+
+  test 'create adds repo history' do
+    Dataverse::CollectionService.stubs(:new).returns(stub(find_collection_by_id: OpenStruct.new(data: OpenStruct.new(name: 'root'))))
+    UploadBundle.any_instance.stubs(:save)
+
+    RepoRegistry.repo_history.expects(:add_repo).with('http://dv.org', ConnectorType::DATAVERSE, title: 'root')
+
+    @action.create(@project, object_url: 'http://dv.org')
   end
 end
