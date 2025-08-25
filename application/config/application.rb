@@ -33,6 +33,32 @@ module DataverseForOndemand
 
     # ALLOW ANY DOMAINS
     config.hosts.clear
+
+    connectors_root = config.root.join('connectors')
+    if connectors_root.exist?
+      Dir.children(connectors_root).each do |connector|
+        connector_path = connectors_root.join(connector)
+        next unless connector_path.directory?
+
+        %w[models services processors helpers].each do |folder|
+          path = connector_path.join(folder)
+          next unless path.exist?
+
+          path_str = path.to_s
+          config.autoload_paths << path_str
+          config.eager_load_paths << path_str
+          config.paths['app/helpers'] << path_str if folder == 'helpers'
+        end
+
+        views_path = connector_path.join('views')
+        config.paths['app/views'] << views_path.to_s if views_path.exist?
+
+        locale_path = connector_path.join('locale')
+        if locale_path.exist?
+          config.i18n.load_path += Dir[locale_path.join('**', '*.{rb,yml,yaml}')]
+        end
+      end
+    end
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
