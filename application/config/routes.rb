@@ -65,6 +65,9 @@ Rails.application.routes.draw do
   get "/connect/:connector_type/:object_type" => "connect#show", as: :connect_repo
   post "/connect/:connector_type/:object_type" => "connect#handle"
 
+  # TRACE ROUTES
+  resources :traces, only: [:index, :show, :create]
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
