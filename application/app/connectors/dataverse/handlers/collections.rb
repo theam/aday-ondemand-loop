@@ -29,6 +29,7 @@ module Dataverse::Handlers
             success: false
           )
         end
+        collection_url = Dataverse::Concerns::DataverseUrlBuilder.build_collection_url(dataverse_url, @collection_id)
         ConnectorResult.new(
           template: '/connectors/dataverse/collections/show',
           locals: {
@@ -37,6 +38,8 @@ module Dataverse::Handlers
             dataverse_url: dataverse_url,
             repo_url: request_params[:repo_url]
           },
+          resource: collection,
+          resource_url: collection_url,
           success: true
         )
       rescue Dataverse::CollectionService::UnauthorizedException => e

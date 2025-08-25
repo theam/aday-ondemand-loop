@@ -25,6 +25,9 @@ class Dataverse::Handlers::CollectionsTest < ActiveSupport::TestCase
     assert res.success?
     assert_equal @collection, res.locals[:collection]
     assert_equal @search_response, res.locals[:search_result]
+    assert_equal @collection, res.resource
+    expected_url = Dataverse::Concerns::DataverseUrlBuilder.build_collection_url(@repo_url.server_url, ':root')
+    assert_equal expected_url, res.resource_url
   end
 
   test 'show returns not found message when missing data' do
