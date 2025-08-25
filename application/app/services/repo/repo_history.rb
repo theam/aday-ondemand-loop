@@ -89,7 +89,7 @@ module Repo
           repo_url: v[:repo_url],
           type: ConnectorType.get(v[:type]),
           title: v[:title],
-          note: v[:note] || v[:version],
+          note: v[:note],
           count: v[:count] || 0,
           last_added: v[:last_added]
         )
