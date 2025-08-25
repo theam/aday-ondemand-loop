@@ -33,7 +33,7 @@ module Dataverse::Handlers
         RepoRegistry.repo_history.add_repo(
           collection_url,
           ConnectorType::DATAVERSE,
-          title: collection.title,
+          title: collection.data.name,
           version: nil
         )
         ConnectorResult.new(

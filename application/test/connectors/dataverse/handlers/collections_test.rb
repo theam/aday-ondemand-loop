@@ -25,7 +25,7 @@ class Dataverse::Handlers::CollectionsTest < ActiveSupport::TestCase
     RepoRegistry.repo_history.expects(:add_repo).with(
       expected_url,
       ConnectorType::DATAVERSE,
-      title: @collection.title,
+      title: @collection.data.name,
       version: nil
     )
     res = @explorer.show(repo_url: @repo_url, page: 1)
