@@ -49,6 +49,7 @@
           <div class="d-flex align-items-center">
             <input type="text" id="active_project" class="form-control me-3" value="<%= t('.input_selected_project_default_value') %>"
                    data-select-project-listener-target="inputProjectName" disabled>
+            <input type="hidden" name="project_id" id="project_id" autocomplete="off" data-select-project-listener-target="inputProjectId">
             <!-- link to project details page -->
             <%= link_to projects_path,
                         class: 'btn btn-outline-secondary',
