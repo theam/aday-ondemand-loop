@@ -84,7 +84,7 @@ module Repo
 
       raw = YAML.load_file(db_path) || []
       raw.map do |v|
-        v = v.transform_keys(&:to_sym)
+        v = v.symbolize_keys
         Entry.new(
           repo_url: v[:repo_url],
           type: ConnectorType.get(v[:type]),
@@ -98,7 +98,7 @@ module Repo
 
     def persist!
       FileUtils.mkdir_p(File.dirname(db_path))
-      payload = @data.map { |e| e.to_h.transform_keys(&:to_s) }
+      payload = @data.map { |e| e.to_h.stringify_keys }
       File.write(db_path, YAML.dump(payload))
     end
   end
