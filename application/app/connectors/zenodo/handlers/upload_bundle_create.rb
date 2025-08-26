@@ -29,7 +29,7 @@ module Zenodo::Handlers
         concept_id = record.concept_id
           version = record.version
       elsif url_data.deposition?
-        repo_info = RepoRegistry.repo_db.get(url_data.zenodo_url)
+        repo_info = ::Configuration.repo_db.get(url_data.zenodo_url)
         if repo_info.metadata.auth_key.present?
           deposition_service = Zenodo::DepositionService.new(url_data.zenodo_url, api_key: repo_info.metadata.auth_key)
           deposition = deposition_service.find_deposition(url_data.deposition_id)
@@ -43,7 +43,7 @@ module Zenodo::Handlers
 
       end
 
-      RepoRegistry.repo_history.add_repo(
+      ::Configuration.repo_history.add_repo(
         remote_repo_url,
         ConnectorType::ZENODO,
         title: title,

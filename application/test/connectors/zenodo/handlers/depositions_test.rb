@@ -17,7 +17,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
 
   test 'show loads deposition using repo db api key' do
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'KEY'))
-    RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
+    ::Configuration.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
     service = mock('service')
     dataset = OpenStruct.new(title: 'Deposition Title', draft?: true, version: 'draft')
@@ -25,7 +25,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
 
     url = Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url('https://zenodo.org', '10')
-    RepoRegistry.repo_history.expects(:add_repo).with(
+    ::Configuration.repo_history.expects(:add_repo).with(
       url,
       ConnectorType::ZENODO,
       title: 'Deposition Title',
@@ -41,7 +41,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
 
   test 'show returns error when api key missing' do
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: nil))
-    RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
+    ::Configuration.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
     result = @explorer.show(repo_url: @repo_url)
     refute result.success?
@@ -50,7 +50,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
 
   test 'show returns error when deposition not found' do
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'KEY'))
-    RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
+    ::Configuration.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
     service = mock('service')
     service.expects(:find_deposition).with('10').returns(nil)
     Zenodo::DepositionService.expects(:new).with('https://zenodo.org', api_key: 'KEY').returns(service)
@@ -60,7 +60,7 @@ class Zenodo::Handlers::DepositionsTest < ActiveSupport::TestCase
 
   test 'create downloads files into project' do
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'KEY'))
-    RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
+    ::Configuration.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
     service = mock('service')
     service.expects(:find_deposition).with('10').returns(:dataset)

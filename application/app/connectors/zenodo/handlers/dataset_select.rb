@@ -38,7 +38,7 @@ module Zenodo::Handlers
       upload_bundle.update({ metadata: metadata })
       log_info('Dataset selected', { upload_bundle: upload_bundle.id, deposition_id: deposition.id, record_id: deposition.record_id })
 
-      RepoRegistry.repo_history.add_repo(
+      ::Configuration.repo_history.add_repo(
         upload_bundle.connector_metadata.title_url,
         ConnectorType::ZENODO,
         title: deposition.title,

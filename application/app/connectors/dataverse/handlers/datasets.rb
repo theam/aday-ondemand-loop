@@ -23,7 +23,7 @@ module Dataverse::Handlers
       version = request_params[:version]
       page = request_params[:page] ? request_params[:page].to_i : 1
       search_query = request_params[:query].present? ? ActionView::Base.full_sanitizer.sanitize(request_params[:query]) : nil
-      repo_info = RepoRegistry.repo_db.get(dataverse_url)
+      repo_info = ::Configuration.repo_db.get(dataverse_url)
       api_key = repo_info&.metadata&.auth_key
       service = Dataverse::DatasetService.new(dataverse_url, api_key: api_key)
 
@@ -65,7 +65,7 @@ module Dataverse::Handlers
         version: dataset.version
       )
 
-      RepoRegistry.repo_history.add_repo(
+      ::Configuration.repo_history.add_repo(
         dataset_url,
         ConnectorType::DATAVERSE,
         title: dataset.title,
@@ -95,7 +95,7 @@ module Dataverse::Handlers
       page = request_params[:page] ? request_params[:page].to_i : 1
       search_query = request_params[:query].present? ? ActionView::Base.full_sanitizer.sanitize(request_params[:query]) : nil
 
-      repo_info = RepoRegistry.repo_db.get(dataverse_url)
+      repo_info = ::Configuration.repo_db.get(dataverse_url)
       api_key = repo_info&.metadata&.auth_key
       service = Dataverse::DatasetService.new(dataverse_url, api_key: api_key)
 

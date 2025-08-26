@@ -30,7 +30,7 @@ module Zenodo::Handlers
 
       external_url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url(repo_url.server_url, @record_id)
 
-      RepoRegistry.repo_history.add_repo(
+      ::Configuration.repo_history.add_repo(
         external_url,
         ConnectorType::ZENODO,
         title: record.title,

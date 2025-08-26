@@ -6,7 +6,7 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
   def setup
     @project = create_project
     @action = Zenodo::Handlers::UploadBundleCreate.new
-    RepoRegistry.repo_history.stubs(:add_repo)
+    ::Configuration.repo_history.stubs(:add_repo)
   end
 
   test 'params schema includes expected keys' do
@@ -35,7 +35,7 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
 
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'KEY'))
-    RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
+    ::Configuration.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
     dep = OpenStruct.new(title: 'title', bucket_url: 'b', draft?: false)
     service = mock('service')
@@ -57,7 +57,7 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
 
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: nil))
-    RepoRegistry.repo_db.stubs(:get).returns(repo_info)
+    ::Configuration.repo_db.stubs(:get).returns(repo_info)
 
     records_service = mock('records')
     records_service.expects(:find_record).with('99').returns(nil)
@@ -72,7 +72,7 @@ class Zenodo::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
                               zenodo_url: 'https://zenodo.org', record_id: '11')
     Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
 
-    RepoRegistry.repo_db.stubs(:get).returns(OpenStruct.new(metadata: OpenStruct.new(auth_key: nil)))
+    ::Configuration.repo_db.stubs(:get).returns(OpenStruct.new(metadata: OpenStruct.new(auth_key: nil)))
 
     record = OpenStruct.new(title: 'rec', concept_id: 'cid')
     records_service = mock('records')
@@ -93,7 +93,7 @@ test 'create adds repo history' do
   Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
 
   repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'KEY'))
-  RepoRegistry.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
+  ::Configuration.repo_db.stubs(:get).with('https://zenodo.org').returns(repo_info)
 
   dep = OpenStruct.new(title: 'Depo', bucket_url: 'b', draft?: true, version: 'draft')
   service = mock('service')
@@ -103,7 +103,7 @@ test 'create adds repo history' do
   Common::FileUtils.any_instance.stubs(:normalize_name).returns('bundle')
   UploadBundle.any_instance.stubs(:save)
 
-  RepoRegistry.repo_history.expects(:add_repo).with('https://zenodo.org/deposit/10', ConnectorType::ZENODO, title: 'Depo', note: 'draft')
+  ::Configuration.repo_history.expects(:add_repo).with('https://zenodo.org/deposit/10', ConnectorType::ZENODO, title: 'Depo', note: 'draft')
 
   @action.create(@project, object_url: 'https://zenodo.org/deposit/10')
 end

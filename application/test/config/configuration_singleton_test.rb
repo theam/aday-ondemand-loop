@@ -201,4 +201,47 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
       ENV.delete('OOD_LOOP_CONFIG_DIRECTORY')
     end
   end
+
+  test 'dataverse_hub memoizes and logs creation' do
+    hub = mock('hub')
+    Dataverse::DataverseHub.expects(:new).once.returns(hub)
+
+    logger = mock('logger')
+    Rails.stubs(:logger).returns(logger)
+    logger.expects(:info).with { |msg| msg.include?('Dataverse::DataverseHub') }
+
+    config = ConfigurationSingleton.new
+    assert_same hub, config.dataverse_hub
+    assert_same hub, config.dataverse_hub
+  end
+
+  test 'repo_db memoizes and logs creation' do
+    db = mock('repo_db')
+    Repo::RepoDb.expects(:new).with(db_path: @config_instance.repo_db_file).once.returns(db)
+    db.stubs(:size).returns(3)
+    db.stubs(:db_path).returns(@config_instance.repo_db_file)
+
+    logger = mock('logger')
+    Rails.stubs(:logger).returns(logger)
+    logger.expects(:info).with("[Configuration] RepoDb created entries: 3 path: #{@config_instance.repo_db_file}")
+
+    config = ConfigurationSingleton.new
+    assert_same db, config.repo_db
+    assert_same db, config.repo_db
+  end
+
+  test 'repo_history memoizes and logs creation' do
+    history = mock('repo_history')
+    Repo::RepoHistory.expects(:new).with(db_path: @config_instance.repo_history_file).once.returns(history)
+    history.stubs(:size).returns(4)
+    history.stubs(:db_path).returns(@config_instance.repo_history_file)
+
+    logger = mock('logger')
+    Rails.stubs(:logger).returns(logger)
+    logger.expects(:info).with("[Configuration] RepoHistory created entries: 4 path: #{@config_instance.repo_history_file}")
+
+    config = ConfigurationSingleton.new
+    assert_same history, config.repo_history
+    assert_same history, config.repo_history
+  end
 end

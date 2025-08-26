@@ -30,7 +30,7 @@ module Dataverse::Handlers
           )
         end
         collection_url = Dataverse::Concerns::DataverseUrlBuilder.build_collection_url(dataverse_url, @collection_id)
-        RepoRegistry.repo_history.add_repo(
+        ::Configuration.repo_history.add_repo(
           collection_url,
           ConnectorType::DATAVERSE,
           title: collection.data.name,

@@ -58,6 +58,29 @@ class ConfigurationSingleton
     config.fetch(connector_type.to_sym, {})
   end
 
+  def dataverse_hub
+    @dataverse_hub ||= begin
+      Rails.logger.info('[Configuration] Created Dataverse::DataverseHub')
+      Dataverse::DataverseHub.new
+    end
+  end
+
+  def repo_db
+    @repo_db ||= begin
+      db = Repo::RepoDb.new(db_path: repo_db_file)
+      Rails.logger.info "[Configuration] RepoDb created entries: #{db.size} path: #{db.db_path}"
+      db
+    end
+  end
+
+  def repo_history
+    @repo_history ||= begin
+      history = Repo::RepoHistory.new(db_path: repo_history_file)
+      Rails.logger.info "[Configuration] RepoHistory created entries: #{history.size} path: #{history.db_path}"
+      history
+    end
+  end
+
   def rails_env
     ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'development'
   end

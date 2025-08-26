@@ -5,7 +5,7 @@ module Repo
 
     # Returns global repository items from the RepoHistory store
     def global
-      RepoRegistry.repo_history.all.map do |entry|
+      ::Configuration.repo_history.all.map do |entry|
         OpenStruct.new(
           type: entry.type,
           date: entry.last_added,

@@ -21,7 +21,7 @@ class Zenodo::Handlers::RecordsTest < ActiveSupport::TestCase
     service.expects(:find_record).with('123').returns(dataset)
     Zenodo::RecordService.expects(:new).with('https://zenodo.org').returns(service)
     url = Zenodo::Concerns::ZenodoUrlBuilder.build_record_url('https://zenodo.org', '123')
-    RepoRegistry.repo_history.expects(:add_repo).with(
+    ::Configuration.repo_history.expects(:add_repo).with(
       url,
       ConnectorType::ZENODO,
       title: 'Record Title',
