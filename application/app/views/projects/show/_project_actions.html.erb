@@ -58,11 +58,11 @@
       <button type="button"
               class="btn btn-sm btn-outline-secondary"
               title="<%= t('.button_view_events_title') %>"
-              data-controller="modal"
-              data-action="click->modal#load"
-              data-modal-url-value="<%= events_project_path(project) %>"
-              data-modal-title-value="<%= t('.button_view_events_title') %>"
-              data-modal-id-value="global-modal">
+              data-controller="project-events"
+              data-action="click->project-events#show"
+              data-project-events-url-value="<%= events_project_path(project, format: :json) %>"
+              data-project-events-title-value="<%= t('.button_view_events_title') %>"
+              data-project-events-modal-id-value="global-modal">
         <i class="bi bi-clock-history" aria-hidden="true"></i>
         <span class="visually-hidden"><%= t('.button_view_events_label') %></span>
       </button>
