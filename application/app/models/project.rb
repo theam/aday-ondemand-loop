@@ -4,6 +4,7 @@ class Project < ApplicationDiskRecord
   include ActiveModel::Model
   include FileStatusSummary
   include LoggingCommon
+  include EventLogger
 
   REQUIRED_ATTRIBUTES = %w[id name download_dir creation_date].freeze
   ATTRIBUTES = REQUIRED_ATTRIBUTES
@@ -91,9 +92,22 @@ class Project < ApplicationDiskRecord
   def save
     return false unless valid?
 
+    new_record = !File.exist?(self.class.filename_by_id(id))
+
     FileUtils.mkdir_p(self.class.download_files_directory(id))
     FileUtils.mkdir_p(download_dir)
-    store_to_file(self.class.filename_by_id(id))
+    result = store_to_file(self.class.filename_by_id(id))
+
+    if result && new_record
+      event = Events::ProjectCreated.new(
+        project_id: id,
+        project_name: name,
+        creation_date: creation_date
+      )
+      record_event(event)
+    end
+
+    result
   end
 
   def destroy
