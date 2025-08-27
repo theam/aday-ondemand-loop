@@ -6,7 +6,7 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
   def setup
     @project = create_project
     @action = Dataverse::Handlers::UploadBundleCreate.new
-    RepoRegistry.repo_history.stubs(:add_repo)
+    ::Configuration.repo_history.stubs(:add_repo)
   end
 
   test 'params schema includes expected keys' do
@@ -79,7 +79,7 @@ class Dataverse::Handlers::UploadBundleCreateTest < ActiveSupport::TestCase
     Dataverse::CollectionService.stubs(:new).returns(stub(find_collection_by_id: OpenStruct.new(data: OpenStruct.new(name: 'root'))))
     UploadBundle.any_instance.stubs(:save)
 
-    RepoRegistry.repo_history.expects(:add_repo).with('http://dv.org', ConnectorType::DATAVERSE, title: 'root', note: 'dataverse')
+    ::Configuration.repo_history.expects(:add_repo).with('http://dv.org', ConnectorType::DATAVERSE, title: 'root', note: 'dataverse')
 
     @action.create(@project, object_url: 'http://dv.org')
   end

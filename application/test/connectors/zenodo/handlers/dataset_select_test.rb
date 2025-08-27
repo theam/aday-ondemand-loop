@@ -70,7 +70,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
 
-    RepoRegistry.repo_history.expects(:add_repo).with(
+    ::Configuration.repo_history.expects(:add_repo).with(
       regexp_matches(%r{zenodo\.org}),
       ConnectorType::ZENODO,
       title: 'Draft',
@@ -91,7 +91,7 @@ class Zenodo::Handlers::DatasetSelectTest < ActiveSupport::TestCase
     service.expects(:find_deposition).with('10').returns(deposition)
     Zenodo::DepositionService.expects(:new).with('http://zenodo.org', api_key: 'KEY').returns(service)
 
-    RepoRegistry.repo_history.expects(:add_repo).with(
+    ::Configuration.repo_history.expects(:add_repo).with(
       regexp_matches(%r{zenodo\.org}),
       ConnectorType::ZENODO,
       title: 'Pub',

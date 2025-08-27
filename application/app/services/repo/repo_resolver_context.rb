@@ -5,7 +5,7 @@ module Repo
     attr_reader :input, :parsed_input, :http_client, :repo_db
     attr_accessor :object_url, :type
 
-    def initialize(input, http_client: Common::HttpClient.new, repo_db: RepoRegistry.repo_db)
+    def initialize(input, http_client: Common::HttpClient.new, repo_db: ::Configuration.repo_db)
       @input = input
       @parsed_input = RepoUrl.parse(input)
       @http_client = http_client

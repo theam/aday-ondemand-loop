@@ -59,7 +59,7 @@ module Dataverse::Handlers
         repo_history_note = 'dataverse'
       end
 
-      RepoRegistry.repo_history.add_repo(
+      ::Configuration.repo_history.add_repo(
         remote_repo_url,
         ConnectorType::DATAVERSE,
         title: dataset_title || collection_title || root_title,

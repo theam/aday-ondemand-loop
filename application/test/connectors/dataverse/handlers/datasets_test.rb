@@ -4,7 +4,7 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
   def setup
     @repo_url = Repo::RepoUrl.parse('https://dataverse.org')
     repo_info = OpenStruct.new(metadata: OpenStruct.new(auth_key: 'key'))
-    RepoRegistry.stubs(:repo_db).returns(stub(get: repo_info))
+    ::Configuration.stubs(:repo_db).returns(stub(get: repo_info))
     @explorer = Dataverse::Handlers::Datasets.new('pid')
     @settings = mock('settings')
     @settings.stubs(:update_user_settings)
@@ -26,7 +26,7 @@ class Dataverse::Handlers::DatasetsTest < ActiveSupport::TestCase
     service.expects(:search_dataset_files_by_persistent_id).with('pid', version: '1', page: 1, query: nil).returns(files_page)
     Dataverse::DatasetService.expects(:new).with('https://dataverse.org', api_key: 'key').returns(service)
     expected_url = Dataverse::Concerns::DataverseUrlBuilder.build_dataset_url('https://dataverse.org', 'pid', version: '1')
-    RepoRegistry.repo_history.expects(:add_repo).with(
+    ::Configuration.repo_history.expects(:add_repo).with(
       expected_url,
       ConnectorType::DATAVERSE,
       title: 'Title',

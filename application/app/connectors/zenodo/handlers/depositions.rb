@@ -16,7 +16,7 @@ module Zenodo::Handlers
 
     def show(request_params)
       repo_url = request_params[:repo_url]
-      repo_info = RepoRegistry.repo_db.get(repo_url.server_url)
+      repo_info = ::Configuration.repo_db.get(repo_url.server_url)
       api_key = repo_info&.metadata&.auth_key
 
       unless api_key
@@ -37,7 +37,7 @@ module Zenodo::Handlers
 
       external_url = Zenodo::Concerns::ZenodoUrlBuilder.build_deposition_url(repo_url.server_url, @deposition_id)
 
-      RepoRegistry.repo_history.add_repo(
+      ::Configuration.repo_history.add_repo(
         external_url,
         ConnectorType::ZENODO,
         title: deposition.title,
@@ -68,7 +68,7 @@ module Zenodo::Handlers
       file_ids = request_params[:file_ids] || []
       project_id = request_params[:project_id]
 
-      repo_info = RepoRegistry.repo_db.get(repo_url.server_url)
+      repo_info = ::Configuration.repo_db.get(repo_url.server_url)
       api_key = repo_info&.metadata&.auth_key
 
       service = Zenodo::DepositionService.new(repo_url.server_url, api_key: api_key)

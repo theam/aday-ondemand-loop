@@ -1,6 +1,8 @@
 require 'dotenv'
 require_relative 'configuration_property'
+require_relative '../app/lib/logging_common'
 class ConfigurationSingleton
+  include LoggingCommon
 
   def initialize
     load_dotenv_files
@@ -58,6 +60,36 @@ class ConfigurationSingleton
     config.fetch(connector_type.to_sym, {})
   end
 
+  def dataverse_hub
+    @dataverse_hub ||= begin
+      log_info('[Configuration] Created Dataverse::DataverseHub')
+      Dataverse::DataverseHub.new
+    end
+  end
+
+  def repo_db
+    @repo_db ||= begin
+      db = Repo::RepoDb.new(db_path: repo_db_file)
+      log_info("[Configuration] RepoDb created entries: #{db.size} path: #{db.db_path}")
+      db
+    end
+  end
+
+  def repo_history
+    @repo_history ||= begin
+      history = Repo::RepoHistory.new(db_path: repo_history_file)
+      log_info("[Configuration] RepoHistory created entries: #{history.size} path: #{history.db_path}")
+      history
+    end
+  end
+
+  def repo_resolver_service
+    @repo_resolver_service ||= begin
+      log_info('[Configuration] Created Repo::RepoResolverService')
+      Repo::RepoResolverService.build
+    end
+  end
+
   def rails_env
     ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'development'
   end
@@ -90,7 +122,7 @@ class ConfigurationSingleton
         yml = YAML.safe_load(content, aliases: true) || {}
         conf.deep_merge!(yml.deep_symbolize_keys)
       rescue => e
-        Rails.logger.error("Can't read or parse #{f} because of error #{e}")
+        log_error("Can't read or parse #{f}", {}, e)
       end
     end
   end
