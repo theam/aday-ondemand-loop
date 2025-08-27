@@ -219,6 +219,29 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
+  test "events default value is empty array" do
+    in_temp_directory do
+      target = create_valid_project
+      assert target.save
+      saved_project = Project.find(target.id)
+      assert saved_project.events.empty?
+    end
+  end
+
+  test "events handle a single event" do
+    in_temp_directory do
+      target = create_valid_project
+      assert target.save
+      event = Event.new(project_id: target.id, id: 'evt1', type: EventType::GENERIC, metadata: {})
+      assert event.save
+
+      saved_project = Project.find(target.id)
+      project_events = saved_project.events
+      assert_equal 1, project_events.count
+      assert_equal 'evt1', project_events.first.id
+    end
+  end
+
   test "update download_dir fails when files pending or downloading" do
     in_temp_directory do |dir|
       project = create_valid_project
