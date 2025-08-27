@@ -208,7 +208,7 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
 
     logger = mock('logger')
     Rails.stubs(:logger).returns(logger)
-    logger.expects(:info).with { |msg| msg.include?('Dataverse::DataverseHub') }
+    logger.expects(:info).with { |msg| msg.include?('[Configuration] Created Dataverse::DataverseHub') }
 
     config = ConfigurationSingleton.new
     assert_same hub, config.dataverse_hub
@@ -223,7 +223,7 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
 
     logger = mock('logger')
     Rails.stubs(:logger).returns(logger)
-    logger.expects(:info).with("[Configuration] RepoDb created entries: 3 path: #{@config_instance.repo_db_file}")
+    logger.expects(:info).with { |msg| msg.include?("[Configuration] RepoDb created entries: 3 path: #{@config_instance.repo_db_file}") }
 
     config = ConfigurationSingleton.new
     assert_same db, config.repo_db
@@ -238,7 +238,7 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
 
     logger = mock('logger')
     Rails.stubs(:logger).returns(logger)
-    logger.expects(:info).with("[Configuration] RepoHistory created entries: 4 path: #{@config_instance.repo_history_file}")
+    logger.expects(:info).with { |msg| msg.include?("[Configuration] RepoHistory created entries: 4 path: #{@config_instance.repo_history_file}") }
 
     config = ConfigurationSingleton.new
     assert_same history, config.repo_history
@@ -251,7 +251,7 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
 
     logger = mock('logger')
     Rails.stubs(:logger).returns(logger)
-    logger.expects(:info).with('[Configuration] Created Repo::RepoResolverService')
+    logger.expects(:info).with { |msg| msg.include?('[Configuration] Created Repo::RepoResolverService') }
 
     config = ConfigurationSingleton.new
     assert_same service, config.repo_resolver_service
