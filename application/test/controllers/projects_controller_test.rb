@@ -30,6 +30,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "project details page should have events button" do
+    get project_url(id: @project.id)
+    assert_response :success
+    assert_select 'button[data-modal-url-value=?]', events_project_path(@project)
+  end
+
   test "project detail page should redirect to projects page when project not found" do
     get project_url(id: 'missing_project_id')
 

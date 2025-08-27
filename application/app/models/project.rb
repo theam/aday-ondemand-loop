@@ -60,6 +60,10 @@ class Project < ApplicationDiskRecord
       end
   end
 
+  def events
+    Event.for_project(id)
+  end
+
   def update(attributes = {})
     attrs = attributes.with_indifferent_access
     old_dir = download_dir
@@ -99,6 +103,10 @@ class Project < ApplicationDiskRecord
 
   def self.project_metadata_dir(id)
     File.join(metadata_directory, id)
+  end
+
+  def self.events_file(id)
+    File.join(project_metadata_dir(id), 'events.yml')
   end
 
   private
