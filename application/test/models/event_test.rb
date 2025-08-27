@@ -18,16 +18,16 @@ class EventTest < ActiveSupport::TestCase
     assert @event.save
     assert File.exist?(@events_file), 'events file not created'
     data = YAML.safe_load(File.read(@events_file))
-    assert_equal 1, data.size
-    assert_equal 'evt1', data.first['id']
+    assert_equal 2, data.size
+    assert_equal 'evt1', data.last['id']
   end
 
   test 'for_project returns stored events' do
     @event.save
     events = Event.for_project(@project.id)
-    assert_equal 1, events.size
-    assert_equal 'evt1', events.first.id
-    assert_equal EventType::GENERIC, events.first.type
+    assert_equal 2, events.size
+    assert_equal 'evt1', events.last.id
+    assert_equal EventType::GENERIC, events.last.type
   end
 
   test 'for_project handles legacy hash file' do

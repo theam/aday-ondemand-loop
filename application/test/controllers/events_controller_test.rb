@@ -23,7 +23,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     json = JSON.parse(@response.body)
-    assert_equal 2, json.length
+    assert_equal 3, json.length
   end
 
   test "should filter events by type" do

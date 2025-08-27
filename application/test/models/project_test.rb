@@ -219,16 +219,22 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
-  test "events default value is empty array" do
+  test "saving project logs ProjectCreated event with matching timestamp" do
     in_temp_directory do
       target = create_valid_project
+      creation = target.creation_date
       assert target.save
       saved_project = Project.find(target.id)
-      assert saved_project.events.empty?
+      events = saved_project.events
+      assert_equal 1, events.count
+      event = events.first
+      assert_equal EventType::PROJECT_CREATED, event.type
+      assert_equal creation, event.creation_date
+      assert_equal target.name, event.metadata['project_name']
     end
   end
 
-  test "events handle a single event" do
+  test "events handle a single additional event" do
     in_temp_directory do
       target = create_valid_project
       assert target.save
@@ -237,8 +243,9 @@ class ProjectTest < ActiveSupport::TestCase
 
       saved_project = Project.find(target.id)
       project_events = saved_project.events
-      assert_equal 1, project_events.count
-      assert_equal 'evt1', project_events.first.id
+      assert_equal 2, project_events.count
+      assert_equal 'evt1', project_events.last.id
+      assert_equal EventType::PROJECT_CREATED, project_events.first.type
     end
   end
 
@@ -257,8 +264,8 @@ class ProjectTest < ActiveSupport::TestCase
 
       saved_project = Project.find(project.id)
       loaded_events = saved_project.events
-      assert_equal 2, loaded_events.count
-      assert_equal %w[evt1 evt2], loaded_events.map(&:id)
+      assert_equal 3, loaded_events.count
+      assert_equal %w[evt1 evt2], loaded_events.last(2).map(&:id)
     end
   end
 
