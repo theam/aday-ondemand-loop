@@ -81,6 +81,13 @@ class ConfigurationSingleton
     end
   end
 
+  def repo_resolver_service
+    @repo_resolver_service ||= begin
+      Rails.logger.info('[Configuration] Created Repo::RepoResolverService')
+      Repo::RepoResolverService.build
+    end
+  end
+
   def rails_env
     ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'development'
   end

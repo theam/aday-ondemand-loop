@@ -9,7 +9,7 @@ class RepositorySettingsController < ApplicationController
       redirect_to repository_settings_path, alert: t('.message_invalid_request', url: repo_url) and return
     end
 
-    repo_resolver = Repo::RepoResolverService.build
+    repo_resolver = ::Configuration.repo_resolver_service
     result = repo_resolver.resolve(repo_url)
 
     if result.unknown?

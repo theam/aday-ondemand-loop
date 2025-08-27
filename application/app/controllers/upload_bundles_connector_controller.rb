@@ -12,7 +12,7 @@ class UploadBundlesConnectorController < ApplicationController
     end
 
     repo_url = params[:remote_repo_url]
-    repo_resolver = Repo::RepoResolverService.build
+    repo_resolver = ::Configuration.repo_resolver_service
     url_resolution = repo_resolver.resolve(repo_url)
     log_info('Remote Repo resolution', { repo_url: repo_url, type: url_resolution.type })
 

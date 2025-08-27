@@ -244,4 +244,17 @@ class ConfigurationSingletonTest < ActiveSupport::TestCase
     assert_same history, config.repo_history
     assert_same history, config.repo_history
   end
+
+  test 'repo_resolver_service memoizes and logs creation' do
+    service = mock('resolver_service')
+    Repo::RepoResolverService.expects(:build).once.returns(service)
+
+    logger = mock('logger')
+    Rails.stubs(:logger).returns(logger)
+    logger.expects(:info).with('[Configuration] Created Repo::RepoResolverService')
+
+    config = ConfigurationSingleton.new
+    assert_same service, config.repo_resolver_service
+    assert_same service, config.repo_resolver_service
+  end
 end

@@ -12,7 +12,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     resolver = mock('resolver')
     url_res = OpenStruct.new(type: ConnectorType::ZENODO, object_url: 'u', unknown?: false)
     resolver.stubs(:resolve).with('u').returns(url_res)
-      Repo::RepoResolverService.stubs(:build).returns(resolver)
+    ::Configuration.stubs(:repo_resolver_service).returns(resolver)
 
     processor = mock('proc')
     processor.stubs(:params_schema).returns([:remote_repo_url])
@@ -37,7 +37,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     Project.stubs(:find).returns(project)
     resolver = mock('resolver')
     resolver.stubs(:resolve).with('u').returns(OpenStruct.new(unknown?: true))
-      Repo::RepoResolverService.stubs(:build).returns(resolver)
+    ::Configuration.stubs(:repo_resolver_service).returns(resolver)
 
     post connector_project_upload_bundles_url(project.id), params: { remote_repo_url: 'u' }
     assert_redirected_to root_path
@@ -52,7 +52,7 @@ class UploadBundlesConnectorControllerTest < ActionDispatch::IntegrationTest
     resolver = mock('resolver')
     url_res = OpenStruct.new(type: ConnectorType::ZENODO, object_url: 'u', unknown?: false)
     resolver.stubs(:resolve).with('u').returns(url_res)
-      Repo::RepoResolverService.stubs(:build).returns(resolver)
+    ::Configuration.stubs(:repo_resolver_service).returns(resolver)
 
     processor = mock('proc')
     processor.stubs(:params_schema).returns([:remote_repo_url])

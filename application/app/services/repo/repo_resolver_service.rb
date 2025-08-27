@@ -11,7 +11,7 @@ module Repo
         end
       end
       resolvers.sort_by! { |r| -r.priority }
-      Rails.logger.info "[RepoResolverService] Resolvers loaded: #{resolvers.map { |r| "#{r.class} (#{r.priority})" }.join(', ')}"
+      LoggingCommon.log_info("[RepoResolverService] Resolvers loaded: #{resolvers.map { |r| "#{r.class} (#{r.priority})" }.join(', ')}")
       new(resolvers)
     end
 

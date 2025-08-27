@@ -22,7 +22,7 @@ class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
     resolver = mock('resolver')
     response = Repo::RepoResolverResponse.new('https://zenodo.org/', ConnectorType::ZENODO)
     resolver.stubs(:resolve).with('https://zenodo.org/').returns(response)
-      Repo::RepoResolverService.stubs(:build).returns(resolver)
+    ::Configuration.stubs(:repo_resolver_service).returns(resolver)
 
     post repository_settings_url, params: { repo_url: 'https://zenodo.org/' }
 
@@ -34,7 +34,7 @@ class RepositorySettingsControllerTest < ActionDispatch::IntegrationTest
     resolver = mock('resolver')
     response = Repo::RepoResolverResponse.new('u', nil)
     resolver.stubs(:resolve).with('u').returns(response)
-      Repo::RepoResolverService.stubs(:build).returns(resolver)
+    ::Configuration.stubs(:repo_resolver_service).returns(resolver)
 
     post repository_settings_url, params: { repo_url: 'u' }
 
