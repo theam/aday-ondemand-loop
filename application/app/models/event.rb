@@ -24,9 +24,9 @@ class Event < ApplicationDiskRecord
   def self.for_project(project_id)
     path = Project.events_file(project_id)
     return [] unless File.exist?(path)
-
     data = YAML.safe_load(File.read(path), permitted_classes: [Hash], aliases: true) || []
-    data.map { |attrs| load_from_hash(attrs) }
+    data = [data] if data.is_a?(Hash)
+    data.select { |attrs| attrs.is_a?(Hash) }.map { |attrs| load_from_hash(attrs) }
   rescue => e
     LoggingCommon.log_error("Cannot load events", { file: path }, e)
     []

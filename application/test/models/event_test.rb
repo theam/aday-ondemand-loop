@@ -30,6 +30,14 @@ class EventTest < ActiveSupport::TestCase
     assert_equal EventType::GENERIC, events.first.type
   end
 
+  test 'for_project handles legacy hash file' do
+    FileUtils.mkdir_p(File.dirname(@events_file))
+    File.open(@events_file, 'w') { |f| f.write(@event.to_h.to_yaml) }
+    events = Event.for_project(@project.id)
+    assert_equal 1, events.size
+    assert_equal 'evt1', events.first.id
+  end
+
   test 'download file created event sets type and metadata' do
     event = Events::DownloadFileCreated.new(project_id: @project.id, file_id: 'f1', filename: 'test.txt', file_size: 10)
     assert_equal EventType::DOWNLOAD_FILE_CREATED, event.type
