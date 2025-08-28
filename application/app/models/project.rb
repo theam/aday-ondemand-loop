@@ -62,8 +62,12 @@ class Project < ApplicationDiskRecord
       end
   end
 
-  def events
+  def all_events
     Event.for_project(id)
+  end
+
+  def events
+    all_events.select { |event| event.entity_type == 'project' }
   end
 
   def update(attributes = {})
@@ -106,6 +110,21 @@ class Project < ApplicationDiskRecord
         entity_type: 'project',
         entity_id: id,
         creation_date: creation_date,
+        metadata: {
+          'name' => name,
+          'download_dir' => download_dir
+        }
+      )
+      record_event(event)
+    end
+
+    if result && !new_record
+      event = Event.new(
+        project_id: id,
+        type: Event::PROJECT_UPDATED,
+        entity_type: 'project',
+        entity_id: id,
+        creation_date: now,
         metadata: {
           'name' => name,
           'download_dir' => download_dir
