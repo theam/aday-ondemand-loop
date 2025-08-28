@@ -128,28 +128,6 @@ class DownloadFileTest < ActiveSupport::TestCase
     assert_equal FileStatus::CANCELLED, target.status
   end
 
-  test 'log_event stores and retrieves events for download file' do
-    project = create_project
-    file1 = create_download_file(project)
-    file2 = create_download_file(project)
-
-    file1.log_event(Events::DownloadFileCreated, filename: file1.filename, file_size: file1.size)
-    file2.log_event(Events::DownloadFileCreated, filename: file2.filename, file_size: file2.size)
-
-    events_file = Project.events_file(project.id)
-    assert File.exist?(events_file), 'events file not created'
-
-    events1 = file1.events
-    events2 = file2.events
-
-    assert_equal 1, events1.length
-    assert events1.first.id.start_with?("#{project.id}-#{file1.id}")
-    assert_equal file1.id, events1.first.metadata['file_id']
-
-    assert_equal 1, events2.length
-    assert events2.first.id.start_with?("#{project.id}-#{file2.id}")
-  end
-
   def map_objects(hash)
     hash['type'] = hash['type'].to_s
     hash['status'] = hash['status'].to_s

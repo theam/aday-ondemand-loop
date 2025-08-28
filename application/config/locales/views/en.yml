@@ -211,7 +211,6 @@ en:
         </ul>
   events:
     table:
-      header_id: "ID"
       header_type: "Type"
       header_creation_date: "Creation date"
       header_metadata: "Metadata"
