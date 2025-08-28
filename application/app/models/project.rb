@@ -100,21 +100,16 @@ class Project < ApplicationDiskRecord
     result = store_to_file(self.class.filename_by_id(id))
 
     if result && new_record
-      event = Events::ProjectCreated.new(
+      event = Event.new(
         project_id: id,
-        name: name,
-        download_dir: download_dir,
-        creation_date: creation_date
-      )
-      record_event(event)
-    end
-
-    if result && !new_record
-      event = Events::ProjectUpdated.new(
-        project_id: id,
-        name: name,
-        download_dir: download_dir,
-        creation_date: now
+        type: Event::PROJECT_CREATED,
+        entity_type: 'project',
+        entity_id: id,
+        creation_date: creation_date,
+        metadata: {
+          'name' => name,
+          'download_dir' => download_dir
+        }
       )
       record_event(event)
     end
