@@ -20,14 +20,14 @@ You can also use projects for short-lived or ad-hoc tasks — such as quickly do
 
 - Click on **Create Project** on the home page to start a new project.  
   OnDemand Loop assigns a randomly generated HPC-themed name, which you can rename by clicking on the pencil icon next to the title.
-- Only **one project can be active at a time**.  
-  Click the **pin** icon to set the project active. All new downloads will be assigned to it automatically.
+- Only **one project can be active at a time**.
+  Click the **pin** icon or use the **project bar** to set the project active. All new downloads will be assigned to it automatically.
 
 !!! tip
 
     The **active project** determines where files are assigned when you select them for download.
-    This helps streamline the interface — you don't need to manually choose a project each time.
-    Simply make sure the correct project is pinned as active before you begin selecting files.
+    The project bar, visible on every page, lets you confirm or change the active project without leaving your workflow.
+    Simply make sure the correct project is selected before you begin choosing files.
 
 ### What You Can Do With a Project
 

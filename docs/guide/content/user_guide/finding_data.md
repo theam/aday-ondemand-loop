@@ -29,7 +29,7 @@ The application supports two ways of finding datasets from remote repositories:
 
 ### Exploring Remote Repositories
 
-There are two ways to explore datasets from a remote repository when downloading data:
+There are three ways to explore datasets from a remote repository when downloading data:
 
 #### 1. Paste a Repository URL or DOI
 
@@ -81,9 +81,14 @@ Once a dataset is selected, **OnDemand Loop displays its metadata and file listi
 
     - For **Zenodo** depositions, a registered API key is needed to load any unpublished or draft content.
 
+#### 3. Reopen Recent Repositories from Activity
+
+Click the folder icon in the project bar to open the **Repository Activity** modal.
+It lists repositories you've recently explored, along with shortcuts to explore them again or open them in a new browser tab.
+
 !!! note "Repository Capabilities May Vary"
 
-    OnDemand Loop uses each repository's **public API** to retrieve metadata, file listings, and search results.  
+    OnDemand Loop uses each repository's **public API** to retrieve metadata, file listings, and search results.
     As a result, features such as search, filtering, and metadata previews may differ slightly between connectors.
 
 
