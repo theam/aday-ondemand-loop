@@ -51,12 +51,7 @@ class Event < ApplicationDiskRecord
     new.tap do |instance|
       ATTRIBUTES.each do |attr|
         value = data[attr.to_s]
-        case attr.to_s
-        when 'type'
-          instance.type = EventType.get(value)
-        else
-          instance.public_send("#{attr}=", value)
-        end
+        instance.public_send("#{attr}=", value)
       end
     end
   end

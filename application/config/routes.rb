@@ -36,8 +36,6 @@ Rails.application.routes.draw do
       end
     end
 
-    # get /projects/:id/events => list events for a project
-    get :events, on: :member, to: 'events#index'
   end
 
   # REPO RESOLVER ROUTES
