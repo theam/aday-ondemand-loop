@@ -4,6 +4,7 @@ class Project < ApplicationDiskRecord
   include ActiveModel::Model
   include FileStatusSummary
   include LoggingCommon
+  include DateTimeCommon
   include EventLogger
 
   REQUIRED_ATTRIBUTES = %w[id name download_dir creation_date].freeze
@@ -101,8 +102,19 @@ class Project < ApplicationDiskRecord
     if result && new_record
       event = Events::ProjectCreated.new(
         project_id: id,
-        project_name: name,
+        name: name,
+        download_dir: download_dir,
         creation_date: creation_date
+      )
+      record_event(event)
+    end
+
+    if result && !new_record
+      event = Events::ProjectUpdated.new(
+        project_id: id,
+        name: name,
+        download_dir: download_dir,
+        creation_date: now
       )
       record_event(event)
     end

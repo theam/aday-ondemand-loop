@@ -4,7 +4,8 @@ module Events
   class ProjectUpdated < BaseEvent
     def initialize(attributes = {})
       metadata = {
-        'project_name' => attributes.delete(:project_name)
+        'name' => attributes.delete(:name),
+        'download_dir' => attributes.delete(:download_dir)
       }.compact
       super(attributes.merge(type: EventType::PROJECT_UPDATED, metadata: metadata))
     end
