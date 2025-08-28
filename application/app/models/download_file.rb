@@ -76,28 +76,4 @@ class DownloadFile < ApplicationDiskRecord
     Configuration.max_download_file_size
   end
 
-  def log_event(event_class, attributes = {})
-    attrs = {
-      id: unique_event_id,
-      project_id: project_id,
-      file_id: id
-    }.merge(attributes)
-    event = event_class.new(attrs)
-    record_event(event)
-  end
-
-  def events
-    prefix = event_id_prefix
-    Event.for_project(project_id).select { |e| e.id.start_with?(prefix) }
-  end
-
-  private
-
-  def event_id_prefix
-    "#{project_id}-#{id}"
-  end
-
-  def unique_event_id
-    "#{event_id_prefix}-#{SecureRandom.uuid}"
-  end
 end
