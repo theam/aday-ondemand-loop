@@ -60,7 +60,7 @@
               title="<%= t('.button_view_events_title') %>"
               data-controller="project-events"
               data-action="click->project-events#show"
-              data-project-events-url-value="<%= events_project_path(project, format: :json) %>"
+              data-project-events-url-value="<%= events_project_path(project.id, format: :json) %>"
               data-project-events-title-value="<%= t('.button_view_events_title') %>"
               data-project-events-modal-id-value="global-modal">
         <i class="bi bi-clock-history" aria-hidden="true"></i>
