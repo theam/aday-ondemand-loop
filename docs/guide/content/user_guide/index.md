@@ -30,13 +30,18 @@ Built‑in repository connectors handle the details of each repository’s API, 
 
 ### Getting Started
 
-1. Open your web browser and navigate to `https://<ood-server>/pun/sys/loop`.
+1. From the Open OnDemand dashboard, use the **Files > OnDemand Loop** menu item (or its configured location) to launch the app.  
+   You can always return to the dashboard later by clicking the **Open OnDemand** link in the navigation bar.
 2. Sign in using your regular Open OnDemand credentials.
-3. Familiarize yourself with the navigation bar:
-    - **Projects**, **Downloads**, **Uploads**, and a **Repositories** drop-down appear from left to right.
-    - On the far right you’ll see links to **Open OnDemand** (which returns you to the main dashboard)
-    - There is also a **Help** dropdown where you can find a link to this **Guide**, the **Sitemap** and **Restart**.
-    - Just below the navigation bar, the **project bar** displays the active project and offers quick links to open or create projects.
-4. Use the project bar to create your first project and set it active so you can immediately begin adding downloads.
-5. Locate the always-visible **Explore** bar near the top of the screen. Paste a DOI or repository URL (e.g., from Dataverse or Zenodo) into this field to browse the dataset contents and selectively download files to your local project directory. The adjacent folder icon opens **Repository Activity**, letting you revisit recently explored repositories.
-6. From the Open OnDemand dashboard, use the **Files > OnDemand Loop** menu item (or its configured location) to launch this app. When you’re done in OnDemand Loop, click the **Open OnDemand** link in the navigation bar to go back to the dashboard.
+3. Familiarize yourself with the navigation bar at the top:
+     - **Projects**, **Downloads**, **Uploads**, and a **Repositories** drop-down appear from left to right.
+     - On the far right you’ll see links to **Open OnDemand** (back to the main dashboard) and a **Help** drop-down with links to the **Guide** and **Sitemap**.
+4. Just below the navigation menu, you’ll see the **application bar**. This bar is sticky — it stays visible at the top of the screen as you scroll.
+     - On the left: a project selection drop-down to switch the active project, and a button to create a new one.
+     - On the right: the **Explore** widget, where you can paste a DOI or repository URL to browse a dataset and download files into your project.
+     - Next to the Explore widget, a **folder icon** opens the **Repository Activity** window, giving you quick access to datasets you’ve recently explored.
+5. Use the application bar to create your first project — it becomes the active project automatically so you can immediately begin adding downloads.
+
+!!! info "Welcome Message"
+    The first time you open the application — or if no projects exist yet — a **welcome message** appears.  
+    It provides basic instructions and a direct link back to this **Guide**.

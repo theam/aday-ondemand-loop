@@ -83,8 +83,15 @@ Once a dataset is selected, **OnDemand Loop displays its metadata and file listi
 
 #### 3. Reopen Recent Repositories from Activity
 
-Click the folder icon in the project bar to open the **Repository Activity** modal.
-It lists repositories you've recently explored, along with shortcuts to explore them again or open them in a new browser tab.
+You can quickly return to datasets you've already explored:
+
+1. Click the **folder icon** next to the **Explore** button in the project bar to open the **Repository Activity** modal.
+2. The modal lists repositories you’ve recently accessed.
+3. For each entry, you’ll find two options:
+   - **Explore** — reopens the dataset inside OnDemand Loop so you can browse files and metadata again.
+   - **Open in Repository** — takes you directly to the dataset’s page on the remote repository website.
+
+This feature saves time when you’re working across multiple projects and need to revisit recently used datasets without searching again.
 
 !!! note "Repository Capabilities May Vary"
 
