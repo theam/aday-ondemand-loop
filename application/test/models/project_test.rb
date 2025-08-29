@@ -228,7 +228,7 @@ class ProjectTest < ActiveSupport::TestCase
       events = saved_project.events
       assert_equal 1, events.count
       event = events.first
-      assert_equal 'project_created', event.type
+      assert_equal 'Project has been created', event.message
       assert_equal creation, event.creation_date
       assert_equal target.name, event.metadata['name']
     end
@@ -238,14 +238,14 @@ class ProjectTest < ActiveSupport::TestCase
     in_temp_directory do
       target = create_valid_project
       assert target.save
-      event = Event.new(project_id: target.id, id: 'evt1', type: 'project_created', entity_type: 'project', metadata: {})
+      event = Event.new(project_id: target.id, id: 'evt1', message: 'project_created', entity_type: 'project', metadata: {})
       assert event.save
 
       saved_project = Project.find(target.id)
       project_events = saved_project.events
       assert_equal 2, project_events.count
       assert_equal 'evt1', project_events.last.id
-      assert_equal 'project_created', project_events.first.type
+      assert_equal 'Project has been created', project_events.first.message
     end
   end
 
@@ -254,8 +254,8 @@ class ProjectTest < ActiveSupport::TestCase
       project = create_valid_project
       assert project.save
 
-      evt1 = Event.new(project_id: project.id, id: 'evt1', type: 'project_created', entity_type: 'project', metadata: {})
-      evt2 = Event.new(project_id: project.id, id: 'evt2', type: 'project_updated', entity_type: 'project', metadata: {})
+      evt1 = Event.new(project_id: project.id, id: 'evt1', message: 'project_created', entity_type: 'project', metadata: {})
+      evt2 = Event.new(project_id: project.id, id: 'evt2', message: 'project_updated', entity_type: 'project', metadata: {})
       assert evt1.save
       assert evt2.save
 

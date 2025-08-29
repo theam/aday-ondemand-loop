@@ -6,7 +6,7 @@
 <table class="table table-sm">
   <thead>
   <tr>
-    <th><%= t('events.table.header_type') %></th>
+    <th><%= t('events.table.header_message') %></th>
     <th><%= t('events.table.header_creation_date') %></th>
     <th><%= t('events.table.header_metadata') %></th>
   </tr>
@@ -14,7 +14,7 @@
   <tbody>
   <% events.each do |event| %>
     <tr>
-      <td><%= event.type %></td>
+      <td><%= event.message %></td>
       <td><%= event.creation_date %></td>
       <td>
         <% if event.metadata.present? %>

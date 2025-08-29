@@ -6,7 +6,7 @@ class EventTest < ActiveSupport::TestCase
     Project.stubs(:metadata_root_directory).returns(@tmp_dir)
     @project = Project.new(id: 'proj1', name: 'Proj', download_dir: '/tmp/proj')
     @project.save
-    @event = Event.new(project_id: @project.id, entity_id: @project.id, entity_type: 'project', type: 'project_created', metadata: { 'foo' => 'bar' }, creation_date: DateTimeCommon.now)
+    @event = Event.new(project_id: @project.id, entity_id: @project.id, entity_type: 'project', message: 'project has been created', metadata: { 'foo' => 'bar' }, creation_date: DateTimeCommon.now)
     @events_file = Project.events_file(@project.id)
   end
 
@@ -27,7 +27,7 @@ class EventTest < ActiveSupport::TestCase
     events = Event.for_project(@project.id)
     assert_equal 2, events.size
     assert_equal @project.id, events.last.entity_id
-    assert_equal 'project_created', events.last.type
+    assert_equal 'project has been created', events.last.message
   end
 
   test 'for_project handles legacy hash file' do

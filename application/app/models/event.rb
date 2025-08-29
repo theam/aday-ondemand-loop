@@ -3,21 +3,12 @@
 class Event < ApplicationDiskRecord
   include ActiveModel::Model
 
-  TYPES = %w[
-    project_created
-    project_updated
-  ].freeze
-
-  TYPES.each do |type|
-    const_set(type.upcase, type)
-  end
-
   ENTITY_TYPES = %w[project download_file upload_bundle upload_file].freeze
-  ATTRIBUTES = %w[id project_id type entity_type entity_id creation_date metadata].freeze
+  ATTRIBUTES = %w[id project_id message entity_type entity_id creation_date metadata].freeze
 
   attr_accessor(*ATTRIBUTES)
 
-  validates_presence_of :id, :project_id, :type, :entity_type, :creation_date
+  validates_presence_of :id, :project_id, :message, :entity_type, :creation_date
 
   def initialize(attributes = {})
     super

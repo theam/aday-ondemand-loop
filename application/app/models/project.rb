@@ -106,7 +106,7 @@ class Project < ApplicationDiskRecord
     if result && new_record
       event = Event.new(
         project_id: id,
-        type: Event::PROJECT_CREATED,
+        message: 'Project has been created',
         entity_type: 'project',
         entity_id: id,
         creation_date: creation_date,
@@ -121,7 +121,7 @@ class Project < ApplicationDiskRecord
     if result && !new_record
       event = Event.new(
         project_id: id,
-        type: Event::PROJECT_UPDATED,
+        message: 'Project has been updated',
         entity_type: 'project',
         entity_id: id,
         creation_date: now,
