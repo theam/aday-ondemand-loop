@@ -13,8 +13,8 @@ class Event
 
   def initialize(attributes = {})
     super
-    self.id ||= SecureRandom.uuid.to_s
-    self.creation_date ||= DateTimeCommon.now
+    self.id = SecureRandom.uuid.to_s
+    self.creation_date = DateTimeCommon.now
     self.metadata ||= {}
   end
 
