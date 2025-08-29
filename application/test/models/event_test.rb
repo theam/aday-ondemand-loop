@@ -30,12 +30,4 @@ class EventTest < ActiveSupport::TestCase
     assert_equal 'project has been created', events.last.message
   end
 
-  test 'for_project handles legacy hash file' do
-    FileUtils.mkdir_p(File.dirname(@events_file))
-    File.open(@events_file, 'w') { |f| f.write(@event.to_h.to_yaml) }
-    events = Event.for_project(@project.id)
-    assert_equal 1, events.size
-    assert_equal @project.id, events.first.entity_id
-  end
-
 end

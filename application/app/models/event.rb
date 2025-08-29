@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class Event < ApplicationDiskRecord
+class Event
   include ActiveModel::Model
+  include YamlStorageCommon
 
   ENTITY_TYPES = %w[project download_file upload_bundle upload_file].freeze
   ATTRIBUTES = %w[id project_id message entity_type entity_id creation_date metadata].freeze
@@ -12,16 +13,14 @@ class Event < ApplicationDiskRecord
 
   def initialize(attributes = {})
     super
-    self.id ||= self.class.generate_id
+    self.id ||= SecureRandom.uuid.to_s
     self.creation_date ||= DateTimeCommon.now
     self.metadata ||= {}
   end
 
   def self.for_project(project_id)
     path = Project.events_file(project_id)
-    return [] unless File.exist?(path)
-    data = YAML.safe_load(File.read(path), permitted_classes: [Hash], aliases: true) || []
-    data = [data] if data.is_a?(Hash)
+    data = load_from_file(path) || []
     data.select { |attrs| attrs.is_a?(Hash) }.map { |attrs| load_from_hash(attrs) }
   rescue => e
     LoggingCommon.log_error("Cannot load events", { file: path }, e)
@@ -33,7 +32,16 @@ class Event < ApplicationDiskRecord
 
     events = self.class.for_project(project_id)
     events << self
+    LoggingCommon.log_info("Event to be saved", events: events)
     self.class.store_events(project_id, events)
+  end
+
+  def to_h
+    h = {}
+    ATTRIBUTES.each do |attr|
+      h[attr.to_s] = send(attr)
+    end
+    h
   end
 
   private
