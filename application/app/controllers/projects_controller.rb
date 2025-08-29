@@ -1,7 +1,6 @@
 class ProjectsController < ApplicationController
   include LoggingCommon
   include EventLogger
-  include DateTimeCommon
 
   def index
     @projects = Project.all
@@ -17,7 +16,7 @@ class ProjectsController < ApplicationController
     project_name = params[:project_name] || ProjectNameGenerator.generate
     project = Project.new(id: project_name, name: project_name)
     if project.save
-      record_event(project_event(project, { message: 'Project created', creation_date: project.creation_date }))
+      record_event(project_event(project, { message: 'Project created' }))
       Current.settings.update_user_settings({ active_project: project.id.to_s })
       notice = t(".project_created", project_name: project_name)
       if params.key?(:redirect_back)
@@ -95,18 +94,17 @@ class ProjectsController < ApplicationController
   private
 
   def project_event(project, attrs={})
-    attributes = {
+    default_attributes = {
       project_id: project.id,
       message: 'Project updated',
       entity_type: 'project',
       entity_id: project.id,
-      creation_date: now,
       metadata: {
         'name' => project.name,
         'download_dir' => project.download_dir
       }
     }
-    attributes.merge!(attrs)
-    Event.new(attributes)
+    default_attributes.merge!(attrs)
+    Event.new(default_attributes)
   end
 end
