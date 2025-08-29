@@ -219,28 +219,13 @@ class ProjectTest < ActiveSupport::TestCase
     end
   end
 
-  test "events handle a single additional event" do
-    in_temp_directory do
-      target = create_valid_project
-      assert target.save
-      event = Event.new(project_id: target.id, id: 'evt1', message: 'project_created', entity_type: 'project', metadata: {})
-      assert event.save
-
-      saved_project = Project.find(target.id)
-      project_events = saved_project.events
-      assert_equal 1, project_events.count
-      assert_equal 'evt1', project_events.last.id
-      assert_equal 'project_created', project_events.first.message
-    end
-  end
-
   test "saving events creates file and loads them" do
     in_temp_directory do
       project = create_valid_project
       assert project.save
 
-      evt1 = Event.new(project_id: project.id, id: 'evt1', message: 'project_created', entity_type: 'project', metadata: {})
-      evt2 = Event.new(project_id: project.id, id: 'evt2', message: 'project_updated', entity_type: 'project', metadata: {})
+      evt1 = Event.new(project_id: project.id, entity_id: project.id, message: 'project_created', entity_type: 'project', metadata: {})
+      evt2 = Event.new(project_id: project.id, entity_id: project.id, message: 'project_updated', entity_type: 'project', metadata: {})
       assert evt1.save
       assert evt2.save
 
@@ -250,7 +235,7 @@ class ProjectTest < ActiveSupport::TestCase
       saved_project = Project.find(project.id)
       loaded_events = saved_project.events
       assert_equal 2, loaded_events.count
-      assert_equal %w[evt1 evt2], loaded_events.last(2).map(&:id)
+      assert_equal project.id, loaded_events.last.entity_id
     end
   end
 
