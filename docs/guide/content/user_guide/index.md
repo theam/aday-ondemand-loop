@@ -30,7 +30,8 @@ Built‑in repository connectors handle the details of each repository’s API, 
 
 ### Getting Started
 
-1. From the Open OnDemand dashboard, use the **Files > OnDemand Loop** menu item (or its configured location) to launch the app.  
+1. From the Open OnDemand dashboard, use the **Files > OnDemand Loop** menu item (or its configured location) to launch the app,
+   or go directly to: `https://<ood-server>/pun/sys/loop`  
    You can always return to the dashboard later by clicking the **Open OnDemand** link in the navigation bar.
 2. Sign in using your regular Open OnDemand credentials.
 3. Familiarize yourself with the navigation bar at the top:
