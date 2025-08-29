@@ -81,13 +81,7 @@ Also in `app/connectors/<connector_type>/`:
 
 These classes are used to store and retrieve repository-specific metadata for associated models.
 
-#### 5. Add Status Classes
-Used to monitor job status and present updates in the UI:
-
-- `DownloadConnectorStatus`
-- `UploadConnectorStatus`
-
-#### 6. Add Supporting Services and Models
+#### 5. Add Supporting Services and Models
 Use these folders if needed:
 
 - `app/services/<connector_type>/`

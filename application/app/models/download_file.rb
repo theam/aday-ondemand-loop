@@ -60,7 +60,7 @@ class DownloadFile < ApplicationDiskRecord
   end
 
   def connector_status
-    ConnectorClassDispatcher.download_connector_status(self)
+    DownloadStatus.new(self)
   end
 
   def connector_metadata
