@@ -1,14 +1,12 @@
 require 'test_helper'
 
-class Dataverse::UploadConnectorStatusTest < ActiveSupport::TestCase
-  include ModelHelper
-
+class UploadStatusTest < ActiveSupport::TestCase
   def setup
     @project = create_project
     @bundle = create_upload_bundle(@project)
     @file = create_upload_file(@project, @bundle)
     @file.status = FileStatus::UPLOADING
-    @status = Dataverse::UploadConnectorStatus.new(@file)
+    @status = UploadStatus.new(@file)
   end
 
   test 'progress from command client' do
