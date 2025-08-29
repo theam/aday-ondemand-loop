@@ -4,8 +4,6 @@ class Project < ApplicationDiskRecord
   include ActiveModel::Model
   include FileStatusSummary
   include LoggingCommon
-  include DateTimeCommon
-  include EventLogger
 
   REQUIRED_ATTRIBUTES = %w[id name download_dir creation_date].freeze
   ATTRIBUTES = REQUIRED_ATTRIBUTES
