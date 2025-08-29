@@ -18,14 +18,14 @@ class EventTest < ActiveSupport::TestCase
     @event.save
     assert File.exist?(@events_file), 'events file not created'
     data = YAML.safe_load(File.read(@events_file))
-    assert_equal 2, data.size
+    assert_equal 1, data.size
     assert_equal @project.id, data.last['entity_id']
   end
 
   test 'for_project returns stored events' do
     @event.save
     events = Event.for_project(@project.id)
-    assert_equal 2, events.size
+    assert_equal 1, events.size
     assert_equal @project.id, events.last.entity_id
     assert_equal 'project has been created', events.last.message
   end

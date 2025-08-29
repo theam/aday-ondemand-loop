@@ -97,43 +97,9 @@ class Project < ApplicationDiskRecord
   def save
     return false unless valid?
 
-    new_record = !File.exist?(self.class.filename_by_id(id))
-
     FileUtils.mkdir_p(self.class.download_files_directory(id))
     FileUtils.mkdir_p(download_dir)
-    result = store_to_file(self.class.filename_by_id(id))
-
-    if result && new_record
-      event = Event.new(
-        project_id: id,
-        message: 'Project has been created',
-        entity_type: 'project',
-        entity_id: id,
-        creation_date: creation_date,
-        metadata: {
-          'name' => name,
-          'download_dir' => download_dir
-        }
-      )
-      record_event(event)
-    end
-
-    if result && !new_record
-      event = Event.new(
-        project_id: id,
-        message: 'Project has been updated',
-        entity_type: 'project',
-        entity_id: id,
-        creation_date: now,
-        metadata: {
-          'name' => name,
-          'download_dir' => download_dir
-        }
-      )
-      record_event(event)
-    end
-
-    result
+    store_to_file(self.class.filename_by_id(id))
   end
 
   def destroy
