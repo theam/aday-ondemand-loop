@@ -14,13 +14,13 @@ loop_up: loop_down
 	$(ENV) $(COMPOSE_CMD) -p loop_passenger up --build || :
 
 loop_down:
-	$(ENV) $(COMPOSE_CMD) -p loop_passenger down -v || :
+       $(ENV) $(COMPOSE_CMD) -p loop_passenger down -v || :
 
 atest_up: atest_down
-	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -f automated_tests/docker-compose.atest.yml -p loop_passenger up --build || :
+       $(ENV) $(COMPOSE_CMD) -f automated_tests/docker-compose.yml -p loop_atests up --build || :
 
 atest_down:
-	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -f automated_tests/docker-compose.atest.yml -p loop_passenger down -v || :
+       $(ENV) $(COMPOSE_CMD) -f automated_tests/docker-compose.yml -p loop_atests down -v || :
 
 loop_build:
 	docker run --platform=linux/amd64 --rm -v $(WORKING_DIR)/application:/usr/local/app -v $(WORKING_DIR)/scripts:/usr/local/scripts -w /usr/local/app $(LOOP_BUILDER_IMAGE) /usr/local/scripts/loop_build.sh
