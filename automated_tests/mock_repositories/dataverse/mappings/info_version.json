@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/info/version"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "info_version_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
