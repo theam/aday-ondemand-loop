@@ -1,0 +1,18 @@
+services:
+  zenodo:
+    image: wiremock/wiremock:3.5.2
+    hostname: zenodo
+    container_name: passenger_loop_zenodo
+    ports:
+      - "9001:8080"
+    volumes:
+      - ./automated_tests/mock_repositories/zenodo:/home/wiremock
+
+  dataverse:
+    image: wiremock/wiremock:3.5.2
+    hostname: dataverse
+    container_name: passenger_loop_dataverse
+    ports:
+      - "9002:8080"
+    volumes:
+      - ./automated_tests/mock_repositories/dataverse:/home/wiremock
