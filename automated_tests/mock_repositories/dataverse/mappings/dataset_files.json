@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/api/datasets/:persistentId/versions/[^/]+/files"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "dataset_files_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

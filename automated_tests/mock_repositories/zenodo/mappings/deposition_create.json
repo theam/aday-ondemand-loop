@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/api/deposit/depositions"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "create_deposition_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

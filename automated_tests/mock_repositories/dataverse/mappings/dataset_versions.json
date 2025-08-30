@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/datasets/:persistentId/versions"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "dataset_versions_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
