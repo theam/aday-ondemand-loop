@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/records",
+    "queryParameters": {
+      "all_versions": { "matches": ".*" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "records_list_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/deposit/depositions",
+    "queryParameters": {
+      "q": { "matches": ".*" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "depositions_draft_list.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
