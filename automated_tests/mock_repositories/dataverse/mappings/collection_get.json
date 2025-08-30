@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/api/dataverses/.*"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "collection_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
