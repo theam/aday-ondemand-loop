@@ -6,7 +6,7 @@ services:
     ports:
       - "9001:8080"
     volumes:
-      - ./automated_tests/mock_repositories/zenodo:/home/wiremock
+      - ./mock_repositories/zenodo:/home/wiremock
 
   dataverse:
     image: wiremock/wiremock:3.5.2
@@ -15,4 +15,4 @@ services:
     ports:
       - "9002:8080"
     volumes:
-      - ./automated_tests/mock_repositories/dataverse:/home/wiremock
+      - ./mock_repositories/dataverse:/home/wiremock
