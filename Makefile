@@ -14,7 +14,7 @@ loop_up: loop_down
 	$(ENV) $(COMPOSE_CMD) -p loop_passenger up --build || :
 
 loop_down:
-       $(ENV) $(COMPOSE_CMD) -p loop_passenger down -v || :
+	$(ENV) $(COMPOSE_CMD) -p loop_passenger down -v || :
 
 loop_build:
 	docker run --platform=linux/amd64 --rm -v $(WORKING_DIR)/application:/usr/local/app -v $(WORKING_DIR)/scripts:/usr/local/scripts -w /usr/local/app $(LOOP_BUILDER_IMAGE) /usr/local/scripts/loop_build.sh
