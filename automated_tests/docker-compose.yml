@@ -1,11 +1,11 @@
 services:
   smtp:
     hostname: smtp
-    container_name: passenger_loop_smtp
+    container_name: test_loop_smtp
     image: maildev/maildev:2.0.5
     restart: on-failure
     ports:
-      - "35000:1080" # web ui
+      - "22100:1080" # web ui
     environment:
       - MAILDEV_SMTP_PORT=25
       - MAILDEV_MAIL_DIRECTORY=/mail
@@ -18,7 +18,7 @@ services:
     image: ${OOD_IMAGE}
     platform: linux/amd64
     hostname: localhost
-    container_name: passenger_loop_ood
+    container_name: test_loop_ood
     privileged: true
     cgroup: host
     volumes:
@@ -30,7 +30,7 @@ services:
       - ../config/.env:/var/www/ood/apps/sys/loop/.env
       - ../docker/loop.conf:/var/lib/ondemand-nginx/config/apps/sys/loop.conf
     ports:
-      - "33000:443"
+      - "22200:443"
     expose:
       - "8080"
       - "80"
@@ -39,18 +39,18 @@ services:
   zenodo:
     image: wiremock/wiremock:3.5.2
     hostname: zenodo
-    container_name: passenger_loop_zenodo
+    container_name: test_loop_zenodo
     ports:
-      - "9001:8080"
+      - "22300:8080"
     volumes:
       - ./mock_repositories/zenodo:/home/wiremock
 
   dataverse:
     image: wiremock/wiremock:3.5.2
     hostname: dataverse
-    container_name: passenger_loop_dataverse
+    container_name: test_loop_dataverse
     ports:
-      - "9002:8080"
+      - "22400:8080"
     volumes:
       - ./mock_repositories/dataverse:/home/wiremock
 
