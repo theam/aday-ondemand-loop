@@ -20,7 +20,8 @@ module YamlStorageCommon
 
   def store_to_file(file_path)
     ensure_storage_directory!(file_path)
-    File.open(file_path, "w") { |f| f.write(to_yaml) }
+    content = to_yaml
+    File.open(file_path, "w") { |f| f.write(content) }
     true
   rescue => e
     LoggingCommon.log_error("Cannot store YAML file", { file: file_path }, e)

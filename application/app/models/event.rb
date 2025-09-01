@@ -30,9 +30,14 @@ class Event
   def save
     return false unless valid?
 
+    path = Project.events_file(project_id)
+    store_to_file(path)
+  end
+
+  def to_yaml
     events = self.class.for_project(project_id)
     events << self
-    self.class.store_events(project_id, events)
+    events.map(&:to_h).to_yaml
   end
 
   def to_h
@@ -54,13 +59,4 @@ class Event
     end
   end
 
-  def self.store_events(project_id, events)
-    path = Project.events_file(project_id)
-    FileUtils.mkdir_p(File.dirname(path))
-    File.open(path, 'w') { |f| f.write(events.map(&:to_h).to_yaml) }
-    true
-  rescue => e
-    LoggingCommon.log_error("Cannot store events", { file: path }, e)
-    false
-  end
 end
