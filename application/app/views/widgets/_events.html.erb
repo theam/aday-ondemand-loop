@@ -1,0 +1,33 @@
+<%
+  project_id = params[:project_id]
+  project = Project.find(project_id)
+  entity_type = 'project'
+  entity_id = project_id
+  events = project ? project.event_list&.all_by_entity_type_and_id(entity_type: entity_type, entity_id: entity_id) : []
+%>
+<table class="table table-sm">
+  <thead>
+  <tr>
+    <th><%= t('events.table.header_message') %></th>
+    <th><%= t('events.table.header_creation_date') %></th>
+    <th><%= t('events.table.header_metadata') %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% events.each do |event| %>
+    <tr>
+      <td><%= t(event.message) %></td>
+      <td><%= event.creation_date %></td>
+      <td>
+        <% if event.metadata.present? %>
+          <ul class="list-unstyled mb-0">
+            <% event.metadata.each do |key, value| %>
+              <li><strong><%= key %></strong>: <%= value %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
