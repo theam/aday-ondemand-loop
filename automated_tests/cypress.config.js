@@ -1,15 +1,17 @@
 const { defineConfig } = require('cypress');
-const loadCredentials = require('./read_credentials');
-const { username, password } = loadCredentials();
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'https://ood',
+    baseUrl: 'https://localhost:22200',
     chromeWebSecurity: false,
     video: false,
-  },
-  env: {
-    ood_username: username,
-    ood_password: password,
+    experimentalModifyObstructiveThirdPartyCode: true,
+    defaultCommandTimeout: 10000,
+    requestTimeout: 10000,
+    responseTimeout: 30000,
+    setupNodeEvents(on, config) {
+      // Load Loop-specific plugins and configuration
+      return require('./cypress/plugins/loop')(on, config)
+    },
   },
 });

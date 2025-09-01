@@ -43,8 +43,3 @@ application/vendor/bundle
 /data
 
 .DS_Store
-
-# Cypress artifacts
-automated_tests/cypress/videos
-automated_tests/cypress/screenshots
-application/bun.lock

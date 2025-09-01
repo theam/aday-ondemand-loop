@@ -1,34 +1,123 @@
 include ../tools/make/ood_versions.mk
 
-CYPRESS_IMAGE ?= cypress/included:13.6.4
-PROJECT_NAME ?= loop_atests
-COMPOSE_CMD = docker compose
+PROJECT_NAME := loop_atests
+COMPOSE_CMD := docker compose
+WORKING_DIR := $(shell pwd)
 ENV := env OOD_IMAGE=$(OOD_IMAGE) OOD_UID=$(OOD_UID) OOD_GID=$(OOD_GID)
+CYPRESS_IMAGE := cypress/included:13.6.4
 
-.PHONY: atest_up atest_down cypress cypress_open
+# Test execution modes
+CYPRESS_BROWSER ?= electron
+CYPRESS_SPEC ?=
 
-atest_up: atest_down
-	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) up --build || :
+.PHONY: help env_up env_down env_status env_logs cypress_deps cypress_build cypress_run cypress_open cypress_headless clean
 
-atest_down:
-	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) down -v || :
+# Default target
+help:
+	@echo "Available targets:"
+	@echo ""
+	@echo "Environment Management:"
+	@echo "  env_up          - Start test environment (OOD, mocks, services)"
+	@echo "  env_down        - Stop test environment"
+	@echo "  env_status      - Show status of environment services"
+	@echo "  env_logs        - Show logs from environment services"
+	@echo ""
+	@echo "Cypress Testing (requires env_up first):"
+	@echo "  cypress_deps    - Generate/update package-lock.json using Docker container"
+	@echo "  cypress_build   - Build Cypress project and install dependencies"
+	@echo "  cypress_run     - Run Cypress tests headless"
+	@echo "  cypress_open    - Open Cypress interactive test runner"
+	@echo "  cypress_headless - Run Cypress tests in headless mode (alias for cypress_run)"
+	@echo ""
+	@echo "Cleanup:"
+	@echo "  clean           - Stop environment and clean up artifacts"
+	@echo ""
+	@echo "Environment variables:"
+	@echo "  CYPRESS_BROWSER   - Browser to use (chrome, firefox, edge) [default: chrome]"
+	@echo "  CYPRESS_SPEC      - Specific test spec to run [default: all]"
+	@echo "  LOOP_USERNAME     - Username for OOD authentication"
+	@echo "  LOOP_PASSWORD     - Password for OOD authentication"
+	@echo "  OOD_VERSION       - OnDemand version [default: 3.1.7]"
 
-cypress:
-	docker run --rm -it \
-		--network $${PROJECT_NAME}_default \
-		-e CYPRESS_baseUrl=https://ood \
-		-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-		-v $$(PWD):/e2e \
+# Start the test environment
+env_up: env_down
+	@echo "Starting test environment..."
+	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) up -d --build
+	@echo "Run 'make cypress_run' or 'make cypress_open' to execute tests"
+
+# Stop the test environment
+env_down:
+	@echo "Stopping test environment..."
+	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) down -v --remove-orphans || :
+
+# Show environment status
+env_status:
+	@echo "Environment status:"
+	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) ps
+
+# Show environment logs
+env_logs:
+	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) logs -f
+
+# Generate/update package-lock.json using Docker container
+cypress_deps:
+	@echo "Generating/updating package-lock.json using Docker container..."
+	@echo "This ensures the lock file is created in the same Linux environment as test execution"
+	@# Remove existing lock file and node_modules to ensure clean resolution
+	@rm -f package-lock.json
+	@rm -rf node_modules
+	docker run --rm \
+		-v $(WORKING_DIR):/e2e \
 		-w /e2e \
-		$${CYPRESS_IMAGE} \
-		cypress run
+		--entrypoint sh \
+		$(CYPRESS_IMAGE) \
+		-c "npm install && chown $(shell id -u):$(shell id -g) package-lock.json"
+	@echo "package-lock.json updated successfully"
+	@echo "You should commit this file to ensure consistent dependency resolution"
 
+# Build Cypress project and install dependencies
+cypress_build:
+	@echo "Building Cypress project and installing dependencies..."
+	docker run --rm \
+		--network host \
+		-v $(WORKING_DIR):/e2e \
+		-w /e2e \
+		--entrypoint sh \
+		$(CYPRESS_IMAGE) \
+		-c "npm ci"
+	@echo "Cypress project built successfully"
+
+# Run Cypress tests in headless mode using vanilla Cypress image
+cypress_run:
+	@echo "Running Cypress tests in headless mode..."
+	docker run --rm \
+		--network host \
+		-e LOOP_USERNAME=$(LOOP_USERNAME) \
+		-e LOOP_PASSWORD=$(LOOP_PASSWORD) \
+		-v $(WORKING_DIR):/e2e \
+		-w /e2e \
+		$(CYPRESS_IMAGE) \
+		cypress run --browser $(CYPRESS_BROWSER) $(if $(CYPRESS_SPEC),--spec $(CYPRESS_SPEC))
+
+# Run Cypress in interactive mode using vanilla Cypress image  
 cypress_open:
+	@echo "Opening Cypress interactive test runner..."
+	@echo "Note: For interactive mode to work, ensure X11 forwarding is enabled"
 	docker run --rm -it \
-		--network $${PROJECT_NAME}_default \
-		-e CYPRESS_baseUrl=https://ood \
-		-e NODE_TLS_REJECT_UNAUTHORIZED=0 \
-		-v $$(PWD):/e2e \
+		--network host \
+		-e LOOP_USERNAME=$(LOOP_USERNAME) \
+		-e LOOP_PASSWORD=$(LOOP_PASSWORD) \
+		-e DISPLAY=host.docker.internal:0 \
+		-v $(WORKING_DIR):/e2e \
 		-w /e2e \
 		--entrypoint=cypress \
-		$${CYPRESS_IMAGE} open
+		$(CYPRESS_IMAGE) open --browser $(CYPRESS_BROWSER)
+
+# Alias for cypress_run
+cypress_headless: cypress_run
+
+# Clean up everything
+clean: env_down
+	@echo "Cleaning up data and test artifacts..."
+	@rm -rf data cypress/screenshots/* cypress/videos/* cypress/results/* || :
+	@echo "Cleanup complete"
