@@ -43,6 +43,10 @@ class ProjectEventList
     @events
   end
 
+  def all_by_entity_type_and_id(entity_type:, entity_id:)
+    all.select { |event| event.entity_type == entity_type && event.entity_id == entity_id }
+  end
+
   def add(attributes)
     attrs = attributes.merge(project_id: @project_id)
     event = attributes.is_a?(Event) ? attributes : Event.new(attrs)
@@ -53,11 +57,14 @@ class ProjectEventList
     event
   end
 
+  def events_file
+    File.join(Project.project_metadata_dir(@project_id), 'events.yml')
+  end
+
   private
 
   def load_events
-    path = Project.events_file(@project_id)
-    data = self.class.load_from_file(path) || []
+    data = self.class.load_from_file(events_file) || []
     data.select { |attrs| attrs.is_a?(Hash) }.map { |attrs| Event.from_hash(attrs) }
   rescue => e
     LoggingCommon.log_error('Cannot load events', { file: path }, e)
@@ -69,6 +76,6 @@ class ProjectEventList
   end
 
   def store
-    store_to_file(Project.events_file(@project_id))
+    store_to_file(events_file)
   end
 end
