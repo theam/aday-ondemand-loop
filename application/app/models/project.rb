@@ -60,8 +60,12 @@ class Project < ApplicationDiskRecord
       end
   end
 
+  def event_list
+    @event_list ||= ProjectEventList.new(project_id: id)
+  end
+
   def all_events
-    Event.for_project(id)
+    event_list.all
   end
 
   def events

@@ -2,19 +2,17 @@
 
 module EventLogger
   def record_event(attributes)
-    event = Event.new(attributes)
-    if event.save
+    list = ProjectEventList.new(project_id: attributes[:project_id])
+    event = list.add(attributes)
+    if event
       LoggingCommon.log_info("Event saved", event.to_h)
       true
     else
-      LoggingCommon.log_error('Cannot record event', {event: event.to_h})
-      event.errors.messages.each do |message|
-        LoggingCommon.log_error(message)
-      end
+      LoggingCommon.log_error('Cannot record event', { event: attributes })
       false
     end
   rescue => e
-    LoggingCommon.log_error('Cannot record event', { event: event.to_h }, e)
+    LoggingCommon.log_error('Cannot record event', attributes, e)
     false
   end
 

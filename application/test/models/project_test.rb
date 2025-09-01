@@ -224,10 +224,9 @@ class ProjectTest < ActiveSupport::TestCase
       project = create_valid_project
       assert project.save
 
-      evt1 = Event.new(project_id: project.id, entity_id: project.id, message: 'project_created', entity_type: 'project', metadata: {})
-      evt2 = Event.new(project_id: project.id, entity_id: project.id, message: 'project_updated', entity_type: 'project', metadata: {})
-      assert evt1.save
-      assert evt2.save
+      list = project.event_list
+      assert list.add(entity_id: project.id, entity_type: 'project', message: 'project_created', metadata: {})
+      assert list.add(entity_id: project.id, entity_type: 'project', message: 'project_updated', metadata: {})
 
       events_path = Project.events_file(project.id)
       assert File.exist?(events_path), 'events file was not created'
