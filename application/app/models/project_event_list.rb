@@ -16,10 +16,8 @@ class ProjectEventList
     all.select { |event| event.entity_type == entity_type && event.entity_id == entity_id }
   end
 
-  def add(event_attributes)
-    attrs = event_attributes.merge(project_id: @project_id)
-    event = event_attributes.is_a?(Event) ? event_attributes : Event.new(attrs)
-    return false unless event.valid?
+  def add(event)
+    return false unless event.valid? && event.project_id == @project_id
 
     @events << event
     store

@@ -3,9 +3,10 @@
 module EventLogger
   def record_event(attributes)
     list = ProjectEventList.new(project_id: attributes[:project_id])
-    event = list.add(attributes)
-    if event
-      LoggingCommon.log_info("Event saved", event.to_h)
+    event = Event.new(attributes)
+    event_saved = list.add(event)
+    if event_saved
+      LoggingCommon.log_info("Event saved", event_saved.to_h)
       true
     else
       LoggingCommon.log_error('Cannot record event', { event: attributes })
