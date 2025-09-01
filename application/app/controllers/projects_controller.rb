@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
     project_name = params[:project_name] || ProjectNameGenerator.generate
     project = Project.new(id: project_name, name: project_name)
     if project.save
-      record_event(project_event_attributes(project, { message: 'Project created' }))
+      record_event(project_event_attributes(project, { message: 'events.project.created' }))
       Current.settings.update_user_settings({ active_project: project.id.to_s })
       notice = t(".project_created", project_name: project_name)
       if params.key?(:redirect_back)
@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
     update_params = params.permit(:name, :download_dir).to_h.compact
 
     if project.update(update_params)
-      record_event(project_event_attributes(project, { message: 'Project updated' }))
+      record_event(project_event_attributes(project, { message: 'events.project.updated' }))
       respond_to do |format|
         format.html { redirect_back fallback_location: projects_path, notice: t(".project_updated_successfully", project_name: project.name) }
         format.json { render json: project.to_json, status: :ok }
@@ -72,7 +72,7 @@ class ProjectsController < ApplicationController
     end
 
     Current.settings.update_user_settings({active_project: project_id})
-    record_event(project_event_attributes(project, { message: 'Project set as active' }))
+    record_event(project_event_attributes(project, { message: 'events.project.active' }))
     respond_to do |format|
       format.html { redirect_back fallback_location: projects_path, notice: t(".project_is_now_the_active_project", project_name: project.name) }
       format.json { render json: project.to_json, status: :ok }
@@ -96,7 +96,7 @@ class ProjectsController < ApplicationController
   def project_event_attributes(project, attrs={})
     default_attributes = {
       project_id: project.id,
-      message: 'Project updated',
+      message: 'events.project.updated',
       entity_type: 'project',
       entity_id: project.id,
       metadata: {

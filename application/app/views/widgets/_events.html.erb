@@ -16,7 +16,7 @@
   <tbody>
   <% events.each do |event| %>
     <tr>
-      <td><%= event.message %></td>
+      <td><%= t(event.message) %></td>
       <td><%= event.creation_date %></td>
       <td>
         <% if event.metadata.present? %>
