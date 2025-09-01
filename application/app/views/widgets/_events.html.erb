@@ -1,7 +1,7 @@
 <%
   project_id = params[:project_id]
   project = Project.find(project_id)
-  events = project.events
+  events = project ? project.events : []
 %>
 <table class="table table-sm">
   <thead>
