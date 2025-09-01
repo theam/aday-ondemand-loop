@@ -3,37 +3,6 @@
 class ProjectEventList
   include YamlStorageCommon
 
-  class Event
-    include ActiveModel::Model
-
-    ATTRIBUTES = %w[id project_id message entity_type entity_id creation_date metadata].freeze
-
-    attr_accessor(*ATTRIBUTES)
-
-    validates_presence_of :id, :project_id, :message, :entity_type, :creation_date
-
-    def initialize(attributes = {})
-      super
-      self.id = SecureRandom.uuid.to_s if id.blank?
-      self.creation_date ||= DateTimeCommon.now
-      self.metadata ||= {}
-    end
-
-    def to_h
-      ATTRIBUTES.each_with_object({}) do |attr, hash|
-        hash[attr.to_s] = public_send(attr)
-      end
-    end
-
-    def self.from_hash(data)
-      new.tap do |instance|
-        ATTRIBUTES.each do |attr|
-          instance.public_send("#{attr}=", data[attr.to_s])
-        end
-      end
-    end
-  end
-
   def initialize(project_id:)
     @project_id = project_id
     @events = load_events
@@ -47,9 +16,9 @@ class ProjectEventList
     all.select { |event| event.entity_type == entity_type && event.entity_id == entity_id }
   end
 
-  def add(attributes)
-    attrs = attributes.merge(project_id: @project_id)
-    event = attributes.is_a?(Event) ? attributes : Event.new(attrs)
+  def add(event_attributes)
+    attrs = event_attributes.merge(project_id: @project_id)
+    event = event_attributes.is_a?(Event) ? event_attributes : Event.new(attrs)
     return false unless event.valid?
 
     @events << event
