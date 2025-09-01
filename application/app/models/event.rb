@@ -32,7 +32,6 @@ class Event
 
     events = self.class.for_project(project_id)
     events << self
-    LoggingCommon.log_info("Event to be saved", events: events)
     self.class.store_events(project_id, events)
   end
 
