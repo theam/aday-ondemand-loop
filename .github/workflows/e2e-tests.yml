@@ -25,11 +25,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set user IDs
-        run: |
-          echo "UID=$(id -u)" >> $GITHUB_ENV
-          echo "GID=$(id -g)" >> $GITHUB_ENV
-
       - name: Build application
         run: make release_build
 
@@ -41,15 +36,17 @@ jobs:
         working-directory: e2e_tests
         run: make env_up
 
-      - name: Debug
-        working-directory: e2e_tests
+      - name: Align ood user with GitHub runner UID/GID
         run: |
-          docker ps
-          sleep 10
-          docker exec test_loop_ood cat /var/log/ondemand-nginx/ood/error.log
-          curl -kv -u "ood:ood" https://localhost:22200/pun/sys/dashboard
-          curl -kv -u "ood:ood" https://localhost:22200/pun/sys/loop
-          docker exec test_loop_ood cat /var/log/ondemand-nginx/ood/error.log
+          # Get GitHub runner's UID/GID
+          HOST_UID=$(id -u)
+          HOST_GID=$(id -g)
+
+          echo "Updating ood user inside container to UID=$HOST_UID, GID=$HOST_GID"
+
+          # Update group and user inside the running container
+          docker exec test_loop_ood groupmod -o -g $HOST_GID ood || true
+          docker exec test_loop_ood usermod -o -u $HOST_UID -g $HOST_GID ood || true
 
       - name: Wait for OnDemand Loop
         run: .github/scripts/wait_for_loop.sh

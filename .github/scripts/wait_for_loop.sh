@@ -9,6 +9,19 @@ SLEEP_SECS="${SLEEP_SECS:-25}"
 
 echo "Trying: ${ENDPOINT} with username: ${OOD_USERNAME}"
 
+docker ps
+
+for i in {1..10}; do
+  if curl -sk -u "ood:ood" https://localhost:22200/pun/sys/loop > /dev/null; then
+    echo "✅ Service is up"
+    break
+  fi
+  echo "⏳ Waiting for service (attempt $i)..."
+  sleep 5
+done
+
+docker exec test_loop_ood cat /var/log/ondemand-nginx/ood/error.log
+
 for ((i=1; i<=MAX_RETRIES; i++)); do
   STATUS_RECEIVED=$(curl -k -s -o /dev/null -L -w '%{http_code}' \
     -u "${OOD_USERNAME}:${OOD_PASSWORD}" "${ENDPOINT}")
