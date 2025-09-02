@@ -8,9 +8,9 @@ class ProjectEventListTest < ActiveSupport::TestCase
       list = ProjectEventList.new(project_id: project_id)
 
       event = Event.new(project_id: project_id,
-                        message: 'created',
                         entity_type: 'project',
                         entity_id: project_id,
+                        message: 'created',
                         metadata: { 'foo' => 'bar' })
 
       list.add(event)
@@ -29,8 +29,14 @@ class ProjectEventListTest < ActiveSupport::TestCase
       project_id = 'p456'
       list = ProjectEventList.new(project_id: project_id)
 
-      e1 = Event.new(project_id: project_id, message: 'm1', entity_type: 'file', entity_id: '1')
-      e2 = Event.new(project_id: project_id, message: 'm2', entity_type: 'file', entity_id: '2')
+      e1 = Event.new(project_id: project_id,
+                     entity_type: 'file',
+                     entity_id: '1',
+                     message: 'm1')
+      e2 = Event.new(project_id: project_id,
+                     entity_type: 'file',
+                     entity_id: '2',
+                     message: 'm2')
       list.add(e1)
       list.add(e2)
 

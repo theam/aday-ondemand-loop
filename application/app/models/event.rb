@@ -3,15 +3,18 @@ class Event
 
   ATTRIBUTES = %w[id project_id message entity_type entity_id creation_date metadata].freeze
 
-  attr_accessor(*ATTRIBUTES)
+  attr_reader(*ATTRIBUTES)
 
   validates_presence_of :id, :project_id, :message, :entity_type, :creation_date
 
-  def initialize(attributes = {})
-    super
-    self.id = SecureRandom.uuid.to_s if id.blank?
-    self.creation_date ||= DateTimeCommon.now
-    self.metadata ||= {}
+  def initialize(project_id:, entity_type:, entity_id: nil, message:, metadata: {})
+    @id = SecureRandom.uuid.to_s
+    @project_id = project_id
+    @entity_type = entity_type
+    @entity_id = entity_id
+    @message = message
+    @creation_date = DateTimeCommon.now
+    @metadata = metadata || {}
   end
 
   def to_h
@@ -21,10 +24,13 @@ class Event
   end
 
   def self.from_hash(data)
-    new.tap do |instance|
-      ATTRIBUTES.each do |attr|
-        instance.public_send("#{attr}=", data[attr.to_s])
-      end
+    new(project_id: data['project_id'],
+        entity_type: data['entity_type'],
+        entity_id: data['entity_id'],
+        message: data['message'],
+        metadata: data['metadata']).tap do |instance|
+      instance.instance_variable_set(:@id, data['id'])
+      instance.instance_variable_set(:@creation_date, data['creation_date'])
     end
   end
 end
