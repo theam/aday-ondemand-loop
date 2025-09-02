@@ -21,7 +21,6 @@ services:
     container_name: test_loop_ood
     privileged: true
     cgroup: host
-    user: "${UID}:${GID}"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - ../application:/var/www/ood/apps/sys/loop

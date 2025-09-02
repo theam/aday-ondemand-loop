@@ -46,6 +46,7 @@ jobs:
         run: |
           docker ps
           sleep 10
+          docker exec test_loop_ood cat /var/log/ondemand-nginx/ood/error.log
           curl -kv -u "ood:ood" https://localhost:22200/pun/sys/dashboard
           curl -kv -u "ood:ood" https://localhost:22200/pun/sys/loop
           docker exec test_loop_ood cat /var/log/ondemand-nginx/ood/error.log
