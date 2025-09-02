@@ -1,6 +1,6 @@
 include ../tools/make/ood_versions.mk
 
-PROJECT_NAME := loop_atests
+PROJECT_NAME := loop_e2e
 COMPOSE_CMD := docker compose
 WORKING_DIR := $(shell pwd)
 ENV := env OOD_IMAGE=$(OOD_IMAGE) OOD_UID=$(OOD_UID) OOD_GID=$(OOD_GID)

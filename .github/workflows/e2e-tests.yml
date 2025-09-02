@@ -54,8 +54,8 @@ jobs:
           ENDPOINT: https://localhost:22200/pun/sys/loop
           OOD_USERNAME: ood
           OOD_PASSWORD: ood
-          MAX_RETRIES: 20
-          SLEEP_SECS: 10
+          MAX_RETRIES: 15
+          SLEEP_SECS: 5
 
       - name: Run Cypress tests
         working-directory: e2e_tests
