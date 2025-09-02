@@ -40,9 +40,10 @@ jobs:
         working-directory: e2e_tests
         run: |
           docker ps
-          docker logs test_loop_ood | head -50
           sleep 10
+          curl -kv -u "ood:ood" https://localhost:22200/pun/sys/dashboard
           curl -kv -u "ood:ood" https://localhost:22200/pun/sys/loop
+          docker exec test_loop_ood cat /var/log/ondemand-nginx/ood/error.log
 
       - name: Wait for OnDemand Loop
         run: .github/scripts/wait_for_loop.sh
