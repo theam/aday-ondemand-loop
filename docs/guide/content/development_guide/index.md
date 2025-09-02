@@ -43,6 +43,9 @@ The documentation is organized by topic to help you find what you need quickly:
 - [Contributing a Change](contributing.md)  
   Best practices and workflow for contributing code or documentation.
 
+- [Automated Tests](automated_tests.md)  
+  End-to-end testing with Cypress, including local execution and CI/CD integration.
+
 - [GitHub Actions](github_actions.md)  
   How CI is handled using GitHub Actions, including testing and deployment workflows.
 
