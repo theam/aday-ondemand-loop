@@ -13,11 +13,6 @@ services:
       #- MAILDEV_INCOMING_PASS=password
     tmpfs:
       - /mail:mode=770,size=128M,uid=1000,gid=1000
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:1080"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   ood:
     image: ${OOD_IMAGE}
@@ -44,12 +39,6 @@ services:
       - smtp
       - zenodo
       - dataverse
-    healthcheck:
-      test: ["CMD", "curl", "-k", "-f", "https://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
 
   zenodo:
     image: wiremock/wiremock:3.5.2
@@ -59,11 +48,6 @@ services:
       - "22300:8080"
     volumes:
       - ./mock_repositories/zenodo:/home/wiremock
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/__admin/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   dataverse:
     image: wiremock/wiremock:3.5.2
@@ -73,10 +57,3 @@ services:
       - "22400:8080"
     volumes:
       - ./mock_repositories/dataverse:/home/wiremock
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/__admin/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-
