@@ -40,6 +40,8 @@ jobs:
         working-directory: e2e_tests
         run: |
           docker ps
+          docker logs test_loop_ood | head -50
+          sleep 10
           curl -kv -u "ood:ood" https://localhost:22200/pun/sys/loop
 
       - name: Wait for OnDemand Loop
