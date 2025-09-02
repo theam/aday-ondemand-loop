@@ -1,9 +1,23 @@
-name: Automated Tests
+name: Cypress E2E Tests
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'application/**'
+      - 'automated_tests/**'
+
   pull_request:
+    branches: [ main ]
+    paths:
+      - 'application/**'
+      - 'automated_tests/**'
+
+  workflow_dispatch:
+
+env:
+  # OnDemand configuration
+  OOD_VERSION: 3.1.7
 
 jobs:
   cypress:
@@ -15,9 +29,22 @@ jobs:
       - name: Build application
         run: make loop_build
 
+      - name: Build Cypress
+        working-directory: automated_tests
+        run: make cypress_build
+
       - name: Start testing environment
         working-directory: automated_tests
-        run: make env_app
+        run: make env_up
+
+      - name: Wait for OnDemand Loop
+        run: .github/scripts/wait_for_loop.sh
+        env:
+          ENDPOINT: https://localhost:22200/pun/sys/loop
+          OOD_USERNAME: ood
+          OOD_PASSWORD: ood
+          MAX_RETRIES: 20
+          SLEEP_SECS: 10
 
       - name: Run Cypress tests
         working-directory: automated_tests
