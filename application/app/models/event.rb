@@ -10,7 +10,7 @@ class Event
   def initialize(project_id:, entity_type:, entity_id: nil, message:, metadata: {}, id: nil, creation_date: nil)
     @id = id || SecureRandom.uuid.to_s
     @project_id = project_id
-    @entity_type = entity_type
+    @entity_type = entity_type.to_s.downcase
     @entity_id = entity_id
     @message = message
     @creation_date = creation_date || DateTimeCommon.now
@@ -25,7 +25,7 @@ class Event
 
   def self.from_hash(data)
     new(project_id: data['project_id'],
-        entity_type: data['entity_type'],
+        entity_type: data['entity_type'].to_s.downcase,
         entity_id: data['entity_id'],
         message: data['message'],
         metadata: data['metadata'],

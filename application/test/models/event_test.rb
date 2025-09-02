@@ -99,5 +99,21 @@ class EventTest < ActiveSupport::TestCase
     assert_equal original_event.metadata, reconstructed.metadata
   end
 
+  test "entity_type is normalized to downcase on creation" do
+    event = Event.new(project_id: 'p1', entity_type: 'PROJECT', message: 'm')
+    assert_equal 'project', event.entity_type
+  end
+
+  test "entity_type is normalized to downcase from_hash" do
+    data = { 'project_id' => 'p1', 'entity_type' => 'FILE', 'message' => 'm' }
+    event = Event.from_hash(data)
+    assert_equal 'file', event.entity_type
+  end
+
+  test "entity_type handles symbols and converts to downcase string" do
+    event = Event.new(project_id: 'p1', entity_type: :Bundle, message: 'm')
+    assert_equal 'bundle', event.entity_type
+  end
+
 end
 
