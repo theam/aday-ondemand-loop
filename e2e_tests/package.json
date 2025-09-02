@@ -1,0 +1,30 @@
+{
+  "name": "loop-cypress-tests",
+  "version": "1.0.0",
+  "description": "Cypress automated tests for OnDemand Loop",
+  "main": "cypress.config.js",
+  "scripts": {
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "test": "cypress run --browser chrome --headless",
+    "test:chrome": "cypress run --browser chrome",
+    "test:firefox": "cypress run --browser firefox", 
+    "test:record": "cypress run --record --key $CYPRESS_RECORD_KEY",
+    "test:ci": "cypress run --browser chrome --headless --reporter junit --reporter-options mochaFile=cypress/results/results-[hash].xml"
+  },
+  "dependencies": {
+    "cypress": "^13.6.4"
+  },
+  "devDependencies": {
+    "@cypress/grep": "^4.0.1"
+  },
+  "keywords": [
+    "cypress",
+    "testing",
+    "e2e",
+    "ondemand",
+    "loop"
+  ],
+  "author": "Harvard Medical Data Commons",
+  "license": "MIT"
+}

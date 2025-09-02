@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/api/dataverses/.*/datasets"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "create_dataset_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

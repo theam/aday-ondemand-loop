@@ -42,6 +42,7 @@ nav:
       - Open OnDemand: development_guide/ood.md
       - Dataverse Integration: development_guide/dataverse_integration.md
       - Contributing a Change: development_guide/contributing.md
+      - E2E Tests: development_guide/e2e_tests.md
       - GitHub Actions: development_guide/github_actions.md
       - Languages and Translations: development_guide/languages_and_translations.md
 
@@ -50,9 +51,12 @@ markdown_extensions:
       permalink: true
       toc_depth: 2
   - admonition
-  - codehilite
   - footnotes
   - tables
+  - pymdownx.highlight:
+      anchor_linenums: true
+      linenums: false
+  - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg

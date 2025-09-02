@@ -1,0 +1,72 @@
+name: Cypress E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'application/**'
+      - 'e2e_tests/**'
+
+  pull_request:
+    paths:
+      - 'application/**'
+      - 'e2e_tests/**'
+
+  workflow_dispatch:
+
+env:
+  # OnDemand configuration
+  OOD_VERSION: 3.1.7
+
+jobs:
+  build-and-run-e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build application
+        run: make release_build
+
+      - name: Build Cypress
+        working-directory: e2e_tests
+        run: make cypress_build
+
+      - name: Start testing environment
+        working-directory: e2e_tests
+        run: make env_up
+
+      - name: Align ood user with GitHub runner UID/GID
+        run: |
+          # Get GitHub runner's UID/GID
+          HOST_UID=$(id -u)
+          HOST_GID=$(id -g)
+
+          echo "Updating ood user inside container to UID=$HOST_UID, GID=$HOST_GID"
+
+          # Update group and user inside the running container
+          docker exec test_loop_ood groupmod -o -g $HOST_GID ood || true
+          docker exec test_loop_ood usermod -o -u $HOST_UID -g $HOST_GID ood || true
+
+      - name: Wait for OnDemand Loop
+        run: .github/scripts/wait_for_loop.sh
+        env:
+          ENDPOINT: https://localhost:22200/pun/sys/loop
+          OOD_USERNAME: ood
+          OOD_PASSWORD: ood
+          MAX_RETRIES: 15
+          SLEEP_SECS: 5
+
+      - name: Run Cypress tests
+        working-directory: e2e_tests
+        run: make cypress_run
+
+      - name: Upload Cypress artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress_artifacts
+          path: |
+            e2e_tests/cypress/screenshots
+            e2e_tests/cypress/results
+          if-no-files-found: ignore

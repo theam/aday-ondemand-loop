@@ -7,6 +7,7 @@ For the actual definition of the workflows refer to the [repository source](http
 ### Workflow Summaries
 
 - **test.yml** – Runs the full test suite via `make test` on pull requests and pushes to the `main` branch. It also generates SimpleCov coverage badges when changes are pushed to `main`.
+- **e2e-tests.yml** – Runs end-to-end Cypress tests on pull requests and pushes to `main` when `application/` or `e2e_tests/` directories change. Builds the application, starts the test environment, and uploads test artifacts on failure.
 - **guide.yml** – Builds this guide using `make guide` and deploys it to GitHub Pages whenever documentation under `docs/guide` changes on `main`.
 - **build_from_hash.yml** – Reusable workflow called by other workflows to build Loop from a specific commit hash for QA or release candidate deployments.
 - **create_release_candidate.yml** – Triggered via a `/create_release_candidate` issue comment. Validates the issue, then uses `build_from_hash.yml` to build a release candidate branch for testing (no deployment).

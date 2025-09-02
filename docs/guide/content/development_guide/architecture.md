@@ -82,7 +82,29 @@ The main configuration class for the application is lives under `config/configur
 This globally accessible object defines all adjustable settings which can be
 overridden via YAML or environment variables (see the [Admin Guide](../admin.md) for details).
 
-`application/test` include all the unit tests and integration tests for the application.
-The application uses standard [Rails testing](https://guides.rubyonrails.org/testing.html) with Minitest with Mocha.
+## Testing
 
-The static fixtures for the tests are stored under `application/test/fixtures`
+OnDemand Loop uses a comprehensive testing strategy with multiple types of tests:
+
+### Unit and Integration Tests (`application/test`)
+
+The Rails application uses standard [Rails testing](https://guides.rubyonrails.org/testing.html) with Minitest and Mocha for mocking. Test types include:
+
+- **Unit tests** - Test individual components, models, and services in isolation
+- **Integration tests** - Test interactions between different parts of the application
+- **Controller tests** - Test HTTP request/response handling and routing
+- **View tests** - Test view components and template rendering logic
+- **System tests** - Test full user workflows through the browser interface
+
+The static fixtures for tests are stored under `application/test/fixtures`.
+
+### End-to-End Tests (`e2e_tests/`)
+
+Cypress-based E2E tests verify complete user workflows from the browser perspective:
+
+- **User interface testing** - Validate UI components and user interactions
+- **Cross-browser compatibility** - Test functionality across different browsers
+- **Integration testing** - Verify the application works with external services
+- **Regression testing** - Ensure new changes don't break existing functionality
+
+E2E tests run in Docker containers for consistency and are integrated into the CI/CD pipeline. See the [E2E Tests](e2e_tests.md) guide for detailed information on writing and running these tests.

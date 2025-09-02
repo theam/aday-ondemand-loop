@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/mydata/retrieve"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "my_dataverse_collections_response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
