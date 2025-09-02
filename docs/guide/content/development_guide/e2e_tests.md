@@ -15,18 +15,15 @@ The automated tests are located in the `e2e_tests/` directory and provide:
 ```
 e2e_tests/
 ├── cypress/
-│   ├── e2e/                    # Test specifications
-│   ├── plugins/                # Cypress plugins and utilities
-│   │   ├── config.js          # cy.loop configuration object
-│   │   ├── loop.js            # Main plugin configuration
-│   │   └── navigation.js      # Navigation utilities
+│   ├── e2e/                   # Test specifications
+│   ├── plugins/               # Application plugins and utilities
 │   ├── support/               # Cypress support files
-│   │   └── e2e.js            # Global test setup
+│   │   └── e2e.js             # Global test setup
 │   └── fixtures/              # Test data files
 ├── cypress.config.js          # Cypress configuration
-├── package.json              # Node.js dependencies
-├── Makefile                  # Test automation commands
-└── docker-compose.yml        # Test environment setup
+├── package.json               # Node.js dependencies
+├── Makefile                   # Test automation commands
+└── docker-compose.yml         # Test environment setup
 ```
 
 ## Running Tests Locally
@@ -40,30 +37,32 @@ e2e_tests/
 ### Quick Start
 
 1. **Start the test environment:**
-   ```bash
-   cd e2e_tests
-   make env_up
-   ```
-   This command starts OnDemand Loop and all required services using Docker Compose.
+
+```bash
+cd e2e_tests
+make env_up
+```
+
+This command starts OnDemand Loop and all required services using Docker Compose.
 
 2. **Build Cypress dependencies:**
-   ```bash
-   make cypress_build
-   ```
+
+```bash
+make cypress_build
+```
 
 3. **Run tests:**
-   ```bash
-   # Run all tests headless
-   make cypress_run
-   
-   # Run tests interactively (requires X11 forwarding)
-   make cypress_open
-   ```
+
+```bash
+# Run all tests headless
+make cypress_run
+```
 
 4. **Clean up:**
-   ```bash
-   make clean
-   ```
+
+```bash
+make clean
+```
 
 ### Available Make Targets
 
@@ -76,7 +75,6 @@ e2e_tests/
 | `cypress_deps` | Generate/update package-lock.json using Docker container |
 | `cypress_build` | Build Cypress project and install dependencies |
 | `cypress_run` | Run Cypress tests headless |
-| `cypress_open` | Open Cypress interactive test runner |
 | `clean` | Stop environment and clean up artifacts |
 
 ### Environment Variables
@@ -120,15 +118,15 @@ describe('Feature Name', () => {
 
 ### Best Practices
 
-1. **Use data attributes** for element selection:
+1. **Use data attributes** for element selection:  
    ```html
    <button data-cy="submit-button">Submit</button>
-   ```
+   ```   
    ```javascript
    cy.get('[data-cy=submit-button]').click()
    ```
 
-2. **Leverage navigation utilities** instead of manual `cy.visit()` calls:
+2. **Leverage navigation utilities** instead of manual `cy.visit()` calls:  
    ```javascript
    // Good
    visitLoopRoot()
@@ -137,12 +135,12 @@ describe('Feature Name', () => {
    cy.visit('/pun/sys/loop', { auth: {...} })
    ```
 
-3. **Use the cy.loop configuration** for consistent settings:
+3. **Use the cy.loop configuration** for consistent settings:  
    ```javascript
    cy.get('.slow-element', { timeout: cy.loop.timeout })
    ```
 
-4. **Add descriptive test names** that explain the expected behavior:
+4. **Add descriptive test names** that explain the expected behavior:  
    ```javascript
    it('should display welcome message and beta notice on first visit', () => {
      // test implementation
@@ -165,14 +163,14 @@ Tests run automatically in GitHub Actions on:
 
 ### GitHub Actions Workflow
 
-The workflow (`.github/workflows/automated-tests.yml`) performs:
+The workflow (`.github/workflows/e2e-tests.yml`) performs:
 
-1. **Build application** using `make loop_build`
+1. **Build application** using `make release_build`
 2. **Build Cypress** dependencies
 3. **Start test environment** with `make env_up`
-4. **Wait for Loop** to be ready using health checks
+4. **Wait for Loop** to be ready using HTTP checks
 5. **Run tests** with `make cypress_run`
-6. **Upload artifacts** (screenshots, videos) on failure
+6. **Upload artifacts** (results, screenshots) on failure
 
 ### Test Artifacts
 
@@ -183,42 +181,19 @@ When tests fail, the following artifacts are automatically uploaded:
 
 ## Troubleshooting
 
-### Common Issues
-
-**Tests fail with authentication errors:**
-- Verify `LOOP_USERNAME` and `LOOP_PASSWORD` environment variables are set
-- Check that the test environment is running with `make env_status`
-
-**Connection refused errors:**
-- Ensure the test environment is fully started with `make env_up`
-- Check service health with `make env_logs`
-
-**Browser launch failures:**
-- For interactive mode, ensure X11 forwarding is enabled
-- Try different browsers with `CYPRESS_BROWSER=chrome make cypress_run`
-
-**SSL certificate errors:**
-- The tests are configured to accept self-signed certificates
-- Check that the browser arguments in `cypress/plugins/loop.js` include SSL bypass flags
-
 ### Debugging Tests
 
-1. **Run tests interactively:**
-   ```bash
-   make cypress_open
-   ```
-
-2. **View environment logs:**
+1. **View environment logs:**
    ```bash
    make env_logs
    ```
 
-3. **Check service status:**
+2. **Check service status:**
    ```bash
    make env_status
    ```
 
-4. **Run specific tests:**
+3. **Run specific tests:**
    ```bash
    CYPRESS_SPEC=cypress/e2e/homepage.cy.js make cypress_run
    ```

@@ -10,7 +10,7 @@ CYPRESS_IMAGE := cypress/included:13.6.4
 CYPRESS_BROWSER ?= electron
 CYPRESS_SPEC ?=
 
-.PHONY: help env_up env_down env_status env_logs cypress_deps cypress_build cypress_run cypress_open cypress_headless clean
+.PHONY: help env_up env_down env_status env_logs cypress_deps cypress_build cypress_run clean
 
 # Default target
 help:
@@ -26,8 +26,6 @@ help:
 	@echo "  cypress_deps    - Generate/update package-lock.json using Docker container"
 	@echo "  cypress_build   - Build Cypress project and install dependencies"
 	@echo "  cypress_run     - Run Cypress tests headless"
-	@echo "  cypress_open    - Open Cypress interactive test runner"
-	@echo "  cypress_headless - Run Cypress tests in headless mode (alias for cypress_run)"
 	@echo ""
 	@echo "Cleanup:"
 	@echo "  clean           - Stop environment and clean up artifacts"
@@ -43,7 +41,7 @@ help:
 env_up: env_down
 	@echo "Starting test environment..."
 	$(ENV) $(COMPOSE_CMD) -f docker-compose.yml -p $(PROJECT_NAME) up -d --build
-	@echo "Run 'make cypress_run' or 'make cypress_open' to execute tests"
+	@echo "Run 'make cypress_run' to execute tests"
 
 # Stop the test environment
 env_down:
@@ -98,23 +96,6 @@ cypress_run:
 		-w /e2e \
 		$(CYPRESS_IMAGE) \
 		cypress run --browser $(CYPRESS_BROWSER) $(if $(CYPRESS_SPEC),--spec $(CYPRESS_SPEC))
-
-# Run Cypress in interactive mode using vanilla Cypress image  
-cypress_open:
-	@echo "Opening Cypress interactive test runner..."
-	@echo "Note: For interactive mode to work, ensure X11 forwarding is enabled"
-	docker run --rm -it \
-		--network host \
-		-e LOOP_USERNAME=$(LOOP_USERNAME) \
-		-e LOOP_PASSWORD=$(LOOP_PASSWORD) \
-		-e DISPLAY=host.docker.internal:0 \
-		-v $(WORKING_DIR):/e2e \
-		-w /e2e \
-		--entrypoint=cypress \
-		$(CYPRESS_IMAGE) open --browser $(CYPRESS_BROWSER)
-
-# Alias for cypress_run
-cypress_headless: cypress_run
 
 # Clean up everything
 clean: env_down
