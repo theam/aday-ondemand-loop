@@ -5,12 +5,12 @@ on:
     branches: [ main ]
     paths:
       - 'application/**'
-      - 'automated_tests/**'
+      - 'e2e_tests/**'
 
   pull_request:
     paths:
       - 'application/**'
-      - 'automated_tests/**'
+      - 'e2e_tests/**'
 
   workflow_dispatch:
 
@@ -19,7 +19,7 @@ env:
   OOD_VERSION: 3.1.7
 
 jobs:
-  Run E2E Tests:
+  build-and-run-e2e-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,15 +29,15 @@ jobs:
         run: make loop_build
 
       - name: Build Cypress
-        working-directory: automated_tests
+        working-directory: e2e_tests
         run: make cypress_build
 
       - name: Start testing environment
-        working-directory: automated_tests
+        working-directory: e2e_tests
         run: make env_up
 
       - name: Debug
-        working-directory: automated_tests
+        working-directory: e2e_tests
         run: |
           docker ps
           curl -kv -u "ood:ood" https://localhost:22200/pun/sys/loop
@@ -52,7 +52,7 @@ jobs:
           SLEEP_SECS: 10
 
       - name: Run Cypress tests
-        working-directory: automated_tests
+        working-directory: e2e_tests
         run: make cypress_run
 
       - name: Upload Cypress artifacts
@@ -61,6 +61,6 @@ jobs:
         with:
           name: cypress_artifacts
           path: |
-            automated_tests/cypress/screenshots
-            automated_tests/cypress/results
+            e2e_tests/cypress/screenshots
+            e2e_tests/cypress/results
           if-no-files-found: ignore

@@ -1,10 +1,10 @@
-# Automated Tests
+# E2E Tests
 
 OnDemand Loop uses [Cypress](https://cypress.io) for end-to-end (E2E) automated testing. These tests verify that the application works correctly from a user's perspective by simulating real interactions with the browser interface.
 
 ## Overview
 
-The automated tests are located in the `automated_tests/` directory and provide:
+The automated tests are located in the `e2e_tests/` directory and provide:
 
 - **End-to-end testing** of critical user workflows
 - **Docker-based execution** for consistency across development and CI/CD environments
@@ -13,7 +13,7 @@ The automated tests are located in the `automated_tests/` directory and provide:
 ### Test Structure
 
 ```
-automated_tests/
+e2e_tests/
 ├── cypress/
 │   ├── e2e/                    # Test specifications
 │   ├── plugins/                # Cypress plugins and utilities
@@ -41,7 +41,7 @@ automated_tests/
 
 1. **Start the test environment:**
    ```bash
-   cd automated_tests
+   cd e2e_tests
    make env_up
    ```
    This command starts OnDemand Loop and all required services using Docker Compose.
@@ -159,8 +159,8 @@ describe('Feature Name', () => {
 
 Tests run automatically in GitHub Actions on:
 
-- **Push to main branch** with changes to `application/` or `automated_tests/`
-- **Pull requests** targeting main branch with changes to `application/` or `automated_tests/`
+- **Push to main branch** with changes to `application/` or `e2e_tests/`
+- **Pull requests** targeting main branch with changes to `application/` or `e2e_tests/`
 - **Manual workflow dispatch**
 
 ### GitHub Actions Workflow
