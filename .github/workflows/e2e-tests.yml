@@ -25,8 +25,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set user IDs
+        run: |
+          echo "UID=$(id -u)" >> $GITHUB_ENV
+          echo "GID=$(id -g)" >> $GITHUB_ENV
+
       - name: Build application
-        run: make loop_build
+        run: make release_build
 
       - name: Build Cypress
         working-directory: e2e_tests
