@@ -279,9 +279,9 @@ class ProjectTest < ActiveSupport::TestCase
       saved_project = Project.find(project.id)
 
       event = Event.new(project_id: project.id,
-                        message: 'created',
                         entity_type: 'project',
                         entity_id: project.id,
+                        message: 'created',
                         metadata: { 'user' => 'alice' })
       saved_project.event_list.add(event)
 
