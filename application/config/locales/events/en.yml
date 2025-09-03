@@ -1,6 +1,9 @@
 en:
   events:
+    view:
+      creation_date_title: "Event creation date"
+      header_details_text: "Additional Event Data"
     project:
-      created: "Project created"
-      updated: "Project updated"
-      active: "Project set as active"
+      created: "New project created"
+      updated: "Project details updated"
+      active: "Project marked as active"
