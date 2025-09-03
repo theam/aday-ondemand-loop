@@ -15,5 +15,17 @@ module Repo
         )
       end
     end
+
+    def project_download_repos(project_id)
+      return [] if project_id.blank?
+
+      project = Project.find_by(id: project_id)
+      return [] unless project
+
+      files = project.download_files
+      Common::FileSorter.new.most_recent(files).map do |file|
+        file.connector_metadata.files_url
+      end.compact.uniq
+    end
   end
 end
