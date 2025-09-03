@@ -20,7 +20,7 @@ You can override the default configuration values in **two supported ways**:
 
 Create one or more `.yml` files in the directory: `/etc/loop/config/loop.d`
 
-Each file should contain a simple key-value structure where the keys match the configuration property names (e.g. `download_root`, `zenodo_enabled`). These files are loaded **once at application startup**, so any changes require a restart.
+Each file should contain a simple key-value structure where the keys match the configuration property names (e.g. `download_root`). These files are loaded **once at application startup**, so any changes require a restart.
 
 #### 2. Environment Variables
 
@@ -75,7 +75,6 @@ You can define environment variables in one of the following ways:
 - [detached_process_status_interval](#detached_process_status_interval)
 - [max_download_file_size](#max_download_file_size)
 - [max_upload_file_size](#max_upload_file_size)
-- [zenodo_enabled](#zenodo_enabled)
 - [guide_url](#guide_url)
 - [http_proxy](#http_proxy)
 - [default_connect_timeout](#default_connect_timeout)
@@ -229,18 +228,6 @@ Defines the maximum allowed size (in bytes) for an individual file upload. Files
 
 - **Default**: `1_073_741_824` (1 GB)
 - **Environment Variable**: `OOD_LOOP_MAX_UPLOAD_FILE_SIZE`
-
----
-
-<a id="zenodo_enabled"></a>
-**`zenodo_enabled`**  
-Boolean flag to enable or disable the Zenodo connector in the application. If set to `false`, Zenodo integration will be hidden and inactive.
-
-- **Default**: `false`
-- **Environment Variable**: `OOD_LOOP_ZENODO_ENABLED`
-
----
-
 <a id="guide_url"></a>
 **`guide_url`**  
 URL to the external documentation site. This is used for help links in the interface and should point to the current user or admin guide for your Loop deployment.
@@ -365,7 +352,6 @@ detached_controller_interval: 5
 detached_process_status_interval: 2_000
 max_download_file_size: 15_000_000_000
 max_upload_file_size: 2_000_000_000
-zenodo_enabled: true
 guide_url: https://example.com/loop
 ```
 
@@ -392,6 +378,5 @@ OOD_LOOP_DETACHED_CONTROLLER_INTERVAL=5
 OOD_LOOP_DETACHED_PROCESS_STATUS_INTERVAL=2_000
 OOD_LOOP_MAX_DOWNLOAD_FILE_SIZE=15_000_000_000
 OOD_LOOP_MAX_UPLOAD_FILE_SIZE=2_000_000_000
-OOD_LOOP_ZENODO_ENABLED=true
 OOD_LOOP_GUIDE_URL=https://example.com/loop
 ```
