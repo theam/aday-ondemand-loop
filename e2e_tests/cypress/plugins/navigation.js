@@ -1,7 +1,7 @@
 export const NAVIGATION = {
   baseUrl: Cypress.env('baseUrl'),
-  dashboardPath: '/pun/sys/dashboard',
-  loopPath: '/pun/sys/loop',
+  dashboardPath: Cypress.env('dashboardPath'),
+  loopPath: Cypress.env('loopPath'),
 }
 
 export const PAGE_TITLES = {
@@ -24,7 +24,7 @@ export const visitLoopRoot = () => {
 }
 
 export const navigateToProjects = () => {
-  cy.get('#nav-projects').click()
+  cy.get('#nav-projects').waitClick()
   cy.get('h1').should('contain', PAGE_TITLES.projects)
 }
 
