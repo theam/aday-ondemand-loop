@@ -24,7 +24,7 @@ export const visitLoopRoot = () => {
 }
 
 export const navigateToProjects = () => {
-  cy.get('#nav-projects').waitClick()
+  cy.get('#nav-projects').click()
   cy.get('h1').should('contain', PAGE_TITLES.projects)
 }
 

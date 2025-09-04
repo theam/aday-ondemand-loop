@@ -61,13 +61,13 @@ describe('Projects', () => {
   it('should edit project name', () => {
     // Navigate to projects page and create a project
     navigateToProjects()
-    cy.get('#create-project-btn').click()
+    cy.get('#create-project-btn').waitClick()
     
     // Get the created project ID
     cy.get('[data-project-id]').invoke('attr', 'data-project-id').as('projectId')
 
     // Click edit project name button
-    cy.get('#edit-project-name-btn').click()
+    cy.get('#edit-project-name-btn').waitClick()
     
     // Clear input and add new name
     const newName = 'Updated Project Name'
