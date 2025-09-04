@@ -295,7 +295,7 @@ en:
       button_open_modal_title: "Open repository activity"
       modal_title: "Recent Repository Activity"
       tab_global_label: "Across All Projects"
-      tab_project_label: "This Project"
+      tab_project_label: "This Project Downloads"
       field_date_title: "Last used date"
       section_item_actions_label: "Item actions"
       button_explore_item_title: "Browse repository"

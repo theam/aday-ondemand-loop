@@ -34,6 +34,7 @@ class Zenodo::ProjectServiceTest < ActiveSupport::TestCase
     assert_equal record.id, file.metadata[:type_id]
     assert_equal 'records', file.metadata[:type]
     assert_equal 'https://zenodo.org', file.metadata[:zenodo_url]
+    assert_equal record.title, file.metadata[:title]
   end
 
   test 'create_files_from_deposition builds download records' do
@@ -50,5 +51,6 @@ class Zenodo::ProjectServiceTest < ActiveSupport::TestCase
     assert_equal deposition.id, file.metadata[:type_id]
     assert_equal 'depositions', file.metadata[:type]
     assert_equal 'https://zenodo.org', file.metadata[:zenodo_url]
+    assert_equal deposition.title, file.metadata[:title]
   end
 end

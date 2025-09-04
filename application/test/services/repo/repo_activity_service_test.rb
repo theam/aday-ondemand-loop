@@ -17,14 +17,19 @@ class Repo::RepoActivityServiceTest < ActiveSupport::TestCase
 
   test 'project_downloads returns sorted project items' do
     project = OpenStruct.new(id: '123')
+    
+    old_summary = OpenStruct.new(type: 'old', date: Time.zone.now - 2.days, title: 'downloads', url: '/old', note: 'dataset')
+    new_summary = OpenStruct.new(type: 'new', date: Time.zone.now, title: 'downloads', url: '/new', note: 'dataset')
+    
     file_old = OpenStruct.new(type: 'old',
                               creation_date: Time.zone.now - 2.days,
-                              connector_metadata: OpenStruct.new(files_url: '/old'))
+                              connector_metadata: OpenStruct.new(repo_summary: old_summary))
     file_new = OpenStruct.new(type: 'new',
                               creation_date: Time.zone.now,
-                              connector_metadata: OpenStruct.new(files_url: '/new'))
+                              connector_metadata: OpenStruct.new(repo_summary: new_summary))
+    
     project.stubs(:download_files).returns([file_old, file_new])
-    Project.stubs(:find_by).with(id: project.id).returns(project)
+    Project.stubs(:find).with(project.id).returns(project)
 
     result = Repo::RepoActivityService.new.project_downloads(project.id)
     assert_equal ['/new', '/old'], result.map(&:url)

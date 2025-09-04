@@ -19,20 +19,12 @@ module Repo
     def project_downloads(project_id)
       return [] if project_id.blank?
 
-      project = Project.find_by(id: project_id)
+      project = Project.find(project_id)
       return [] unless project
 
       files = project.download_files
       Common::FileSorter.new.most_recent(files).map do |file|
-        next unless file.connector_metadata&.files_url
-
-        OpenStruct.new(
-          type: file.type,
-          date: file.creation_date,
-          title: 'downloads',
-          url: file.connector_metadata.files_url,
-          note: 'dataset'
-        )
+        file.connector_metadata.repo_summary
       end.compact.uniq { |item| item.url }
     end
   end

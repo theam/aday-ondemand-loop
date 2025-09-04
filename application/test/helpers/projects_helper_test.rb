@@ -82,9 +82,9 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'most_recent_explore_url returns url of most recent file' do
     file_old = OpenStruct.new(end_date: '2023-01-01T00:00:00', start_date: nil, creation_date: nil,
-                              connector_metadata: OpenStruct.new(files_url: '/old'))
+                              connector_metadata: OpenStruct.new(explore_url: '/old'))
     file_new = OpenStruct.new(end_date: '2023-01-02T00:00:00', start_date: nil, creation_date: nil,
-                              connector_metadata: OpenStruct.new(files_url: '/new'))
+                              connector_metadata: OpenStruct.new(explore_url: '/new'))
     project = OpenStruct.new(download_files: [file_old, file_new])
 
     assert_equal '/new', most_recent_explore_url(project)

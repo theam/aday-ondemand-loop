@@ -48,6 +48,7 @@ module Zenodo
             zenodo_url: @zenodo_url,
             type: type,
             type_id: source.id,
+            title: source.title,
             id: file.id,
             download_url: file.download_url,
             temp_location: nil
