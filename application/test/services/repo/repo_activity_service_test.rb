@@ -15,16 +15,21 @@ class Repo::RepoActivityServiceTest < ActiveSupport::TestCase
     assert_equal entry1.type, result.first.type
   end
 
-  test 'project_download_repos returns sorted project urls' do
+  test 'project_downloads returns sorted project items' do
     project = OpenStruct.new(id: '123')
-    file_old = OpenStruct.new(creation_date: Time.zone.now - 2.days,
+    file_old = OpenStruct.new(type: 'old',
+                              creation_date: Time.zone.now - 2.days,
                               connector_metadata: OpenStruct.new(files_url: '/old'))
-    file_new = OpenStruct.new(creation_date: Time.zone.now,
+    file_new = OpenStruct.new(type: 'new',
+                              creation_date: Time.zone.now,
                               connector_metadata: OpenStruct.new(files_url: '/new'))
     project.stubs(:download_files).returns([file_old, file_new])
     Project.stubs(:find_by).with(id: project.id).returns(project)
 
-    result = Repo::RepoActivityService.new.project_download_repos(project.id)
-    assert_equal ['/new', '/old'], result
+    result = Repo::RepoActivityService.new.project_downloads(project.id)
+    assert_equal ['/new', '/old'], result.map(&:url)
+    assert_equal ['new', 'old'], result.map(&:type)
+    assert_equal ['downloads', 'downloads'], result.map(&:title)
+    assert_equal ['dataset', 'dataset'], result.map(&:note)
   end
 end

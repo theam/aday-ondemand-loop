@@ -8,9 +8,14 @@ class RepositoryActivityViewTest < ActionView::TestCase
 
     service = mock('service')
     service.stubs(:global).returns([])
-    service.stubs(:project_download_repos).with(project_id).returns(['/new', '/old'])
+    downloads = [
+      OpenStruct.new(url: '/new', type: 'new', date: Time.zone.now, title: 'downloads', note: 'dataset'),
+      OpenStruct.new(url: '/old', type: 'old', date: Time.zone.now - 1.day, title: 'downloads', note: 'dataset')
+    ]
+    service.stubs(:project_downloads).with(project_id).returns(downloads)
     Repo::RepoActivityService.stubs(:new).returns(service)
 
+    view.stubs(:connector_icon).returns('')
     view.stubs(:params).returns(ActionController::Parameters.new(project_id: project_id))
 
     html = render partial: 'widgets/repository_activity'
