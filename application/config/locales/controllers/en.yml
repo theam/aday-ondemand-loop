@@ -15,7 +15,7 @@ en:
     show:
       project_not_found: "Project %{id} not found"
     create:
-      project_created: "Project %{project_name} created"
+      project_created: "Project %{project_name} created. A random HPC-themed name was assigned — click the pencil icon to rename"
       project_create_error: "Error generating the project: %{errors}"
     update:
       project_not_found: "Project %{id} not found"
