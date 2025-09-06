@@ -39,6 +39,7 @@ Tests run inside a Docker container using the provided `Makefile` targets.
 #### Common Targets
 - `make test_bash` – open an interactive shell inside the test container.
 - `make test_exec` – run commands non-interactively (piped via `echo`).
+- `make coverage` – run the test suite with code coverage enabled.
 
 #### Run the full suite
 ```bash
@@ -70,6 +71,29 @@ For exploratory work, start a shell and run tests manually:
 ```bash
 make test_bash
 bundle exec rake test
+```
+
+---
+
+### Code Coverage
+OnDemand Loop uses [SimpleCov](https://github.com/simplecov-ruby/simplecov) to measure test coverage.  
+Coverage reports are helpful for identifying untested code paths and ensuring contributions maintain a high level of reliability.
+
+To generate a coverage report:
+
+```bash
+echo 'bundle exec rake test:coverage' | make test_exec
+```
+
+or simply:
+
+```bash
+make coverage
+```
+
+After running, open the generated report at:
+```
+application/tmp/coverage/index.html
 ```
 
 ---
