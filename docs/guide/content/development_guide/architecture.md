@@ -84,7 +84,8 @@ overridden via YAML or environment variables (see the [Admin Guide](../admin.md)
 
 ## Testing
 
-OnDemand Loop uses a comprehensive testing strategy with multiple types of tests:
+OnDemand Loop uses a comprehensive testing strategy with multiple types of tests.
+For instructions on running the test suite see the [Testing](testing.md) guide.
 
 ### Unit and Integration Tests (`application/test`)
 

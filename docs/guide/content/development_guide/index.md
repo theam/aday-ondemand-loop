@@ -46,8 +46,11 @@ The documentation is organized by topic to help you find what you need quickly:
 - [E2E Tests](e2e_tests.md)  
   End-to-end testing with Cypress, including local execution and CI/CD integration.
 
-- [GitHub Actions](github_actions.md)  
+- [GitHub Actions](github_actions.md)
   How CI is handled using GitHub Actions, including testing and deployment workflows.
+
+- [Testing](testing.md)
+  How the Rails test suite is structured and executed using the provided Make targets.
 
 Each page is self-contained but builds on shared understanding of the architecture and workflows.  
 If you're new to the project, we recommend starting with:
