@@ -30,7 +30,6 @@ All Rails tests live under `application/test` and follow Rails conventions:
 | `fixtures/`       | Sample data for deterministic tests |
 
 Tests use [Minitest](https://guides.rubyonrails.org/testing.html) with [Mocha](https://mocha.jamesmead.org/) for mocking.  
-Each test file ends with `_test.rb` and subclasses `ActiveSupport::TestCase`, `ActionDispatch::IntegrationTest`, or similar.
 
 ---
 
