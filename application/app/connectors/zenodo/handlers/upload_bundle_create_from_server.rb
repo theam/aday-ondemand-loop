@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Zenodo::Handlers
+  # Handler to create an UploadBundle from a Zenodo server URL
   class UploadBundleCreateFromServer
     include LoggingCommon
 
@@ -8,15 +11,13 @@ module Zenodo::Handlers
     def initialize(object = nil); end
 
     def params_schema
-      [
-        :object_url
-      ]
+      [:object_url]
     end
 
     def create(project, request_params)
       remote_repo_url = request_params[:object_url]
       url_data = Zenodo::ZenodoUrl.parse(remote_repo_url)
-      log_info('Creating upload bundle', { project_id: project.id, remote_repo_url: remote_repo_url })
+      log_info('Creating upload bundle from server', { project_id: project.id, remote_repo_url: remote_repo_url })
 
       ::Configuration.repo_history.add_repo(
         remote_repo_url,
@@ -44,7 +45,7 @@ module Zenodo::Handlers
         }
       end
       upload_bundle.save
-      log_info('Upload bundle created', { bundle_id: upload_bundle.id })
+      log_info('Upload bundle created from server', { bundle_id: upload_bundle.id })
 
       ConnectorResult.new(
         resource: upload_bundle,
