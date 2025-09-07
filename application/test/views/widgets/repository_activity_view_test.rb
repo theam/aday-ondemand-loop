@@ -14,7 +14,6 @@ class RepositoryActivityViewTest < ActionView::TestCase
     ]
     service.stubs(:project_downloads).with(project_id).returns(downloads)
     Repo::RepoActivityService.stubs(:new).returns(service)
-
     view.stubs(:connector_icon).returns('')
     view.stubs(:params).returns(ActionController::Parameters.new(project_id: project_id))
 
@@ -23,5 +22,6 @@ class RepositoryActivityViewTest < ActionView::TestCase
     assert_includes html, I18n.t('widgets.repository_activity.tab_project_label')
     assert_includes html, '/new'
     assert_includes html, '/old'
+    assert_includes html, connector_project_upload_bundles_path(project_id: project_id)
   end
 end
