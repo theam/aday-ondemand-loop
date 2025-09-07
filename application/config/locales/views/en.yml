@@ -124,6 +124,9 @@ en:
         button_active_project_title: "Active project"
         button_set_as_active_project_title: "Set as Active Project"
 
+        button_add_files_text: "Add Files"
+        button_add_files_title: "Add Files"
+
         button_create_upload_bundle_label: "Create Upload Bundle"
         button_create_upload_bundle_placeholder: "Dataset URL"
         button_create_upload_bundle_title: "Create Upload Bundle"
@@ -300,6 +303,7 @@ en:
       field_date_title: "Last used date"
       section_item_actions_label: "Item actions"
       button_explore_item_title: "Browse repository"
+      button_create_upload_bundle_title: "Create Upload Bundle"
       button_open_repository_title: "Open repository on website"
     reset:
       success_page_title: "Reset Completed"
