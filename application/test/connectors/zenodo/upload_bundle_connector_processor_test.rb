@@ -15,9 +15,29 @@ class Zenodo::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
     assert_includes @processor.params_schema, :remote_repo_url
   end
 
-  test 'create delegates to action' do
+  test 'create delegates to record handler' do
+    url_data = OpenStruct.new(record?: true, deposition?: false)
+    Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
     action = mock('action')
-    Zenodo::Handlers::UploadBundleCreate.expects(:new).returns(action)
+    Zenodo::Handlers::UploadBundleCreateFromRecord.expects(:new).returns(action)
+    action.expects(:create).with(@project, {foo: 'bar'}).returns(:result)
+    assert_equal :result, @processor.create(@project, {foo: 'bar'})
+  end
+
+  test 'create delegates to deposition handler' do
+    url_data = OpenStruct.new(record?: false, deposition?: true)
+    Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
+    action = mock('action')
+    Zenodo::Handlers::UploadBundleCreateFromDeposition.expects(:new).returns(action)
+    action.expects(:create).with(@project, {foo: 'bar'}).returns(:result)
+    assert_equal :result, @processor.create(@project, {foo: 'bar'})
+  end
+
+  test 'create delegates to generic handler' do
+    url_data = OpenStruct.new(record?: false, deposition?: false)
+    Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
+    action = mock('action')
+    Zenodo::Handlers::UploadBundleCreateFromServer.expects(:new).returns(action)
     action.expects(:create).with(@project, {foo: 'bar'}).returns(:result)
     assert_equal :result, @processor.create(@project, {foo: 'bar'})
   end
@@ -76,17 +96,22 @@ class Zenodo::UploadBundleConnectorProcessorTest < ActiveSupport::TestCase
   end
 
   test 'create handles exception and returns error result' do
+    url_data = OpenStruct.new(record?: false, deposition?: false)
+    Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
+
     @processor.expects(:log_error).with('UploadBundle creation error', { remote_repo_url: 'https://example.com' }, instance_of(RuntimeError))
-    
-    Zenodo::Handlers::UploadBundleCreate.any_instance.stubs(:create).raises(RuntimeError.new('Test error'))
-    
+
+    Zenodo::Handlers::UploadBundleCreateFromServer.any_instance.stubs(:create).raises(RuntimeError.new('Test error'))
+
     result = @processor.create(@project, { object_url: 'https://example.com' })
     assert_equal false, result.success?
   end
 
   test 'create uses object_url parameter correctly' do
+    url_data = OpenStruct.new(record?: false, deposition?: false)
+    Zenodo::ZenodoUrl.stubs(:parse).returns(url_data)
     action = mock('action')
-    Zenodo::Handlers::UploadBundleCreate.expects(:new).returns(action)
+    Zenodo::Handlers::UploadBundleCreateFromServer.expects(:new).returns(action)
     action.expects(:create).with(@project, { object_url: 'https://test.com', other_param: 'value' }).returns(:result)
     assert_equal :result, @processor.create(@project, { object_url: 'https://test.com', other_param: 'value' })
   end
