@@ -24,8 +24,12 @@ en:
           message_success: "Dataset selected: %{title}"
         repository_settings_update:
           message_success: "Repository updated: %{url} type: %{type}"
-        upload_bundle_create:
+        upload_bundle_create_from_server:
+          message_success: "Zenodo upload bundle created: %{name}"
+        upload_bundle_create_from_record:
           message_record_not_found: "Zenodo record not found: %{url}. Only published records are supported"
+          message_success: "Zenodo upload bundle created: %{name}"
+        upload_bundle_create_from_deposition:
           message_deposition_not_found: "Zenodo deposition not found for record: %{url}"
           message_success: "Zenodo upload bundle created: %{name}"
           message_auth_error: "Authorization error. A valid Zenodo access token is required to fetch/create deposition from this record"
