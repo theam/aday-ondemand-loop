@@ -4,22 +4,23 @@
   project_recent = service.project_downloads(project_id)
   global_recent = service.global
 %>
-<p class="mb-3"><%= t('.description_text') %></p>
+<h3 class="h6"><%= t('.from_url_title') %></h3>
+<p class="mb-3 text-muted fs-7"><%= t('.from_url_help_text') %></p>
 
-<%= form_with url: connector_project_upload_bundles_path(project_id: project_id), method: :post, local: true, class: 'd-flex gap-2 mb-4' do |form| %>
+<%= form_with url: connector_project_upload_bundles_path(project_id: project_id), method: :post, local: true, class: 'd-flex gap-2 mb-4', data: {action: "submit->modal#showSpinner"} do |form| %>
   <%= form.text_field :remote_repo_url,
                       placeholder: t('projects.show.project_actions.button_create_upload_bundle_placeholder'),
                       class: 'form-control',
                       'aria-label': t('projects.show.project_actions.button_create_upload_bundle_placeholder') %>
   <%= button_tag type: 'submit',
-                 class: 'btn btn-primary',
+                 class: 'btn btn-outline-primary',
                  title: t('projects.show.project_actions.button_create_upload_bundle_title') do %>
     <i class="bi bi-folder-plus" aria-hidden="true"></i>
     <span class="visually-hidden"><%= t('projects.show.project_actions.button_create_upload_bundle_label') %></span>
   <% end %>
 <% end %>
 
-<h2 class="h6"><%= t('.recent_datasets_title') %></h2>
+<h3 class="h6"><%= t('.from_recent_datasets_title') %></h3>
 <div id="recent-datasets-tabs">
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
@@ -45,13 +46,14 @@
                   </div>
                   <%= content_tag(:span, item.note, class: 'badge bg-secondary flex-shrink-0') if item.note %>
                 </div>
-                <%= render layout: 'shared/button_to', locals: {
-                      url: connector_project_upload_bundles_path(project_id: project_id),
-                      title: t('projects.show.project_actions.button_create_upload_bundle_title'),
-                      class: 'btn-sm btn-outline-dark',
-                      icon: 'bi bi-folder-plus'
-                    } do %>
-                  <input type="hidden" name="remote_repo_url" value="<%= item.url %>">
+                <%= button_to connector_project_upload_bundles_path(project_id: project_id),
+                            method: :post,
+                            params: { remote_repo_url: item.url },
+                            class: 'btn btn-sm btn-outline-dark',
+                            data: {action: "click->modal#showSpinner"},
+                            title: t('projects.show.project_actions.button_create_upload_bundle_title'),
+                            'aria-label': t('projects.show.project_actions.button_create_upload_bundle_title') do %>
+                  <i class="bi bi-folder-plus" aria-hidden="true"></i>
                 <% end %>
               </header>
             </li>
@@ -76,13 +78,14 @@
                   </div>
                   <%= content_tag(:span, item.note, class: 'badge bg-secondary flex-shrink-0') if item.note %>
                 </div>
-                <%= render layout: 'shared/button_to', locals: {
-                      url: connector_project_upload_bundles_path(project_id: project_id),
-                      title: t('projects.show.project_actions.button_create_upload_bundle_title'),
-                      class: 'btn-sm btn-outline-dark',
-                      icon: 'bi bi-folder-plus'
-                    } do %>
-                  <input type="hidden" name="remote_repo_url" value="<%= item.url %>">
+                <%= button_to connector_project_upload_bundles_path(project_id: project_id),
+                            method: :post,
+                            params: { remote_repo_url: item.url },
+                            class: 'btn btn-sm btn-outline-dark',
+                            data: {action: "click->modal#showSpinner"},
+                            title: t('projects.show.project_actions.button_create_upload_bundle_title'),
+                            'aria-label': t('projects.show.project_actions.button_create_upload_bundle_title') do %>
+                  <i class="bi bi-folder-plus" aria-hidden="true"></i>
                 <% end %>
               </header>
             </li>

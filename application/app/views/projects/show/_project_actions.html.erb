@@ -94,8 +94,8 @@
           title="<%= t('.button_create_upload_bundle_title') %>"
           data-controller="modal"
           data-action="click->modal#load"
-          data-modal-url-value="<%= widgets_path('upload_bundle_new', project_id: project.id) %>"
-          data-modal-title-value="<%= t('widgets.upload_bundle_new.modal_title') %>"
+          data-modal-url-value="<%= widgets_path('upload_bundle_create', project_id: project.id) %>"
+          data-modal-title-value="<%= t('widgets.upload_bundle_create.modal_title') %>"
           data-modal-id-value="global-modal">
     <i class="bi bi-folder-plus" aria-hidden="true"></i>
     <span class="ps-1"><%= t('.button_create_upload_bundle_label') %></span>
