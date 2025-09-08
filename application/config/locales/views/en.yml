@@ -304,7 +304,9 @@ en:
     upload_bundle_new:
       modal_title: "Create Upload Bundle"
       description_text: "Paste the URL of a remote repository item to create an Upload Bundle or reuse a recent dataset."
-      recent_datasets_title: "Recent Datasets"
+      recent_datasets_title: "Create From Recent Datasets"
+      tab_project_label: "This Project"
+      tab_global_label: "Across All Projects"
       empty_recent_text: "No recent datasets"
     reset:
       success_page_title: "Reset Completed"
