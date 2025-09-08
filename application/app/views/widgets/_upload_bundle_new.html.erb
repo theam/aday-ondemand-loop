@@ -1,0 +1,45 @@
+<%
+  project_id = params[:project_id]
+  recent = Repo::RepoActivityService.new.project_downloads(project_id)
+%>
+<p class="mb-3"><%= t('.description_text') %></p>
+
+<%= form_with url: connector_project_upload_bundles_path(project_id: project_id), method: :post, local: true, class: 'd-flex gap-2 mb-4' do |form| %>
+  <%= form.text_field :remote_repo_url,
+                      placeholder: t('projects.show.project_actions.button_create_upload_bundle_placeholder'),
+                      class: 'form-control',
+                      'aria-label': t('projects.show.project_actions.button_create_upload_bundle_placeholder') %>
+  <%= form.submit t('projects.show.project_actions.button_create_upload_bundle_label'), class: 'btn btn-primary' %>
+<% end %>
+
+<% if recent.any? %>
+  <h2 class="h6"><%= t('.recent_datasets_title') %></h2>
+  <ul class="list-unstyled mt-3 mb-0">
+    <% recent.each do |item| %>
+      <li class="card mb-2 shadow-sm rounded">
+        <header class="card-header d-flex justify-content-between align-items-center gap-3">
+          <div class="d-flex align-items-center gap-3 flex-grow-1">
+            <%= render partial: '/shared/file_row_date', locals: { date: item.date, title: t('widgets.repository_activity.field_date_title') } if item.date %>
+            <span class="lh-1" aria-hidden="true"><%= connector_icon(item.type) %></span>
+            <div class="d-flex flex-column flex-grow-1">
+              <h3 class="mb-0 h6"><%= item.title %></h3>
+              <small class="text-muted text-truncate"><%= item.url %></small>
+            </div>
+            <%= content_tag(:span, item.note, class: 'badge bg-secondary flex-shrink-0') if item.note %>
+          </div>
+          <%= render layout: 'shared/button_to', locals: {
+                url: connector_project_upload_bundles_path(project_id: project_id),
+                label: t('projects.show.project_actions.button_create_upload_bundle_label'),
+                title: t('projects.show.project_actions.button_create_upload_bundle_title'),
+                class: 'btn-sm btn-outline-dark',
+                icon: 'bi bi-folder-plus'
+              } do %>
+            <input type="hidden" name="remote_repo_url" value="<%= item.url %>">
+          <% end %>
+        </header>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-muted"><%= t('.empty_recent_text') %></p>
+<% end %>

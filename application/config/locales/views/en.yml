@@ -301,6 +301,11 @@ en:
       section_item_actions_label: "Item actions"
       button_explore_item_title: "Browse repository"
       button_open_repository_title: "Open repository on website"
+    upload_bundle_new:
+      modal_title: "Create Upload Bundle"
+      description_text: "Paste the URL of a remote repository item to create an Upload Bundle or reuse a recent dataset."
+      recent_datasets_title: "Recent Datasets"
+      empty_recent_text: "No recent datasets"
     reset:
       success_page_title: "Reset Completed"
       success_content_title: "Reset Completed"
