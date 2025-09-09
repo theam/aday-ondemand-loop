@@ -59,7 +59,7 @@ class DownloadFilesControllerTest < ActionDispatch::IntegrationTest
     @file.expects(:update).with(status: FileStatus::CANCELLED).returns(true)
 
     DownloadFile.stubs(:find).returns(@file)
-    DownloadFilesController.any_instance.expects(:log_event).with(project_id: @project_id, entity_type: 'download_file', entity_id: @file_id, message: 'events.download_file.cancelled', metadata: { filename: 'filename_test' })
+    DownloadFilesController.any_instance.expects(:log_event).with(project_id: @project_id, entity_type: 'download_file', entity_id: @file_id, message: 'events.download_file.cancelled', metadata: { 'filename' => 'filename_test' })
 
     post cancel_project_download_file_url(project_id: @project_id, id: @file_id)
     assert_redirected_to root_path
