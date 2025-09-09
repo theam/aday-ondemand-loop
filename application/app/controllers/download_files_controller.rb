@@ -27,7 +27,7 @@ class DownloadFilesController < ApplicationController
           entity_type: 'download_file',
           entity_id: file.id,
           message: 'events.download_file.cancelled',
-          metadata: { filename: file.filename }
+          metadata: { 'filename' => file.filename }
         )
       end
       redirect_back fallback_location: root_path, notice: t('download_files.file_cancellation_success', filename: file.filename)

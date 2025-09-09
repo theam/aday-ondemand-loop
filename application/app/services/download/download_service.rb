@@ -36,7 +36,7 @@ module Download
               file.update(end_date: now, status: result.status)
               case result.status
               when FileStatus::ERROR
-                log_download_file_event(file, 'events.download_file.error', { message: result.message })
+                log_download_file_event(file, 'events.download_file.error', { 'message' => result.message })
               when FileStatus::CANCELLED
                 log_download_file_event(file, 'events.download_file.cancelled')
               else
@@ -45,7 +45,7 @@ module Download
             rescue => e
               log_error('Error while processing file', {file_id: file.id}, e)
               file.update(end_date: now, status: FileStatus::ERROR)
-              log_download_file_event(file, 'events.download_file.error', { error: e.message })
+              log_download_file_event(file, 'events.download_file.error', { 'error' => e.message })
             ensure
               stats[:completed] += 1
               stats[:progress] -= 1
@@ -81,7 +81,7 @@ module Download
         entity_type: 'download_file',
         entity_id: file.id,
         message: message,
-        metadata: { filename: file.filename }.merge(metadata)
+        metadata: { 'filename' => file.filename }.merge(metadata)
       )
     end
 
