@@ -76,7 +76,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'DownloadFile', entity_id: 'f1', message: 'events.download_file.error', metadata: { filename: 'file.txt', error: 'An error occurred' })
+      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.error', metadata: { filename: 'file.txt', error: 'An error occurred' })
       target.start
     end
   end
@@ -98,7 +98,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'DownloadFile', entity_id: 'f1', message: 'events.download_file.error', metadata: { filename: 'file.txt', message: 'failed' })
+      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.error', metadata: { filename: 'file.txt', message: 'failed' })
       target.start
     end
   end

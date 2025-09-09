@@ -36,7 +36,7 @@ module Download
             if result.status == FileStatus::ERROR
               log_event(
                 project_id: file.project_id,
-                entity_type: 'DownloadFile',
+                entity_type: 'download_file',
                 entity_id: file.id,
                 message: 'events.download_file.error',
                 metadata: { filename: file.filename, message: result.message }
@@ -47,7 +47,7 @@ module Download
             file.update(end_date: now, status: FileStatus::ERROR)
             log_event(
               project_id: file.project_id,
-              entity_type: 'DownloadFile',
+              entity_type: 'download_file',
               entity_id: file.id,
               message: 'events.download_file.error',
               metadata: { filename: file.filename, error: e.message }

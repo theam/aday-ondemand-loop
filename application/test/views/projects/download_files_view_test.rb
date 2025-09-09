@@ -37,7 +37,7 @@ class DownloadFilesViewTest < ActionView::TestCase
 
     html = render partial: 'projects/show/download_files', locals: { project: project }
 
-    expected_path = widgets_path('events', project_id: project.id, entity_type: 'downloadfile', entity_id: file.id)
+    expected_path = widgets_path('events', project_id: project.id, entity_type: 'download_file', entity_id: file.id)
     assert_includes html, "data-modal-url-value=\"#{ERB::Util.html_escape(expected_path)}\""
   end
 end
