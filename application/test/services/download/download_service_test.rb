@@ -87,6 +87,29 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
     end
   end
 
+  test 'logs cancelled event when download processor returns cancelled status' do
+    Dir.mktmpdir do |dir|
+      Configuration.stubs(:metadata_root).returns(dir.to_s)
+      connector = mock('connector')
+      connector.expects(:download).once.returns(OpenStruct.new({status: FileStatus::CANCELLED}))
+      ConnectorClassDispatcher.stubs(:download_processor).returns(connector)
+
+      now_time = file_now
+      file = mock('download_file')
+      file.stubs(:project_id).returns('p1')
+      file.stubs(:id).returns('f1')
+      file.stubs(:filename).returns('file.txt')
+      file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
+      file.expects(:update).with(end_date: now_time, status: FileStatus::CANCELLED).once
+      files_provider = DownloadFilesProviderMock.new([file])
+      target = Download::DownloadService.new(files_provider)
+      target.stubs(:now).returns(now_time)
+      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.started', metadata: { filename: 'file.txt' })
+      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.cancelled', metadata: { filename: 'file.txt' })
+      target.start
+    end
+  end
+
   test 'logs event when download processor returns error status' do
     Dir.mktmpdir do |dir|
       Configuration.stubs(:metadata_root).returns(dir.to_s)

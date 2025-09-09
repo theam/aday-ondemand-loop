@@ -55,9 +55,11 @@ class DownloadFilesControllerTest < ActionDispatch::IntegrationTest
   test "cancel should redirect with message and save file if not downloading" do
     @file.stubs(:status).returns(FileStatus::SUCCESS)
     @file.stubs(:filename).returns('filename_test')
+    @file.stubs(:id).returns(@file_id)
     @file.expects(:update).with(status: FileStatus::CANCELLED).returns(true)
 
     DownloadFile.stubs(:find).returns(@file)
+    DownloadFilesController.any_instance.expects(:log_event).with(project_id: @project_id, entity_type: 'download_file', entity_id: @file_id, message: 'events.download_file.cancelled', metadata: { filename: 'filename_test' })
 
     post cancel_project_download_file_url(project_id: @project_id, id: @file_id)
     assert_redirected_to root_path

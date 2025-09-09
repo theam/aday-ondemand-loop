@@ -11,3 +11,4 @@ en:
       started: "Download started"
       finished: "Download finished"
       error: "Download failed"
+      cancelled: "Download cancelled"

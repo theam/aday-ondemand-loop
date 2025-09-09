@@ -40,13 +40,22 @@ module Download
             stats[:progress] += 1
             result = download_processor.download
             file.update(end_date: now, status: result.status)
-            if result.status == FileStatus::ERROR
+            case result.status
+            when FileStatus::ERROR
               log_event(
                 project_id: file.project_id,
                 entity_type: 'download_file',
                 entity_id: file.id,
                 message: 'events.download_file.error',
                 metadata: { filename: file.filename, message: result.message }
+              )
+            when FileStatus::CANCELLED
+              log_event(
+                project_id: file.project_id,
+                entity_type: 'download_file',
+                entity_id: file.id,
+                message: 'events.download_file.cancelled',
+                metadata: { filename: file.filename }
               )
             else
               log_event(

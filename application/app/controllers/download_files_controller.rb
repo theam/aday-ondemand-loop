@@ -1,6 +1,7 @@
 class DownloadFilesController < ApplicationController
   include DateTimeCommon
   include LoggingCommon
+  include EventLogger
 
   def cancel
     project_id = params[:project_id]
@@ -11,7 +12,8 @@ class DownloadFilesController < ApplicationController
       return redirect_back fallback_location: root_path, alert: t('download_files.file_not_found', file_id: file_id, project_id: project_id)
     end
 
-    if file.status.downloading?
+    was_downloading = file.status.downloading?
+    if was_downloading
       command_client = Command::CommandClient.new(socket_path: ::Configuration.command_server_socket_file)
       request = Command::Request.new(command: 'download.cancel', body: {project_id: project_id, file_id: file_id})
       response = command_client.request(request)
@@ -19,6 +21,15 @@ class DownloadFilesController < ApplicationController
     end
 
     if file.update(status: FileStatus::CANCELLED)
+      unless was_downloading
+        log_event(
+          project_id: project_id,
+          entity_type: 'download_file',
+          entity_id: file.id,
+          message: 'events.download_file.cancelled',
+          metadata: { filename: file.filename }
+        )
+      end
       redirect_back fallback_location: root_path, notice: t('download_files.file_cancellation_success', filename: file.filename)
     else
       redirect_back fallback_location: root_path, alert: t('download_files.file_cancellation_update_error', filename: file.filename)
