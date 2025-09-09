@@ -25,62 +25,32 @@ module Download
         batch = files.first(1)
         return if batch.empty?
 
-        log_info('Processing Batch', {elapsed_time: elapsed_time, stats: stats_to_s})
-        download_threads = batch.map do |file|
-          download_processor = ConnectorClassDispatcher.download_processor(file)
-          Thread.new do
-            file.update(start_date: now, end_date: nil, status: FileStatus::DOWNLOADING)
-            log_event(
-              project_id: file.project_id,
-              entity_type: 'download_file',
-              entity_id: file.id,
-              message: 'events.download_file.started',
-              metadata: { filename: file.filename }
-            )
-            stats[:progress] += 1
-            result = download_processor.download
-            file.update(end_date: now, status: result.status)
-            case result.status
-            when FileStatus::ERROR
-              log_event(
-                project_id: file.project_id,
-                entity_type: 'download_file',
-                entity_id: file.id,
-                message: 'events.download_file.error',
-                metadata: { filename: file.filename, message: result.message }
-              )
-            when FileStatus::CANCELLED
-              log_event(
-                project_id: file.project_id,
-                entity_type: 'download_file',
-                entity_id: file.id,
-                message: 'events.download_file.cancelled',
-                metadata: { filename: file.filename }
-              )
-            else
-              log_event(
-                project_id: file.project_id,
-                entity_type: 'download_file',
-                entity_id: file.id,
-                message: 'events.download_file.finished',
-                metadata: { filename: file.filename }
-              )
+          log_info('Processing Batch', {elapsed_time: elapsed_time, stats: stats_to_s})
+          download_threads = batch.map do |file|
+            download_processor = ConnectorClassDispatcher.download_processor(file)
+            Thread.new do
+              file.update(start_date: now, end_date: nil, status: FileStatus::DOWNLOADING)
+              log_download_file_event(file, 'events.download_file.started')
+              stats[:progress] += 1
+              result = download_processor.download
+              file.update(end_date: now, status: result.status)
+              case result.status
+              when FileStatus::ERROR
+                log_download_file_event(file, 'events.download_file.error', { message: result.message })
+              when FileStatus::CANCELLED
+                log_download_file_event(file, 'events.download_file.cancelled')
+              else
+                log_download_file_event(file, 'events.download_file.finished')
+              end
+            rescue => e
+              log_error('Error while processing file', {file_id: file.id}, e)
+              file.update(end_date: now, status: FileStatus::ERROR)
+              log_download_file_event(file, 'events.download_file.error', { error: e.message })
+            ensure
+              stats[:completed] += 1
+              stats[:progress] -= 1
             end
-          rescue => e
-            log_error('Error while processing file', {file_id: file.id}, e)
-            file.update(end_date: now, status: FileStatus::ERROR)
-            log_event(
-              project_id: file.project_id,
-              entity_type: 'download_file',
-              entity_id: file.id,
-              message: 'events.download_file.error',
-              metadata: { filename: file.filename, error: e.message }
-            )
-          ensure
-            stats[:completed] += 1
-            stats[:progress] -= 1
           end
-        end
         # Wait for all downloads to complete
         download_threads.each(&:join)
       end
@@ -103,6 +73,16 @@ module Download
 
     def stats_to_s
       "zombies=#{stats[:zombies]} in_progress=#{stats[:progress]} pending=#{stats[:pending]} completed=#{stats[:completed]}"
+    end
+
+    def log_download_file_event(file, message, metadata = {})
+      log_event(
+        project_id: file.project_id,
+        entity_type: 'download_file',
+        entity_id: file.id,
+        message: message,
+        metadata: { filename: file.filename }.merge(metadata)
+      )
     end
 
   end
