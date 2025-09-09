@@ -8,4 +8,6 @@ en:
       updated: "Project details updated"
       active: "Project marked as active"
     download_file:
+      started: "Download started"
+      finished: "Download finished"
       error: "Download failed"

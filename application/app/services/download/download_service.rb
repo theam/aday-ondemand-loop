@@ -30,6 +30,13 @@ module Download
           download_processor = ConnectorClassDispatcher.download_processor(file)
           Thread.new do
             file.update(start_date: now, end_date: nil, status: FileStatus::DOWNLOADING)
+            log_event(
+              project_id: file.project_id,
+              entity_type: 'download_file',
+              entity_id: file.id,
+              message: 'events.download_file.started',
+              metadata: { filename: file.filename }
+            )
             stats[:progress] += 1
             result = download_processor.download
             file.update(end_date: now, status: result.status)
@@ -40,6 +47,14 @@ module Download
                 entity_id: file.id,
                 message: 'events.download_file.error',
                 metadata: { filename: file.filename, message: result.message }
+              )
+            else
+              log_event(
+                project_id: file.project_id,
+                entity_type: 'download_file',
+                entity_id: file.id,
+                message: 'events.download_file.finished',
+                metadata: { filename: file.filename }
               )
             end
           rescue => e
