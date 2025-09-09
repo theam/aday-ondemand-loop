@@ -3,6 +3,7 @@ module Download
   class DownloadService
     include LoggingCommon
     include DateTimeCommon
+    include EventLogger
 
     attr_reader :files_provider, :stats
 
@@ -32,9 +33,25 @@ module Download
             stats[:progress] += 1
             result = download_processor.download
             file.update(end_date: now, status: result.status)
+            if result.status == FileStatus::ERROR
+              log_event(
+                project_id: file.project_id,
+                entity_type: 'DownloadFile',
+                entity_id: file.id,
+                message: 'events.download_file.error',
+                metadata: { filename: file.filename, message: result.message }
+              )
+            end
           rescue => e
             log_error('Error while processing file', {file_id: file.id}, e)
             file.update(end_date: now, status: FileStatus::ERROR)
+            log_event(
+              project_id: file.project_id,
+              entity_type: 'DownloadFile',
+              entity_id: file.id,
+              message: 'events.download_file.error',
+              metadata: { filename: file.filename, error: e.message }
+            )
           ensure
             stats[:completed] += 1
             stats[:progress] -= 1

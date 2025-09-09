@@ -7,3 +7,5 @@ en:
       created: "New project created"
       updated: "Project details updated"
       active: "Project marked as active"
+    download_file:
+      error: "Download failed"
