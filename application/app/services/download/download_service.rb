@@ -36,7 +36,7 @@ module Download
               file.update(end_date: now, status: result.status)
               case result.status
               when FileStatus::ERROR
-                log_download_file_event(file, 'events.download_file.error', { 'message' => result.message })
+                log_download_file_event(file, 'events.download_file.error', { 'message' => result.message, 'error' => result.error })
               when FileStatus::CANCELLED
                 log_download_file_event(file, 'events.download_file.cancelled')
               else

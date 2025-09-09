@@ -63,8 +63,8 @@ module Zenodo
 
     private
 
-    def response(file_status, message)
-      OpenStruct.new({ status: file_status, message: message })
+    def response(file_status, message, error = nil)
+      OpenStruct.new({ status: file_status, message: message, error: error })
     end
   end
 end
