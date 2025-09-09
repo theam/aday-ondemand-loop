@@ -15,7 +15,13 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       connector = ConnectorDownloadProcessorMock.new
       ConnectorClassDispatcher.stubs(:download_processor).returns(connector)
 
-      file = stub({update: nil, save: nil})
+      file = stub({
+        update: nil,
+        save: nil,
+        project_id: 'p1',
+        id: 'f1',
+        filename: 'file.txt'
+      })
       files_provider = DownloadFilesProviderMock.new([file])
 
       main = download_service_thread(files_provider)
