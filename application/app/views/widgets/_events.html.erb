@@ -7,6 +7,9 @@
 %>
 <div id="events-list">
   <ul class="list-unstyled m-0">
+    <% if events.empty? %>
+      <%= t('events.view.empty_events_text') %>
+    <% end %>
     <% events.each do |event| %>
       <li class="card mb-2 shadow-sm rounded">
         <header class="card-header px-3">
