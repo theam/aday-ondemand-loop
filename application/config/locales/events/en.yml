@@ -9,7 +9,8 @@ en:
       updated: "Project details updated"
       active: "Project marked as active"
     download_file:
-      started: "Download started"
-      finished: "Download finished"
-      error: "Download failed"
+      started: "Download service - Download started"
+      finished: "Download service - Download finished"
+      error: "Download failure"
+      error_checksum_verification: "Download failure - MD5 validation failed"
       cancelled: "Download cancelled"

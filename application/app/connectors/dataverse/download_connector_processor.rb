@@ -95,8 +95,8 @@ module Dataverse
         true
       else
         log_error('Checksum verification failed', {file_path: file_path, expected_md5: expected_md5, current_md5: file_md5})
-        log_download_file_event(file, 'events.download_file.error', {
-          'error' => 'Checksum verification failed',
+        log_download_file_event(file, 'events.download_file.error_checksum_verification', {
+          'error' => 'Checksum verification failed after the file was downloaded',
           'file_path' => file_path,
           'expected_md5' => expected_md5,
           'current_md5' => file_md5

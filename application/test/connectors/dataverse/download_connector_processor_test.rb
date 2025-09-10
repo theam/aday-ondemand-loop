@@ -74,9 +74,9 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
 
     @processor.expects(:log_download_file_event).with(
       @file,
-      'events.download_file.error',
+      'events.download_file.error_checksum_verification',
       {
-        'error' => 'Checksum verification failed',
+        'error' => 'Checksum verification failed after the file was downloaded',
         'file_path' => @download_path,
         'expected_md5' => @file.metadata[:md5],
         'current_md5' => bad_md5
