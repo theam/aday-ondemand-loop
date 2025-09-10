@@ -74,16 +74,5 @@ module Download
     def stats_to_s
       "zombies=#{stats[:zombies]} in_progress=#{stats[:progress]} pending=#{stats[:pending]} completed=#{stats[:completed]}"
     end
-
-    def log_download_file_event(file, message, metadata = {})
-      log_event(
-        project_id: file.project_id,
-        entity_type: 'download_file',
-        entity_id: file.id,
-        message: message,
-        metadata: { 'filename' => file.filename }.merge(metadata)
-      )
-    end
-
   end
 end

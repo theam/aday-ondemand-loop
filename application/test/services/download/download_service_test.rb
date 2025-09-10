@@ -15,13 +15,14 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       connector = ConnectorDownloadProcessorMock.new
       ConnectorClassDispatcher.stubs(:download_processor).returns(connector)
 
-      file = stub({
-        update: nil,
-        save: nil,
-        project_id: 'p1',
-        id: 'f1',
-        filename: 'file.txt'
-      })
+      file = mock("download_file")
+      file.stubs(:project_id).returns('p1')
+      file.stubs(:id).returns('f1')
+      file.stubs(:filename).returns('file.txt')
+      file.stubs(:save).returns(nil)
+      file.stubs(:update).returns(nil)
+      file.stubs(:is_a?).with(DownloadFile).returns(true)
+
       files_provider = DownloadFilesProviderMock.new([file])
 
       main = download_service_thread(files_provider)
@@ -63,8 +64,8 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.started', metadata: { 'filename' => 'file.txt' })
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.finished', metadata: { 'filename' => 'file.txt' })
+      target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished').once
 
       target.start
     end
@@ -87,8 +88,8 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.started', metadata: { 'filename' => 'file.txt' })
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.error', metadata: { 'filename' => 'file.txt', 'error' => 'An error occurred' })
+      target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.error', { 'error' => 'An error occurred' }).once
       target.start
     end
   end
@@ -110,8 +111,9 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.started', metadata: { 'filename' => 'file.txt' })
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.cancelled', metadata: { 'filename' => 'file.txt' })
+      target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.cancelled').once
+
       target.start
     end
   end
@@ -133,8 +135,8 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.started', metadata: { 'filename' => 'file.txt' })
-      target.expects(:log_event).with(project_id: 'p1', entity_type: 'download_file', entity_id: 'f1', message: 'events.download_file.error', metadata: { 'filename' => 'file.txt', 'message' => 'failed', 'error' => 'An error occurred' })
+      target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.error', { 'message' => 'failed', 'error' => 'An error occurred' }).once
       target.start
     end
   end

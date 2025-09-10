@@ -22,13 +22,7 @@ class DownloadFilesController < ApplicationController
 
     if file.update(status: FileStatus::CANCELLED)
       unless was_downloading
-        log_event(
-          project_id: project_id,
-          entity_type: 'download_file',
-          entity_id: file.id,
-          message: 'events.download_file.cancelled',
-          metadata: { 'filename' => file.filename }
-        )
+        log_download_file_event(file, 'events.download_file.cancelled', { 'filename' => file.filename })
       end
       redirect_back fallback_location: root_path, notice: t('download_files.file_cancellation_success', filename: file.filename)
     else
