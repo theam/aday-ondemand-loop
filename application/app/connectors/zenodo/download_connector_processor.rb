@@ -45,7 +45,7 @@ module Zenodo
           'url' => download_url,
           'partial_downloads' => download_processor.partial_downloads
         })
-        return response(FileStatus::ERROR, 'file download failed', e.message)
+        return response(FileStatus::ERROR, 'file download failed')
       end
 
       connector_metadata.partial_downloads = download_processor.partial_downloads
@@ -69,8 +69,8 @@ module Zenodo
 
     private
 
-    def response(file_status, message, error = nil)
-      OpenStruct.new({ status: file_status, message: message, error: error })
+    def response(file_status, message)
+      OpenStruct.new({ status: file_status, message: message })
     end
   end
 end
