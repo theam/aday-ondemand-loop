@@ -12,18 +12,17 @@ class DownloadFilesController < ApplicationController
       return redirect_back fallback_location: root_path, alert: t('download_files.file_not_found', file_id: file_id, project_id: project_id)
     end
 
-    was_downloading = file.status.downloading?
-    if was_downloading
+    previous_status = file.status.to_s
+    if file.status.downloading?
       command_client = Command::CommandClient.new(socket_path: ::Configuration.command_server_socket_file)
       request = Command::Request.new(command: 'download.cancel', body: {project_id: project_id, file_id: file_id})
+      log_download_file_event(file, 'events.download_file.cancel_started', { 'filename' => file.filename, 'previous_status' => previous_status })
       response = command_client.request(request)
       return redirect_back fallback_location: root_path, alert: t('download_files.file_cancellation_error', filename: file.filename) if response.status != 200
     end
 
     if file.update(status: FileStatus::CANCELLED)
-      unless was_downloading
-        log_download_file_event(file, 'events.download_file.cancelled', { 'filename' => file.filename })
-      end
+      log_download_file_event(file, 'events.download_file.cancel_completed', { 'filename' => file.filename, 'previous_status' => previous_status })
       redirect_back fallback_location: root_path, notice: t('download_files.file_cancellation_success', filename: file.filename)
     else
       redirect_back fallback_location: root_path, alert: t('download_files.file_cancellation_update_error', filename: file.filename)
