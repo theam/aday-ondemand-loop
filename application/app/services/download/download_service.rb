@@ -34,14 +34,6 @@ module Download
               stats[:progress] += 1
               result = download_processor.download
               file.update(end_date: now, status: result.status)
-              case result.status
-              when FileStatus::ERROR
-                log_download_file_event(file, 'events.download_file.error', { 'message' => result.message, 'error' => result.error })
-              when FileStatus::CANCELLED
-                log_download_file_event(file, 'events.download_file.cancelled')
-              else
-                log_download_file_event(file, 'events.download_file.finished')
-              end
             rescue => e
               log_error('Error while processing file', {file_id: file.id}, e)
               file.update(end_date: now, status: FileStatus::ERROR)
@@ -49,6 +41,7 @@ module Download
             ensure
               stats[:completed] += 1
               stats[:progress] -= 1
+              log_download_file_event(file, 'events.download_file.finished')
             end
           end
         # Wait for all downloads to complete

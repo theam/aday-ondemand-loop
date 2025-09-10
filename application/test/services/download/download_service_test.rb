@@ -89,7 +89,8 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
       target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.error', { 'error' => 'An error occurred' }).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.error', {'error' => 'An error occurred'}).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished').once
       target.start
     end
   end
@@ -112,7 +113,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
       target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.cancelled').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished').once
 
       target.start
     end
@@ -136,7 +137,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
       target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.error', { 'message' => 'failed', 'error' => 'An error occurred' }).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished').once
       target.start
     end
   end
