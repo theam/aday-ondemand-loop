@@ -22,6 +22,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       file.stubs(:save).returns(nil)
       file.stubs(:update).returns(nil)
       file.stubs(:is_a?).with(DownloadFile).returns(true)
+      file.stubs(:status).returns('', FileStatus::DOWNLOADING)
 
       files_provider = DownloadFilesProviderMock.new([file])
 
@@ -59,15 +60,17 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       file.stubs(:project_id).returns('p1')
       file.stubs(:id).returns('f1')
       file.stubs(:filename).returns('file.txt')
+      file.stubs(:status).returns('', FileStatus::DOWNLOADING)
       file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
       file.expects(:update).with(end_date: now_time, status: FileStatus::SUCCESS).once
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.finished').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.started', {'previous_status' => ''}).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished', {'previous_status' => 'downloading'}).once
 
       target.start
+      assert true
     end
   end
 
@@ -83,7 +86,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       file.stubs(:project_id).returns('p1')
       file.stubs(:id).returns('f1')
       file.stubs(:filename).returns('file.txt')
-      file.stubs(:status).returns(FileStatus::DOWNLOADING)
+      file.stubs(:status).returns('')
       file.expects(:status).once
       file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
       file.expects(:update).with(end_date: now_time, status: FileStatus::ERROR).once
@@ -91,9 +94,10 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
       target.expects(:log_download_file_event).with(file, 'events.download_file.started', {'previous_status' => ''}).once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.error', {'error' => 'An error occurred', 'previous_status' => 'downloading'}).once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.finished', {'previous_status' => 'downloading'}).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.error', {'error' => 'An error occurred', 'previous_status' => ''}).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished', {'previous_status' => ''}).once
       target.start
+      assert true
     end
   end
 
@@ -109,16 +113,17 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       file.stubs(:project_id).returns('p1')
       file.stubs(:id).returns('f1')
       file.stubs(:filename).returns('file.txt')
-      file.stubs(:status).returns(FileStatus::DOWNLOADING)
+      file.stubs(:status).returns('', FileStatus::DOWNLOADING)
       file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
       file.expects(:update).with(end_date: now_time, status: FileStatus::CANCELLED).once
       files_provider = DownloadFilesProviderMock.new([file])
       target = Download::DownloadService.new(files_provider)
       target.stubs(:now).returns(now_time)
-      target.expects(:log_download_file_event).with(file, 'events.download_file.started').once
-      target.expects(:log_download_file_event).with(file, 'events.download_file.finished').once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.started', {'previous_status' => ''}).once
+      target.expects(:log_download_file_event).with(file, 'events.download_file.finished', {'previous_status' => 'downloading'}).once
 
       target.start
+      assert true
     end
   end
 
@@ -135,7 +140,6 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       file.stubs(:id).returns('f1')
       file.stubs(:filename).returns('file.txt')
       file.stubs(:status).returns(FileStatus::DOWNLOADING)
-      file.expects(:status).once
       file.expects(:update).with(start_date: now_time, end_date: nil, status: FileStatus::DOWNLOADING).once
       file.expects(:update).with(end_date: now_time, status: FileStatus::ERROR).once
       files_provider = DownloadFilesProviderMock.new([file])
@@ -144,6 +148,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
       target.expects(:log_download_file_event).with(file, 'events.download_file.started', {'previous_status' => 'downloading'}).once
       target.expects(:log_download_file_event).with(file, 'events.download_file.finished', {'previous_status' => 'downloading'}).once
       target.start
+      assert true
     end
   end
 
@@ -153,6 +158,7 @@ class Download::DownloadServiceTest < ActiveSupport::TestCase
   def download_service_thread(files_provider)
     Thread.new do
       target = Download::DownloadService.new(files_provider)
+      target.stubs(:log_download_file_event)
       target.start
     end
   end
