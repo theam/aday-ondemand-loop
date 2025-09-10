@@ -43,7 +43,7 @@ module Download
             ensure
               stats[:completed] += 1
               stats[:progress] -= 1
-              log_download_file_event(file, 'events.download_file.finished','previous_status' => previous_status)
+              log_download_file_event(file, 'events.download_file.finished', { 'previous_status' => previous_status })
             end
           end
         # Wait for all downloads to complete
