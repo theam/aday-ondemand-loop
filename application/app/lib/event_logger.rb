@@ -16,7 +16,7 @@ module EventLogger
     )
   end
 
-  def log_download_file_event(file, message, metadata = {})
+  def log_download_file_event(file, message:, metadata:)
     unless file.is_a?(DownloadFile)
       raise ArgumentError, "Expected DownloadFile model, got #{file.class}"
     end
