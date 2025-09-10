@@ -75,12 +75,12 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     @processor.expects(:log_download_file_event).with(
       @file,
       'events.download_file.error',
-      includes(
+      {
         'error' => 'Checksum verification failed',
         'file_path' => @download_path,
         'expected_md5' => @file.metadata[:md5],
         'current_md5' => bad_md5
-      )
+      }
     )
 
     mock_downloader = mock('downloader')
@@ -158,7 +158,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     processor.expects(:log_download_file_event).with(
       file,
       'events.download_file.error',
-      includes('error' => 'boom', 'url' => expected_url, 'partial_downloads' => true)
+      {'error' => 'boom', 'url' => expected_url, 'partial_downloads' => true}
     )
 
     result = processor.download
@@ -198,7 +198,7 @@ class Dataverse::DownloadConnectorProcessorTest < ActiveSupport::TestCase
     processor.expects(:log_download_file_event).with(
       file,
       'events.download_file.error',
-      includes('error' => 'boom', 'url' => expected_url, 'partial_downloads' => false)
+      {'error' => 'boom', 'url' => expected_url, 'partial_downloads' => false}
     )
 
     result = processor.download
