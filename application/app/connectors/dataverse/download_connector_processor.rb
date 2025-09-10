@@ -48,7 +48,7 @@ module Dataverse
         file.update({ metadata: connector_metadata.to_h })
         FileUtils.rm_f(temp_location) if download_processor.partial_downloads == false
         log_error('Download failed', { id: file.id, url: download_url, partial_downloads: download_processor.partial_downloads }, e)
-        log_download_file_event(file, 'events.download_file.error', {
+        log_download_file_event(file, message: 'events.download_file.error', metadata: {
           'error' => e.message,
           'url' => download_url,
           'partial_downloads' => download_processor.partial_downloads
@@ -95,7 +95,7 @@ module Dataverse
         true
       else
         log_error('Checksum verification failed', {file_path: file_path, expected_md5: expected_md5, current_md5: file_md5})
-        log_download_file_event(file, 'events.download_file.error_checksum_verification', {
+        log_download_file_event(file, message: 'events.download_file.error_checksum_verification', metadata: {
           'error' => 'Checksum verification failed after the file was downloaded',
           'file_path' => file_path,
           'expected_md5' => expected_md5,
