@@ -26,7 +26,7 @@ module EventLogger
       entity_type: 'download_file',
       entity_id: file.id,
       message: message,
-      metadata: { 'filename' => file.filename }.merge(metadata)
+      metadata: { 'filename' => file.filename, 'status' => file.status.to_s }.merge(metadata)
     )
   end
 
