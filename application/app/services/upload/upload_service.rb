@@ -31,7 +31,7 @@ module Upload
           previous_status = file_data.file.status.to_s
           Thread.new do
             file_data.file.update(start_date: now, end_date: nil, status: FileStatus::UPLOADING)
-            log_upload_file_event(file_data.file, message: 'events.upload_file.started', metadata: { 'previous_status' => previous_status })
+            log_upload_file_event(file_data.file, message: 'events.upload_file.started', metadata: {})
             stats[:progress] += 1
             result = upload_processor.upload
             previous_status = file_data.file.status.to_s
@@ -43,7 +43,7 @@ module Upload
           ensure
             stats[:completed] += 1
             stats[:progress] -= 1
-            log_upload_file_event(file_data.file, message: 'events.upload_file.finished', metadata: { 'previous_status' => previous_status })
+            log_upload_file_event(file_data.file, message: 'events.upload_file.finished', metadata: {})
           end
         end
         # Wait for all downloads to complete
