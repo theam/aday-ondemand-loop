@@ -31,7 +31,7 @@ module Download
             previous_status = file.status.to_s
             Thread.new do
               file.update(start_date: now, end_date: nil, status: FileStatus::DOWNLOADING)
-              log_download_file_event(file, message: 'events.download_file.started', metadata: {'previous_status' => previous_status})
+              log_download_file_event(file, message: 'events.download_file.started', metadata: {})
               stats[:progress] += 1
               result = download_processor.download
               previous_status = file.status.to_s
@@ -43,7 +43,7 @@ module Download
             ensure
               stats[:completed] += 1
               stats[:progress] -= 1
-              log_download_file_event(file, message: 'events.download_file.finished', metadata: { 'previous_status' => previous_status })
+              log_download_file_event(file, message: 'events.download_file.finished', metadata: {})
             end
           end
         # Wait for all downloads to complete
