@@ -281,6 +281,8 @@ en:
       button_browse_file_a11y_text: "Browse file %{filename}"
       button_browse_file_title: "Browse file"
       button_cancel_upload_title: "Cancel upload"
+      button_view_events_title: "View File Events"
+      button_view_events_label: "View Events"
       field_creation_date_title: "Creation date"
       field_project_title: "Project: %{name}"
       field_bundle_title: "Upload Bundle: %{name}"
