@@ -47,6 +47,12 @@ class UploadStatusControllerTest < ActionDispatch::IntegrationTest
     file = create_upload_file(project, upload_bundle)
     file.save
 
+    Upload::UploadFilesProvider.any_instance
+                               .stubs(:recent_files)
+                               .returns([OpenStruct.new(file: file,
+                                                        project: project,
+                                                        upload_bundle: upload_bundle)])
+
     get upload_status_files_url
     assert_response :success
     assert_select 'button.status-badge-button[data-modal-url-value=?]',
