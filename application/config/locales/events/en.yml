@@ -3,7 +3,14 @@ en:
     view:
       creation_date_title: "Event creation date"
       header_details_text: "Additional Event Data"
+      empty_events_text: "No events for this item"
     project:
       created: "New project created"
       updated: "Project details updated"
       active: "Project marked as active"
+    download_file:
+      started: "Download service - Download started (%{status})"
+      finished: "Download service - Download processing completed (%{status})"
+      error: "Download failure (%{status})"
+      error_checksum_verification: "Download failure - MD5 validation failed (%{status})"
+      cancel_completed: "Cancel request processed (%{status})"

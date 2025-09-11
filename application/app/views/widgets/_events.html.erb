@@ -1,12 +1,15 @@
 <%
   project_id = params[:project_id]
   project = Project.find(project_id)
-  entity_type = 'project'
-  entity_id = project_id
+  entity_type = params[:entity_type].to_s.downcase.presence || 'project'
+  entity_id = params[:entity_id].presence || project_id
   events = project ? project.event_list&.all_by_entity_type_and_id(entity_type: entity_type, entity_id: entity_id) : []
 %>
 <div id="events-list">
   <ul class="list-unstyled m-0">
+    <% if events.empty? %>
+      <%= t('events.view.empty_events_text') %>
+    <% end %>
     <% events.each do |event| %>
       <li class="card mb-2 shadow-sm rounded">
         <header class="card-header px-3">
@@ -26,7 +29,7 @@
 
             <div class="d-flex align-items-center flex-grow-1 gap-3">
               <h2 class="mb-0 h6">
-                <%= t(event.message) %>
+                <%= t(event.message, **event.metadata.transform_keys(&:to_sym)) %>
               </h2>
             </div>
           </a>

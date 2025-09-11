@@ -16,6 +16,20 @@ module EventLogger
     )
   end
 
+  def log_download_file_event(file, message:, metadata:)
+    unless file.is_a?(DownloadFile)
+      raise ArgumentError, "Expected DownloadFile model, got #{file.class}"
+    end
+
+    log_event(
+      project_id: file.project_id,
+      entity_type: 'download_file',
+      entity_id: file.id,
+      message: message,
+      metadata: { 'filename' => file.filename, 'status' => file.status.to_s }.merge(metadata)
+    )
+  end
+
   def log_event(project_id:, entity_type:, entity_id:, message:, metadata:)
     attributes = {
       project_id: project_id,
