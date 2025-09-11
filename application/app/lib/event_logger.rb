@@ -30,6 +30,20 @@ module EventLogger
     )
   end
 
+  def log_upload_file_event(file, message:, metadata:)
+    unless file.is_a?(UploadFile)
+      raise ArgumentError, "Expected UploadFile model, got #{file.class}"
+    end
+
+    log_event(
+      project_id: file.project_id,
+      entity_type: 'upload_file',
+      entity_id: file.id,
+      message: message,
+      metadata: { 'filename' => file.filename, 'status' => file.status.to_s }.merge(metadata)
+    )
+  end
+
   def log_event(project_id:, entity_type:, entity_id:, message:, metadata:)
     attributes = {
       project_id: project_id,

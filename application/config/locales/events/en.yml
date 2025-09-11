@@ -14,3 +14,9 @@ en:
       error: "Download failure (%{status})"
       error_checksum_verification: "Download failure - MD5 validation failed (%{status})"
       cancel_completed: "Cancel request processed (%{status})"
+    upload_file:
+      started: "Upload service - Upload started (%{status})"
+      finished: "Upload service - Upload processing completed (%{status})"
+      error: "Upload failure (%{status})"
+      error_checksum_verification: "Upload failure - MD5 validation failed (%{status})"
+      cancel_completed: "Cancel request processed (%{status})"
