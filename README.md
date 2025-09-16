@@ -6,7 +6,7 @@
 ![Branch coverage](docs/badges/coverage-branch.svg)
 
 # OnDemand Loop
-Welcome to the OnDemand Loop documentation. Updated
+Welcome to the OnDemand Loop documentation.
 
 [**OnDemand Loop**](https://github.com/IQSS/ondemand-loop) is a companion application to [**Open OnDemand**](https://openondemand.org), designed to streamline the movement of research data between high-performance computing (HPC) clusters and remote repositories such as [**Dataverse**](https://dataverse.org), or [**Zenodo**](https://zenodo.org).
 
