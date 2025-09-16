@@ -1,4 +1,5 @@
 <div class="d-flex justify-content-between align-items-center flex-wrap"
+     id="project-actions"
      data-controller="update-inline-field"
      data-update-inline-field-initial-value-value="<%= project.name %>"
      data-update-inline-field-url-value="<%= project_path(id: project.id) %>"
@@ -9,6 +10,7 @@
   <!-- LEFT: Project Info -->
   <div class="d-flex align-items-center gap-2 me-2">
     <a href="<%= files_app_url(project.download_dir) %>"
+       id="open-project-folder-btn"
        target="_blank"
        class="btn btn-sm btn-outline-secondary"
        aria-label="<%= t('.button_open_project_folder_label') %>"
@@ -50,6 +52,7 @@
         title: t('.button_delete_project_title'),
         class: "btn-sm btn-outline-secondary icon-hover-danger",
         icon: "bi bi-trash",
+        button_id: 'delete-project-btn',
         modal_id: 'modal-delete-confirmation',
         modal_title: t('.modal_delete_confirmation_title'),
         modal_subtitle: project.name,
@@ -58,6 +61,7 @@
 
       <button type="button"
               class="btn btn-sm btn-outline-secondary"
+              id="view-project-events-btn"
               title="<%= t('.button_view_events_title') %>"
               data-controller="modal"
               data-action="click->modal#load"
@@ -69,7 +73,9 @@
       </button>
 
     <% if active_project?(project.id) %>
-      <button class="btn btn-sm btn-outline-primary cursor-default" title="<%= t('.button_active_project_title') %>">
+      <button class="btn btn-sm btn-outline-primary cursor-default"
+              id="active-project-indicator"
+              title="<%= t('.button_active_project_title') %>">
         <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
         <span class="visually-hidden"><%= t('.button_active_project_title') %></span>
       </button>
@@ -78,7 +84,8 @@
         url: set_active_project_path(id: project.id),
         title: t('.button_set_as_active_project_title'),
         class: 'btn-sm btn-outline-dark',
-        icon: "bi bi-pin-angle-fill"
+        icon: "bi bi-pin-angle-fill",
+        button_id: 'set-active-project-btn'
       } %>
     <% end %>
 
@@ -91,6 +98,7 @@
 <div class="d-flex justify-content-end gap-2 mt-2 mb-2">
   <button type="button"
           class="btn btn-sm btn-outline-secondary"
+          id="create-upload-bundle-btn"
           title="<%= t('.button_create_upload_bundle_title') %>"
           data-controller="modal"
           data-action="click->modal#load"
@@ -103,5 +111,5 @@
 
   <!-- Open metadata link -->
   <%= render partial: '/shared/metadata_folder_link',
-             locals: { path: Project.project_metadata_dir(project.id) } %>
+             locals: { path: Project.project_metadata_dir(project.id), id: 'project-metadata-link' } %>
 </div>
