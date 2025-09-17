@@ -32,6 +32,7 @@ nav:
       - Upload File Selector: user_guide/upload_file_selector.md
       - Supported Repositories: user_guide/supported_repositories.md
   - Admin Guide: admin.md
+  - Customizations: customizations.md
   - Installation Guide: installation.md
   - Development Guide:
       - Overview: development_guide/index.md
