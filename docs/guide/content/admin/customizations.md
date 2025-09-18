@@ -1,19 +1,17 @@
 # Customizations
 
-OnDemand Loop ships with sensible defaults for both the in-app navigation bar
-and its entry inside the Open OnDemand dashboard. Administrators can override
-these defaults to align the experience with local branding, terminology, and
-menu organization.
+Beyond core configuration, OnDemand Loop supports extensive interface customization to align the experience with your organization's branding, terminology, and navigation preferences. This section covers how to customize both the application's appearance within the broader Open OnDemand dashboard and its internal navigation structure.
 
-### Open OnDemand navigation menu (`manifest.yml`)
+### Open OnDemand Integration
 
-The `manifest.yml` file that accompanies the application controls how OnDemand
-Loop appears inside the broader Open OnDemand interface. Administrators can
-adjust the following attributes:
+OnDemand Loop ships with sensible defaults for how it appears inside the Open OnDemand dashboard. The `manifest.yml` file that accompanies the application controls these settings and can be customized by administrators.
+
+#### Dashboard Menu Configuration (`manifest.yml`)
+
+The `manifest.yml` file controls how OnDemand Loop appears in the broader Open OnDemand interface. Administrators can adjust the following attributes:
 
 - **Application name and description** displayed to users
-- **Menu category placement** (e.g., Files, Interactive Apps, custom
-  categories)
+- **Menu category placement** (e.g., Files, Interactive Apps, custom categories)
 - **Icons, subcategories, and window behavior** for the application shortcut
 
 #### Default configuration
@@ -59,11 +57,13 @@ new_window: true
     - Test navigation changes with end users to ensure intuitive placement.
     - Coordinate with other application deployments for consistent categorization.
 
-### Application navigation bar overrides
+### Application Navigation Bar
 
-To customize the navigation bar at the top of the application, add a `navigation` key to any YAML file inside `/etc/loop/config/loop.d`. Configuration entries can hide or replace existing items, introduce brand-new links, or add dropdown menus with arbitrary depth.
+To customize the navigation bar at the top of the application, add a `navigation` key to any YAML file inside `/etc/loop/config/loop.d`. Navigation customization is just another configuration setting supported by the application, following the same YAML configuration patterns used for other settings.
 
-#### Navigation item types
+Configuration entries can hide or replace existing items, introduce brand-new links, or add dropdown menus with arbitrary depth. Place your navigation YAML configuration alongside other configuration files so it is evaluated during application initialization.
+
+#### Navigation Item Types
 
 The navigation system recognizes the following item types:
 
@@ -71,7 +71,44 @@ The navigation system recognizes the following item types:
 - **`nav_menu`** – dropdown menu containers with nested items
 - **`nav_label`** – display-only entries for headings or status indicators
 
-### `nav_link`
+### Default Navigation Items
+
+OnDemand Loop ships with the following default navigation structure that administrators can customize or override. Each item has a unique `id` that can be referenced in your configuration to hide, modify, or replace existing navigation elements.
+
+#### Left-aligned navigation (primary links)
+
+- **`nav-projects`** – Links to the Projects page (`/projects`)
+- **`nav-downloads`** – Links to the Download Status page (`/download_status`)
+- **`nav-uploads`** – Links to the Upload Status page (`/upload_status`)
+- **`repositories`** – Dropdown menu containing repository connections
+  - **`nav-dataverse`** – Links to Dataverse landing page
+  - **`nav-zenodo`** – Links to Zenodo landing page
+  - **`repositories-settings-separator`** – Divider
+  - **`nav-repo-settings`** – Links to Repository Settings (`/repository_settings`)
+
+#### Right-aligned navigation
+
+- **`nav-ood-dashboard`** – Links back to the main Open OnDemand dashboard (uses `ood_dashboard_url`)
+- **`help`** – Help dropdown menu containing:
+  - **`nav-guide`** – Links to external documentation (`guide_url` configuration)
+  - **`nav-sitemap`** – Links to application sitemap (`/sitemap`)
+  - **`nav-restart`** – Links to restart functionality
+  - **`help-reset-separator`** – Divider
+  - **`nav-reset`** – Resets application state (with confirmation dialog)
+
+To customize any of these items, reference them by their `id` in your navigation configuration. For example, to hide the uploads link:
+
+```yaml
+navigation:
+  - id: "nav-uploads"
+    hidden: true
+```
+
+### Navigation Configuration Types
+
+Now that you understand the default navigation structure, you can create custom navigation items using the following configuration types. Each type serves a different purpose and has its own set of attributes.
+
+#### `nav_link`
 
 A standalone link that directs users to a URL.
 
@@ -97,10 +134,9 @@ navigation:
 - `new_tab` – open in a new window when `true`
 - `hidden` – hide the item when `true`, show when `false` (default)
 
-### `nav_label`
+#### `nav_label`
 
-Items without a `url` or nested `items` automatically render as labels. Labels
-can highlight the application name, status indicators, or short instructions.
+Items without a `url` or nested `items` automatically render as labels. Labels can highlight the application name, status indicators, or short instructions.
 
 ```yaml
 navigation:
@@ -111,7 +147,7 @@ navigation:
     icon: "bs://bi-activity"
 ```
 
-### `nav_menu`
+#### `nav_menu`
 
 A parent item that renders nested entries in a dropdown.
 
@@ -149,13 +185,11 @@ Nested entries can be:
 - **`nav_menu_label`** – headers rendered as plain text
 - **`nav_menu_divider`** – separators (use `label: "---"`)
 
-### Advanced configuration examples
+### Advanced Configuration Examples
 
-Use the following reference snippets to compose more elaborate menus. Mix and
-match entries, update `id` values to override defaults, and mark any entry with
-`hidden: true` to stage future releases without exposing the item yet.
+Use the following reference snippets to compose more elaborate menus. Mix and match entries, update `id` values to override defaults, and mark any entry with `hidden: true` to stage future releases without exposing the item yet.
 
-#### Example 1 – complete left-aligned navigation
+#### Complete left-aligned navigation
 
 ```yaml
 navigation:
@@ -198,7 +232,7 @@ navigation:
         position: 4
 ```
 
-#### Example 2 – right-aligned user menu
+#### Right-aligned user menu
 
 ```yaml
 navigation:
@@ -236,7 +270,7 @@ navigation:
     icon: "bs://bi-question-circle"
 ```
 
-#### Example 3 – mixed navigation with custom partials
+#### Mixed navigation with custom partials
 
 ```yaml
 navigation:
@@ -279,7 +313,7 @@ navigation:
     icon: "bs://bi-activity"
 ```
 
-#### Example 4 – hidden items and conditional display
+#### Hidden items and conditional display
 
 ```yaml
 navigation:
@@ -310,25 +344,15 @@ navigation:
         hidden: true
 ```
 
-### Icon reference
+### Icon Reference
 
-- **Bootstrap icons** – use the format `bs://bi-icon-name` (e.g.,
-  `bs://bi-house`, `bs://bi-gear`)
-- **Connector icons** – use `connector://service-name` (e.g.,
-  `connector://dataverse`, `connector://zenodo`)
-- **Custom assets** – provide a direct asset path (e.g.,
-  `/assets/custom-icon.svg`)
+- **Bootstrap icons** – use the format `bs://bi-icon-name` (e.g., `bs://bi-house`, `bs://bi-gear`)
+- **Connector icons** – use `connector://service-name` (e.g., `connector://dataverse`, `connector://zenodo`)
+- **Custom assets** – provide a direct asset path (e.g., `/assets/custom-icon.svg`)
 
-### Best practices
-
-1. Use incremental `position` values for predictable ordering within an
-   alignment group.
-2. Balance the number of left and right aligned items for better visual
-   distribution.
-3. Keep labels concise yet descriptive.
-4. Use separators (`label: "---"`) to group dropdown options.
-5. Mark experimental features with `hidden: true` until you are ready to reveal
-   them.
-
-Place the YAML snippet alongside other configuration files so it is evaluated
-during application initialization.
+!!! tip "Navigation customization best practices"
+    - Use incremental `position` values for predictable ordering within an alignment group.
+    - Balance the number of left and right aligned items for better visual distribution.
+    - Keep labels concise yet descriptive.
+    - Use separators (`label: "---"`) to group dropdown options.
+    - Mark experimental features with `hidden: true` until you are ready to reveal them.

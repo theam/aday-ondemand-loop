@@ -1,16 +1,6 @@
-# Admin Guide
+# Configuration
 
-This guide describes how to configure the OnDemand Loop application using environment variables and YAML configuration files. The application's configuration is managed through the `ConfigurationSingleton` class, which provides a centralized interface for accessing all configurable properties.
-
-Each property is defined with sensible defaults and can be overridden in one of two ways:
-
-1. **Environment Variables** — Loaded from `.env` files or system-level environment variables.
-2. **YAML Files** — Located in `/etc/loop/config/loop.d` by default.
-
-The configuration system uses the `ConfigurationProperty` abstraction to define properties with specific types (e.g., `path`, `integer`, `boolean`). These properties are then exposed as methods on the global `Configuration` object, allowing the rest of the application to access them consistently.
-
-This guide documents each configuration property, including its purpose, default value, and expected type. It is intended for system administrators deploying or managing OnDemand Loop.
-
+This section covers all the core system settings that control how OnDemand Loop operates in your environment. The configuration system uses the `ConfigurationProperty` abstraction to define properties with specific types (e.g., `path`, `integer`, `boolean`). These properties are then exposed as methods on the global `Configuration` object, allowing the rest of the application to access them consistently.
 
 ### Setting Configuration Values
 
@@ -28,21 +18,21 @@ You can define environment variables in one of the following ways:
 
 - Set them in the system environment (e.g. using your init system or shell profile)
 - Create a `.env` file in the application root
-- Create a `.env.<RAILS_ENV>` file for environment-specific values  
+- Create a `.env.<RAILS_ENV>` file for environment-specific values
   _(e.g., `.env.production`, `.env.development`)_
 
 !!! note "Environment Precedence"
 
     If both `.env` and `.env.<RAILS_ENV>` (e.g. `.env.production`) are present, the environment-specific file takes precedence.
 
-    These files will also override any variables already defined in the system environment or by the init system.  
+    These files will also override any variables already defined in the system environment or by the init system.
     This allows `.env.<RAILS_ENV>` to serve as the authoritative source for configuration in each environment.
 
 ---
 
 !!! note "Property Values"
 
-    **File Paths**  
+    **File Paths**
     The system supports dynamic path expansion for user directories. You can reference the current user's home directory using either syntax:
 
      - `~/data/info` (tilde expansion)
@@ -50,7 +40,7 @@ You can define environment variables in one of the following ways:
 
     Both will automatically resolve to the user's actual home directory path (e.g., `/home/username/data/info`).
 
-    **Numeric Values**  
+    **Numeric Values**
     For improved readability of large numbers, the system supports Ruby-style numeric formatting with underscores as thousand separators:
 
      - `65_000` (equivalent to 65000)
@@ -58,7 +48,10 @@ You can define environment variables in one of the following ways:
 
     The underscores are ignored during processing and serve only to make configuration values easier to read and understand.
 
-### List of config properties
+### Configuration Properties
+
+The following properties control various aspects of OnDemand Loop's behavior. Each property can be set via YAML configuration files or environment variables as described above.
+
 - [version](#version)
 - [ood_version](#ood_version)
 - [metadata_root](#metadata_root)
@@ -82,6 +75,7 @@ You can define environment variables in one of the following ways:
 - [default_pagination_items](#default_pagination_items)
 - [dataverse_hub_url](#dataverse_hub_url)
 - [zenodo_default_url](#zenodo_default_url)
+- [navigation](#navigation)
 
 ---
 
@@ -114,7 +108,7 @@ Specifies the directory where OnDemand Loop stores internal metadata, such as pr
 
 <a id="download_root"></a>
 **`download_root`**  
-Defines the destination directory where project-organized files from [remote repositories](user_guide/supported_repositories.md) (e.g., Dataverse, Zenodo) are downloaded.  
+Defines the destination directory where project-organized files from [remote repositories](../user_guide/supported_repositories.md) (e.g., Dataverse, Zenodo) are downloaded.
 These files are accessible through the Files app integration.
 
 - **Default**: `~/loop_downloads`
@@ -162,7 +156,7 @@ Sets the polling interval (in milliseconds) for the frontend to check the status
 
 <a id="locale"></a>
 **`locale`**  
-Defines the default language/locale used by the application interface. This setting determines the translation context for UI text.  
+Defines the default language/locale used by the application interface. This setting determines the translation context for UI text.
 Currently only English is supported.
 
 - **Default**: `:en` (English)
@@ -230,6 +224,9 @@ Defines the maximum allowed size (in bytes) for an individual file upload. Files
 
 - **Default**: `1_073_741_824` (1 GB)
 - **Environment Variable**: `OOD_LOOP_MAX_UPLOAD_FILE_SIZE`
+
+---
+
 <a id="guide_url"></a>
 **`guide_url`**  
 URL to the external documentation site. This is used for help links in the interface and should point to the current user or admin guide for your Loop deployment.
@@ -250,7 +247,7 @@ The value should be a hash with the following optional keys:
 - `:password`: (optional) password for proxy authentication
 
 - **Default**: no proxy (`nil`)
-- **Environment Variable**: `Not supported`
+- **Environment Variable**: _Not supported_
 
 ---
 
@@ -306,7 +303,21 @@ For development or testing environments, this can be pointed to alternative Zeno
 
 ---
 
+<a id="navigation"></a>
+**`navigation`**
+Defines custom navigation bar items that override or extend the default application navigation.
+This array property allows administrators to customize the navigation bar at the top of the application, including hiding default items, adding new links, or creating dropdown menus.
+For detailed configuration options and examples, see the [Navigation Customization](customizations.md#application-navigation-bar) section.
+
+- **Default**: `[]` (empty array, uses default navigation)
+- **Environment Variable**: _Not supported_
+
+---
+
 ### Other Environment Variables
+
+These additional environment variables control application behavior and are typically set at the system level.
+
 - [OOD_LOOP_CONFIG_DIRECTORY](#ood_loop_config_directory)
 - [OOD_LOOP_COMMAND_SERVER_FILE](#ood_loop_command_server_file)
 - [OOD_LOOP_DETACHED_PROCESS_FILE](#ood_loop_detached_process_file)
@@ -315,9 +326,9 @@ For development or testing environments, this can be pointed to alternative Zeno
 ---
 
 <a id="ood_loop_config_directory"></a>
-**`OOD_LOOP_CONFIG_DIRECTORY`**
+**`OOD_LOOP_CONFIG_DIRECTORY`**  
 Specifies the directory containing YAML configuration files that OnDemand Loop loads at startup to configure its behavior.
-These files define the values for [environment-specific properties](#list-of-config-properties) such as paths, limits, and UI settings.
+These files define the values for [environment-specific properties](#configuration-properties) such as paths, limits, and UI settings.
 The directory is read once at application boot, so any changes require a restart to take effect.
 
 - **Default**: `/etc/loop/config/loop.d`
