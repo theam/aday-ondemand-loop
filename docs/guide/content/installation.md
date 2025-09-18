@@ -180,7 +180,7 @@ your server names.
 
 ### Configuring Navigation Menu Appearance
 
-Consult the [Customizations guide](customizations.md) for
+Consult the [Customizations guide](admin/customizations.md) for
 details on adjusting the Open OnDemand manifest and the in-application
 navigation bar. That section includes default values, customization examples,
 and recommended best practices for tailoring the menus to your deployment.

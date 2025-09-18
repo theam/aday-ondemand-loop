@@ -24,7 +24,7 @@ This simulates how the application is deployed in production, allowing you to it
 
 Environment-specific configuration can be overridden by editing the [`.env`](https://github.com/IQSS/ondemand-loop/blob/main/config/.env).
 This configuration file is mounted into the deployed application root folder.
-For a list of supported configuration properties, refer to the [Admin Guide](../admin.md).
+For a list of supported configuration properties, refer to the [Admin Guide](../admin/index.md).
 
 ---
 
