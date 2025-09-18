@@ -16,4 +16,8 @@ nav {
   .main-item-icon {
     margin-right: -3px
   }
+
+  .dropdown-header {
+    color: var(--bs-dropdown-link-color) !important;
+  }
 }
