@@ -1,26 +1,23 @@
-import { visitLoopRoot } from '../../plugins/navigation'
+import appActionsBar from '../../pages/AppActionsBar'
+import homePage from '../../pages/HomePage'
+import pageBreadcrumbs from '../../pages/PageBreadcrumbs'
 
 describe('Explore Widget - Dataverse', () => {
-  const EXPLORE_INPUT_SELECTOR = '#explore-repo-url-input'
-  const EXPLORE_SUBMIT_SELECTOR = '#explore-repo-url-submit'
   const DATAVERSE_URL = Cypress.env('dataverseUrl')
 
   beforeEach(() => {
-    visitLoopRoot()
+    homePage.visitLoopRoot()
   })
 
   it('should navigate to explore dataverse page and verify rendering', () => {
     // Navigate to the homepage first
-    visitLoopRoot()
+    homePage.visitLoopRoot()
 
     // Find and interact with the explore widget input
-    cy.get(EXPLORE_INPUT_SELECTOR).should('be.visible')
-    
-    // Enter the Dataverse URL
-    cy.get(EXPLORE_INPUT_SELECTOR).clear().type(DATAVERSE_URL)
-    
-    // Submit the explore form
-    cy.get(EXPLORE_SUBMIT_SELECTOR).waitClick()
+    appActionsBar.getExploreRepoInput().should('be.visible')
+
+    // Enter the Dataverse URL and submit
+    appActionsBar.exploreRepository(DATAVERSE_URL)
     
     // Verify that we're on the explore page and it rendered successfully
     cy.url().should('include', '/explore/')
@@ -30,12 +27,12 @@ describe('Explore Widget - Dataverse', () => {
     cy.title().should('eq', 'OnDemand Loop - Dataverse Collection')
     
     // Verify breadcrumbs are present and structured correctly
-    cy.get('nav[aria-label="Breadcrumb"]').should('be.visible')
+    pageBreadcrumbs.getBreadcrumbs().should('be.visible')
     cy.get('.breadcrumb').should('be.visible')
     cy.get('.breadcrumb .breadcrumb-item').should('have.length.at.least', 3)
-    
+
     // Verify specific breadcrumb items
-    cy.get('.breadcrumb .breadcrumb-item').first().should('contain', 'Home')
+    pageBreadcrumbs.getBreadcrumbHome().should('contain', 'Home')
     cy.get('.breadcrumb .breadcrumb-item').eq(1).should('contain', 'Dataverse')
     cy.get('.breadcrumb .breadcrumb-item').eq(2).should('contain', DATAVERSE_URL)
     
@@ -67,16 +64,13 @@ describe('Explore Widget - Dataverse', () => {
 
   it('should handle explore widget with dataverse URL via explore button', () => {
     // Navigate to the homepage
-    visitLoopRoot()
+    homePage.visitLoopRoot()
 
     // Find the explore widget
-    cy.get(EXPLORE_INPUT_SELECTOR).should('be.visible')
-    
-    // Enter the Dataverse URL
-    cy.get(EXPLORE_INPUT_SELECTOR).clear().type(DATAVERSE_URL)
-    
-    // Click the explore button instead of submitting form
-    cy.get(EXPLORE_SUBMIT_SELECTOR).waitClick()
+    appActionsBar.getExploreRepoInput().should('be.visible')
+
+    // Enter the Dataverse URL and submit via explore button
+    appActionsBar.exploreRepository(DATAVERSE_URL)
     
     // Verify navigation to explore page
     cy.url().should('include', '/explore/')
@@ -89,18 +83,17 @@ describe('Explore Widget - Dataverse', () => {
 
   it('should validate explore widget is present on homepage', () => {
     // Verify the explore widget exists and is properly structured
-    cy.get('#app-actions-bar .explore-repo').should('be.visible')
-    cy.get(EXPLORE_INPUT_SELECTOR).should('be.visible')
-    cy.get(EXPLORE_INPUT_SELECTOR).should('have.attr', 'placeholder')
-    cy.get(EXPLORE_SUBMIT_SELECTOR).should('be.visible')
+    appActionsBar.getExploreRepoForm().should('be.visible')
+    appActionsBar.getExploreRepoInput().should('be.visible')
+    appActionsBar.getExploreRepoInput().should('have.attr', 'placeholder')
+    appActionsBar.getExploreSubmitButton().should('be.visible')
 
     cy.task('log', 'Explore widget validation completed')
   })
 
   it('should test search functionality within dataverse collection', () => {
     // Navigate to dataverse collection first
-    cy.get(EXPLORE_INPUT_SELECTOR).clear().type(DATAVERSE_URL)
-    cy.get(EXPLORE_SUBMIT_SELECTOR).click()
+    appActionsBar.exploreRepository(DATAVERSE_URL)
     
     // Wait for page to load and verify we're on the collection page
     cy.get('h2').contains('Sample Dataverse').should('be.visible')
@@ -121,14 +114,13 @@ describe('Explore Widget - Dataverse', () => {
 
   it('should test pagination navigation in dataverse collection', () => {
     // Navigate to dataverse collection
-    cy.get(EXPLORE_INPUT_SELECTOR).clear().type(DATAVERSE_URL)
-    cy.get(EXPLORE_SUBMIT_SELECTOR).click()
+    appActionsBar.exploreRepository(DATAVERSE_URL)
     
     // Verify we're on page 1
     cy.get('.card-header').contains('11 to 30 of 195882 results').should('be.visible')
     
     // Click next page
-      cy.get('a[data-test="header-pagination-next"]').click()
+      cy.get('a[data-test-id="header-pagination-next"]').click()
     
     // Verify we're now on page 2
     cy.url().should('include', 'page=2')
