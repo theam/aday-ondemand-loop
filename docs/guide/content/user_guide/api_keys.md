@@ -6,7 +6,7 @@ Without a repository API key, OnDemand Loop can browse and download only the pub
 
 ---
 
-## Getting your Dataverse API token
+### Getting your Dataverse API token
 
 1. Sign in to your Dataverse installation.
 2. Click your user name in the top-right corner and select **API Token** from the menu.
@@ -21,7 +21,7 @@ Without a repository API key, OnDemand Loop can browse and download only the pub
 
 ---
 
-## Getting your Zenodo API key
+### Getting your Zenodo API key
 
 1. Sign in to Zenodo. 
 2. Open the **Applications** page from the user menu.
@@ -35,7 +35,7 @@ Without a repository API key, OnDemand Loop can browse and download only the pub
 
 ---
 
-## Setting API keys in OnDemand Loop
+### Setting API keys in OnDemand Loop
 
 Once you have the token or key, add it to the corresponding repository connector:
 
