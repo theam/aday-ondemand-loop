@@ -14,7 +14,7 @@ The application supports two ways of finding datasets from remote repositories:
     See the [Supported Repositories](supported_repositories.md) section for the current list. [Contributions to support additional repositories are welcome!](../development_guide/contributing.md)
 
     **Public datasets** with published versions are supported by default.  
-    Access to **unpublished or draft content** may require an API key, depending on the repository's access policies.
+    Access to **unpublished or draft content** may require an API key, depending on the repository's access policies. See [API keys](api_keys.md) for details on how to configure access for Dataverse and Zenodo.
 
 ---
 
