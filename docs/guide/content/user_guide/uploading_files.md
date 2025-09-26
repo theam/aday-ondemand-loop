@@ -15,6 +15,7 @@ Uploads are organized into **upload bundles**, which group a set of files and li
    Each upload bundle requires an API key for authentication.
     - If no key is present, a red badge appears in the bundle header.
     - Click the **pencil icon** to enter your key and choose whether to save it globally or only for this bundle.
+    - Another way of defining the API key is on **Repositories -> Settings** as it is described in [API keys](api_keys.md) section.
 
 3. **Select or Create a Dataset**  
    Depending on the type of URL provided and the rules of the remote repository,  

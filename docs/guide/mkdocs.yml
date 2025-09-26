@@ -27,6 +27,7 @@ nav:
       - Introduction: user_guide/index.md
       - Projects: user_guide/projects.md
       - Finding Data: user_guide/finding_data.md
+      - API keys: user_guide/api_keys.md
       - Downloading Files: user_guide/downloading_files.md
       - Uploading Files: user_guide/uploading_files.md
       - Upload File Selector: user_guide/upload_file_selector.md
