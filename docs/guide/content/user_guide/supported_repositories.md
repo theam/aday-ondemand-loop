@@ -28,13 +28,13 @@ You can find a list of known public Dataverse instances on the <a href="https://
 
 - Download individual files from public or draft datasets.
 - Public dataset versions are available by default. 
-- Draft dataset versions require the presence of an API token.
+- Draft dataset versions require the presence of an API token (See [API keys](api_keys.md) section)
 - Files must be under 10&nbsp;GB in size.
 - Checksums are verified after download.
 
 **Upload**
 
-- Requires a Dataverse API token.
+- Requires a Dataverse API token (See [API keys](api_keys.md) section).
 - Upload to an existing dataset or create a new dataset inside a collection.
 - Files are transferred using the Dataverse API and verified with checksums.
 
@@ -128,10 +128,10 @@ You can access the **Settings** page from the **Repositories** dropdown in the t
 From this page, you can:
 
 - View all previously used repositories.
-- Edit existing API keys.
-- Add API keys for newly used repositories.
+- Edit existing [API keys](api_keys.md).
+- Add [API keys](api_keys.md) for newly used repositories.
 - **Delete repositories** to remove their saved settings.
 
 Deleting a repository clears its associated settings and credentials from the application. This can be helpful for managing outdated or incorrect configurations.
 
-Configuring API keys ahead of time simplifies upload and download operations, particularly when working with draft datasets from platforms like **Dataverse**.
+Configuring [API keys](api_keys.md) ahead of time simplifies upload and download operations, particularly when working with draft datasets from platforms like **Dataverse**.

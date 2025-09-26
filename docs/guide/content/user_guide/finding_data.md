@@ -81,6 +81,8 @@ Once a dataset is selected, **OnDemand Loop displays its metadata and file listi
 
     - For **Zenodo** depositions, a registered API key is needed to load any unpublished or draft content.
 
+    - See the [API keys](api_keys.md) section for more details.
+
 #### 3. Reopen Recent Repositories from Activity
 
 You can quickly return to datasets you've already explored:
