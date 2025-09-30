@@ -46,6 +46,7 @@ nav:
       - Open OnDemand: development_guide/ood.md
       - Dataverse Integration: development_guide/dataverse_integration.md
       - Contributing a Change: development_guide/contributing.md
+      - Accessibility Guidelines: development_guide/accessibility.md
       - Testing: development_guide/testing.md
       - Manual Testing: development_guide/manual_testing.md
       - E2E Tests: development_guide/e2e_tests.md
@@ -59,6 +60,8 @@ markdown_extensions:
   - admonition
   - footnotes
   - tables
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.highlight:
       anchor_linenums: true
       linenums: false
