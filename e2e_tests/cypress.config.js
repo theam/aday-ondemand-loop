@@ -1,6 +1,17 @@
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
+  env: {
+    axe: {
+      context: 'body',
+      includedImpacts: ['critical', 'serious'],
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa'],
+      },
+      skipFailures: false,
+    },
+  },
   e2e: {
     chromeWebSecurity: false,
     video: false,
