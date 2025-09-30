@@ -64,6 +64,17 @@ const summarizeViolations = (violations) =>
     targets: nodes.flatMap((node) => node.target),
   }))
 
+const logViolationsToNode = (violations) => {
+  const summary = summarizeViolations(violations)
+
+  cy.task('logAxeViolations', {
+    count: violations.length,
+    summary,
+  })
+
+  return summary
+}
+
 const printViolationsToConsole = (violations) => {
   if (!violations.length) {
     // eslint-disable-next-line no-console
@@ -94,6 +105,8 @@ const printViolationsToConsole = (violations) => {
 }
 
 const logViolations = (violations) => {
+  const summary = logViolationsToNode(violations)
+
   if (!violations.length) {
     Cypress.log({
       name: 'axe',
@@ -106,7 +119,7 @@ const logViolations = (violations) => {
   Cypress.log({
     name: 'axe',
     message: `${violations.length} accessibility violation${violations.length === 1 ? '' : 's'}`,
-    consoleProps: () => summarizeViolations(violations),
+    consoleProps: () => summary,
   })
 
   violations.forEach(({ id, impact, description, nodes }) => {

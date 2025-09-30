@@ -53,7 +53,7 @@ Accessibility scans are powered by [axe-core](https://github.com/dequelabs/axe-c
 
 The default configuration targets WCAG 2 A/AA rules and fails the test on serious accessibility issues. Override the defaults through `Cypress.env('axe')` in `cypress.config.js` or per-test overrides shown above.
 
-When violations are detected, the Cypress command log links to the detailed failure data. Click an `axe` entry to see the impacted nodes, rendered HTML, and suggested fixes. You can also open the browser DevTools console while the test runs to view a grouped summary table for every violation that `cy.runA11y()` reports.
+When violations are detected, the Cypress command log links to the detailed failure data. Click an `axe` entry to see the impacted nodes, rendered HTML, and suggested fixes. You can also open the browser DevTools console while the test runs to view a grouped summary table for every violation that `cy.runA11y()` reports. Headless CLI runs output the same summary to STDOUT so you can review the issues directly in CI logs.
 
 ## Adding New Tests
 
