@@ -64,12 +64,42 @@ const summarizeViolations = (violations) =>
     targets: nodes.flatMap((node) => node.target),
   }))
 
+const printViolationsToConsole = (violations) => {
+  if (!violations.length) {
+    // eslint-disable-next-line no-console
+    console.info('[axe] No accessibility violations detected')
+    return
+  }
+
+  // eslint-disable-next-line no-console
+  console.groupCollapsed(`[axe] ${violations.length} accessibility violation${
+    violations.length === 1 ? '' : 's'
+  }`)
+  summarizeViolations(violations).forEach((violation, violationIndex) => {
+    // eslint-disable-next-line no-console
+    console.groupCollapsed(`${violation.impact ?? 'minor'} – ${violation.id}`)
+    // eslint-disable-next-line no-console
+    console.table(
+      violation.targets.map((target, index) => ({
+        target,
+        html: violations[violationIndex]?.nodes[index]?.html,
+        description: violation.description,
+      })),
+    )
+    // eslint-disable-next-line no-console
+    console.groupEnd()
+  })
+  // eslint-disable-next-line no-console
+  console.groupEnd()
+}
+
 const logViolations = (violations) => {
   if (!violations.length) {
     Cypress.log({
       name: 'axe',
       message: 'No accessibility violations detected',
     })
+    printViolationsToConsole(violations)
     return
   }
 
@@ -93,6 +123,8 @@ const logViolations = (violations) => {
       }),
     })
   })
+
+  printViolationsToConsole(violations)
 }
 
 Cypress.Commands.add('checkA11yAndLog', (contextOverride, optionsOverride = {}, skipFailuresOverride) => {
