@@ -21,7 +21,7 @@ class ConfigurationSingleton
       ::ConfigurationProperty.integer(:download_files_retention_period, default: 24 * 60 * 60),
       ::ConfigurationProperty.integer(:upload_files_retention_period, default: 24 * 60 * 60),
       ::ConfigurationProperty.integer(:ui_feedback_delay, default: 1500),
-      ::ConfigurationProperty.integer(:restart_delay, default: 3000),
+      ::ConfigurationProperty.integer(:restart_delay, default: 4000),
       ::ConfigurationProperty.integer(:detached_controller_interval, default: 10),
       ::ConfigurationProperty.integer(:detached_process_status_interval, default: 10 * 1000), # 10s in MILLISECONDS
       ::ConfigurationProperty.integer(:max_download_file_size, default: 10 * 1024 * 1024 * 1024), # 10 GIGABYTE
@@ -135,11 +135,9 @@ class ConfigurationSingleton
   end
 
   def read_config
-    $stdout.puts("Reading OnDemand Loop configuration files from: #{config_directory}")
     files = Pathname.glob(config_directory.join('*.{yml,yaml}'))
     files.sort.each_with_object({}) do |f, conf|
       begin
-        $stdout.puts("Loading file: #{f}")
         yml = YAML.safe_load_file(f, aliases: true) || {}
         conf.deep_merge!(yml.deep_symbolize_keys)
       rescue => e
