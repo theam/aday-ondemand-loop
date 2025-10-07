@@ -34,6 +34,27 @@ Follow established patterns using navigation utilities and the `cy.loop` configu
 
 See [Writing Tests](https://iqss.github.io/ondemand-loop/development_guide/e2e_tests/#writing-tests) for best practices, patterns, and examples.
 
+## Accessibility Checks
+
+Accessibility scans are powered by [axe-core](https://github.com/dequelabs/axe-core) and [cypress-axe](https://github.com/component-driven/cypress-axe).
+
+1. Visit the page or component under test.
+2. Call `cy.runA11y()` to inject axe and scan the current page.
+3. Optionally scope or customize the scan:
+   ```js
+   cy.runA11y({
+     context: '#dialog',
+     options: {
+       includedImpacts: ['critical', 'serious', 'moderate'],
+     },
+     skipFailures: true, // only log violations
+   })
+   ```
+
+The default configuration targets WCAG 2 A/AA rules and fails the test on serious accessibility issues. Override the defaults through `Cypress.env('axe')` in `cypress.config.js` or per-test overrides shown above.
+
+When violations are detected, the Cypress command log links to the detailed failure data. Click an `axe` entry to see the impacted nodes, rendered HTML, and suggested fixes. You can also open the browser DevTools console while the test runs to view a grouped summary table for every violation that `cy.runA11y()` reports. Headless CLI runs output the same summary to STDOUT so you can review the issues directly in CI logs.
+
 ## Adding New Tests
 
 Create test files in `cypress/e2e/` with the `.cy.js` extension following naming conventions.
