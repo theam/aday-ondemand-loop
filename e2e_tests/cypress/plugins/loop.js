@@ -27,7 +27,33 @@ module.exports = (on, config) => {
     log(message) {
       console.log(MESSAGE_INDENTATION + message)
       return null
-    }
+    },
+    logAxeViolations({ count, summary }) {
+      const prefix = `${MESSAGE_INDENTATION}[axe]`
+
+      if (!count) {
+        console.log(`${prefix} No accessibility violations detected`)
+        return null
+      }
+
+      const violationLabel = count === 1 ? 'violation' : 'violations'
+      console.log(`${prefix} ${count} accessibility ${violationLabel}`)
+
+      summary.forEach(({ id, impact, description, nodes, targets }) => {
+        const impactLabel = impact || 'minor'
+        console.log(
+          `${MESSAGE_INDENTATION.repeat(2)}${impactLabel} – ${id} (${nodes} node${
+            nodes === 1 ? '' : 's'
+          })`,
+        )
+        console.log(`${MESSAGE_INDENTATION.repeat(3)}${description}`)
+        targets.forEach((target) => {
+          console.log(`${MESSAGE_INDENTATION.repeat(3)}• ${target}`)
+        })
+      })
+
+      return null
+    },
   })
 
   // Load credentials from multiple sources
